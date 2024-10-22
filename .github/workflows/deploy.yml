@@ -32,4 +32,3 @@ jobs:
           **/.git*
           **/.git*/**
           **/node_modules/**
-        dry-run: true
