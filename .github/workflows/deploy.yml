@@ -1,0 +1,33 @@
+on: 
+  push:
+    branches:
+      - main
+name: 🇸🇱 Deploy steelers.de 🇸🇱
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+
+    - name: 🏗 build css and js
+      uses: actions/setup-node@v3
+      env:
+        COMPOSE_TLS_VERSION: TLSv1_2
+      with:
+        node-version: 16
+    - run: npm ci
+    - run: npm run build
+
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.ftp_host }}
+        username: ${{ secrets.ftp_user }}
+        password: ${{ secrets.ftp_password }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+        dry-run: true
