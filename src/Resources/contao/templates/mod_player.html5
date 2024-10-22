@@ -1,0 +1,7 @@
+<?php $this->block('content'); ?>
+<div class="tilastot-player <?= $this->cssClass ?>" <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
+  <?php
+  var_dump($this->player);
+  ?>
+</div>
+<?php $this->endblock(); ?>

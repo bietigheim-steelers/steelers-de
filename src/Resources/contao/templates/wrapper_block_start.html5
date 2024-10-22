@@ -1,0 +1,7 @@
+<?php
+if (TL_MODE === 'BE') {
+  echo $this->headline['value'];
+  return;
+}
+?>
+<div class="my-block"><?= $this->headline['value'] ?>

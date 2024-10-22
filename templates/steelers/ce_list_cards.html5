@@ -1,0 +1,21 @@
+<div class="defaultcontainer gridwrapper !px-2 md:px-0 block" <?= $this->cssID ?><?php if ($this->style) : ?> style="<?= $this->style ?>" <?php endif; ?>>
+
+  <?php if ($this->headline) : ?>
+    <h3 title="<?= $this->headline ?>"><?= $this->headline ?></h3>
+  <?php endif; ?>
+  <div class="inside grid grid-cols-12 justify-center gap-8 md:gap-16">
+    <?php foreach ($this->items as $item) : ?>
+      <?php
+      if ($item['class'] === 'last' && count($this->items) % 2 != 0) {
+        $item['class'] = 'col-span-12 md:col-span-6 md:col-start-4 ';
+      } else {
+        $item['class'] = 'col-span-12 md:col-span-6';
+      }
+      ?>
+      <div class="mt-6 flex flex-col place-content-center border-double border-steelgreen <?= $item['class'] ?>" style="border-width: 30px;">
+        <h5 class="uppercase flex-grow text-3xl xl:text-4xl w-full m-0 block text-center font-headline font-bold leading-tight bg-steelgreen p-5 text-white">
+          <?= $item['content'] ?></h5>
+      </div>
+    <?php endforeach; ?>
+  </div>
+</div>

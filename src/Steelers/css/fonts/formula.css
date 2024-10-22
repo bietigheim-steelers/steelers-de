@@ -1,0 +1,302 @@
+@font-face {
+  font-family: "PP Formula Condensed";
+  src: local("PP Formula Condensed Regular Italic"),
+    local("PPFormula-CondensedRegularItalic"),
+    url("/files/steelers/fonts/formula/PPFormula-CondensedRegularItalic.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-CondensedRegularItalic.woff")
+      format("woff");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Semi Cond Exlight";
+  src: local("PP Formula Semi Condensed Extralight Italic"),
+    local("PPFormula-SemiCondensedExtralightItalic"),
+    url("/files/steelers/fonts/formula/PPFormula-SemiCondensedExtralightItalic.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-SemiCondensedExtralightItalic.woff")
+      format("woff");
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula";
+  src: local("PP Formula Regular Italic"), local("PPFormula-RegularItalic"),
+    url("/files/steelers/fonts/formula/PPFormula-RegularItalic.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-RegularItalic.woff")
+      format("woff");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Narrow";
+  src: local("PP Formula Narrow Bold Italic"),
+    local("PPFormula-NarrowBoldItalic"),
+    url("/files/steelers/fonts/formula/PPFormula-NarrowBoldItalic.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-NarrowBoldItalic.woff")
+      format("woff");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula";
+  src: local("PP Formula Light"), local("PPFormula-Light"),
+    url("/files/steelers/fonts/formula/PPFormula-Light.woff2") format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula";
+  src: local("PP Formula Medium Italic"), local("PPFormula-MediumItalic"),
+    url("/files/steelers/fonts/formula/PPFormula-MediumItalic.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-MediumItalic.woff")
+      format("woff");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Condensed";
+  src: local("PP Formula Condensed Light Italic"),
+    local("PPFormula-CondensedLightItalic"),
+    url("/files/steelers/fonts/formula/PPFormula-CondensedLightItalic.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-CondensedLightItalic.woff")
+      format("woff");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula";
+  src: local("PP Formula Regular"), local("PPFormula-Regular"),
+    url("/files/steelers/fonts/formula/PPFormula-Regular.woff2") format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Semi Condensed";
+  src: local("PP Formula Semi Condensed Thin"),
+    local("PPFormula-SemiCondensedThin"),
+    url("/files/steelers/fonts/formula/PPFormula-SemiCondensedThin.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-SemiCondensedThin.woff")
+      format("woff");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula";
+  src: local("PP Formula Extrabold Italic"), local("PPFormula-ExtraboldItalic"),
+    url("/files/steelers/fonts/formula/PPFormula-ExtraboldItalic.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-ExtraboldItalic.woff")
+      format("woff");
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Condensed";
+  src: local("PP Formula Condensed Regular"),
+    local("PPFormula-CondensedRegular"),
+    url("/files/steelers/fonts/formula/PPFormula-CondensedRegular.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-CondensedRegular.woff")
+      format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Condensed";
+  src: local("PP Formula Condensed Extralight"),
+    local("PPFormula-CondensedExtralight"),
+    url("/files/steelers/fonts/formula/PPFormula-CondensedExtralight.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-CondensedExtralight.woff")
+      format("woff");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula";
+  src: local("PP Formula Extrabold"), local("PPFormula-Extrabold"),
+    url("/files/steelers/fonts/formula/PPFormula-Extrabold.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-Extrabold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Narrow";
+  src: local("PP Formula Narrow Semibold"), local("PPFormula-NarrowSemibold"),
+    url("/files/steelers/fonts/formula/PPFormula-NarrowSemibold.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-NarrowSemibold.woff")
+      format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Extended";
+  src: local("PP Formula Extended Light"), local("PPFormula-ExtendedLight"),
+    url("/files/steelers/fonts/formula/PPFormula-ExtendedLight.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-ExtendedLight.woff")
+      format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Extended";
+  src: local("PP Formula Extended Medium"), local("PPFormula-ExtendedMedium"),
+    url("/files/steelers/fonts/formula/PPFormula-ExtendedMedium.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-ExtendedMedium.woff")
+      format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Semi Cond Exlight";
+  src: local("PP Formula Semi Condensed Extralight"),
+    local("PPFormula-SemiCondensedExtralight"),
+    url("/files/steelers/fonts/formula/PPFormula-SemiCondensedExtralight.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-SemiCondensedExtralight.woff")
+      format("woff");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Narrow";
+  src: local("PP Formula Narrow Regular"), local("PPFormula-NarrowRegular"),
+    url("/files/steelers/fonts/formula/PPFormula-NarrowRegular.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-NarrowRegular.woff")
+      format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula";
+  src: local("PP Formula Medium"), local("PPFormula-Medium"),
+    url("/files/steelers/fonts/formula/PPFormula-Medium.woff2") format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-Medium.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Extended";
+  src: local("PP Formula Extended Bold"), local("PPFormula-ExtendedBold"),
+    url("/files/steelers/fonts/formula/PPFormula-ExtendedBold.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-ExtendedBold.woff")
+      format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Extended";
+  src: local("PP Formula Extended Light Italic"),
+    local("PPFormula-ExtendedLightItalic"),
+    url("/files/steelers/fonts/formula/PPFormula-ExtendedLightItalic.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-ExtendedLightItalic.woff")
+      format("woff");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Narrow";
+  src: local("PP Formula Narrow Bold"), local("PPFormula-NarrowBold"),
+    url("/files/steelers/fonts/formula/PPFormula-NarrowBold.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-NarrowBold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Semi Cond";
+  src: local("PP Formula Semi Condensed Medium"),
+    local("PPFormula-SemiCondensedMedium"),
+    url("/files/steelers/fonts/formula/PPFormula-SemiCondensedMedium.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-SemiCondensedMedium.woff")
+      format("woff");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Semi Extended";
+  src: local("PP Formula Semi Extended Bold"),
+    local("PPFormula-SemiExtendedBold"),
+    url("/files/steelers/fonts/formula/PPFormula-SemiExtendedBold.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-SemiExtendedBold.woff")
+      format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PP Formula Compressed";
+  src: local("PP Formula Condensed Black"), local("PPFormula-CondensedBlack"),
+    url("/files/steelers/fonts/formula/PPFormula-CondensedBlack.woff2")
+      format("woff2"),
+    url("/files/steelers/fonts/formula/PPFormula-CondensedBlack.woff")
+      format("woff");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}

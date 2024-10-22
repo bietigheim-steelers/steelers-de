@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<body>
+  
+{% set category_map = {
+    "vollzahler": "Vollzahler",
+    "familie1": "Familienkarte 1",
+    "familie2": "Familienkarte 2",
+    "familie3": "Familienkarte 3",
+    "rentner": "Rentner",
+    "student": "Student",
+    "azubi": "Auszubildender",
+    "schueler": "Schüler über 18 Jahre",
+    "mitglied": "SC Mitglied",
+    "jugendlicher": "Jugendlicher (13-17 Jahre)",
+    "kind": "Kind (8-12 Jahre)",
+    "behinderung": "Fan mit Behinderung ab 50%",
+    "rollstuhl": "Rollstuhlfahrer inkl. Begleitperson",
+} %}
+
+  <table>
+    <tr>
+    <td>{{ ticket_type|upper }}</td>
+    <td>{{ seat_block }}</td>
+    {% if seat_row  %}
+    <td>{{ seat_row + 1 }}</td>
+    {% else %}
+    <td>/</td>
+    {% endif %}
+    {% if seat_seat  %}
+    <td>{{ seat_seat + 1 }}</td>
+    {% else %}
+    <td>/</td>
+    {% endif %}
+    <td>{{ customer_firstname }}</td>
+    <td>{{ customer_name }}</td>
+    <td>{{ category_map[ticket_category] }}</td>
+    <td>{{ eventim_account }}</td>
+    <td>{{ customer_email }}</td>
+    <td>/</td>
+    <td>{{ ticket_form }}</td>
+    <td>{{ customer_member|default('/')  }}</td>
+    <td>{{ ticket_payment }}</td>
+    <td></td>
+    <td>{{ price }}</td>
+    <td>{{ ff_new_dk|default('/') }}</td>
+    <td>{{ customer_last_season }}</td>
+    <td>{{ "now"|date("j/n/y") }}</td>
+    <td></td>
+    </tr>
+  </table>
+
+  <pre>
+  {{ raw_data }}
+  </pre>
+</body>
+
+</html>

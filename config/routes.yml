@@ -1,0 +1,8 @@
+app.tilastot.utils:
+  resource: ../src/Tilastot/Utils
+  type: annotation
+app.tilastot.controller:
+  controller: App\Tilastot\Controller\SeasonTicketController::order
+  path: /seasonticket/order
+  methods: POST
+  schemes: [https]

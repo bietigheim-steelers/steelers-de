@@ -1,0 +1,5 @@
+<fieldset<?php if ($this->class) : ?> class="<?= $this->class ?> border-b border-gray-900/10" <?php endif; ?>>
+
+    <?php if ($this->label) : ?>
+        <legend class="text-2xl text-black font-sans uppercase font-bold !mt-0 mb-4"><?= $this->label ?></legend>
+    <?php endif; ?>

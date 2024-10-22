@@ -1,0 +1,6 @@
+<div class="<?= $this->class ?>">
+  <div class="max-w-screen-2xl mx-auto relative pt-4 md:py-4 sm:my-16 md:my-24 xl:my-36 z-40">
+    <<?= $this->hl ?> class="block-headline"><?= $this->headline ?>
+    </<?= $this->hl ?>>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<div class="pb-4 mt-8 border-b border-black/10 sm:max-w-md  <?= $this->prefix ?><?php if ($this->class) : ?> <?= $this->class ?><?php endif; ?>">
+  <?php $this->block('label'); ?>
+  <?php $this->endblock(); ?>
+
+  <?php $this->block('field'); ?>
+  <?php $this->endblock(); ?>
+</div>

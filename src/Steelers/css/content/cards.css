@@ -1,0 +1,19 @@
+.hyperlink-card {
+  @apply bg-steelgreen;
+}
+
+.hyperlink-card h5 {
+  @apply text-white;
+}
+
+.frontpage-5050 .hyperlink-card {
+  width: 90%;
+  height: 18rem;
+}
+
+@media (min-width: 1024px) {
+  .frontpage-5050 .hyperlink-card {
+    width: clamp(20rem, 40rem, 46vw);
+    height: 18rem;
+  }
+}

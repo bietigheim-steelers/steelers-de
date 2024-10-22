@@ -1,0 +1,74 @@
+<?php
+$filedata = file_get_contents(__DIR__ . '/../../src/shopdata.json');
+if ($filedata) :
+  $data = json_decode($filedata);
+  $jsondata = [];
+  foreach ($data as $product) :
+    $jsondata[] = [
+      'name' => $product->name,
+      'link' => $product->permalink,
+      'image' => $product->images[0]->src,
+    ];
+  endforeach;
+?>
+  <div id="homeshop">
+    <div class="<?= $this->class ?> mt-24 md:mt-32 xl:mt-64 pointer-events-none">
+      <div class="max-w-screen-2xl mx-auto relative py-4 my-16 xl:my-32 z-40 flex">
+        <h2 class="block-headline headline--small !-top-12 md:!-top-16"><?= $this->keys['title'] ?></h2>
+      </div>
+    </div>
+    <div class="max-w-screen-2xl mx-2 lg:mx-auto relative my-20 -mt-48 xl:-mt-64 lg:grid grid-cols-11">
+      <div class="hidden lg:block pt-4 lg:pt-10 col-span-2 relative">
+        <a href="<?= $data[0]->permalink ?>" class="buy-now z-10 btn-default absolute lg:-right-10 xl:-right-32 lg:top-40 xl:top-56 whitespace-nowrap">Jetzt
+          kaufen</a>
+        <h3 class="text-4xl text-black"><?= $this->keys['edition'] ?></h3>
+      </div>
+      <div class="swiper-shop col-span-9 overflow-hidden">
+        <div class="swiper-wrapper">
+          <?php foreach ($data as $product) : ?>
+            <div class="swiper-slide aspect-1 h-[420px] w-[420px]">
+              <a href="<?= $product->permalink ?>" class="h-[420px] w-[420px] block">
+                <img class="aspect-1 object-cover" alt="<?= $product->name ?>" title="<?= $product->name ?>" src="<?= $product->images[0]->src ?>" loading="lazy" />
+              </a>
+            </div>
+          <?php endforeach; ?>
+        </div>
+      </div>
+
+      <div class="mt-5 flex flex-col md:flex-row md:justify-between overflow-hidden col-span-11">
+        <div class="flex gap-14">
+          <button class="swiper-button-left" aria-label="vorheriges Produkt"><svg xmlns="http://www.w3.org/2000/svg" class="fill-black stroke-black" x="0px" y="0px" width="60px" height="40px" viewBox="0 0 60 40">
+              <g>
+                <line stroke-width="2" x1="62.5" y1="20.031" x2="20.5" y2="20.031"></line>
+                <polygon stroke-miterlimit="10" points="21,25 15.406,20.093 21,15.06"></polygon>
+                <path d="M19.938,2.045c9.866,0,17.893,8.026,17.893,17.893S29.804,37.83,19.938,37.83S2.045,29.804,2.045,19.938
+  S10.071,2.045,19.938,2.045 M19.938,0C8.926,0,0,8.926,0,19.938c0,11.011,8.926,19.938,19.938,19.938s19.938-8.927,19.938-19.938
+  C39.875,8.926,30.949,0,19.938,0L19.938,0z"></path>
+              </g>
+            </svg></button>
+          <button class="swiper-button-right" aria-label="nächstes Produkt"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" class="rotate-180 fill-black stroke-black" width="60px" height="40px" viewBox="0 0 60 40">
+              <g>
+                <line fill="none" stroke-width="2" x1="62.5" y1="20.031" x2="20.5" y2="20.031"></line>
+                <polygon stroke-miterlimit="10" points="21,25 15.406,20.093 21,15.06"></polygon>
+                <path d="M19.938,2.045c9.866,0,17.893,8.026,17.893,17.893S29.804,37.83,19.938,37.83S2.045,29.804,2.045,19.938
+      S10.071,2.045,19.938,2.045 M19.938,0C8.926,0,0,8.926,0,19.938c0,11.011,8.926,19.938,19.938,19.938s19.938-8.927,19.938-19.938
+      C39.875,8.926,30.949,0,19.938,0L19.938,0z"></path>
+              </g>
+            </svg></button>
+        </div>
+        <div class="w-full md:w-1/2 lg:w-1/3 text-right mt-5 md:mt-0 border-t-2 border-black pt-3 uppercase font-bold"><a href="https://shop.steelers.de" class="link-default">zum Shop</a></div>
+      </div>
+    </div>
+
+
+
+
+
+
+    <div class="<?= $this->class ?> ">
+
+
+    </div>
+  </div>
+
+<?php endif; ?>

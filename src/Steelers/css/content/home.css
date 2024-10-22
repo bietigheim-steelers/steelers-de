@@ -1,0 +1,91 @@
+.agile__actions {
+  @apply p-5 max-w-screen-2xl mx-auto;
+  justify-content: left !important;
+}
+.agile__actions button svg {
+  @apply fill-gray-900 stroke-gray-900 p-1;
+}
+.agile__actions button:disabled svg {
+  @apply fill-slate-300 stroke-slate-300 p-1;
+}
+
+/*
+.formbody .invisible,
+.formbody label {
+  @apply hidden;
+}
+
+.formbody .formfields {
+  @apply flex text-2xl leading-10;
+}
+
+.formbody .formfields .widget:first-child {
+  @apply grow;
+}
+.formbody .formfields .widget input {
+  @apply text-black;
+}
+.formbody .formfields .widget input,
+.formbody .formfields .widget button {
+  @apply w-full h-full;
+}
+.formbody .formfields .widget:last-child {
+  @apply flex-none w-52;
+}
+.formbody .formfields .widget:last-child button {
+  @apply bg-steelgreen text-lg text-white font-bold py-2 px-4 relative border-none uppercase whitespace-nowrap;
+}
+
+.formbody .formfields .widget:last-child button::after {
+  content: "";
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: url("/files/steelers/layout/btn-arrow.svg");
+  width: 42px;
+  height: 21px;
+  position: relative;
+  top: 4px;
+  left: 4px;
+}
+*/
+
+.form-home img {
+  width: min(50vw, 700px);
+}
+
+.home-partner {
+  @apply flex flex-wrap place-content-center gap-8 my-36;
+}
+
+.home-partner .ce_hyperlink {
+  @apply flex items-center justify-center grayscale mix-blend-multiply opacity-75;
+}
+.home-partner .ce_hyperlink img {
+  @apply w-36;
+}
+.home-partner .ce_hyperlink:hover {
+  @apply grayscale-0 opacity-100;
+}
+
+#homeshop img {
+  @apply w-full;
+}
+
+/* Slider */
+.swiper-news .swiper-slide {
+  width: 340px;
+}
+
+.frontpage-5050 .inside {
+  @apply grid grid-cols-1 justify-items-center;
+}
+
+@media (min-width: 1024px) {
+  .frontpage-5050 {
+    padding: 0 !important;
+  }
+  .frontpage-5050 .inside {
+    @apply flex justify-between;
+  }
+}

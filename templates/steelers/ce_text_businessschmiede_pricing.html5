@@ -1,0 +1,191 @@
+<div class="py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-6 lg:px-8">
+    <div class="mx-auto max-w-4xl text-center">
+      <h2 class="text-base font-semibold leading-7 text-steelgreen">Kosten</h2>
+      <p class="mt-2 text-4xl font-bold tracking-tight text-gray-900 font-headline sm:text-6xl">Geschmiedet für
+        Ihren Erfolg
+      </p>
+    </div>
+    <div class="isolate mx-auto mt-10 grid max-w-md grid-cols-1 gap-8 lg:mx-0 lg:max-w-none lg:grid-cols-3">
+      <div class="rounded-3xl p-8 ring-1 bg-white ring-gray-200 xl:p-10">
+        <div class="flex items-center justify-between gap-x-4">
+          <h3 id="tier-geselle" class="text-3xl font-semibold leading-8 text-gray-900">GESELLE</h3>
+        </div>
+        <p class="mt-6 flex items-baseline gap-x-1">
+          <span class="text-4xl font-bold tracking-tight text-gray-900">388€</span>
+          <span class="text-sm leading-6 text-gray-600">/Saison zzgl. Mwst.</span>
+        </p>
+        <a href="https://steelers.de/files/steelers/content/business/schmiede/Bestellformular_Steelers_Business_Schmiede_2024_25_Beschreibbar.pdf" aria-describedby="tier-geselle" class="mt-6 block rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 text-steelgreen ring-1 ring-inset ring-gray-200 hover:ring-steelgreen focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-steelgreen">Bestellen</a>
+        <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-600 xl:mt-10">
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            4x Sitzplatz-Tagestickets*
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Nutzungsrecht Logo „Steelers Business-Schmiede“
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Firmenlogo und Verlinkung auf der Steelers-Website
+            in der Kategorie Business-Schmiede
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Firmenlogopräsentation auf Videowürfel beim Heimspielen
+            (Gemeinschaftseinblendung)
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            1x Einladung zu einem Partner-Netzwerktreffen
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Newsletter
+          </li>
+        </ul>
+      </div>
+      <div class="rounded-3xl p-8 ring-1 bg-white ring-gray-200 xl:p-10">
+        <div class="flex items-center justify-between gap-x-4">
+          <h3 id="tier-geselle" class="text-3xl font-semibold leading-8 text-gray-900">SCHMIEDEMEISTER</h3>
+        </div>
+        <p class="mt-6 flex items-baseline gap-x-1">
+          <span class="text-4xl font-bold tracking-tight text-gray-900">568€</span>
+          <span class="text-sm leading-6 text-gray-600">/Saison zzgl. Mwst.</span>
+        </p>
+        <a href="https://steelers.de/files/steelers/content/business/schmiede/Bestellformular_Steelers_Business_Schmiede_2024_25_Beschreibbar.pdf" aria-describedby="tier-geselle" class="mt-6 block rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 text-steelgreen ring-1 ring-inset ring-gray-200 hover:ring-steelgreen focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-steelgreen">Bestellen</a>
+        <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-600 xl:mt-10">
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            10x Sitzplatz-Tagestickets*
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Nutzungsrecht Logo „Steelers Business-Schmiede“
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Firmenlogo und Verlinkung auf der Steelers-Website
+            in der Kategorie Business-Schmiede
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Firmenlogopräsentation auf Videowürfel beim Heimspielen
+            (Gemeinschaftseinblendung)
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            1x Einladung zu einem Partner-Netzwerktreffen
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Newsletter
+          </li>
+        </ul>
+      </div>
+      <div class="rounded-3xl p-8 ring-1 bg-white ring-gray-200 xl:p-10">
+        <div class="flex items-center justify-between gap-x-4">
+          <h3 id="tier-geselle" class="text-3xl font-semibold leading-8 text-gray-900">STEELER</h3>
+        </div>
+        <p class="mt-6 flex items-baseline gap-x-1">
+          <span class="text-4xl font-bold tracking-tight text-gray-900">1.838€</span>
+          <span class="text-sm leading-6 text-gray-600">/Saison zzgl. Mwst.</span>
+        </p>
+        <a href="https://steelers.de/files/steelers/content/business/schmiede/Bestellformular_Steelers_Business_Schmiede_2024_25_Beschreibbar.pdf" aria-describedby="tier-geselle" class="mt-6 block rounded-md px-3 py-2 text-center text-sm font-semibold leading-6 text-steelgreen ring-1 ring-inset ring-gray-200 hover:ring-steelgreen focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-steelgreen">Bestellen</a>
+        <ul role="list" class="mt-8 space-y-3 text-sm leading-6 text-gray-600 xl:mt-10">
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            40x Sitzplatz-Tagestickets oder 2 Sitzplatz-Dauerkarte BASIC *
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Nutzungsrecht Logo „Steelers Business-Schmiede“
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Firmenlogo und Verlinkung auf der Steelers-Website
+            in der Kategorie Business-Schmiede
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Firmenlogopräsentation auf Videowürfel beim Heimspielen
+            (Gemeinschaftseinblendung)
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            1x Einladung zu einem Partner-Netzwerktreffen
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Newsletter
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Vorstellung der eigenen Firma im Newsletter
+          </li>
+          <li class="flex gap-x-3">
+            <svg class="h-6 w-5 flex-none text-steelgreen" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+            </svg>
+            Firmenlogopräsentation im Live-Stream (Gemeinschaftseinblendung)
+          </li>
+        </ul>
+      </div>
+    </div>
+    <p class="mt-5 text-sm leading-6 text-gray-600">* Tagestickets nach Verfügbarkeit in den Blöcken B,F,H,L zu frei
+      wählbaren Heimspielen der
+      Hauptrunde 2024/25
+      (außer vs. Heilbronn)</p>
+    <p class="list-decimal">
+    <ul class="list-disc text-sm leading-6 text-gray-600 pl-4">
+      <li>Upgrade in einen anderen Block nach Absprache möglich</li>
+      <li>Upgrade zu einem höheren Paket innerhalb der Saison sind nach Absprache möglich.</li>
+      <li>Die Preise verstehen sich zzgl. MwSt. in Höhe von derzeit 19%. Über die Möglichkeit der steuerlichen
+        Absetzbarkeit sprechen Sie bitte mit Ihrem Steuerberater.</li>
+      <li>Die Partnerschaft verlängert sich jeweils automatisch um eine weitere Saison zu gleichen Bedingungen, wenn das
+        Unternehmen oder die Steelers GmbH diese Partnerschaft nicht mit einer Frist von 3 Monaten zum jeweils 30.06.
+        schriftlich kündigt.</li>
+      <li>Sie erteilen ausdrücklich Ihre Zustimmung, dass die Steelers GmbH Ihre Daten zur Vertragserfüllung, sowie zu
+        eigenen Werbe- und Marketingzwecken erhalten und diese Daten nutzen dürfen.</li>
+    </ul>
+    </p>
+  </div>
+</div>

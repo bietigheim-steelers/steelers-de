@@ -1,0 +1,53 @@
+<!-- indexer::stop -->
+<nav class="flex items-center justify-between  px-4 sm:px-0 mt-8" aria-label="<?= $this->pagination ?>">
+  <div class="-mt-px flex w-0 flex-1">
+    <?php if ($this->hasPrevious) : ?>
+    <a href="<?= $this->previous['href'] ?>" title="<?= $this->previous['title'] ?>"
+      class="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-gray-500 ">
+      <svg xmlns="http://www.w3.org/2000/svg" class="fill-black stroke-black" x="0px" y="0px" width="60px" height="40px"
+        viewBox="0 0 60 40">
+        <g>
+          <line stroke-width="2" x1="62.5" y1="20.031" x2="20.5" y2="20.031"></line>
+          <polygon stroke-miterlimit="10" points="21,25 15.406,20.093 21,15.06"></polygon>
+          <path d="M19.938,2.045c9.866,0,17.893,8.026,17.893,17.893S29.804,37.83,19.938,37.83S2.045,29.804,2.045,19.938
+S10.071,2.045,19.938,2.045 M19.938,0C8.926,0,0,8.926,0,19.938c0,11.011,8.926,19.938,19.938,19.938s19.938-8.927,19.938-19.938
+C39.875,8.926,30.949,0,19.938,0L19.938,0z"></path>
+        </g>
+      </svg>
+    </a>
+    <?php endif; ?>
+  </div>
+  <div class="block md:hidden">
+    <p><?= $this->total ?></p>
+  </div>
+  <div class="hidden md:-mt-px md:flex">
+    <?php foreach ($this->pages as $page) : ?>
+    <?php if (null === $page['href']) : ?>
+    <a href="<?= $page['href'] ?>" title="<?= $page['title'] ?>"
+      class="inline-flex items-center border-t-2 border-steelgreen px-4 pt-4 text-sm font-medium text-steelgreen"
+      aria-current="page"><?= $page['page'] ?></a>
+    <?php else : ?>
+    <a href="<?= $page['href'] ?>" title="<?= $page['title'] ?>"
+      class="inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"><?= $page['page'] ?></a>
+    <?php endif; ?>
+    <?php endforeach; ?>
+  </div>
+  <div class="-mt-px flex w-0 flex-1 justify-end">
+    <?php if ($this->hasNext) : ?>
+    <a href="<?= $this->next['href'] ?>" title="<?= $this->next['title'] ?>"
+      class="inline-flex items-center border-t-2 border-transparent pt-0 pl-1 text-sm font-medium text-gray-500 ">
+      <svg xmlns="http://www.w3.org/2000/svg" class="fill-black stroke-black rotate-180" x="0px" y="0px" width="60px"
+        height="40px" viewBox="0 0 60 40">
+        <g>
+          <line stroke-width="2" x1="62.5" y1="20.031" x2="20.5" y2="20.031"></line>
+          <polygon stroke-miterlimit="10" points="21,25 15.406,20.093 21,15.06"></polygon>
+          <path d="M19.938,2.045c9.866,0,17.893,8.026,17.893,17.893S29.804,37.83,19.938,37.83S2.045,29.804,2.045,19.938
+S10.071,2.045,19.938,2.045 M19.938,0C8.926,0,0,8.926,0,19.938c0,11.011,8.926,19.938,19.938,19.938s19.938-8.927,19.938-19.938
+C39.875,8.926,30.949,0,19.938,0L19.938,0z"></path>
+        </g>
+      </svg>
+    </a>
+    <?php endif; ?>
+  </div>
+</nav>
+<!-- indexer::continue -->

@@ -1,0 +1,179 @@
+<div class="<?= $this->class ?> mt-24">
+  <div class="max-w-screen-2xl mx-auto relative py-4 md:py-4 sm:my-16 md:my-24 xl:my-32 z-40">
+    <h2 class="block-headline w-full invisible lg:visible md:w-auto text-right md:text-left">
+      #<?= $this->player['jersey']; ?></h2>
+  </div>
+</div>
+<div class="<?= $this->class ?> defaultcontainer max-w-screen-2xl mx-auto relative my-20">
+  <div class="grid md:grid-cols-2 items-end -mt-[24rem] md:-mt-[30rem]">
+    <div class="mb-0 !pb-0 xl:p-5">
+      <h3 class="text-5xl font-sans inline-block md:block uppercase font-bold text-black">
+        <span class="block lg:hidden font-headlineItalic player-number mt-20">#<?= $this->player['jersey']; ?></span>
+        <?= $this->player['firstname'] ?> <?= $this->player['lastname'] ?><br><span
+          class="player-subheadline"><?php
+                                      switch ($this->player['position']) {
+                                        case 'GK':
+                                        case 'G':
+                                          echo "Goalie";
+                                          break;
+                                        case 'DE':
+                                        case 'D':
+                                          echo "Verteidiger";
+                                          break;
+                                        case 'FO':
+                                        case 'F':
+                                        case 'C':
+                                        case 'LW':
+                                        case 'CE':
+                                        case 'RW':
+                                          echo "Stürmer";
+                                          break;
+                                        default:
+                                          echo $this->player['position'];
+                                      }
+                                      ?></span>
+      </h3>
+      <div class="flex flex-col justify-end h-full pt-2 w-3/4">
+        <div class="text-sm uppercase">Geboren</div>
+        <div class="text-lg font-bold -mt-1"><?= Date::parse('d. F Y', $this->player['birthday']) ?></div>
+        <div class="text-lg font-bold -mt-1"><?= $this->player['birthplace'] ?></div>
+        <div class="border-t-2 border-black my-2"></div>
+        <div class="text-sm uppercase">Facts</div>
+        <div class="text-lg font-bold -mt-1"><?= $this->player['weight'] ?> kg</div>
+        <div class="text-lg font-bold -mt-1"><?= $this->player['height'] ?> cm</div>
+        <div class="text-lg font-bold -mt-1">
+          <?php
+          if ($this->player['position'] == 'GK') {
+            if ($this->player['shoots'] == 'left' || $this->player['shoots'] == 'L') {
+              echo "fängt links";
+            } else if ($this->player['shoots'] == 'right' || $this->player['shoots'] == 'R') {
+              echo "fängt rechts";
+            }
+          } else {
+            if ($this->player['shoots'] == 'left' || $this->player['shoots'] == 'L') {
+              echo "schießt links";
+            } else if ($this->player['shoots'] == 'right' || $this->player['shoots'] == 'R') {
+              echo "schießt rechts";
+            }
+          };
+
+          ?>
+        </div>
+        <div class="border-t-2 border-black my-2"></div>
+        <div class="text-sm uppercase">Nationalität</div>
+        <div class="text-lg font-bold -mt-1"><?= $this->player['nationality'] ?></div>
+        <div class="border-t-2 border-black my-2"></div>
+        <div class="text-sm uppercase">Ein Steeler seit</div>
+        <div class="text-lg font-bold -mt-1"><?= $this->player['steelersince'] ?></div>
+      </div>
+    </div>
+    <div class="aspect-w-4 aspect-h-5 xl:aspect-h-4 bg-gray-400 overflow-hidden max-[600px]:mt-8">
+      <?php
+      if ($this->player['pictures'][1]) :
+        $topImage = $this->getImage($this->urlEncode($this->player['pictures'][1]['path']), 1000, 1000, 'crop');
+        $ogimage_800 = $this->getImage($this->player['pictures'][1]['path'], 800, 800, 'proportional');
+        $ogimage_600 = $this->getImage($this->player['pictures'][1]['path'], 600, 600, 'proportional');
+        $ogimage_500 = $this->getImage($this->player['pictures'][1]['path'], 500, 500, 'proportional');
+        $ogimage_450 = $this->getImage($this->player['pictures'][1]['path'], 450, 450, 'proportional');
+      elseif ($this->player['pictures'][0]) :
+        $topImage = $this->getImage($this->urlEncode($this->player['pictures'][0]['path']), 1000, 1000, 'crop');
+        $ogimage_800 = $this->getImage($this->player['pictures'][0]['path'], 800, 800, 'proportional');
+        $ogimage_600 = $this->getImage($this->player['pictures'][0]['path'], 600, 600, 'proportional');
+        $ogimage_500 = $this->getImage($this->player['pictures'][0]['path'], 500, 500, 'proportional');
+        $ogimage_450 = $this->getImage($this->player['pictures'][0]['path'], 450, 450, 'proportional');
+      endif;
+      if ($topImage) :
+      ?>
+        <?php
+        // $image = FilesModel::findMultipleByUuids([$this->singleSRC])->fetchAll();
+        ?>
+        <img src="<?= $ogimage_800 ?>" class="w-full h-full object-center object-cover sm:w-full sm:h-full"
+          alt="<?= $this->player['lastname'] . ' ' . $this->player['lastname'] ?>" />
+      <?php
+      endif;
+      ?>
+    </div>
+  </div>
+  <?php if ($this->player['warmuppartner']) : ?>
+    <div class="sm:w-4/5 mx-auto relative mb-10 mt-8 lg:mt-20 text-center">
+      <div class="text-sm uppercase">Warm-Up Partner von <?= $this->player['firstname'] ?>
+        <?= $this->player['lastname'] ?></div>
+      <div class="text-lg font-bold -mt-1"><?= $this->player['warmuppartner'] ?></div>
+    </div>
+  <?php endif; ?>
+  <?php if ($this->player['about']) : ?>
+
+
+    <div class="sm:w-4/5 mx-auto relative my-20">
+      <div class="grid md:p-0 md:grid-cols-2 items-start gap-8">
+        <div class="overflow-hidden border-t-4 border-gray-800 pt-10">
+          <?php if ($this->player['profilePic']) :  ?>
+            <?php
+            $image = $this->getImage($this->urlEncode($this->player['profilePic']['path']), 600, 800, 'crop');
+            $imageUrl = $this->Environment->base . $image;
+            ?>
+            <a href="<?= $imageUrl ?>" class="glightbox">
+              <img src="<?= $imageUrl; ?>" alt="<?= $this->player['firstname'] . ' ' . $this->player['lastname']; ?>"
+                class="aspect-video w-full h-full object-center object-cover sm:w-full sm:h-full" />
+            </a>
+          <?php endif; ?>
+        </div>
+        <div class="md:pt-10 flex flex-col items-start">
+          <h4 class="text-2xl text-black font-sans uppercase font-bold !mt-0">Über <?= $this->player['firstname'] ?>
+            <?= $this->player['lastname'] ?></h4>
+          <div class="mt-2 leading-relaxed prose">
+            <?= $this->player['about'] ?>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <?php endif; ?>
+  <div class="mt-28">
+    <h3 class="text-steelgreen font-bold text-5xl uppercase font-headline">Aktuelle Saison</h3>
+    <div class="sm:w-4/5 mx-auto relative my-8 player-stats">
+      <div>
+        <div class="number"><?= $this->stats['games'] ?></div>
+        <div class="title"><?= ngettext("Spiel", "Spiele", $this->stats['games']) ?></div>
+      </div>
+      <div>
+        <div class="number"><?= $this->stats['goals'] ?></div>
+        <div class="title"><?= ngettext("Tor", "Tore", $this->stats['goals']) ?></div>
+      </div>
+      <div>
+        <div class="number"><?= $this->stats['assists'] ?></div>
+        <div class="title"><?= ngettext("Vorlage", "Vorlagen", $this->stats['assists']) ?></div>
+      </div>
+      <div>
+        <div class="number"><?= $this->stats['points'] ?></div>
+        <div class="title"><?= ngettext("Punkt", "Punkte", $this->stats['points']) ?></div>
+      </div>
+      <div>
+        <div class="number"><?= $this->stats['penalties'] ?></div>
+        <div class="title hidden lg:block">Strafminuten</div>
+        <div class="title block lg:hidden">Strafen</div>
+      </div>
+      <div>
+        <div class="number"><?= $this->stats['shots'] ?></div>
+        <div class="title"><?= ngettext("Schuss", "Schüsse", $this->stats['shots']) ?></div>
+      </div>
+      <div>
+        <div class="number"><?= $this->stats['plusminus'] ?></div>
+        <div class="title">+/-</div>
+      </div>
+      <div>
+        <div class="number">
+          <?= $this->stats['games'] > 0 ? number_format($this->stats['points'] / $this->stats['games'], 2, ',', '.') : '0,00' ?>
+        </div>
+        <div class="title hidden lg:block">Punkte pro Spiel</div>
+        <div class="title block lg:hidden">Pkt/Sp</div>
+      </div>
+    </div>
+  </div>
+  <div class="my-28 career-stats">
+    <h3 class="text-steelgreen font-bold text-5xl uppercase font-headline">Karriere</h3>
+    <div class="sm:w-4/5 mx-auto relative my-8 max-w-full overflow-auto">
+      <?= $this->player['epstats'] ?>
+    </div>
+  </div>
+</div>

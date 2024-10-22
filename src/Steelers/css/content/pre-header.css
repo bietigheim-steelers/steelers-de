@@ -1,0 +1,90 @@
+#preheader > .inside > .mod_article {
+  @apply flex flex-row content-center items-center m-3 gap-2;
+}
+
+#header-del-logo {
+  @apply relative z-50;
+}
+#header-del-logo img {
+  height: 40px !important;
+  width: auto !important;
+}
+
+#preheader .ce_hyperlink:not(#header-del-logo) {
+  @apply uppercase font-medium text-xs lg:text-sm hidden;
+}
+
+#preheader .preheader-right {
+  @apply grow flex justify-end;
+}
+
+#preheader .image_container a {
+  overflow: hidden;
+}
+#preheader .image_container a img {
+  @apply transition-transform w-5;
+}
+#preheader .ce_hyperlink:not(#header-del-logo) .image_container a:hover img {
+  @apply scale-150;
+}
+
+.preheader-social-media {
+  @apply flex flex-row gap-2;
+}
+
+@media (min-width: 1280px) {
+  #preheader .ce_hyperlink {
+    @apply !block;
+  }
+  #header-del-logo,
+  #preheader .preheader-right {
+    @apply border-r border-gray-400 pr-2;
+  }
+}
+/* @media (min-width: 1280px) {
+  #preheader > .inside > .mod_article {
+    @apply gap-2;
+  }
+
+  #header-del-logo,
+  #preheader .preheader-right {
+    @apply pr-2;
+  }
+} */
+@media (min-width: 1536px) {
+  #preheader > .inside > .mod_article {
+    @apply gap-5;
+  }
+
+  #header-del-logo,
+  #preheader .preheader-right {
+    @apply pr-5;
+  }
+  #preheader .image_container a img {
+    @apply w-7;
+  }
+
+  .preheader-social-media {
+    @apply flex flex-row gap-5;
+  }
+}
+
+@media (min-width: 1024px) {
+  .preheader-links > span {
+    @apply hidden;
+  }
+
+  .preheader-links-inner {
+    @apply flex flex-row gap-3;
+  }
+  #header-del-logo img {
+    height: 47px !important;
+    width: auto !important;
+  }
+}
+
+.game_is_today::before {
+  @apply bg-steelgreen absolute block w-24 h-4 top-0 -z-10;
+
+  content: "";
+}

@@ -1,0 +1,62 @@
+<?php
+if (!function_exists('tokenTruncate')) {
+  function tokenTruncate($string, $your_desired_width)
+  {
+    $parts = preg_split('/([\s\n\r]+)/', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $parts_count = count($parts);
+
+    $length = 0;
+    $last_part = 0;
+    for (; $last_part < $parts_count; ++$last_part) {
+      $length += strlen($parts[$last_part]);
+      if ($length > $your_desired_width) {
+        break;
+      }
+    }
+
+    return trim(implode(array_slice($parts, 0, $last_part)));
+  }
+}
+try {
+  $container = \Contao\System::getContainer();
+  $rootDir = $container->getParameter('kernel.project_dir');
+
+  $image = $container->get('contao.image.picture_factory')->create($rootDir . '/'  . $this->arrData['singleSRC'], 11);
+  $sources = $image->getSources();
+  $imageObj = $sources[0]['src'];
+  $imageUrl = $imageObj->getUrl($rootDir);
+} catch (Exception $e) {
+  $imageUrl = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 511, 637, 'crop');
+}
+?>
+<div class="swiper-slide bg-white h-full">
+  <a href="<?= $this->link ?>" data-bigimage="<?= $this->arrData['singleSRC'] ?>">
+    <img src="<?= $imageUrl ?>" class="aspect-news w-full" alt="<?= $this->newsHeadline ?>" loading="lazy" /></a>
+  <div class="p-5 grow flex flex-col">
+    <div class="text-gray-400 italic uppercase">
+      <?php if (count($this->categoriesList) > 0) : ?>
+        <?= implode(', ', $this->categoriesList) ?>
+        <?php endif; ?>&nbsp;
+    </div>
+
+    <?php
+    // needs to be done like that to avoid empty space at the beginning
+    echo '<a href="' . $this->link . '" class="block mt-1 text-lg md:text-xl line-clamp-3 text-steelgreen uppercase font-bold leading-5 md:leading-6 whitespace-pre-wrap" style="overflow: hidden;
+display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 3;
+height: calc(3*1.5rem);">';
+    echo trim($this->newsHeadline);
+    echo '</a>';
+    ?>
+
+    <?php
+    // needs to be done like that to avoid empty space at the beginning
+    echo '<p class="mt-3 md:mt-5 text-sm text-black whitespace-pre-wrap" style="height: calc(4*1.25rem);">';
+    echo tokenTruncate(strip_tags($this->teaser), 120) ?>&#8230;
+    </p>
+    <div class="mt-2 md:mt-5 flex-1 flex flex-col justify-start">
+      <time class="text-sm text-steelgreen" datetime="<?= $this->datetime ?>"><?= date('d.m.Y', $this->time) ?></time>
+    </div>
+  </div>
+</div>

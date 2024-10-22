@@ -1,0 +1,97 @@
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<div class="defaultcontainer">
+    <div class="mx-auto max-w-full px-6 lg:px-8">
+        <!-- xs to lg -->
+        <div class="mx-auto mt-12 space-y-4 sm:mt-8 lg:hidden">
+            <?php foreach ($this->header as $i => $col) : ?>
+                <?php if (0 == $i && $this->useLeftTh) : ?>
+                    &nbsp;
+                <?php else : ?>
+                    <section class="p-8">
+                        <h3 class="text-2xl font-semibold leading-6 text-steelgreen"><?= $col['content'] ?></h3>
+                        <ul role="list" class="mt-10 space-y-4 text-sm leading-6 text-gray-900">
+                            <?php foreach ($this->body as $class => $row) : ?>
+                                <li class="grid grid-cols-6 gap-x-3 text-sm leading-6 text-gray-900">
+                                    <div class="col-span-4"><?= $row[0]['content'] ?>:</div>
+                                    <div class="col-span-2 font-bold"><?= $row[$i]['content'] ?></div>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </section>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </div>
+
+        <!-- lg+ -->
+        <div class="isolate mt-20 hidden lg:block">
+            <div class="relative -mx-8">
+                <div class="absolute inset-x-4 inset-y-0 -z-10 flex">
+                    <div class="flex w-1/5 px-4" style="margin-left: 20%" aria-hidden="true">
+                        <div class="w-full border-x border-t border-[#00519c]/30 bg-[#00519c]/90">
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute inset-x-4 inset-y-0 -z-10 flex">
+                    <div class="flex w-1/5 px-4" style="margin-left: 40%" aria-hidden="true">
+                        <div class="w-full border-x border-t border-[#34a8e0]/30 bg-[#34a8e0]/90">
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute inset-x-4 inset-y-0 -z-10 flex">
+                    <div class="flex w-1/5 px-4" style="margin-left: 60%" aria-hidden="true">
+                        <div class="w-full border-x border-t border-[#3ac635]/30 bg-[#3ac635]/90">
+                        </div>
+                    </div>
+                </div>
+                <div class="absolute inset-x-4 inset-y-0 -z-10 flex">
+                    <div class="flex w-1/5 px-4" style="margin-left: 80%" aria-hidden="true">
+                        <div class="w-full border-x border-t border-[#017900]/30 bg-[#017900]/90">
+                        </div>
+                    </div>
+                </div>
+                <table class="w-full table-fixed border-separate border-spacing-x-8 text-left">
+                    <?php if ($this->useHeader) : ?>
+                        <thead>
+                            <tr>
+                                <?php foreach ($this->header as $i => $col) : ?>
+                                    <?php if (0 == $i && $this->useLeftTh) : ?>
+                                        <td></td>
+                                    <?php else : ?>
+                                        <th scope="col" class="px-4 pt-6 xl:px-8 xl:pt-8">
+                                            <div class="text-center uppercase text-xl font-headline font-semibold leading-7 text-gray-900">
+                                                <?= $col['content'] ?>
+                                            </div>
+                                        </th>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </tr>
+                        </thead>
+                    <?php endif; ?>
+                    <tbody>
+                        <?php foreach ($this->body as $class => $row) : ?>
+                            <tr>
+                                <?php foreach ($row as $i => $col) : ?>
+                                    <?php if (0 == $i && $this->useLeftTh) : ?>
+                                        <th scope="row" class="py-4 text-sm font-normal leading-6 text-gray-900">
+                                            <?= $col['content'] ?>
+                                            <div class="absolute inset-x-8 mt-4 h-px bg-gray-900/5"></div>
+                                        </th>
+                                    <?php else : ?>
+                                        <td class="px-6 py-4 xl:px-8">
+                                            <div class="text-center text-sm leading-6 text-gray-100"><?= $col['content'] ?></div>
+                                        </td>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php $this->endblock(); ?>

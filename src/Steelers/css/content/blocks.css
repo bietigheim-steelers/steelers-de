@@ -1,0 +1,75 @@
+#main .block-headline {
+  @apply italic; 
+  color: #009cde;
+  font-family: "WhyteItalic", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  text-transform: uppercase;
+  font-size: clamp(4em, 15vw, 16em);
+  text-shadow: 1px 1px white, -1px -1px white;
+  max-width: 100%;
+  overflow-x: clip;
+  padding: 0 0.5rem 0 0.5rem;
+}
+
+#main .block-headline.headline--small {
+  font-size: clamp(4em, 15vw, 12em);
+  line-height: 8rem;
+  position: relative;
+  top: -4rem;
+}
+
+@supports (-webkit-text-stroke: 3px #009cde) {
+  #main .block-headline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px #009cde;
+    text-shadow: none;
+  }
+  @media (min-width: 768px) {
+    #main .block-headline {
+      -webkit-text-stroke: 3px #009cde;
+      color: transparent;
+    }
+  }
+}
+
+.block-black {
+  @apply bg-black text-white;
+}
+
+@media (min-width: 1024px) {
+  .big-text-block {
+    @apply my-24;
+  }
+  #main .block-headline {
+    line-height: 12rem;
+  }
+}
+
+.big-text-block {
+  @apply max-w-screen-2xl mx-2 sm:mx-auto relative pt-6 mt-8 text-5xl sm:text-6xl md:text-8xl uppercase isolate;
+}
+
+.big-text-block strong {
+  @apply relative;
+  font-weight: normal;
+}
+.big-text-block strong::after {
+  @apply absolute left-0 right-0 bottom-5 h-3 sm:h-7 bg-steelgreen;
+  z-index: -5;
+  content: "";
+}
+
+@supports (-webkit-text-stroke: 3px #046a38) {
+  .green-outline {
+      color: transparent;
+      -webkit-text-stroke: 1px #046a38;
+      text-shadow: none;
+    }
+  @media (min-width: 768px) {
+  .green-outline {
+      color: transparent;
+      -webkit-text-stroke: 3px #046a38;
+      text-shadow: none;
+    }
+  }
+
+}

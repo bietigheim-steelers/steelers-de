@@ -1,0 +1,9 @@
+<?php $this->block('content'); ?>
+<div class="tilastot-roster <?= $this->cssClass ?>" <?= ($this->cssId) ? 'id="'.$this->cssId.'"' : '' ?>>
+<<?= $this->headlineUnit ?>><?= $this->headline ?></<?= $this->headlineUnit ?>>
+
+<?php
+var_dump($this->players);
+?>
+</div>
+<?php $this->endblock(); ?>

@@ -1,0 +1,6 @@
+<script>
+window.steelers_home_news = [
+  <?= implode(',', $this->articles) ?>
+];
+</script>
+<div id="homenews"></div>

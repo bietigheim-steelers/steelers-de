@@ -1,0 +1,24 @@
+</div>
+<div class="mt-5 flex flex-col md:flex-row md:justify-between md:absolute bottom-0 lg:bottom-16 z-50" style="padding-left: 3vw; height: 40px;">
+  <div class="flex gap-14">
+    <button class="swiper-button-left" aria-label="vorheriges Highlight"><svg xmlns="http://www.w3.org/2000/svg" class="fill-black stroke-black" x="0px" y="0px" width="60px" height="40px" viewBox="0 0 60 40">
+        <g>
+          <line stroke-width="2" x1="62.5" y1="20.031" x2="20.5" y2="20.031"></line>
+          <polygon stroke-miterlimit="10" points="21,25 15.406,20.093 21,15.06"></polygon>
+          <path d="M19.938,2.045c9.866,0,17.893,8.026,17.893,17.893S29.804,37.83,19.938,37.83S2.045,29.804,2.045,19.938
+  S10.071,2.045,19.938,2.045 M19.938,0C8.926,0,0,8.926,0,19.938c0,11.011,8.926,19.938,19.938,19.938s19.938-8.927,19.938-19.938
+  C39.875,8.926,30.949,0,19.938,0L19.938,0z"></path>
+        </g>
+      </svg></button>
+    <button class="swiper-button-right" aria-label="nächstes Highlight"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" class="rotate-180 fill-black stroke-black" width="60px" height="40px" viewBox="0 0 60 40">
+        <g>
+          <line fill="none" stroke-width="2" x1="62.5" y1="20.031" x2="20.5" y2="20.031"></line>
+          <polygon stroke-miterlimit="10" points="21,25 15.406,20.093 21,15.06"></polygon>
+          <path d="M19.938,2.045c9.866,0,17.893,8.026,17.893,17.893S29.804,37.83,19.938,37.83S2.045,29.804,2.045,19.938
+      S10.071,2.045,19.938,2.045 M19.938,0C8.926,0,0,8.926,0,19.938c0,11.011,8.926,19.938,19.938,19.938s19.938-8.927,19.938-19.938
+      C39.875,8.926,30.949,0,19.938,0L19.938,0z"></path>
+        </g>
+      </svg></button>
+  </div>
+</div>
+</div>

@@ -1,0 +1,28 @@
+<?php
+$ogimage1200 = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 1920, 1080, 'crop');
+$ogimage1200_2x = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 3840, 2160, 'crop');
+$ogimage1200_3x = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 5760, 3240, 'crop');
+$ogimage768 = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 800, 600, 'crop');
+$ogimage768_2x = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 1600, 1200, 'crop');
+$ogimage768_3x = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 2400, 1800, 'crop');
+$ogimage = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 375, 300, 'crop');
+$ogimage_2x = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 750, 600, 'crop');
+$ogimage_3x = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 1125, 900, 'crop');
+?>
+<div class="swiper-slide bg-white h-full">
+  <div class="slide-desc">
+    <div class="swiper-slide__header"><a title="„Sind bereit, etwas mitzunehmen“" href="<?= $this->link ?>">
+        <p class="swiper-slide__headline"><span itemprop="headline"><?= $this->newsHeadline ?></span></p>
+      </a></div>
+    <p class="text-white text-xl"><?= $this->subHeadline ?></p>
+    <div class="d-flex align-items-center read-more-wrap text-left"><a class="btn-default mt-4"
+        title="<?= $this->newsHeadline ?>" href="<?= $this->link ?>">
+        weiterlesen</a></div>
+  </div>
+  <picture class="">
+    <source class="" srcset="<?= $ogimage1200; ?>, <?= $ogimage1200_2x; ?> 2x, <?= $ogimage1200_3x; ?> 3x" media="(min-width: 1200px)" type="image/jpeg">
+    <source srcset="<?= $ogimage768; ?>, <?= $ogimage768_2x; ?> 2x, <?= $ogimage768_3x; ?> 3x" media="(min-width: 768px)" type="image/jpeg">
+    <source srcset="<?= $ogimage; ?>, <?= $ogimage_2x; ?> 2x, <?= $ogimage_3x; ?> 3x" type="image/jpeg">
+    <img class="max-w-full h-auto w-full block" src="<?= $ogimage1200; ?>" alt="<?= $this->newsHeadline ?>">
+  </picture>
+</div>

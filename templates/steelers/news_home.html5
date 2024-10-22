@@ -1,0 +1,6 @@
+{
+id: '<?= $this->id ?>',
+newsHeadline: '<?= $this->newsHeadline ?>',
+image: '<?= $this->replaceInsertTags('{{figure::' . $this->arrData['singleSRC'] . '?size=10&template=image_url}}'); ?>',
+link: '<?= $this->link ?>'
+}

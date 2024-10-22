@@ -1,0 +1,70 @@
+.standings-table small {
+  @apply hidden;
+}
+
+.standings-table {
+  @apply w-full grid grid-cols-1 divide-y-2 divide-black text-xs;
+}
+
+.standings-table .table-header,
+.standings-table .table-row {
+  @apply grid grid-cols-10 py-4 items-center;
+}
+
+.standings-table .table-header {
+  @apply font-bold leading-5;
+}
+
+.standings-table .table-row {
+  @apply divide-x divide-black;
+}
+.standings-table .table-row > div:nth-child(1) {
+  @apply border-r-4 border-black;
+}
+.standings-table .table-row:nth-child(-n + 7) > div:nth-child(1) {
+  @apply border-r-4 border-steelblue;
+}
+.standings-table .table-row:nth-child(n + 12) > div:nth-child(1) {
+  @apply border-r-4;
+  border-color: #e31e74;
+}
+.standings-table .table-row > div:nth-child(2) {
+  @apply !border-l-0;
+}
+
+.standings-table .table-row.highlight-team {
+  @apply text-steelgreen;
+  background-color: rgba(0, 156, 222, 0.05);
+}
+
+.standings-table .table-row .logo {
+  @apply mx-2 hidden;
+}
+
+.standings-table .table-header > div,
+.standings-table .table-row > div {
+  @apply text-center px-4 whitespace-nowrap uppercase;
+}
+
+@media (min-width: 768px) {
+  .standings-table {
+    @apply text-base;
+  }
+  .standings-table small {
+    @apply inline;
+    font-size: 87.5%;
+  }
+}
+@media (min-width: 640px) {
+  .standings-table .table-header,
+  .standings-table .table-row {
+    @apply grid-cols-12;
+  }
+  .standings-table .table-header > div,
+  .standings-table .table-row > div {
+    @apply px-2;
+  }
+  .standings-table .table-row .logo {
+    @apply block;
+  }
+}

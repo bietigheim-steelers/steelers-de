@@ -1,0 +1,29 @@
+  <?php foreach ($this->items as $item): ?>
+    <?php if ($item['isActive']): ?>
+      <li class="<?= $item['class'] ?> flex-none mx-2 my-4">
+        <?php if ($item['image']): ?>
+          <?php $this->insert('picture_default', $item['image']->picture) ?>
+        <?php endif; ?>
+
+        <strong class="<?= $item['class'] ?> whitespace-nowrap rounded-md px-4 py-3 text-sm text-white bg-steelgreen" <?php if ($item['subitems']): ?> aria-haspopup="true" <?php endif; ?>>
+          <span class="name" itemprop="name"><?= $item['link'] ?></span>
+
+        </strong>
+
+        <?= $item['subitems'] ?>
+      </li>
+    <?php else: ?>
+      <li class="<?= $item['class'] ?> flex-none mx-2 my-4">
+        <a href="<?= $item['href'] ?>" class="<?= $item['class'] ?> whitespace-nowrap rounded-md px-4 py-3 text-sm bg-gray-200/50" title="<?= $item['linkTitle'] ?>" itemprop="url" <?php if ($item['subitems']): ?> aria-haspopup="true" <?php endif; ?>>
+          <?php if ($item['image']): ?>
+            <?php $this->insert('picture_default', $item['image']->picture) ?>
+          <?php endif; ?>
+
+          <span class="name" itemprop="name"><?= $item['link'] ?></span>
+
+        </a>
+
+        <?= $item['subitems'] ?>
+      </li>
+    <?php endif; ?>
+  <?php endforeach; ?>

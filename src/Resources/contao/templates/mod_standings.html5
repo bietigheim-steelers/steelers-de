@@ -1,0 +1,34 @@
+<?php $this->block('content'); ?>
+<div class="<?= $this->cssClass ?>" <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
+  <<?= $this->headlineUnit ?>><?= $this->headline ?></<?= $this->headlineUnit ?>>
+  <table>
+    <thead>
+      <tr>
+        <th>Platz</th>
+        <?php
+        foreach ($this->columns as $column) {
+          echo "<th>" . $GLOBALS['TL_LANG']['tilastot_standings_columns'][$column] . "</th>";
+        }
+        ?>
+      </tr>
+    </thead>
+    <tbody>
+      <?php
+      foreach ($this->standings as $key => $team) {
+        $class = ($team['tilastotid'] == $this->my_team) ? ' class="highlight-team"' : '';
+      ?>
+      <tr<?= $class ?>>
+        <td><?= $team['rank'] ?>.</td>
+        <?php
+          foreach ($this->columns as $column) {
+            echo "<td>" . $team[$column] . "</td>";
+          }
+          ?>
+        </tr>
+        <?php
+      }
+        ?>
+    </tbody>
+  </table>
+</div>
+<?php $this->endblock(); ?>

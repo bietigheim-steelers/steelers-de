@@ -1,0 +1,45 @@
+<?php
+$ogimage = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 750, 938, 'crop');
+$GLOBALS['og:image'] = $this->Environment->base . $ogimage;
+?>
+<div class="relative mb-20 md:-mt-[29rem] lg:-mt-[26rem] xl:-mt-[32rem]">
+  <div class="grid items-end grid-cols-1 md:grid-cols-2 defaultcontainer max-lg:!mt-0">
+    <div class="xl:mb-20 py-5 lg:pr-16">
+      <h3
+        class="text-3xl lg:text-4xl xl:text-5xl !mt-4 lg:!mt-8 pt-4 uppercase font-bold font-sans text-black leading-none max-w-full text-ellipsis overflow-hidden">
+        <?= $this->newsHeadline ?></h3>
+      <p class="mt-2">
+        <?php if (count($this->categoriesList) > 0) : ?>
+          <span class="text-lg uppercase font-bold"><?= implode(' / ', $this->categoriesList) ?> /</span>
+        <?php endif; ?>
+        <time class="text-lg font-bold text-steelgreen" datetime="<?= $this->datetime ?>"><?= $this->date ?></time>
+      </p>
+    </div>
+    <div class="overflow-hidden xl:mx-2">
+      <?php
+      if ($this->addImage) :
+      ?>
+        <img src="<?= $ogimage; ?>" alt="<?= $this->newsHeadline; ?>" class="aspect-[4/5]" />
+      <?php
+      endif;
+      ?>
+    </div>
+  </div>
+  <div class="ce_text defaultcontainer mb-8">
+    <div class="!my-8 md:!my-32 max-w-5xl mx-auto bg-steelwhite/80 relative z-20 backdrop-blur-lg prose">
+      <?php
+      if ($this->pid == 6 && array_intersect(array_keys($this->categories), [7, 8, 9, 10, 11, 12, 13, 19])):
+      ?>
+        <p>Neuigkeiten des Steelers-Nachwuchses werden präsentiert von <a href="http://carat.art"
+            target="_blank">carat.art</a>.</p>
+      <?php
+      endif;
+      ?>
+      <?= $this->teaser; ?>
+      <hr class="border-black border-t mt-8">
+    </div>
+  </div>
+  <?php if ($this->hasText): ?>
+    <?= $this->text ?>
+  <?php endif; ?>
+</div>

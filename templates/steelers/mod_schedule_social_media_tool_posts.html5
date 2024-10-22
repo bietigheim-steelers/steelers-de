@@ -1,0 +1,1149 @@
+<?php
+$allLogos = [];
+foreach ($this->games as $key => $game) {
+  if (!in_array($game['home']['logo'], $allLogos)) {
+    $allLogos[] = $game['home']['logo'];
+  }
+  if (!in_array($game['away']['logo'], $allLogos)) {
+    $allLogos[] = $game['away']['logo'];
+  }
+}
+
+// Define the folder path
+$folderPath = '../files/steelers/tools/social-media/starting-six';
+
+// Use glob to get all PNG files
+$pngFiles = glob($folderPath . '/*.png');
+
+//
+$allPlayers = [];
+foreach ($pngFiles as $file) {
+  $allPlayers[] = basename($file);
+}
+
+?>
+<style>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      flex-direction: row;
+    }
+
+    .inputs {
+      margin-left: 20px;
+    }
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+  }
+
+  input[type="text"],
+  textarea,
+  input[type="file"],
+  select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+</style>
+<div>
+  <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+  <div class="container">
+    <div class="inputs">
+      <p>
+        <select id="fileSelect">
+          <option value="">...Post wählen...</option>
+          <option value="Starting_Six">Starting_Six</option>
+          <option value="Endstand_Home">Endstand_Home</option>
+          <option value="Endstand_Away">Endstand_Away</option>
+          <option value="Gameday_Home">Gameday_Home</option>
+          <option value="Gameday_Away">Gameday_Away</option>
+          <option value="News">News</option>
+          <option value="Preview">Preview</option>
+          <option value="Matchup">Matchup</option>
+          <option value="Geburtstag">Geburtstag</option>
+        </select>
+      </p>
+      <hr>
+      <div class="form-container">
+        <div class="form-group">
+          <label for="logoSelect">Gegnerlogo:</label>
+          <select id="logoSelect">
+            <?php foreach ($allLogos as $logo): ?>
+              <option value="<?php echo htmlspecialchars($logo); ?>"><?php echo htmlspecialchars(basename($logo)); ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+        <?php for ($i = 1; $i <= 6; $i++): ?>
+          <div class="form-group">
+            <label for="playerSelect<?= $i ?>">Spieler <?= $i ?>:</label>
+            <select id="playerSelect<?= $i ?>">
+              <option value="">...Spieler wählen...</option>
+              <?php foreach ($allPlayers as $player): ?>
+                <option value="<?php echo htmlspecialchars($player); ?>"><?php echo htmlspecialchars(basename($player)); ?>
+                </option>
+              <?php endforeach; ?>
+            </select>
+          </div>
+        <?php endfor; ?>
+        <div class="form-group">
+          <label for="uploadImage">Foto:</label>
+          <input type="file" id="uploadImage" accept="image/*">
+        </div>
+        <div class="form-group">
+          <label for="headlineInput">Headline:</label>
+          <input type="text" id="headlineInput" value="endstand">
+        </div>
+        <div class="form-group">
+          <label for="smalltextInput">Kleiner Text:</label>
+          <input type="text" id="smalltextInput" value="15.09.2024 vs essen">
+        </div>
+        <div class="form-group">
+          <label for="resultInput">Ergebnis:</label>
+          <input type="text" id="resultInput" value="9:9">
+        </div>
+        <div class="form-group">
+          <label for="periodsInput">Drittelergebnisse:</label>
+          <input type="text" id="periodsInput" value="( 9:9 | 9:9 | 9:9 )">
+        </div>
+        <div class="form-group">
+          <label for="timeInput">Uhrzeit:</label>
+          <input type="text" id="timeInput" value="">
+        </div>
+        <div class="form-group">
+          <label for="paragraphInput">Text:</label>
+          <textarea id="paragraphInput"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="jerseynumberInput">Nummer:</label>
+          <textarea id="jerseynumberInput"></textarea>
+        </div>
+      </div>
+      <button id="save">Save</button>
+    </div>
+    <canvas id="posts" width="1080" height="1350"
+      style="max-width: 800px; max-height: 99vh; border: 1px solid lightgrey; margin-top: 1px;"></canvas>
+  </div>
+
+  <script>
+    const postConfig = {
+      'Endstand_Home': ['smalltext', 'bgImage', 'result', 'periods', 'opponentAway'],
+      'Matchup': ['headline', 'smalltext', 'opponentAway', 'matchup'],
+      'Endstand_Away': ['smalltext', 'bgImage', 'result', 'periods', 'opponentAway'],
+      'Gameday_Home': ['smalltext', 'bgImage', 'opponentAway', 'time', 'wby'],
+      'Gameday_Away': ['smalltext', 'bgImage', 'opponentAway', 'time'],
+      'News': ['headline', 'bgImage', 'smalltext', 'paragraph'],
+      'Geburtstag': ['bgImage', 'jerseynumber', 'paragraph'],
+      'Preview': ['bgImage', 'opponentAway', 'paragraph'],
+      'Starting_Six': ['smalltext', 'playerSelect1', 'playerSelect2', 'playerSelect3', 'playerSelect4',
+        'playerSelect5', 'playerSelect6'
+      ],
+    }
+    let config = [];
+    let selectedPost;
+    let headline = '';
+    let smalltext = '';
+    let resultText = '';
+    let timeText = '';
+    let paragraphText = '';
+    let jerseynumberText = '';
+    let periodsText = '( 9:9 | 9:9 | 9:9 )';
+    let opponentLogo;
+    let opponentLogos = [];
+    let opponentShortname;
+    let matchupData;
+    let matchupDataFairplay;
+    let matchupDataScoring;
+    let matchupDataPlayer;
+
+    <?php for ($i = 1; $i <= 6; $i++): ?>
+      let selectedPlayer<?= $i ?> = '';
+    <?php endfor; ?>
+
+    const headlineInput = document.getElementById('headlineInput');
+    const smalltextInput = document.getElementById('smalltextInput');
+    const resultInput = document.getElementById('resultInput');
+    const periodsInput = document.getElementById('periodsInput');
+    const timeInput = document.getElementById('timeInput');
+    const paragraphInput = document.getElementById('paragraphInput');
+    const jerseynumberInput = document.getElementById('jerseynumberInput');
+    const logoSelect = document.getElementById('logoSelect');
+    const fileSelect = document.getElementById('fileSelect');
+
+    <?php for ($i = 1; $i <= 6; $i++): ?>
+      const playerSelect<?= $i ?> = document.getElementById('playerSelect<?= $i ?>');
+    <?php endfor; ?>
+
+    const canvas = document.getElementById('posts');
+    const ctx = canvas.getContext('2d');
+
+    // Load the image
+    let image = new Image();
+
+    document.getElementById('save').addEventListener('click', function() {
+      var canvas = document.getElementById('posts');
+      var dataURL = canvas.toDataURL('image/png');
+      var link = document.createElement('a');
+      link.href = dataURL;
+      link.download = selectedPost + '.png';
+      link.click();
+    });
+
+    headlineInput.addEventListener('input', function() {
+      headline = headlineInput.value.trim();
+      drawCanvas();
+    });
+
+    resultInput.addEventListener('input', function() {
+      resultText = resultInput.value;
+      drawCanvas();
+    });
+
+    smalltextInput.addEventListener('input', function() {
+      smalltext = smalltextInput.value;
+      drawCanvas();
+    });
+
+    periodsInput.addEventListener('input', function() {
+      periodsText = periodsInput.value;
+      drawCanvas();
+    });
+
+    timeInput.addEventListener('input', function() {
+      timeText = timeInput.value;
+      drawCanvas();
+    });
+
+    paragraphInput.addEventListener('input', function() {
+      paragraphText = paragraphInput.value;
+      drawCanvas();
+    });
+
+    jerseynumberInput.addEventListener('input', function() {
+      jerseynumberText = jerseynumberInput.value;
+      drawCanvas();
+    });
+
+    const steelersLogo = new Image();
+    steelersLogo.src = '/files/steelers/layout/logo-nav.svg';
+    steelersLogo.onload = function() {
+      drawCanvas();
+    };
+
+    const wby = new Image();
+    wby.src = '/files/steelers/tools/social-media/wby.svg';
+    wby.onload = function() {
+      drawCanvas();
+    };
+
+    <?php for ($i = 1; $i <= 6; $i++): ?>
+      playerSelect<?= $i ?>.addEventListener('change', function() {
+        const selectedPlayer = playerSelect<?= $i ?>.value;
+        const img = new Image();
+        img.src = '/files/steelers/tools/social-media/starting-six/' + selectedPlayer;
+
+        img.onload = function() {
+          selectedPlayer<?= $i ?> = img;
+          drawCanvas();
+        };
+      });
+    <?php endfor; ?>
+
+    logoSelect.addEventListener('change', function() {
+      if (logoSelect.selectedOptions.length > 1) {
+        opponentLogo = false;
+        opponentLogos = [];
+        for (let option of logoSelect.selectedOptions) {
+          const selectedLogo = option.value;
+          const img = new Image();
+          img.src = selectedLogo;
+          img.onload = function() {
+            opponentLogos.push(img);
+            drawCanvas();
+          };
+        }
+        return
+      }
+      const selectedLogo = logoSelect.value;
+      const img = new Image();
+      img.src = selectedLogo;
+
+      switch (selectedLogo) {
+        case 'files/steelers/teams/ol/memmingen.png':
+          opponentShortname = "MEM";
+          break;
+        case 'files/steelers/teams/ol/Rebels-Logo.png':
+          opponentShortname = "SEC";
+          break;
+        case 'files/steelers/teams/ol/bayreuth.png':
+          opponentShortname = "OTB";
+          break;
+        case 'files/steelers/teams/ol/fuessen.png':
+          opponentShortname = "EVF";
+          break;
+        case 'files/steelers/teams/ol/passau.png':
+          opponentShortname = "EHF";
+          break;
+        case 'files/steelers/teams/ol/peiting.png':
+          opponentShortname = "ECP";
+          break;
+        case 'files/steelers/teams/ol/hoechstadt.png':
+          opponentShortname = "HEC";
+          break;
+        case 'files/steelers/teams/ol/heilbronn.png':
+          opponentShortname = "HNF";
+          break;
+        case 'files/steelers/teams/ol/riessersee.png':
+          opponentShortname = "SCR";
+          break;
+        case 'files/steelers/teams/ol/deggendorf.png':
+          opponentShortname = "DSC";
+          break;
+        case 'files/steelers/teams/ol/lindau.png':
+          opponentShortname = "LIN";
+          break;
+        case 'files/steelers/teams/ol/badtoelz.png':
+          opponentShortname = "ECT";
+          break;
+      }
+
+      img.onload = function() {
+        // Clear the canvas before drawing the new image
+        opponentLogo = img;
+        drawCanvas();
+      };
+    });
+
+    fileSelect.addEventListener('change', function() {
+      const selectedFile = fileSelect.value;
+      const img = new Image();
+      img.src = '/files/steelers/tools/social-media/posts/empty' + selectedFile + '.png';
+
+
+      if (selectedFile == 'Matchup') {
+        fetch(
+            `https://api.hockeydata.net/data/ebel/Standings?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=15881&referer=deb-online.live`
+          )
+          .then(response => response.json())
+          .then(data => {
+            matchupData = data.data.rows;
+            drawCanvas();
+          });
+        fetch(
+            `https://api.hockeydata.net/data/ebel/TeamFairplay?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=15881&referer=deb-online.live`
+          )
+          .then(response => response.json())
+          .then(data => {
+            matchupDataFairplay = data.data.rows;
+            drawCanvas();
+          });
+        fetch(
+            `https://api.hockeydata.net/data/ebel/TeamScoringEfficiency?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=15881&referer=deb-online.live`
+          )
+          .then(response => response.json())
+          .then(data => {
+            matchupDataScoring = data.data.rows;
+            drawCanvas();
+          });
+        fetch(
+            `https://api.hockeydata.net/data/ebel/LeaderFieldPlayers?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=15881&referer=deb-online.live`
+          )
+          .then(response => response.json())
+          .then(data => {
+            matchupDataPlayer = data.data.rows;
+            drawCanvas();
+          });
+      }
+
+      img.onload = function() {
+        // Clear the canvas before drawing the new image
+        updateInputsVisibility(selectedFile);
+        config = postConfig[selectedFile];
+        selectedPost = selectedFile;
+        image = img;
+        drawCanvas();
+      };
+    });
+
+    const fontC = new FontFace('Bahnschrift Condensed',
+      'url(/files/steelers/tools/social-media/fonts/bahnschrift.ttf)', {
+        weight: 'bold', // You can also use numeric values like '400', '700', etc.
+        style: 'normal',
+        stretch: 'semi-condensed'
+      });
+    fontC.load().then(function(loadedFont) {
+      document.fonts.add(loadedFont);
+      drawCanvas();
+    });
+
+    const fontC2 = new FontFace('Bahnschrift2',
+      'url(/files/steelers/tools/social-media/fonts/bahnschrift2.ttf)', {
+        weight: '100', // You can also use numeric values like '400', '700', etc.
+        style: 'normal',
+        stretch: 'condensed'
+      });
+    fontC2.load().then(function(loadedFont) {
+      document.fonts.add(loadedFont);
+      drawCanvas();
+    });
+
+    const fontC3 = new FontFace('Bahnschrift3',
+      'url(/files/steelers/tools/social-media/fonts/bahnschrift2.ttf)', {
+        weight: '700', // You can also use numeric values like '400', '700', etc.
+        style: 'normal',
+        stretch: 'condensed'
+      });
+    fontC3.load().then(function(loadedFont) {
+      document.fonts.add(loadedFont);
+      drawCanvas();
+    });
+
+    const fontF = new FontFace('PPFormula', 'url(/files/steelers/tools/social-media/fonts/PPFormula.otf)');
+
+    fontF.load().then(function(loadedFont) {
+      document.fonts.add(loadedFont);
+      drawCanvas();
+    }).catch(function(error) {
+      console.error('Font loading failed:', error);
+    });
+
+    let backgroundImage;
+
+    let imageX = 0;
+    let imageY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let scale = 1;
+    let lastScale = 1;
+
+    function drawCanvas() {
+      if (config.length === 0) {
+        return;
+      }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (config.includes('bgImage')) {
+        if (backgroundImage) {
+          if (isNaN(backgroundImage.width)) {
+            console.log('image not loaded')
+          }
+          ctx.drawImage(backgroundImage, imageX, imageY, backgroundImage.width * scale, backgroundImage.height * scale);
+        }
+      }
+      ctx.drawImage(image, 0, 0);
+
+      let startX
+      let startY
+
+      // Hilfslinien
+
+      // Mitte
+      // ctx.strokeStyle = 'pink';
+      // ctx.lineWidth = 2;
+      // ctx.beginPath();
+      // ctx.moveTo(canvas.width / 2, 0);
+      // ctx.lineTo(canvas.width / 2, canvas.height);
+      // ctx.stroke();
+
+      // save area for isntagram posts
+      // let squareSize = canvas.width;
+      // let squareX = (canvas.width - squareSize) / 2;
+      // let squareY = (canvas.height - squareSize) / 2;
+      // ctx.strokeRect(squareX, squareY, squareSize, squareSize);
+
+
+      if (config.includes('headline')) {
+        ctx.save(); // Save the current context state
+        // main headline
+        const textScale = .85
+        const cornerGapVertical = 25
+        const cornerGapHorizontal = 65
+        const cornerSize = 70
+        ctx.scale(textScale, textScale);
+        headline = headline.toUpperCase();
+        ctx.font = '700 143px Bahnschrift Condensed';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = '#046a38';
+        var text1Width = (ctx.measureText(headline).width * textScale);
+        var text1Height = (ctx.measureText(headline).fontBoundingBoxDescent * textScale);
+        var x1 = (canvas.width / 2) / textScale;
+        var y1 = 325;
+        ctx.fillText(headline, x1, y1);
+
+        ctx.restore();
+
+        x1 = x1 * textScale
+        y1 = y1 * textScale
+
+        // Ecke oben links
+        startX = x1 - (text1Width / 2) - cornerGapHorizontal
+        startY = y1 - text1Height - cornerGapVertical
+        ctx.beginPath();
+        ctx.moveTo(startX, startY); // links unten
+        ctx.lineTo(startX, startY - cornerSize); // links ecke
+        ctx.lineTo(startX + cornerSize, startY - cornerSize); // links oben
+        ctx.strokeStyle = '#046a38';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+        // Ecke unten rechts
+        startX = x1 + (text1Width / 2) + cornerGapHorizontal - cornerSize
+        startY = y1 + 35
+        ctx.beginPath();
+        ctx.moveTo(startX, startY); // recht unten
+        ctx.lineTo(startX + cornerSize, startY); // rechts ecke
+        ctx.lineTo(startX + cornerSize, startY - cornerSize); // rechts oben
+        ctx.strokeStyle = '#046a38';
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
+      }
+
+
+      if (config.includes('smalltext')) {
+        smalltext = smalltext.toUpperCase();
+        ctx.font = '100 34px Bahnschrift2';
+        ctx.fillStyle = '#046a38';
+        if (selectedPost == 'Endstand_Away') {
+          ctx.fillStyle = '#878787';
+        }
+
+        var y1 = 322;
+
+        if (!config.includes('headline')) {
+          startX = 780
+          if (selectedPost == 'Gameday_Home' || selectedPost == 'Gameday_Away') {
+            ctx.fillStyle = 'white';
+            startX = 845
+            y1 = 425
+          } else if (selectedPost == 'Starting_Six') {
+            startX = 825
+            y1 = 350
+          }
+        }
+
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'alphabetic';
+        var text1Width = (ctx.measureText(smalltext).width);
+        var text1Height = 143;
+        var x1 = startX - text1Width - 20;
+
+        ctx.fillText(smalltext, x1, y1);
+      }
+
+      if (config.includes('result')) {
+        // Ergebnis
+        ctx.font = '100 180px Bahnschrift3';
+        ctx.fillStyle = 'white';
+        var text1Width = (ctx.measureText(resultText).width);
+        ctx.fillText(resultText, (canvas.width - text1Width) / 2, 1150);
+      }
+
+      if (config.includes('periods')) {
+        // Ergebnis
+        ctx.font = '700 43px Bahnschrift2';
+        ctx.fillStyle = 'white';
+        var text1Width = (ctx.measureText(periodsText).width);
+        ctx.fillText(periodsText, (canvas.width - text1Width) / 2, 1204);
+      }
+
+      if (config.includes('time')) {
+        // Uhrzeit
+        ctx.font = '100 100px Bahnschrift3';
+        ctx.fillStyle = 'white';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'alphabetic';
+        var x1 = 900 - ctx.measureText(timeText).width;
+        ctx.fillText(timeText, x1, 1177);
+      }
+
+      if (config.includes('jerseynumber')) {
+        // Rückennummer
+        ctx.font = '100 280px PPFormula';
+        ctx.strokeStyle = 'white';
+        ctx.globalAlpha = 0.3;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'alphabetic';
+        var textWidth = ctx.measureText(jerseynumberText).width
+        var x1 = (1080 - textWidth) / 2;
+        ctx.strokeText(jerseynumberText, x1, 1247);
+
+        if (/^\d+$/.test(jerseynumberText)) {
+          ctx.font = '100 80px PPFormula';
+          ctx.strokeStyle = 'white';
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'alphabetic';
+          var x1 = ((1080 - textWidth) / 2) - ctx.measureText('#').width - 5;
+          ctx.strokeText('#', x1, 1247);
+        }
+
+        ctx.globalAlpha = 1.0;
+      }
+
+      let points;
+      if (config.includes('paragraph')) {
+        let boxX = 250;
+        let boxY = 890;
+        let boxWidth = 1080 - 500;
+        let boxHeight = 300;
+        let lineHeight = 50;
+        let font = '100 40px Bahnschrift2';
+        let correction = 0;
+
+        if (selectedPost == 'Preview') {
+          boxWidth = 240;
+          boxX = 750
+          boxY = 890;
+        }
+        if (selectedPost == 'Geburtstag') {
+          font = '100 60px Bahnschrift2';
+          boxWidth = 900;
+          boxX = 90;
+          correction = -10;
+        }
+
+        points = drawMultilineText(ctx, paragraphText, boxX, boxY, boxWidth, boxHeight, lineHeight, font);
+
+        // Ecke oben links
+        startX = points[0] - 24
+        startY = points[1] + correction
+        ctx.beginPath();
+        ctx.moveTo(startX, startY); // links unten
+        ctx.lineTo(startX, startY - 36); // links ecke
+        ctx.lineTo(startX + 36, startY - 36); // links oben
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Ecke unten rechts
+        startX = points[0] + points[2] - 7
+        startY = points[1] + points[3] - 8
+        ctx.beginPath();
+        ctx.moveTo(startX, startY); // recht unten
+        ctx.lineTo(startX + 36, startY); // rechts ecke
+        ctx.lineTo(startX + 36, startY - 36); // rechts oben
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+      }
+
+
+      if (config.includes('opponentAway')) {
+        if (opponentLogo) {
+
+          let boxX = 700; // X-coordinate of the box
+          let boxY = 988; // Y-coordinate of the box
+          const maxWidth = 170; // Replace with your desired max width
+          const maxHeight = 170; // Replace with your desired max height
+          const boxWidth = 220; // Width of the box
+          const boxHeight = 200; // Height of the box
+
+          if (selectedPost == 'Endstand_Away') {
+            boxX = 158; // X-coordinate of the box
+            boxY = 988; // Y-coordinate of the box
+          }
+
+          if (selectedPost == 'Gameday_Home') {
+            boxX = 745; // X-coordinate of the box
+            boxY = 820; // Y-coordinate of the box
+          }
+          if (selectedPost == 'Gameday_Away') {
+            boxX = 745; // X-coordinate of the box
+            boxY = 510; // Y-coordinate of the box
+          }
+          if (selectedPost == 'Matchup') {
+            boxX = 660; // X-coordinate of the box
+            boxY = 410; // Y-coordinate of the box
+          }
+          if (selectedPost == 'Preview') {
+            boxX = 760; // X-coordinate of the box
+            boxY = 700; // Y-coordinate of the box
+            if (points) {
+              boxY = points[1] - 230;
+            }
+          }
+
+          let width2 = opponentLogo.width;
+          let height2 = opponentLogo.height;
+
+          height2 = height2 * (maxWidth / width2);
+          width2 = maxWidth;
+
+          width2 = width2 * (maxHeight / height2);
+          height2 = maxHeight;
+
+          // Calculate the coordinates to center the image within the box
+          const centerX2 = boxX + (boxWidth - width2) / 2;
+          const centerY2 = boxY + (boxHeight - height2) / 2;
+
+          createImageBitmap(opponentLogo).then((bitmap) => {
+            ctx.drawImage(bitmap, centerX2, centerY2, width2, height2);
+          });
+        } else if (opponentLogos.length > 0 && points) {
+          let count = 1
+          for (let logo of opponentLogos) {
+            let boxX = 760;
+            let boxY = points[1] - 30 - (190 * count);
+            count++;
+            const maxWidth = 160;
+            const maxHeight = 160;
+            const boxWidth = 200;
+            const boxHeight = 180;
+
+            let width2 = logo.width;
+            let height2 = logo.height;
+
+            height2 = height2 * (maxWidth / width2);
+            width2 = maxWidth;
+
+            width2 = width2 * (maxHeight / height2);
+            height2 = maxHeight;
+
+            // Calculate the coordinates to center the image within the box
+            const centerX2 = boxX + (boxWidth - width2) / 2;
+            const centerY2 = boxY + (boxHeight - height2) / 2;
+
+            createImageBitmap(logo).then((bitmap) => {
+              ctx.drawImage(bitmap, centerX2, centerY2, width2, height2);
+            });
+
+          }
+        }
+      }
+
+      if (config.includes('playerSelect1')) {
+        const canvasWidth = 1080;
+        const playerLeft = 50;
+        const playerWidth = 250;
+        const playerHeight = 250;
+        if (selectedPlayer1) {
+          drawPlayer(ctx, selectedPlayer1, 50, 430);
+        }
+        if (selectedPlayer2) {
+          drawPlayer(ctx, selectedPlayer2, (canvasWidth / 2) + (
+            playerWidth /
+            2) - playerWidth, 430);
+        }
+        if (selectedPlayer3) {
+          drawPlayer(ctx, selectedPlayer3, canvasWidth - playerLeft -
+            playerWidth, 430);
+        }
+        if (selectedPlayer4) {
+          drawPlayer(ctx, selectedPlayer4, (((canvasWidth / 2) - (
+            playerLeft)) / 2) - 125, 735);
+        }
+        if (selectedPlayer5) {
+          drawPlayer(ctx, selectedPlayer5, ((((canvasWidth / 2) + (
+            playerWidth /
+            2) - playerWidth) + playerWidth / 2) + ((canvasWidth - playerLeft -
+            playerWidth)) + 100) / 2, 735);
+        }
+        if (selectedPlayer6) {
+          drawPlayer(ctx, selectedPlayer6, (canvasWidth / 2) + (
+            playerWidth /
+            2) - playerWidth, 880);
+        }
+      }
+
+      if (config.includes('matchup')) {
+        if (matchupDataScoring && matchupData && matchupDataFairplay && matchupDataPlayer) {
+          let startY = 650;
+          const lineHeight = 64;
+
+          ctx.font = '100 50px Bahnschrift2';
+          ctx.fillStyle = 'white';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          [
+            'Spiele',
+            'Tabellenplatz',
+            'Punkte',
+            'Siege | nach OT',
+            'Tore | Gegentore',
+            'Top-Scorer',
+            'Strafminuten',
+            'Torschüsse',
+            'Über | Unterzahl',
+          ].forEach((line, index) => {
+            const lineWidth = ctx.measureText(line.toUpperCase()).width;
+            ctx.fillText(line.toUpperCase(), 540, startY + (index * lineHeight));
+          });
+
+
+          ctx.font = '700 45px Bahnschrift3';
+          ctx.fillStyle = 'white';
+          ctx.textAlign = 'right';
+          ctx.textBaseline = 'middle';
+          const homeData = matchupData.find(obj => obj['teamShortname'] === 'SCB');
+          const homeDataFairplay = matchupDataFairplay.find(obj => obj['teamShortname'] === 'SCB');
+          const homeDataScoring = matchupDataScoring.find(obj => obj['teamShortname'] === 'SCB');
+          const homeDataPlayer = matchupDataPlayer.find(obj => obj['teamShortname'] === 'SCB');
+
+          [
+            homeData['gamesPlayed'].toString(),
+            homeData['tableRank'].toString(),
+            homeData['points'].toString(),
+            homeData['gamesWon'].toString() + ' | ' + homeData['gamesWonInOt'].toString(),
+            homeData['goalsFor'] + ' | ' + homeData['goalsAgainst'],
+            shortenLastname(homeDataPlayer['playerLastname']) + " | " + homeDataPlayer['points'],
+            homeDataFairplay['penaltyMinutes'].toString(),
+            homeDataScoring['shotsOnGoal'].toString(),
+            Math.round(homeDataFairplay['powerplayPercentage'].toString()) + "% | " + Math.round(homeDataFairplay['penaltyKillingPercentage']).toString() + "%",
+          ].forEach((line, index) => {
+            const lineWidth = ctx.measureText(line.toUpperCase()).width;
+            ctx.fillText(line.toUpperCase(), 330, startY + (index * lineHeight));
+          });
+
+          if (opponentShortname) {
+            ctx.font = '700 45px Bahnschrift3';
+            ctx.fillStyle = 'white';
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            const awayData = matchupData.find(obj => obj['teamShortname'] === opponentShortname);
+            const awayDataFairplay = matchupDataFairplay.find(obj => obj['teamShortname'] === opponentShortname);
+            const awayDataScoring = matchupDataScoring.find(obj => obj['teamShortname'] === opponentShortname);
+            const awayDataPlayer = matchupDataPlayer.find(obj => obj['teamShortname'] === opponentShortname);
+
+            [
+              awayData['gamesPlayed'].toString(),
+              awayData['tableRank'].toString(),
+              awayData['points'].toString(),
+              awayData['gamesWon'].toString() + ' | ' + awayData['gamesWonInOt'].toString(),
+              awayData['goalsFor'] + ' | ' + awayData['goalsAgainst'],
+              shortenLastname(awayDataPlayer['playerLastname']) + " | " + awayDataPlayer['points'],
+              awayDataFairplay['penaltyMinutes'].toString(),
+              awayDataScoring['shotsOnGoal'].toString(),
+              Math.round(awayDataFairplay['powerplayPercentage']).toString() + "% | " + Math.round(awayDataFairplay['penaltyKillingPercentage']).toString() + "%",
+            ].forEach((line, index) => {
+              const lineWidth = ctx.measureText(line.toUpperCase()).width;
+              ctx.fillText(line.toUpperCase(), 750, startY + (index * lineHeight));
+            });
+          }
+
+          if (steelersLogo) {
+            let boxX = 210; // X-coordinate of the box
+            let boxY = 410; // Y-coordinate of the box
+            const maxWidth = 150; // Replace with your desired max width
+            const maxHeight = 150; // Replace with your desired max height
+            const boxWidth = 220; // Width of the box
+            const boxHeight = 200; // Height of the box
+
+            let width2 = steelersLogo.width;
+            let height2 = steelersLogo.height;
+
+            height2 = height2 * (maxWidth / width2);
+            width2 = maxWidth;
+
+            width2 = width2 * (maxHeight / height2);
+            height2 = maxHeight;
+
+            // Calculate the coordinates to center the image within the box
+            const centerX2 = boxX + (boxWidth - width2) / 2;
+            const centerY2 = boxY + (boxHeight - height2) / 2;
+
+            createImageBitmap(steelersLogo).then((bitmap) => {
+              ctx.drawImage(bitmap, centerX2, centerY2, width2, height2);
+            });
+          }
+
+        }
+
+      } // endif matchup
+
+
+      if (wby && config.includes('wby')) {
+        let boxX = 70; // X-coordinate of the box
+        let boxY = 30; // Y-coordinate of the box
+        const maxWidth = 120; // Replace with your desired max width
+        const maxHeight = 100; // Replace with your desired max height
+        const boxWidth = 200; // Width of the box
+        const boxHeight = 100; // Height of the box
+
+        let width2 = wby.width;
+        let height2 = wby.height;
+
+        height2 = height2 * (maxWidth / width2);
+        width2 = maxWidth;
+
+        width2 = width2 * (maxHeight / height2);
+        height2 = maxHeight;
+
+        // Calculate the coordinates to center the image within the box
+        const centerX2 = boxX;
+        const centerY2 = boxY;
+
+        createImageBitmap(wby).then((bitmap) => {
+          ctx.drawImage(bitmap, centerX2, centerY2, width2, height2);
+        });
+      }
+
+    }
+
+    function shortenLastname(input) {
+      const minusIndex = input.indexOf('-');
+      if (minusIndex !== -1 && minusIndex + 1 < input.length) {
+        return input.substring(0, minusIndex + 2) + '.';
+      }
+      return input;
+    }
+
+    // Initialize Hammer.js
+    const hammer = new Hammer(canvas);
+
+    // Handle touch events for dragging using Hammer.js
+    hammer.on('panstart', function(event) {
+      const rect = canvas.getBoundingClientRect();
+      const touchX = event.center.x - rect.left;
+      const touchY = event.center.y - rect.top;
+      isDragging = true;
+      dragStartX = touchX - imageX;
+      dragStartY = touchY - imageY;
+    });
+
+    hammer.on('panmove', function(event) {
+      if (isDragging) {
+        const rect = canvas.getBoundingClientRect();
+        imageX = event.center.x - rect.left - dragStartX;
+        imageY = event.center.y - rect.top - dragStartY;
+        drawCanvas();
+      }
+    });
+
+    hammer.on('panend pancancel', function() {
+      isDragging = false;
+    });
+
+    // Handle pinch events for resizing using Hammer.js
+    hammer.get('pinch').set({
+      enable: true
+    });
+
+    hammer.on('pinchstart', function() {
+      lastScale = scale;
+    });
+
+    hammer.on('pinchmove', function(event) {
+      scale = lastScale * event.scale;
+      drawCanvas();
+    });
+
+    // Handle mousewheel events for scaling
+    document.getElementById('posts').addEventListener('wheel', function(event) {
+      event.preventDefault();
+      const scaleAmount = 0.01;
+      if (event.deltaY < 0) {
+        scale += scaleAmount;
+      } else {
+        scale -= scaleAmount;
+      }
+      drawCanvas();
+    });
+
+    // Handle image upload
+    document.getElementById('uploadImage').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const uploadedImage = new Image();
+          base64String = e.target.result;
+          const byteString = atob(base64String.split(',')[1]);
+          const mimeString = base64String.split(',')[0].split(':')[1].split(';')[0];
+          const ab = new ArrayBuffer(byteString.length);
+          const ia = new Uint8Array(ab);
+          for (let i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+          }
+          const blob = new Blob([ab], {
+            type: mimeString
+          });
+          const url = URL.createObjectURL(blob);
+          uploadedImage.src = url;
+
+          uploadedImage.onload = () => {
+            URL.revokeObjectURL(url); // Clean up the Blob URL
+            const targetWidth = 1080;
+            const originalWidth = uploadedImage.width;
+            scale = targetWidth / originalWidth;
+
+            backgroundImage = uploadedImage;
+            drawCanvas();
+          };
+          setTimeout(function() {
+
+          }, 100)
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function drawMultilineText(ctx, text, boxX, boxY, boxWidth, boxHeight, lineHeight, font) {
+      ctx.font = font;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = 'white';
+
+      // Split text into lines based on existing line breaks
+      const initialLines = text.toUpperCase().split('\n');
+      let lines = [];
+
+      initialLines.forEach(line => {
+        const words = line.split(' ');
+        let currentLine = words[0];
+
+        for (let i = 1; i < words.length; i++) {
+          const word = words[i];
+          const width = ctx.measureText(currentLine + ' ' + word).width;
+          if (width < boxWidth) {
+            currentLine += ' ' + word;
+          } else {
+            lines.push(currentLine.trim());
+            currentLine = word;
+          }
+        }
+        lines.push(currentLine.trim());
+      });
+
+      // Calculate the starting y-coordinate to center the text vertically
+      const totalHeight = lines.length * lineHeight;
+      let y = boxY + boxHeight - totalHeight + lineHeight / 2;
+
+      const longestLine = lines.reduce((a, b) => a.length > b.length ? a : b);
+
+      let points = [(boxX + boxWidth / 2) - (ctx.measureText(longestLine).width / 2), y, ctx.measureText(longestLine)
+        .width, totalHeight
+      ]
+
+      // Draw each line centered horizontally within the box
+      lines.forEach(line => {
+        ctx.fillText(line, boxX + boxWidth / 2, y);
+        y += lineHeight;
+      });
+
+      return points
+    }
+
+    function updateInputsVisibility(selectedPostType) {
+      const allInputs = {
+        'headline': headlineInput,
+        'smalltext': smalltextInput,
+        'result': resultInput,
+        'periods': periodsInput,
+        'time': timeInput,
+        'opponentAway': logoSelect,
+        'jerseynumber': jerseynumberInput,
+        <?php for ($i = 1; $i <= 6; $i++): ?> 'playerSelect<?= $i ?>': playerSelect<?= $i ?>,
+        <?php endfor; ?> 'bgImage': document.getElementById('uploadImage'),
+        'paragraph': document.getElementById('paragraphInput') // Assuming there's an input for paragraph
+      };
+
+      // Hide all inputs initially
+      for (let key in allInputs) {
+        if (allInputs[key]) {
+          allInputs[key].parentElement.style.display = 'none';
+        }
+      }
+
+      // Show only the inputs that are part of the selected configuration
+      if (postConfig[selectedPostType]) {
+        postConfig[selectedPostType].forEach(inputName => {
+          if (allInputs[inputName]) {
+            allInputs[inputName].parentElement.style.display = 'block';
+            if (inputName == 'opponentAway') {
+              if (selectedPostType == 'Preview') {
+                allInputs[inputName].multiple = true;
+              } else {
+                allInputs[inputName].multiple = false;
+              }
+            }
+          }
+        });
+      }
+    }
+
+    function drawPlayer(ctx, player, x, y, width, height) {
+      const canvasWidth = 1080;
+      const playerLeft = 50;
+      const playerWidth = 250;
+      const playerHeight = 250;
+      // Ergebnis
+      let playerData = player.src.split('/').pop().split('_').map(part => part.replace('.png', ''));
+      let nummer = playerData[1];
+
+      let nummerX = x
+      let nummerY = y + 80
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
+      ctx.shadowBlur = 10;
+      ctx.shadowOffsetX = 5;
+      ctx.shadowOffsetY = 5;
+      ctx.font = '500 200px Bahnschrift Condensed';
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; // Set the text color
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      let numberX = nummerX + playerWidth / 2;
+      let numberY = nummerY;
+
+      // Draw the text
+      ctx.fillText(nummer.replace(/^0+/, ''), numberX, numberY);
+
+      ctx.drawImage(player, (player.width / 1.5) / 4, 0, player.width / 1.5, player.width / 1.5, x, y,
+        playerWidth,
+        playerHeight);
+
+      drawRoundedRect(ctx, x - 10, y + playerHeight, playerWidth + 20, 30, 10, decodeURIComponent(playerData[2]), playerData[1]);
+    }
+
+    function drawRoundedRect(ctx, x, y, width, height, radius, text) {
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.25)';
+      ctx.shadowBlur = 10;
+      ctx.shadowOffsetX = 5;
+      ctx.shadowOffsetY = 5;
+
+      // Draw the rectangle
+      ctx.fillStyle = 'rgba(255, 255, 255, 1)';
+      ctx.fillRect(x, y, width, height);
+
+      // Set the font and calculate the position to center the text
+      ctx.font = '500 25px Bahnschrift Condensed';
+      ctx.fillStyle = 'black'; // Set the text color
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      let textX = x + width / 2;
+      let textY = (y + height / 2) + 2;
+
+      // Draw the text
+      ctx.fillText(text.toUpperCase(), textX, textY);
+    }
+
+    updateInputsVisibility('');
+  </script>
+</div>

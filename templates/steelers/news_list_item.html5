@@ -1,0 +1,67 @@
+<?php
+
+try {
+  $container = \Contao\System::getContainer();
+  $rootDir = $container->getParameter('kernel.project_dir');
+
+  $image = $container->get('contao.image.picture_factory')->create($rootDir . '/'  . $this->arrData['singleSRC'], 11);
+  $sources = $image->getSources();
+  $imageObj = $sources[0]['src'];
+  $ogimage = $imageObj->getUrl($rootDir);
+} catch (Exception $e) {
+  $ogimage = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 511, 637, 'crop');
+}
+
+if (!function_exists('tokenTruncate')) {
+  function tokenTruncate($string, $your_desired_width)
+  {
+    $parts = preg_split('/([\s\n\r]+)/', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $parts_count = count($parts);
+
+    $length = 0;
+    $last_part = 0;
+    for (; $last_part < $parts_count; ++$last_part) {
+      $length += strlen($parts[$last_part]);
+      if ($length > $your_desired_width) {
+        break;
+      }
+    }
+
+    return trim(implode(array_slice($parts, 0, $last_part)));
+  }
+}
+
+?>
+<div class="group relative bg-white border border-gray-200 mx-2 xl:mx-4 flex flex-col overflow-hidden">
+  <div class="flex flex-col bg-white h-full">
+    <a href="<?= $this->link ?>" data-bigimage="<?= $this->arrData['singleSRC'] ?>">
+      <img src="<?= $ogimage; ?>" width="296" height="370" alt="<?= $this->newsHeadline ?>" class="aspect-news w-full">
+    </a>
+    <div class="p-5 grow flex flex-col">
+      <div class="text-gray-400 italic uppercase">
+        <?php if (count($this->categoriesList) > 0) : ?>
+          <?= implode(', ', $this->categoriesList) ?>
+          <?php endif; ?>&nbsp;
+      </div>
+
+      <?php
+      echo '<a href="' . $this->link . '" class="mt-1 text-xl text-steelgreen uppercase font-bold leading-6">';
+      echo trim($this->newsHeadline);
+      echo '</a>';
+      ?>
+      <p class="mt-5 text-sm text-black"><?= tokenTruncate(strip_tags($this->teaser), 120) ?>&#8230;</p>
+      <div class="mt-5 flex-1 flex flex-col justify-end">
+        <time class="text-sm text-steelgreen" datetime="<?= $this->datetime ?>"><?= date('d.m.Y', $this->time) ?></time>
+      </div>
+    </div>
+  </div>
+</div>
+<?php
+
+$schemaOrg = $this->getSchemaOrgData();
+
+if ($this->hasText) {
+  $schemaOrg['text'] = $this->rawHtmlToPlainText($this->text);
+}
+
+$this->addSchemaOrg($schemaOrg);

@@ -1,0 +1,17 @@
+<!-- indexer::stop -->
+<nav class="<?= $this->class ?> microsite-nav device bg-steelblue" <?= $this->cssID ?><?php if ($this->style) : ?> style="<?= $this->style ?>" <?php endif; ?>>
+	<div class="flex flex-wrap items-center gap-6 relative mx-12 py-5">
+		<?php
+		global $objPage;
+		$layoutId = $objPage->layout;
+		if ($layoutId == 6) { // Layout alwa-cup
+			echo $this->replaceInsertTags('{{insert_article::alwa-cup-titel}}');
+		} elseif ($layoutId == 7) { // Layout Porsche Camp
+			echo $this->replaceInsertTags('{{insert_article::porsche-camp-title}}');
+		}
+		?>
+		<?= $this->items ?>
+	</div>
+</nav>
+<a id=" <?= $this->skipId ?>" class="hidden">&nbsp;</a>
+<!-- indexer::continue --> 

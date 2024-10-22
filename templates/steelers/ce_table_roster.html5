@@ -1,0 +1,37 @@
+<div class="defaultcontainer mb-8 max-lg:!my-12">
+    <h3 class="text-4xl md:text-5xl"><?= $this->headline ?></h3>
+    <div class="!my-12 max-w-5xl mx-auto">
+        <!-- xs to lg -->
+        <div class="mt-8 flow-root">
+            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <table class="min-w-full divide-y divide-gray-300">
+                        <thead class="bg-steelblue">
+                            <tr>
+                                <?php foreach ($this->header as $i => $col) : ?>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-white font-headline text-2xl uppercase"><?= $col['content'] ?></th>
+                                <?php endforeach; ?>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white/20">
+                            <?php foreach ($this->body as $class => $row) : ?>
+                                <tr class="even:bg-gray-50/20">
+                                    <?php foreach ($row as $i => $cell) : ?>
+                                        <?php
+                                        $addedClasses = 'font-medium';
+                                        if ($this->header[$i]['content'] === 'Name') :
+                                            $addedClasses = 'font-bold';
+                                        endif;
+                                        ?>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm <?= $addedClasses ?> text-gray-900 sm:pl-3"><?= $cell['content'] ?></td>
+                                    <?php endforeach ?>
+                                </tr>
+                            <?php endforeach; ?>
+                            <!-- More people... -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

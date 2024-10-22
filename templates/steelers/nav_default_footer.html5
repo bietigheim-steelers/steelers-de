@@ -1,0 +1,41 @@
+<?php if ($this->level == 'level_1') : ?>
+<ul
+  class="<?= $this->level ?> text-white w-full font-bold gap-2 xl:gap-0 flex-col xl:flex-row flex justify-items-center justify-between mt-8 font-headline text-2xl uppercase">
+  <?php foreach ($this->items as $item) : ?>
+
+  <?php if (!empty($item['subitems'])) : ?>
+  <li class="<?= $item['class'] ?> relative <?= $item['isActive'] ? 'active' : '' ?>" aria-haspopup="true">
+    <strong><?= $item['link'] ?></strong>
+    <?= $item['subitems'] ?>
+  </li>
+  <?php else : ?>
+  <?php if ($item['isActive']) : ?>
+  <li class="active"><strong><?= $item['link'] ?></strong></li>
+  <?php else : ?>
+  <li<?php if ($item['class']) : ?> class="<?= $item['class'] ?>" <?php endif; ?>><a href="<?= $item['href'] ?: './' ?>"
+      title="<?= $item['pageTitle'] ?: $item['title'] ?>" <?php if ('' !== $item['accesskey']) : ?>
+      accesskey="<?= $item['accesskey'] ?>" <?php endif; ?><?php if ($item['tabindex']) : ?>
+      tabindex="<?= $item['tabindex'] ?>"
+      <?php endif; ?><?= $item['target'] ?><?= $item['rel'] ?? '' ?><?php if (!empty($item['subitems'])) : ?>
+      aria-haspopup="true" <?php endif; ?>><?= $item['link'] ?></a></li>
+    <?php endif; ?>
+    <?php endif; ?>
+
+    <?php endforeach; ?>
+</ul>
+<?php else : ?>
+<ul class="<?= $this->level ?> font-sans text-base ml-3 md:ml-0">
+  <?php foreach ($this->items as $item) : ?>
+  <?php if ($item['isActive']) : ?>
+  <li class="active"><strong><?= $item['link'] ?></strong></li>
+  <?php else : ?>
+  <li class="<?= $item['class'] ?> hover:bg-steelblue"><a href="<?= $item['href'] ?: './' ?>"
+      class="py-1 whitespace-nowrap block" title="<?= $item['pageTitle'] ?: $item['title'] ?>"
+      <?php if ('' !== $item['accesskey']) : ?> accesskey="<?= $item['accesskey'] ?>"
+      <?php endif; ?><?php if ($item['tabindex']) : ?> tabindex="<?= $item['tabindex'] ?>"
+      <?php endif; ?><?= $item['target'] ?><?= $item['rel'] ?? '' ?><?php if (!empty($item['subitems'])) : ?>
+      aria-haspopup="true" <?php endif; ?>><?= $item['link'] ?></a></li>
+  <?php endif; ?>
+  <?php endforeach; ?>
+</ul>
+<?php endif; ?>

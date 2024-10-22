@@ -1,0 +1,75 @@
+<?php
+$allSubs = [];
+if ($this->level == 'level_1') :
+?>
+<script>
+var openSubItem = null;
+
+function clickOnParent(el, openSub) {
+  var mobileNav = document.getElementById('mobile-nav-ul');
+  for (let child of mobileNav.children) {
+    child.children[0].classList.remove('activeSub');
+  }
+  var allSubs = document.getElementsByClassName('level_2');
+  if (openSub === openSubItem) {
+    // close current sub item
+    mobileNav.classList.remove('subItemIsOpen');
+    allSubs[openSubItem].classList.remove('openSubItem')
+    openSubItem = null;
+  } else if (openSubItem === null) {
+    // open new sub element
+    mobileNav.classList.add('subItemIsOpen');
+    el.classList.add('activeSub');
+    allSubs[openSub].classList.add('openSubItem')
+    openSubItem = openSub;
+  } else {
+    // switch between two sub elements
+    mobileNav.classList.add('subItemIsOpen');
+    el.classList.add('activeSub');
+    allSubs[openSubItem].classList.remove('openSubItem')
+    allSubs[openSub].classList.add('openSubItem')
+    openSubItem = openSub;
+  }
+}
+</script>
+<ul id="mobile-nav-ul" class="<?= $this->level ?> text-white w-full font-bold flex h-full items-stretch lg:!hidden">
+  <?php foreach ($this->items as $key => $item) : ?>
+  <?php if (!empty($item['subitems'])) : ?>
+  <li class="<?= $item['class'] ?> <?= $item['isActive'] ? 'active' : ''; ?> cursor-pointer">
+    <a aria-haspopup="true" onClick="clickOnParent(this, <?= count($allSubs); ?>)"><?= $item['link'] ?></a>
+    <?php $allSubs[] = $item['subitems'] ?>
+  </li>
+
+  <?php elseif ($item['isActive']) : ?>
+  <li class="active <?= $item['class'] ?>"><a <?php if (!empty($item['subitems'])) : ?> aria-haspopup="true"
+      <?php endif; ?>><?= $item['link'] ?></a></li>
+  <?php else : ?>
+  <li<?php if ($item['class']) : ?> class="<?= $item['class'] ?>" <?php endif; ?>><a href="<?= $item['href'] ?: './' ?>"
+      title="<?= $item['pageTitle'] ?: $item['title'] ?>" <?php if ('' !== $item['accesskey']) : ?>
+      accesskey="<?= $item['accesskey'] ?>" <?php endif; ?><?php if ($item['tabindex']) : ?>
+      tabindex="<?= $item['tabindex'] ?>"
+      <?php endif; ?><?= $item['target'] ?><?= $item['rel'] ?? '' ?><?php if (!empty($item['subitems'])) : ?>
+      aria-haspopup="true" <?php endif; ?>><?= $item['link'] ?></a>
+    </li>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</ul>
+<?php else : ?>
+<ul class="<?= $this->level ?> text-white w-full font-bold flex absolute gap-2 top-0 mt-24 content-start lg:!hidden">
+  <?php foreach ($this->items as $item) : ?>
+  <?php if ($item['isActive']) : ?>
+  <li class="isSubElement active"><a><?= $item['link'] ?></a></li>
+  <?php else : ?>
+  <li class="isSubElement <?= $item['class'] ?>"><a href="<?= $item['href'] ?: './' ?>"
+      title="<?= $item['pageTitle'] ?: $item['title'] ?>" <?php if ('' !== $item['accesskey']) : ?>
+      accesskey="<?= $item['accesskey'] ?>" <?php endif; ?><?php if ($item['tabindex']) : ?>
+      tabindex="<?= $item['tabindex'] ?>"
+      <?php endif; ?><?= $item['target'] ?><?= $item['rel'] ?? '' ?><?php if (!empty($item['subitems'])) : ?>
+      aria-haspopup="true" <?php endif; ?>><?= $item['link'] ?></a></li>
+  <?php endif; ?>
+  <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+<?php foreach ($allSubs as $sub) : ?>
+<?= $sub; ?>
+<?php endforeach; ?>

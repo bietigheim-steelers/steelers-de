@@ -1,0 +1,67 @@
+span.player-subheadline {
+  @apply text-5xl uppercase font-bold text-gray-600 font-sans mt-2;
+}
+
+@supports (-webkit-text-stroke: 1px #000) {
+  span.player-subheadline {
+    color: transparent;
+    -webkit-text-stroke: 1px #000;
+    text-shadow: none;
+  }
+  span.player-number {
+    color: transparent;
+    font-size: clamp(5rem,15vw,16rem);
+    -webkit-text-stroke: 1px #009cde;
+    text-shadow: none;
+  }
+}
+
+.player-stats {
+  @apply grid grid-cols-2 items-center text-center;
+}
+.player-stats > div {
+  @apply px-3 pt-8 my-4 border-t-2 border-black;
+}
+
+.player-stats .number {
+  @apply font-headline text-6xl border-r border-black;
+}
+.player-stats .title {
+  @apply font-bold text-xl uppercase border-r border-black;
+}
+.player-stats > div:nth-child(2n) .title,
+.player-stats > div:nth-child(2n) .number {
+  @apply border-none;
+}
+
+.career-stats a {
+  @apply text-steelblue;
+}
+.table_stats {
+  @apply bg-steelwhite/70 mt-4;
+}
+
+.table_stats .tdh_stats {
+  @apply text-steelgreen font-bold uppercase py-3 border-b border-black;
+}
+
+.table_stats tr:nth-child(2) td {
+  @apply pt-3;
+}
+.table_stats .tr_stats_even {
+  @apply bg-black/10;
+}
+
+@media (min-width: 1024px) {
+  .player-stats {
+    @apply grid-cols-4;
+  }
+  .player-stats > div:nth-child(2n) .title,
+  .player-stats > div:nth-child(2n) .number {
+    @apply border-r border-black border-solid;
+  }
+  .player-stats > div:nth-child(4n) .title,
+  .player-stats > div:nth-child(4n) .number {
+    @apply border-none;
+  }
+}

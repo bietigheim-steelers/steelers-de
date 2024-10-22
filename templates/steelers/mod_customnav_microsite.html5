@@ -1,0 +1,15 @@
+<!-- indexer::stop -->
+<nav class="<?= $this->class ?> microsite-nav device bg-steelblue" <?= $this->cssID ?><?php if ($this->style) : ?> style="<?= $this->style ?>" <?php endif; ?>>
+	<div class="flex items-center gap-6 py-2 relative mx-12" style="height: 60px;">
+		<?php
+		global $objPage;
+		$layoutId = $objPage->layout;
+		if ($layoutId == 6) { // Layout alwa-cup
+			echo $this->replaceInsertTags('{{insert_article::alwa-cup-titel}}');
+		}
+		?>
+		<?= $this->items ?>
+	</div>
+</nav>
+<a id=" <?= $this->skipId ?>" class="hidden">&nbsp;</a>
+<!-- indexer::continue -->

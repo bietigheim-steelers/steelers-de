@@ -1,0 +1,7 @@
+<?php $this->block('content'); ?>
+<div class="tilastot-camps <?= $this->cssClass ?>" <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
+  <?php
+  var_dump($this->camps);
+  ?>
+</div>
+<?php $this->endblock(); ?>

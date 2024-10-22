@@ -1,0 +1,24 @@
+<?php $this->block('content'); ?>
+<div class="next-game-at-home <?= $this->cssClass ?>">
+  <table>
+    <thead>
+      <tr>
+        <th>Datum</th>
+        <th>Uhrzeit</th>
+        <th>Heim</th>
+        <th>Auswärts</th>
+        <th>Ergebnis</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><?= \System::parseDate('d.m.Y', $this->game['gamedate']) ?></td>
+        <td><?= $this->game['gametime'] ?> Uhr</td>
+        <td><?= $this->game['home']['name'] ?></td>
+        <td><?= $this->game['away']['name'] ?></td>
+        <td><?= $this->game['homescore'] . ":" . $this->game['awayscore'] ?> <?= $this->game['resulttype'] ?></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<?php $this->endblock(); ?>

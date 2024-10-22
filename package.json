@@ -1,0 +1,40 @@
+{
+  "name": "steelers-de-theme",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "css-dev": "npx tailwindcss -i ./src/Steelers/css/main.css -o ./files/steelers/css/steelers.css --watch --config tailwind.config.cjs",
+    "css-build": "npx tailwindcss -i ./src/Steelers/css/main.css -o ./files/steelers/css/steelers.css --minify --config tailwind.config.cjs",
+    "js-dev": "vite",
+    "js-build": "vite build && vite build --config vite-form.config.js",
+    "build": "npm run css-build && npm run js-build",
+    "dev-sync": "cpx \"./!(node_modules)/**\" \"../devilbox-contao/data/www/steelers\" -v"
+  },
+  "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.0",
+    "@tailwindcss/forms": "^0.5.4",
+    "@tailwindcss/typography": "^0.5.8",
+    "@vitejs/plugin-vue": "^3.0.0",
+    "autoprefixer": "^10.4.14",
+    "dotenv": "^16.0.1",
+    "postcss-import": "^14.1.0",
+    "tailwindcss": "^3.2.4",
+    "vite": "^3.0.0"
+  },
+  "dependencies": {
+    "@glidejs/glide": "^3.6.0",
+    "@vueform/vueform": "^1.9.9",
+    "blaze-slider": "^1.8.0",
+    "cpx": "^1.5.0",
+    "glightbox": "^3.2.0",
+    "lodash.throttle": "^4.1.1",
+    "swiper": "^9.2.0",
+    "vue": "^3.2.37"
+  },
+  "browserslist": [
+    "last 1 version",
+    "> 1%",
+    "not dead",
+    "Safari 8"
+  ]
+}

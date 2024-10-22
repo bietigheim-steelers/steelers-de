@@ -1,0 +1,12 @@
+<!-- indexer::stop -->
+<div class="defaultcontainer  <?= $this->class ?> block" <?= $this->cssID ?><?php if ($this->style) : ?> style="<?= $this->style ?>" <?php endif; ?>>
+
+  <?php if ($this->headline) : ?>
+    <<?= $this->hl ?>><?= $this->headline ?></<?= $this->hl ?>>
+  <?php endif; ?>
+
+  <div id="formApp"></div>
+  <script type="module" src="files/steelers/js/form.js?2024070200"></script>
+
+</div>
+<!-- indexer::continue -->

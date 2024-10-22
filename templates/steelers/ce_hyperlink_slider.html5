@@ -1,0 +1,27 @@
+<?php
+$ogimage = $this->getImage($this->urlEncode($this->singleSRC), 800, 800, 'crop');
+$ogimage_640 = $this->getImage($this->urlEncode($this->singleSRC), 400, 400, 'crop');
+?>
+<div class="swiper-slide relative">
+  <div class="grid grid-cols-1 md:grid-cols-2">
+    <div class="relative py-5 pr-16" style="padding-left: 3vw">
+      <div class="absolute md:top-5 lg:top-10 xl:top-16 pr-16 ">
+        <h3
+          class="text-3xl lg:text-4xl xl:text-5xl bg-white/30 backdrop-blur p-2 md:bg-transparent uppercase font-bold font-sans text-black leading-none whitespace-pre-wrap">
+          <?php
+                                                                                                                                                                            echo str_replace(array(': '), array(':<br>'),$this->headline);
+                                                                                                                                                                            ?></h3>
+        <p class="lg:mt-10">
+          <a class="btn-default inline-block" href="<?= $this->href ?>"><?= $this->linkTitle ?></a>
+        </p>
+      </div>
+    </div>
+    <div class="overflow-hidden" style="max-height: 70vh">
+      <?php if ($this->addImage) : ?>
+      <img srcset="<?= $ogimage_640 ?> 640w, <?= $ogimage ?> 1536w" sizes="(max-width: 640px) 400px,
+         800px" src="<?= $ogimage ?>" class="object-cover object-top w-full h-full aspect-square"
+        alt="<?= $this->headline ?>" />
+      <?php endif; ?>
+    </div>
+  </div>
+</div>

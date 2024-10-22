@@ -1,0 +1,60 @@
+<?php $this->extend('form_row'); ?>
+
+<?php $this->block('field'); ?>
+<fieldset id="ctrl_<?= $this->id ?>"
+  class="radio_container<?php if ($this->class) : ?> <?= $this->class ?><?php endif; ?>">
+  <?php if ($this->label) : ?>
+    <legend class="text-sm font-semibold leading-6 text-gray-900">
+      <?php if ($this->mandatory) : ?>
+        <?= $this->label ?> <span class="mandatory">*</span>
+      <?php else : ?>
+        <?= $this->label ?>
+      <?php endif; ?>
+    </legend>
+  <?php endif; ?>
+  <?php if ($this->hasErrors()) : ?>
+    <p class="error"><?= $this->getErrorAsString() ?></p>
+  <?php endif; ?>
+
+  <div class="space-y-4">
+    <?php foreach ($this->getOptions() as $option) : ?>
+      <label
+        class="relative block cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none sm:flex sm:justify-between">
+        <input onChange="activate_opt_<?= $option['id'] ?>()" id="opt_<?= $option['id'] ?>" name="<?= $option['name'] ?>"
+          type="radio" value="<?= $option['value'] ?>" class="sr-only" aria-labelledby="lbl_<?= $option['id'] ?>"
+          aria-describedby="desc_<?= $option['id'] ?>">
+        <span class="flex items-center">
+          <span class="flex flex-col text-sm">
+            <span id="lbl_<?= $option['id'] ?>" class="font-medium text-gray-900"><?= $option['value'] ?></span>
+            <span class="text-gray-500">
+            </span>
+          </span>
+        </span>
+        <span id="desc_<?= $option['id'] ?>" class="mt-2 flex text-sm sm:ml-4 sm:mt-0 sm:flex-col sm:text-right">
+          <span class="font-medium text-gray-900"><?= $option['label'] ?></span>
+        </span>
+        <span class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"></span>
+        <script>
+          function activate_opt_<?= $option['id'] ?>() {
+            console.log('clicked on <?= $option['id'] ?>');
+            const radioGroup = document.getElementById('ctrl_<?= $this->id ?>');
+            const allElements = document.querySelectorAll('#ctrl_<?= $this->id ?> label')
+            if (allElements.length > 0) {
+              for (let i = 0; i < allElements.length; i++) {
+                let item = allElements[i];
+                item.classList.remove('border-steelgreen', 'ring-2', 'ring-steelgreen');
+                item.classList.add('border-gray-300');
+              }
+            }
+            const current = document.getElementById('opt_<?= $option['id'] ?>')
+            current.parentElement.classList.remove('border-gray-300');
+            current.parentElement.classList.add('border-steelgreen', 'ring-2', 'ring-steelgreen');
+
+
+          }
+        </script>
+      </label>
+    <?php endforeach; ?>
+  </div>
+</fieldset>
+<?php $this->endblock(); ?>

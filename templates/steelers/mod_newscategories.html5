@@ -1,0 +1,11 @@
+<?php $this->extend('block_unsearchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<div class="max-w-screen-2xl mx-auto relative mt-8 mb-20 md:my-20">
+  <ul class="<?= $this->level ?><?php if ($this->isActiveCategories): ?> active-categories<?php endif; ?> flex flex-wrap flex-row">
+    <?= $this->categories ?>
+  </ul>
+</div>
+
+<?php $this->endblock(); ?>

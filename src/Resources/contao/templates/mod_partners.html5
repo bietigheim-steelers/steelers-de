@@ -1,0 +1,10 @@
+<?php $this->block('content'); ?>
+<div class="tilastot-partners <?= $this->cssClass ?>" <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
+  <?php
+  var_dump($this->categories);
+  ?>
+  <?php
+  var_dump($this->partners);
+  ?>
+</div>
+<?php $this->endblock(); ?>

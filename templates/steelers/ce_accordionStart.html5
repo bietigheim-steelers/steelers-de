@@ -1,0 +1,4 @@
+<section class="<?= $this->class ?> defaultcontainer mb-8 max-lg:!my-12 ce_accordion block" <?= $this->cssID ?><?php if ($this->style) : ?> style="<?= $this->style ?>" <?php endif; ?>>
+
+    <div class="accordion vertical">
+        <ul>

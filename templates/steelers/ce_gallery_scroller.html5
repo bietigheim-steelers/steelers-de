@@ -1,0 +1,48 @@
+<div class="relative overflow-hidden isolate">
+  <div class="absolute -z-10 w-screen h-4/6 bg-black">
+    <?php
+    $allPictures = StringUtil::deserialize($this->orderSRC);
+    echo $this->replaceInsertTags('{{image::' . $allPictures[0] . '?height=768&width=768&mode=box&alt=' . $this->headline . '&class=w-full h-full object-center object-cover opacity-20 grayscale}}');
+    ?>
+  </div>
+  <h3 class="pl-5"><?= $this->headline ?></h3>
+  <div class="swiper-gallery mx-2 md:mx-12" data-perrow="<?= $this->perRow; ?>">
+    <div class="swiper-wrapper" data-glide-el="track">
+      <?php
+      foreach ($allPictures as $picture) :
+        $file = \FilesModel::findByUuid($picture);
+        $image_300 = $this->getImage($this->urlEncode($file->path), 300, 375, 'crop');
+        $image_400 = $this->getImage($this->urlEncode($file->path), 400, 500, 'crop');
+      ?>
+        <li class="swiper-slide w-[300px] 2xl:w-[400px]">
+          <a href="/<?= $file->path ?>" class="glightbox" data-gallery="gallery<?= $this->id ?>">
+            <img srcset="<?= $image_300 ?> 640w, <?= $image_400 ?> 1536w" sizes="(max-width: 640px) 300px,
+         400px" src="<?= $ogimage ?>" class="w-full h-full object-center object-cover" alt="<?= $this->headline ?>" />
+          </a>
+        </li>
+      <?php
+      endforeach;
+      ?>
+    </div>
+    <div class="mt-5 flex gap-14" data-glide-el="controls">
+      <button class="swiper-button-left" aria-label="vorheriges Bild"><svg xmlns="http://www.w3.org/2000/svg" class="fill-black stroke-black" x="0px" y="0px" width="60px" height="40px" viewBox="0 0 60 40">
+          <g>
+            <line stroke-width="2" x1="62.5" y1="20.031" x2="20.5" y2="20.031"></line>
+            <polygon stroke-miterlimit="10" points="21,25 15.406,20.093 21,15.06"></polygon>
+            <path d="M19.938,2.045c9.866,0,17.893,8.026,17.893,17.893S29.804,37.83,19.938,37.83S2.045,29.804,2.045,19.938
+S10.071,2.045,19.938,2.045 M19.938,0C8.926,0,0,8.926,0,19.938c0,11.011,8.926,19.938,19.938,19.938s19.938-8.927,19.938-19.938
+C39.875,8.926,30.949,0,19.938,0L19.938,0z"></path>
+          </g>
+        </svg></button>
+      <button class="swiper-button-right" aria-label="nächstes Bild"><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" class="rotate-180 fill-black stroke-black" width="60px" height="40px" viewBox="0 0 60 40">
+          <g>
+            <line fill="none" stroke-width="2" x1="62.5" y1="20.031" x2="20.5" y2="20.031"></line>
+            <polygon stroke-miterlimit="10" points="21,25 15.406,20.093 21,15.06"></polygon>
+            <path d="M19.938,2.045c9.866,0,17.893,8.026,17.893,17.893S29.804,37.83,19.938,37.83S2.045,29.804,2.045,19.938
+		S10.071,2.045,19.938,2.045 M19.938,0C8.926,0,0,8.926,0,19.938c0,11.011,8.926,19.938,19.938,19.938s19.938-8.927,19.938-19.938
+		C39.875,8.926,30.949,0,19.938,0L19.938,0z"></path>
+          </g>
+        </svg></button>
+    </div>
+  </div>
+</div>

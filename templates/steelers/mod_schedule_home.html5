@@ -1,0 +1,8 @@
+<?php $this->block('content'); ?>
+<div class="basis-full lg:basis-1/2">
+  <script>
+  window.tilastot_gamedata = <?= json_encode($this->games, JSON_PRETTY_PRINT) ?>;
+  </script>
+  <div id="homeschedule" class="h-full"></div>
+</div>
+<?php $this->endblock(); ?>

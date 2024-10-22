@@ -1,0 +1,14 @@
+<?php $this->extend('block_searchable'); ?>
+
+<?php $this->block('content'); ?>
+<div class="flex items-center justify-center h-screen">
+  <div>
+    <h2 class="block-headline"><?= $this->keys['code']; ?></h1>
+      <h3 class="text-center text-5xl"><?= $this->keys['title']; ?></h3>
+      <p class="text-center mt-2 text-lg font-bold uppercase"><?= $this->keys['desc']; ?></p>
+      <p class="text-center mt-16">
+        <a href=" /" class="btn-default">Zur Startseite</a>
+      </p>
+  </div>
+</div>
+<?php $this->endblock(); ?>

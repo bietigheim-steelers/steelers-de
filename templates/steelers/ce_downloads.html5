@@ -1,0 +1,10 @@
+    <?php foreach ($this->files as $file) : ?>
+        <div class=" bg-white flex items-center p-5 transition-all duration-500 hover:scale-110 hover:shadow-lg download-element ext-<?= $file['extension'] ?>">
+    <?php if ($file['previews']) : ?>
+        <?php foreach ($file['previews'] as $preview) : ?>
+            <?php $this->insert('image', $preview->getLegacyTemplateData()) ?>
+        <?php endforeach ?>
+    <?php endif ?>
+    <a href="<?= $file['href'] ?>" title="<?= $file['title'] ?>" type="<?= $file['mime'] ?>"><?= $file['link'] ?></a>
+    </div>
+<?php endforeach; ?>

@@ -1,0 +1,42 @@
+<?php $this->extend('block_unsearchable'); ?>
+
+<?php $this->block('content'); ?>
+
+<figure class="relative my-28 xl:my-36">
+  <?php if ($this->isVideo) : ?>
+    <div class="absolute top-0 bottom-0 left-0 right-0 bg-black bg-opacity-80 z-10 flex items-center justify-center">
+      <div>
+        <h6 class="font-headline text-steelgreen text-3xl md:text-6xl lg:text-9xl xl:text-[12rem] xl:leading-[10rem] uppercase text-center">
+          Ich bin
+          ein<br />Steeler</h6>
+        <p class="text-center mt-3 md:mt-20">
+          <a href="/partner" class="btn-default">Sponsor werden</a>
+        </p>
+      </div>
+    </div>
+    <video id="home-video" class="w-full" <?= $this->size ?><?php if ($this->poster) : ?> poster="<?= $this->poster ?>" <?php endif; ?><?php if ($this->preload) : ?> preload="<?= $this->preload ?>" <?php endif; ?> <?= implode(' ', $this->attributes) ?>>
+      <?php foreach ($this->files as $file) : ?>
+        <source type="<?= $file->mime ?>" src="<?= $file->path . $this->range ?>">
+      <?php endforeach; ?>
+    </video>
+  <?php endif; ?>
+</figure>
+<script>
+  // define an observer instance
+  var observer = new IntersectionObserver(onIntersection, {
+    root: null, // default is the viewport
+    threshold: .05 // percentage of target's visible area. Triggers "onIntersection"
+  })
+
+  // callback is called on intersection change
+  function onIntersection(entries, opts) {
+    if (entries[0].isIntersecting) {
+      entries[0].target.play()
+    }
+  }
+
+  // Use the observer to observe an element
+  observer.observe(document.querySelector('#home-video'))
+</script>
+
+<?php $this->endblock(); ?>

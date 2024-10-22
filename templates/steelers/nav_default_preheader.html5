@@ -1,0 +1,5 @@
+    <?php foreach ($this->items as $item) : ?>
+        <div class="ce_hyperlink block">
+            <a href="<?= $item['href'] ?: './' ?>" class="hyperlink_txt" title="<?= $item['pageTitle'] ?: $item['title'] ?>"><?= $item['link'] ?></a>
+        </div>
+    <?php endforeach; ?>

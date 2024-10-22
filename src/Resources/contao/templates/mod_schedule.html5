@@ -1,0 +1,32 @@
+<?php $this->block('content'); ?>
+<div class="holema-table <?= $this->cssClass ?>" <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
+	<<?= $this->headlineUnit ?>><?= $this->headline ?></<?= $this->headlineUnit ?>>
+	<table>
+		<thead>
+			<tr>
+				<th>Datum</th>
+				<th>Uhrzeit</th>
+				<th>Heim</th>
+				<th>Auswärts</th>
+				<th>Ergebnis</th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			foreach ($this->games as $key => $game) {
+				$class = ($team['holemaid'] == $this->my_team) ? ' class="highlight-team"' : '';
+			?>
+				<tr>
+					<td><?= \System::parseDate('d.m.Y', $game['gamedate']) ?></td>
+					<td><?= $game['gametime'] ?> Uhr</td>
+					<td><?= $game['home']['name'] ?></td>
+					<td><?= $game['away']['name'] ?></td>
+					<td><?= $game['homescore'] . ":" . $game['awayscore'] ?> <?= $game['resulttype'] ?></td>
+				</tr>
+			<?php
+			}
+			?>
+		</tbody>
+	</table>
+</div>
+<?php $this->endblock(); ?>

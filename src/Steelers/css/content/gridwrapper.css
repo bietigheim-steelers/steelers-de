@@ -1,0 +1,62 @@
+h3 {
+  @apply text-steelgreen font-bold text-2xl uppercase font-headline mt-8 mb-3;
+  letter-spacing: -0.05rem;
+}
+.gridwrapper h3 {
+  @apply text-4xl overflow-hidden text-ellipsis;
+}
+
+
+.grid-221 {
+  @apply inside grid grid-cols-1 gap-4;
+}
+.grid-321 {
+  @apply inside grid grid-cols-1 gap-4;
+}
+.grid-432 {
+  @apply inside grid grid-cols-2 gap-4;
+}
+.grid-543 {
+  @apply inside grid grid-cols-3 gap-4;
+}
+.grid-111 {
+  @apply inside grid grid-cols-1 gap-4;
+}
+
+@media (min-width: 768px) {
+  .grid-221 {
+    @apply grid-cols-2 gap-8;
+  }
+  .grid-321 {
+    @apply grid-cols-2 gap-8;
+  }
+  .grid-432 {
+    @apply grid-cols-3 gap-8;
+  }
+  .grid-543 {
+    @apply grid-cols-4 gap-8;
+  }
+  .grid-111 {
+    @apply gap-8;
+  }
+}
+@media (min-width: 1024px) {
+  .gridwrapper h3 {
+    @apply text-5xl overflow-hidden text-ellipsis;
+  }
+  .grid-321 {
+    @apply grid-cols-3 gap-16;
+  }
+  .grid-321 {
+    @apply grid-cols-3 gap-16;
+  }
+  .grid-432 {
+    @apply grid-cols-4 gap-16;
+  }
+  .grid-543 {
+    @apply grid-cols-5 gap-16;
+  }
+  .grid-111 {
+    @apply gap-16;
+  }
+}

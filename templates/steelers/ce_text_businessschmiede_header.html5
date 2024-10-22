@@ -1,0 +1,18 @@
+        <?php
+        $image = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 800, 800, 'box');
+        $imageUrl = $this->Environment->base . $image;
+        ?>
+        <div class="bg-black py-24 sm:py-32">
+          <div class="relative isolate">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+              <div class="mx-auto flex max-w-2xl flex-col gap-16 px-6 py-16 sm:p-8 lg:mx-0 lg:max-w-none lg:flex-row lg:items-center lg:py-20 xl:gap-x-20 xl:px-20">
+                <img class="h-96 w-full flex-none rounded-2xl object-cover lg:aspect-square lg:h-auto lg:max-w-sm" src="<?= $image ?>" alt="<?= $this->headline ?>">
+                <div class="w-full flex-auto">
+                  <h2 class="text-3xl font-bold tracking-tight text-white font-headline sm:text-4xl">
+                    <?= $this->headline ?></h2>
+                  <div class="text-lg leading-8 text-gray-300"> <?= $this->text ?></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>

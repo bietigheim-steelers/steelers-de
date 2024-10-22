@@ -1,0 +1,13 @@
+<?php $this->block('content'); ?>
+<div class="defaultcontainer gridwrapper !px-2 md:px-0 block">
+  <h3 title="<?= $this->headline ?>"><?= $this->headline ?></h3>
+  <div class="inside grid ce_wrapperStart grid-111 no-card">
+    <div class="ce_list ce_hyperlink nohover block">
+      <ul>
+        <?php foreach ($this->partners as $partner) : ?>
+          <li><?= $partner['name']; ?></li>
+        <?php endforeach ?>
+      </ul>
+    </div>
+  </div>
+  <?php $this->endblock(); ?>

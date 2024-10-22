@@ -1,0 +1,9 @@
+<li>
+    <input type="checkbox" id="checkbox-<?= $this->id ?>" name="checkbox-accordion" />
+    <label for="checkbox-<?= $this->id ?>">
+        <?= $this->headline ?>
+    </label>
+    <div class="content">
+        <?= $this->text ?>
+    </div>
+</li>

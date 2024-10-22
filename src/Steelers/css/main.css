@@ -1,0 +1,24 @@
+@import "../../node_modules/glightbox/dist/css/glightbox.css";
+@import "../../node_modules/swiper/swiper-bundle.css";
+@import "tailwind.css";
+@import "navigation.css";
+@import "base.css";
+@import "fonts/formula.css";
+@import "footer.css";
+@import "tinyDrawer.css";
+@import "progress.css";
+@import "content/blocks.css";
+@import "content/news.css";
+@import "content/pre-header.css";
+@import "content/gridwrapper.css";
+@import "content/schedule.css";
+@import "content/standings.css";
+@import "content/home.css";
+@import "content/player.css";
+@import "content/partner.css";
+@import "content/accordion.css";
+@import "content/cards.css";
+
+@import "microsite/alwacup.css";
+
+@import "dsgvo-video-embed.min.css";
