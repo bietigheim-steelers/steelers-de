@@ -43,4 +43,5 @@ jobs:
         script: |
           cd ${{ secrets.DEPLOY_PATH }}
           cd src/
+          chmod 744 updateTheme.sh
           ./updateTheme.sh
