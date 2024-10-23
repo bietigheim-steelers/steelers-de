@@ -20,16 +20,24 @@ jobs:
     - run: npm ci
     - run: npm run build
 
-    - uses: actions/checkout@v3
-    - name: 🚢 rsync deployments
+    - name: 🚢 deploy files to prod
       uses: burnett01/rsync-deployments@7.0.1
       with:
         switches: -avzr --exclude='/*.*' --exclude='.git/' --exclude='node_modules/'
         path: ./
-        rsh: ls
         remote_path: ${{ secrets.DEPLOY_PATH }}
         remote_host: ${{ secrets.DEPLOY_HOST }}
         remote_port: ${{ secrets.DEPLOY_PORT }}
         remote_user: ${{ secrets.DEPLOY_USER }}
         remote_key: ${{ secrets.DEPLOY_KEY }}
         remote_key_pass: ${{ secrets.DEPLOY_KEY_PASS }}
+
+    - name: rebuild cache on prod
+      uses: D3rHase/ssh-command-action@latest
+      with:
+        host: ${{ secrets.DEPLOY_HOST }}
+        port: ${{ secrets.DEPLOY_PORT }}
+        user: ${{ secrets.DEPLOY_USER }}
+        private_key: ${{ secrets.DEPLOY_KEY }}
+        host_fingerprint: ${{ secrets.DEPLOY_KEY_PASS }}
+        command: echo 'Hello, World!'
