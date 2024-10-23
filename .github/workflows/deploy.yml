@@ -41,5 +41,6 @@ jobs:
         port: ${{ secrets.DEPLOY_PORT }}
         passphrase: ${{ secrets.DEPLOY_KEY_PASS }}
         script: |
+          cd ${{ secrets.DEPLOY_PATH }}
           cd src/
           ./updateTheme.sh
