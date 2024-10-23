@@ -5,7 +5,7 @@ on:
 name: 🇸🇱 Deploy steelers.de 🇸🇱
 jobs:
   web-deploy:
-    name: 🎉 Deploy
+    name: 🇸🇱 Deploy
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
@@ -20,15 +20,15 @@ jobs:
     - run: npm ci
     - run: npm run build
 
-    - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+    - uses: actions/checkout@v3
+    - name: 🚢 rsync deployments
+      uses: burnett01/rsync-deployments@7.0.1
       with:
-        server: ${{ secrets.ftp_host }}
-        username: ${{ secrets.ftp_user }}
-        password: ${{ secrets.ftp_password }}
-        port: 21
-        protocol: ftps
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/node_modules/**
+        switches: -avzr --dry-run
+        path: ./
+        remote_path: ${{ secrets.DEPLOY_PATH }}
+        remote_host: ${{ secrets.DEPLOY_HOST }}
+        remote_port: ${{ secrets.DEPLOY_PORT }}
+        remote_user: ${{ secrets.DEPLOY_USER }}
+        remote_key: ${{ secrets.DEPLOY_KEY }}
+        remote_key_pass: ${{ secrets.DEPLOY_KEY_PASS }}
