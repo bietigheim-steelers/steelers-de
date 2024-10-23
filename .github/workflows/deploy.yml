@@ -24,8 +24,9 @@ jobs:
     - name: 🚢 rsync deployments
       uses: burnett01/rsync-deployments@7.0.1
       with:
-        switches: -avzr --dry-run --exclude='/*.*' --exclude='.git/' --exclude='node_modules/'
+        switches: -avzr --exclude='/*.*' --exclude='.git/' --exclude='node_modules/'
         path: ./
+        rsh: ls
         remote_path: ${{ secrets.DEPLOY_PATH }}
         remote_host: ${{ secrets.DEPLOY_HOST }}
         remote_port: ${{ secrets.DEPLOY_PORT }}
