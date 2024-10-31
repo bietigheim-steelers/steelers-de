@@ -1,11 +1,11 @@
-<?php
-$ogimage = $this->getImage($this->urlEncode($this->singleSRC), 160, 160, 'crop');
-?>
 <?php $this->extend('block_searchable'); ?>
 
 <?php $this->block('content'); ?>
 <div class="border-t-4 border-gray-800 pt-6 mt-6 flex flex-wrap md:flex-nowrap gap-3">
-  <?php if ($this->addImage) : ?>
+  <?php
+  if ($this->addImage) :
+    $ogimage = $this->getImage($this->urlEncode($this->singleSRC), 160, 160, 'crop');
+  ?>
     <img src="<?= $ogimage ?>" class="object-cover object-center w-40 aspect-square" alt="<?= $this->linkTitle ?>" />
   <?php endif; ?>
   <div style="max-width: 80vw">
