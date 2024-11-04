@@ -1,0 +1,7 @@
+<?php if ($_POST['FORM_SUBMIT']) : ?>
+  <div class="ce_text defaultcontainer mb-8 max-lg:!my-12">
+    <div class="!my-12 max-w-5xl mx-auto prose">
+      <div style="background-color: darkred; padding: 8px; color: white;"><b>Fehler beim Abschicken des Formulars. Bitte prüfen Sie unten Ihre Angaben!</b></div>
+    </div>
+  </div>
+<?php endif; ?>
