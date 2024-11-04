@@ -17,6 +17,7 @@ use App\Tilastot\Model\PlayerStats;
 use \App\Tilastot\Module\RefreshModule;
 use App\Tilastot\Model\Partners;
 use App\Tilastot\Model\Camps;
+use App\Tilastot\Model\BusTours;
 
 /* Backend Module */
 
@@ -40,6 +41,7 @@ $GLOBALS['BE_MOD']['del'] = array(
 
 $GLOBALS['BE_MOD']['content']['tilastot_partners'] = array('tables' => array('tl_tilastot_partners'));
 $GLOBALS['BE_MOD']['content']['tilastot_camps'] = array('tables' => array('tl_tilastot_camps'));
+$GLOBALS['BE_MOD']['content']['tilastot_bus_tours'] = array('tables' => array('tl_tilastot_bus_tours'));
 
 /* Model Classes */
 $GLOBALS['TL_MODELS']['tl_tilastot_client_rounds'] = Rounds::class;
@@ -49,6 +51,7 @@ $GLOBALS['TL_MODELS']['tl_tilastot_client_stats'] = PlayerStats::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_client_standings'] = Standings::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_partners'] = Partners::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_camps'] = Camps::class;
+$GLOBALS['TL_MODELS']['tl_tilastot_bus_tours'] = BusTours::class;
 
 /* Cronjob */
 $GLOBALS['TL_CRON']['hourly'][] = array('App\\Tilastot\\Utils\\TilastotApi', 'refreshAll');
@@ -60,3 +63,4 @@ $GLOBALS['TL_WRAPPERS']['stop'][] = 'rowEnd';
 // Add permissions
 $GLOBALS['TL_PERMISSIONS'][] = 'tilastot_camps';
 $GLOBALS['TL_PERMISSIONS'][] = 'tilastot_campsp';
+$GLOBALS['TL_PERMISSIONS'][] = 'tilastot_bus_tours';
