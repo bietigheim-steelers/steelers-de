@@ -40,7 +40,20 @@ if (!function_exists('tokenTruncate')) {
     <div class="p-5 grow flex flex-col">
       <div class="text-gray-400 italic uppercase">
         <?php if (count($this->categoriesList) > 0) : ?>
-          <?= implode(', ', $this->categoriesList) ?>
+          <?php
+          if (in_array('Spielbericht', $this->categoriesList) && isset($this->arrData['game_id'])) {
+            $game = \App\Tilastot\Model\Games::findByPk($this->arrData['game_id']);
+            if ($game) {
+              $homeTeam = \App\Tilastot\Model\Standings::getTeamData($game->hometeam, $game->round, 'shortname');
+              $awayTeam = \App\Tilastot\Model\Standings::getTeamData($game->awayteam, $game->round, 'shortname');
+              echo $homeTeam . ' - ' . $awayTeam . ' ' . $game->homescore . ':' . $game->awayscore . ' ' . $game->resulttype;
+            } else {
+              echo implode(', ', $this->categoriesList);
+            }
+          } else {
+            echo implode(', ', $this->categoriesList);
+          }
+          ?>
           <?php endif; ?>&nbsp;
       </div>
 
