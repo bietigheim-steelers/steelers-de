@@ -21,15 +21,18 @@ class tl_games_for_news extends Backend
 {
   public function getGamesForSelect()
   {
+    $options = array(0 => '');
+
     $games = Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate, round FROM tl_tilastot_client_games WHERE gamedate < ? ORDER BY gamedate DESC LIMIT 5")
       ->execute(time());
 
-    $options = array();
     while ($games->next()) {
       $homeTeam = Standings::getTeamData($games->hometeam, $games->round);
       $awayTeam = Standings::getTeamData($games->awayteam, $games->round);
       $options[$games->id] = sprintf('%s - %s vs. %s', date('d.m.Y', $games->gamedate), $homeTeam, $awayTeam);
     }
+
+    array_push($options, '-----');
 
     $games = Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate, round FROM tl_tilastot_client_games WHERE gamedate > ? ORDER BY gamedate ASC LIMIT 5")
       ->execute(time());
