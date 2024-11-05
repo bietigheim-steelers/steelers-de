@@ -19,18 +19,33 @@ class tl_games_for_news extends Backend
 {
   public function getGamesForSelect()
   {
-    $time = time();
-    $startDate = strtotime('-5 days', $time);
-    $endDate = strtotime('+5 days', $time);
-
-    $games = Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate FROM tl_tilastot_client_games WHERE gamedate BETWEEN ? AND ?")
-      ->execute($startDate, $endDate);
+    $games = Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate FROM tl_tilastot_client_games ORDER BY gamedate DESC LIMIT 5")
+      ->execute();
 
     $options = array();
     while ($games->next()) {
-      $options[$games->id] = sprintf('%s - %s vs. %s', date('d.m.Y', $games->gamedate), $games->hometeam, $games->awayteam);
+      $homeTeam = $this->getTeamName($games->hometeam);
+      $awayTeam = $this->getTeamName($games->awayteam);
+      $options[$games->id] = sprintf('%s - %s vs. %s', date('d.m.Y', $games->gamedate), $homeTeam, $awayTeam);
+    }
+
+    $games = Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate FROM tl_tilastot_client_games WHERE gamedate > ? ORDER BY gamedate ASC LIMIT 5")
+      ->execute(time());
+
+    while ($games->next()) {
+      $homeTeam = $this->getTeamName($games->hometeam);
+      $awayTeam = $this->getTeamName($games->awayteam);
+      $options[$games->id] = sprintf('%s - %s vs. %s', date('d.m.Y', $games->gamedate), $homeTeam, $awayTeam);
     }
 
     return $options;
+  }
+
+  private function getTeamName($teamId)
+  {
+    $team = Database::getInstance()->prepare("SELECT name FROM tl_tilastot_client_standings WHERE id=?")
+      ->execute($teamId);
+
+    return $team->numRows ? $team->name : 'Unknown';
   }
 }
