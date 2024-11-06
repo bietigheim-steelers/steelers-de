@@ -562,16 +562,16 @@ foreach ($pngFiles as $file) {
         // Ergebnis
         ctx.font = '100 180px Bahnschrift3';
         ctx.fillStyle = 'white';
-        var text1Width = (ctx.measureText(resultText).width);
-        ctx.fillText(resultText, (canvas.width - text1Width) / 2, 1150);
+        var text1Width = (ctx.measureText(resultText.trim()).width);
+        ctx.fillText(resultText.trim(), (canvas.width - text1Width) / 2, 1150);
       }
 
       if (config.includes('periods')) {
         // Ergebnis
         ctx.font = '700 43px Bahnschrift2';
         ctx.fillStyle = 'white';
-        var text1Width = (ctx.measureText(periodsText).width);
-        ctx.fillText(periodsText, (canvas.width - text1Width) / 2, 1204);
+        var text1Width = (ctx.measureText(periodsText.trim()).width);
+        ctx.fillText(periodsText.trim(), (canvas.width - text1Width) / 2, 1204);
       }
 
       if (config.includes('time')) {
@@ -580,8 +580,8 @@ foreach ($pngFiles as $file) {
         ctx.fillStyle = 'white';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'alphabetic';
-        var x1 = 900 - ctx.measureText(timeText).width;
-        ctx.fillText(timeText, x1, 1177);
+        var x1 = 900 - ctx.measureText(timeText.trim()).width;
+        ctx.fillText(timeText.trim(), x1, 1177);
       }
 
       if (config.includes('jerseynumber')) {
@@ -1083,6 +1083,14 @@ foreach ($pngFiles as $file) {
                 allInputs[inputName].multiple = true;
               } else {
                 allInputs[inputName].multiple = false;
+              }
+            }
+            if (inputName == 'smalltext') {
+              if (selectedPostType == 'Gameday_Home' || selectedPostType == 'Gameday_Away') {
+                allInputs[inputName].value = 'X. Spieltag';
+              }
+              if (selectedPostType == 'Endstand_Home' || selectedPostType == 'Endstand_Away') {
+                allInputs[inputName].value = '1.1.1970 vs. GEGNER';
               }
             }
           }
