@@ -115,6 +115,10 @@ a.email:hover {
   @apply max-w-screen-2xl mx-auto relative my-20 px-2 lg:px-3;
 }
 
+.defaultcontainer--small {
+  @apply max-w-screen-lg mx-auto relative my-12 px-2;
+}
+
 h3.text-5xl {
   font-size: 2.625rem;
 }

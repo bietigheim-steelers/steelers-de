@@ -1,0 +1,21 @@
+<div class="<?php if ($this->class): ?> <?= $this->class ?><?php endif; ?> form-group">
+  <?php $this->block('label'); ?>
+  <?php if ($this->label): ?>
+    <label for="ctrl_<?= $this->id ?>" class="form-label<?php if ($this->class): ?> <?= $this->class ?><?php endif; ?>">
+      <?php if ($this->mandatory): ?>
+        <span class="invisible"><?= $this->mandatoryField ?> </span><?= $this->label ?><span class="mandatory">*</span>
+      <?php else: ?>
+        <?= $this->label ?>
+      <?php endif; ?>
+    </label>
+  <?php endif; ?>
+  <?php $this->endblock(); ?>
+
+  <?php $this->block('field'); ?>
+  <?php if ($this->hasErrors()): ?>
+    <p class="error"><?= $this->getErrorAsString() ?></p>
+  <?php endif; ?>
+
+  <input type="<?= $this->type ?>" name="<?= $this->name ?>" id="ctrl_<?= $this->id ?>" class="form-input text<?php if ($this->hideInput): ?> password<?php endif; ?>" value="<?= Contao\StringUtil::specialchars($this->value) ?>" <?= $this->getAttributes() ?>>
+  <?php $this->endblock(); ?>
+</div>

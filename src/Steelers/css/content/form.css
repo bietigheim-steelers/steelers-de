@@ -1,0 +1,47 @@
+.steelers_form {
+  @apply bg-steelwhite px-8 py-10 border-gray-900/10 border-2;
+}
+
+.steelers_form fieldset {
+  @apply grid grid-cols-6 gap-2 mb-8;
+}
+
+.steelers_form fieldset > legend {
+  @apply col-span-12 font-headline text-steelgreen text-3xl;
+}
+
+@screen lg {
+  .steelers_form fieldset > legend {
+    @apply text-4xl;
+  }
+}
+
+@screen lg {
+  .steelers_form fieldset {
+    @apply grid-cols-12;
+  }
+}
+
+.steelers_form .invisible {
+  @apply hidden;
+}
+.steelers_form .form-group {
+  @apply relative mb-2;
+}
+
+.steelers_form .form-label {
+  @apply static text-base text-gray-800 mb-2;
+}
+
+.steelers_form .form-input {
+  @apply w-full p-2 border-none outline-none;
+}
+
+.steelers_form .form-input:focus {
+  @apply border-steelgreen outline-steelgreen;
+}
+
+.steelers_form .form-input:focus + .steelers_form .form-label,
+.steelers_form .form-input:not(:placeholder-shown) + .steelers_form .form-label {
+  @apply static text-base text-gray-800;
+}

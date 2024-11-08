@@ -1,0 +1,31 @@
+<?php
+if (!function_exists('addClassToSvg')) {
+    function addClassToSvg($svgString, $classString)
+    {
+        $svgString = str_replace('<br>', '', $svgString);
+        $svgString = str_replace('<br/>', '', $svgString);
+        $svgString = str_replace('<br />', '', $svgString);
+        $svgString = str_replace('<svg', '<svg class="' . $classString . '"', $svgString);
+        return $svgString;
+    }
+}
+
+?>
+<div class="defaultcontainer">
+    <?php if ($this->headline) : ?>
+        <<?= $this->hl ?> class="text-4xl md:text-5xl"><?= $this->headline ?></<?= $this->hl ?>>
+    <?php endif; ?>
+    <div class="mx-auto mt-16 max-w-7xl px-6 sm:mt-20 md:mt-24 lg:px-8 py-8 bg-steelwhite">
+        <dl class="mx-auto grid max-w-2xl grid-cols-1 gap-x-6 gap-y-10 text-base/7 text-gray-600 lg:mx-0 lg:max-w-none lg:gap-x-8 lg:gap-y-16 <?= strlen($this->class) > 15 ? $this->class : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' ?>">
+            <?php foreach ($this->body as $class => $row) : ?>
+                <div class="relative pl-9">
+                    <dt class="inline font-semibold text-gray-900">
+                        <?= addClassToSvg(html_entity_decode($row[2]['content']), 'absolute -left-4 top-1 h-10 w-10 text-steelblue fill-steelgreen') ?>
+                        <?= $row[0]['content'] ?>
+                    </dt>
+                    <dd class="inline"><?= $row[1]['content'] ?></dd>
+                </div>
+            <?php endforeach; ?>
+        </dl>
+    </div>
+</div>
