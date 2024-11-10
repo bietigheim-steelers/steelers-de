@@ -4,7 +4,7 @@ if ($this->addImage) :
 endif;
 ?>
 <div
-  class="px-2 py-12 mt-6 flex flex-col justify-between items-end hyperlink-card bg-cover bg-no-repeat bg-blend-overlay bg-center <?= $this->class ?>"
+  class="px-8 py-12 mt-6 flex flex-col justify-between items-end hyperlink-card bg-cover bg-no-repeat bg-blend-overlay bg-center <?= $this->class ?>"
   style="<?= $ogimage; ?>">
   <h5 class="uppercase text-3xl xl:text-4xl w-full text-center font-headline font-bold leading-tight text-steelgreen">
     <?php

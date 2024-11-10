@@ -43,7 +43,7 @@
   ?>
 
   <?php if ($this->canonical) : ?>
-  <link rel="canonical" href="<?= $this->canonical ?>">
+    <link rel="canonical" href="<?= $this->canonical ?>">
   <?php endif; ?>
 
   <?= $this->viewport ?>
@@ -54,7 +54,7 @@
   <?php $this->endblock(); ?>
   <?php
   // classes to avoid purging
-  // mt-10 mt-5 w-p60 h-p40 grid grid-cols-2 border-steelgreen border-gray-300 ring-2 ring-steelgreen
+  // mt-10 mt-5 w-p60 h-p40 grid grid-cols-2 border-steelgreen border-gray-300 ring-2 ring-steelgreen max-w-xl max-w-2xl max-w-4xl min-w-xl min-w-2xl min-w-4xl
   ?>
 </head>
 
@@ -74,10 +74,10 @@
         </div>
         <?php $this->block('header'); ?>
         <?php if ($this->header) : ?>
-        <?= $this->header ?>
+          <?= $this->header ?>
       </div>
-      <?php endif; ?>
-      <?php $this->endblock(); ?>
+    <?php endif; ?>
+    <?php $this->endblock(); ?>
     </header>
 
     <?php $this->sections('before'); ?>
@@ -96,21 +96,21 @@
 
       <?php $this->block('left'); ?>
       <?php if ($this->left) : ?>
-      <aside id="left">
-        <div class="inside">
-          <?= $this->left ?>
-        </div>
-      </aside>
+        <aside id="left">
+          <div class="inside">
+            <?= $this->left ?>
+          </div>
+        </aside>
       <?php endif; ?>
       <?php $this->endblock(); ?>
 
       <?php $this->block('right'); ?>
       <?php if ($this->right) : ?>
-      <aside id="right">
-        <div class="inside">
-          <?= $this->right ?>
-        </div>
-      </aside>
+        <aside id="right">
+          <div class="inside">
+            <?= $this->right ?>
+          </div>
+        </aside>
       <?php endif; ?>
       <?php $this->endblock(); ?>
 
@@ -121,11 +121,11 @@
 
     <?php $this->block('footer'); ?>
     <?php if ($this->footer) : ?>
-    <footer id="footer">
-      <div class="inside">
-        <?= $this->footer ?>
-      </div>
-    </footer>
+      <footer id="footer">
+        <div class="inside">
+          <?= $this->footer ?>
+        </div>
+      </footer>
     <?php endif; ?>
     <?php $this->endblock(); ?>
 
