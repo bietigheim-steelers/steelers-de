@@ -30,7 +30,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_bus_tours'] = array(
         ),
         'label' => array(
             'fields'                  => array('hometeam', 'tourdate'),
-            'label_callback'          => array('tl_tilastot_bus_tours', 'showTours'),
+            'label_callback'          => array('tl_tilastot_bus_tours', 'showTour'),
             'format' => '<span style="color:#999">nach</span> %s <span style="color:#999;padding-left:3px">[%s]</span>'
         ),
         'global_operations' => array(
