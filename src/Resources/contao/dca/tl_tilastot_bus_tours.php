@@ -86,7 +86,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_bus_tours'] = array(
             'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_bus_tours']['hometeam'],
             'exclude'                 => true,
             'search'                  => true,
-            'inputType'               => 'select',
+            'inputType'               => 'text',
             'eval'                    => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'clr w50'),
             'sql'                     => "varchar(50) NULL"
         ),
