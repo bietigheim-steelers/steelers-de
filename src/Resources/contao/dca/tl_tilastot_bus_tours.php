@@ -29,8 +29,9 @@ $GLOBALS['TL_DCA']['tl_tilastot_bus_tours'] = array(
             'panelLayout'             => 'filter;search,limit'
         ),
         'label' => array(
-            'fields'                  => array('tourdate', 'hometeam'),
-            'showColumns'             => true
+            'fields'                  => array('hometeam', 'tourdate'),
+            'label_callback'          => array('tl_tilastot_bus_tours', 'showTours'),
+            'format' => '<span style="color:#999">nach</span> %s <span style="color:#999;padding-left:3px">[%s]</span>'
         ),
         'global_operations' => array(
             'all' => array(
@@ -158,5 +159,11 @@ class tl_tilastot_bus_tours extends Backend
 	public function loadDate($value)
 	{
 		return strtotime(date('Y-m-d', $value) . ' 00:00:00');
+	}
+
+	public function showTour($row, $label, $dc, $args)
+	{
+        $args[1] = date('d.m.Y', $args[1]);
+        return $args;
 	}
 }
