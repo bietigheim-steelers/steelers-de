@@ -28,7 +28,7 @@ $GLOBALS['og:image'] = $this->Environment->base . $ogimage;
   <div class="ce_text defaultcontainer mb-8">
     <div class="!my-8 md:!my-32 max-w-5xl mx-auto bg-steelwhite/80 relative z-20 backdrop-blur-lg prose">
       <?php
-      if ($this->pid == 6 && array_intersect(array_keys($this->categories), [7, 8, 9, 10, 11, 12, 13, 19])):
+      if ($this->pid == 6 && array_intersect(array_keys($this->categories), [7, 8, 9, 10, 11, 12, 13, 19, 27])):
       ?>
         <p>Neuigkeiten des Steelers-Nachwuchses werden präsentiert von <a href="http://carat.art"
             target="_blank">carat.art</a>.</p>
