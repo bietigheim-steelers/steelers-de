@@ -96,6 +96,9 @@ $GLOBALS['TL_DCA']['tl_tilastot_bus_tours'] = array(
             'search'                  => true,
             'inputType'               => 'text',
             'eval'                    => array('datepicker' => true, 'rgxp' => 'date', 'mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
+            'load_callback' => array(
+                array('tl_tilastot_bus_tours', 'loadDate')
+            ),
             'sql'                     => "int(10) unsigned NULL"
         ),
         'tourtime' => array(
@@ -149,3 +152,11 @@ $GLOBALS['TL_DCA']['tl_tilastot_bus_tours'] = array(
         ),
     )
 );
+
+class tl_tilastot_bus_tours extends Backend
+{
+	public function loadDate($value)
+	{
+		return strtotime(date('Y-m-d', $value) . ' 00:00:00');
+	}
+}
