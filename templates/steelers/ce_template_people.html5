@@ -11,10 +11,10 @@
 	<?php endif; ?>
 	<div>
 		<h5 class="uppercase text-2xl font-bold leading-tight"><?= $this->keys['name']; ?><?php
-		if($this->keys['lizenz']) {
-			echo " <small class=\"text-gray-50 font-thin text-sm\">(". $this->keys['lizenz'].")</small>";
-		}
-		?></h5>
+																																											if ($this->keys['lizenz']) {
+																																												echo " <small class=\"text-gray-500 font-thin text-sm\">(" . $this->keys['lizenz'] . ")</small>";
+																																											}
+																																											?></h5>
 		<p class="uppercase text-lg font-light leading-tight"><?= $this->keys['role']; ?></p>
 		<ul class="mt-6">
 			<li><a href="tel:<?= $this->keys['phone']; ?>"><?= $this->keys['phone']; ?></a></li>
