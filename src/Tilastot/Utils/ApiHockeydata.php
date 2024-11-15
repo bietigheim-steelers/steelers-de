@@ -245,7 +245,7 @@ class ApiHockeydata
             }
             $g->homescore = $game->homeTeamScore;
             $g->awayscore = $game->awayTeamScore;
-            $g->ended = ($game->gameHasEnded || array_key_exists('FINISHED', $game->labels)) ? 1 : 0;
+            $g->ended = ($game->gameHasEnded || $game->gameStatus == 4 || array_key_exists('FINISHED', $game->labels)) ? 1 : 0;
             $g->tstamp = time();
             $g->save();
         }
