@@ -56,7 +56,11 @@ $GLOBALS['og:image'] = $this->Environment->base . $ogimage;
             <div class="Gamestrip__Overview__Wrapper">
               <div class="Gamestrip__Overview max-w-[50px] md:max-w-[140px] relative items-center clr-gray-04 flex justify-center flex-col n8 Gamestrip__Overview">
                 <div class="Gamestrip__Time--wrapper">
-                  <div class="ScoreCell__Time hidden md:block Gamestrip__Time ScoreCell__Time--post text-center font-thin text-gray-500"><?= Contao\Date::parse('d.m.Y', $game->gamedate); ?><br><?= $game->gametime ?></div>
+                  <div class="ScoreCell__Time hidden md:block Gamestrip__Time ScoreCell__Time--post text-center font-thin text-gray-500"><?= Contao\Date::parse('d.m.Y', $game->gamedate); ?><br><?= $game->gametime ?><?php 
+                  if($game->resulttype == 'OT'):
+                    ?><br><span class="text-steelgreen font-headline text-xl uppercase">Overtime</span><?php endif; ?><?php
+                  if($game->resulttype == 'SO'):
+                    ?><br><span class="text-steelgreen font-headline text-xl uppercase">Shootout</span><?php endif; ?></div>
                   <div class="ScoreCell__Time md:hidden Gamestrip__Time ScoreCell__Time--post text-center font-thin text-gray-500">vs.</div>
                 </div>
               </div>
