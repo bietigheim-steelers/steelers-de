@@ -1,0 +1,137 @@
+.Gamestrip__Competitors {
+  height: 100%
+}
+
+.Gamestrip--xl .Gamestrip__Competitors {
+  gap: 10px;
+  height: 112px;
+  margin: 0 auto;
+  max-width: 1400px
+}
+
+.Gamestrip__Info--right {
+  -webkit-box-ordinal-group: 4;
+  -ms-flex-order: 3;
+  order: 3
+}
+
+.Gamestrip__InfoLogo .Gamestrip__Logo:not(.icon__svg--dark) {
+  fill: #b0b0b0
+}
+
+.Gamestrip__InfoLogo--Left {
+  padding-left: 18px
+}
+
+.Gamestrip__InfoLogo--Right {
+  padding-right: 18px
+}
+
+.Gamestrip--xl .Gamestrip__ScoreContainer {
+  width: 100px
+}
+
+.Gamestrip__ScoreContainer {
+  padding-top: 6px
+}
+
+.Gamestrip__Team--left .Gamestrip__TeamContainer {
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end
+}
+
+.nhl .Gamestrip__Team--left .Gamestrip__ScoreContainer {
+  padding-right: 16px
+}
+
+.Gamestrip__Team--left .Gamestrip__InfoWrapper {
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: right
+}
+
+.Gamestrip__Team--left .Gamestrip__InfoLogo {
+  -webkit-box-ordinal-group: 2;
+  -ms-flex-order: 1;
+  order: 1
+}
+
+.Gamestrip__Team--right .Gamestrip__TeamContainer {
+  -webkit-box-ordinal-group: 3;
+  -ms-flex-order: 2;
+  order: 2;
+  text-align: right
+}
+
+.nhl .Gamestrip__Team--right .Gamestrip__ScoreContainer {
+  padding-left: 16px
+}
+
+.Gamestrip__Team--right .Gamestrip__InfoWrapper {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  text-align: left
+}
+
+.Gamestrip__Team--right .Gamestrip__InfoLogo {
+  -webkit-box-ordinal-group: 2;
+  -ms-flex-order: 1;
+  order: 1
+}
+
+.Gamestrip__Team--right .Gamestrip__Info {
+  -webkit-box-ordinal-group: 4;
+  -ms-flex-order: 3;
+  order: 3
+}
+
+.Gamestrip__TeamContainer {
+  -webkit-box-flex: 1;
+  -ms-flex: 1 0 auto;
+  flex: 1 0 auto;
+  z-index: 1
+}
+
+.Gamestrip__TeamContent {
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex
+}
+
+@media only screen and (min-width:350px) and (max-width:767px) {
+  .Gamestrip__TeamContent--left {
+    -webkit-box-pack: end;
+    -ms-flex-pack: end;
+    justify-content: end
+  }
+}
+
+.Gamestrip--xl .ScoreCell__TeamName {
+  max-width: 223px
+}
+
+.Gamestrip {
+  background: #fff;
+  border-bottom-color: #cecfcf
+}
+
+.Gamestrip__Overview__Wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex
+}
+
+.Gamestrip--xl .Gamestrip__Overview {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  gap: 2px
+}
