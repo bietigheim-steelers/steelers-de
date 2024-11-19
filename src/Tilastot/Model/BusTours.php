@@ -19,5 +19,5 @@ class BusTours extends Model
      * Name of the database table
      * @var string
      */
-    protected static $strTable = 'tl_tilastot_client_bus_tours';
+    protected static $strTable = 'tl_tilastot_bus_tours';
 }
