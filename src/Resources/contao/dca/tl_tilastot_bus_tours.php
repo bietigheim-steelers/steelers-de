@@ -73,7 +73,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_bus_tours'] = array(
     ),
     // Palettes
     'palettes' => array(
-        'default' => 'hometeam,tourdate,tourtime,price,minparticipants,full;published;notes'
+        'default' => '{game_legend},game_id;hometeam,tourdate,tourtime,price,minparticipants,full;published;notes'
     ),
     // Fields
     'fields'   => array(
@@ -90,6 +90,14 @@ $GLOBALS['TL_DCA']['tl_tilastot_bus_tours'] = array(
             'inputType'               => 'text',
             'eval'                    => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'clr w50'),
             'sql'                     => "varchar(50) NULL"
+        ),
+        'game_id' => array(
+            'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_bus_tours']['game_id'],
+            'exclude'                 => true,
+            'inputType'               => 'select',
+            'options_callback'        => array('tl_tilastot_bus_tours', 'getGamesForSelect'),
+            'eval'                    => array('mandatory' => false, 'tl_class' => 'w50'),
+            'sql'                     => "int(10) unsigned NOT NULL default '0'"
         ),
         'tourdate' => array(
             'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_bus_tours']['gamedate'],
@@ -166,4 +174,20 @@ class tl_tilastot_bus_tours extends Backend
         $args[1] = date('d.m.Y', $args[1]);
         return $args;
 	}
+
+    public function getGamesForSelect()
+    {
+        $options = array(0 => '');
+
+        $games = Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate, round FROM tl_tilastot_client_games WHERE gamedate > ? AND awayteam = ? ORDER BY gamedate ASC")
+        ->execute(time(), 97);
+
+        while ($games->next()) {
+            $homeTeam = Standings::getTeamData($games->hometeam, $games->round);
+            $awayTeam = Standings::getTeamData($games->awayteam, $games->round);
+            $options[$games->id] = sprintf('%s - %s vs. %s', date('d.m.Y', $games->gamedate), $homeTeam, $awayTeam);
+        }
+
+        return $options;
+    }
 }
