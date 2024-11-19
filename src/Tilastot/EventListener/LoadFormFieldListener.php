@@ -82,7 +82,12 @@ class LoadFormFieldListener
             } else {
                 $bustoursArray = $bustours->fetchAll();
                 $widget->options = array_map(function ($tour) {
-                    $text = $tour['tourdate'] . ' - ' . $tour['hometeam'] . ' - ' . $tour['price'] . '€';
+                    $timezone = new \DateTimeZone('Europe/Berlin');
+                    $timestamp = $tour['tourdate'];
+                    $date = new \DateTime("@$timestamp");
+                    $date->setTimezone($timezone);
+                    $formattedDate = $date->format('d.m.Y');
+                    $text = $formattedDate . ' - ' . $tour['hometeam'] . ' - ' . $tour['price'] . '€';
                     if ($tour['full']) {
                         $text .= ' - ausgebucht (Warteliste)';
                     }
