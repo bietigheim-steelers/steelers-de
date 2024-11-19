@@ -114,3 +114,6 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['partners'] .= '{template_legend:hid
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['camps'] = '{title_legend},name,headline,type;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['camps'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
+
+$GLOBALS['TL_DCA']['tl_module']['palettes']['bustours'] = '{title_legend},name,headline,type;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['bustours'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
