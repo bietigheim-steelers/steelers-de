@@ -1,6 +1,4 @@
-
 <?php
-
 namespace App\Tilastot\Module;
 
 use App\Tilastot\Model\BusTours;

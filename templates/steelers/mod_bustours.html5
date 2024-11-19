@@ -1,0 +1,8 @@
+<?php $this->block('content'); ?>
+<div class="tilastot-camps defaultcontainer gridwrapper !px-2 md:px-0 block <?= $this->cssClass ?>"
+  <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
+  <?php
+  var_dump($this->bustours)
+  ?>
+</div>
+<?php $this->endblock(); ?>
