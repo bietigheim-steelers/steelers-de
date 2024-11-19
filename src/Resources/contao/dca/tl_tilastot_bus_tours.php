@@ -180,7 +180,7 @@ class tl_tilastot_bus_tours extends Backend
         $options = array(0 => '');
 
         $games = Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate, round FROM tl_tilastot_client_games WHERE gamedate > ? AND awayteam = ? ORDER BY gamedate ASC")
-        ->execute(time(), 97);
+        ->execute(time(), 54744);
 
         while ($games->next()) {
             $homeTeam = Standings::getTeamData($games->hometeam, $games->round);
