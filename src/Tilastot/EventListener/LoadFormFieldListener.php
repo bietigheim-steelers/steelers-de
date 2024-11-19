@@ -20,10 +20,11 @@ class LoadFormFieldListener
         if (is_array($widget->options) && ($widget->options[0]['value'] == 'gamedays' || $widget->options[0]['value'] == 'gamedays_away')) {
             if($widget->options[0]['value'] == 'gamedays') {
                 $column = array('gamedate >= ? AND hometeam = ? AND id != ?');
+                $displayTeam = 'awayteam';
             } else {
                 $column = array('gamedate >= ? AND awayteam = ? AND id != ?');
+                $displayTeam = 'hometeam';
             }
-            $column = array('gamedate >= ? AND hometeam = ? AND id != ?');
             $games = Games::findAll(array(
                 'order'   => ' gamedate ASC',
                 'column'  => $column,
@@ -34,7 +35,7 @@ class LoadFormFieldListener
             } else {
                 $gameArray = $games->fetchAll();
                 $widget->options = array_map(function ($game) {
-                    $away = Standings::findByIdAndRound($game['awayteam'], $game['round'], true);
+                    $away = Standings::findByIdAndRound($game[$displayTeam], $game['round'], true);
                     $date = \Contao\Date::parse('d.m.Y', $game['gamedate']);
                     $text = $date . ' - '  . $away['name'];
                     return array('value' => $text, 'label' => $text);
