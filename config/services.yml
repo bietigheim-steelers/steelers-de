@@ -67,6 +67,12 @@ services:
         category: tilastot
         template: mod_camps
         type: camps
+  App\Tilastot\Module\BusToursModule:
+    tags:
+      - name: contao.frontend_module
+        category: tilastot
+        template: mod_bustours
+        type: bustours
   App\Tilastot\ContentElement\WrapperBlockStart:
     tags:
       - name: contao.content_element
