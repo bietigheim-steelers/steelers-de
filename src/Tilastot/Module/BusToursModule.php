@@ -2,6 +2,9 @@
 namespace App\Tilastot\Module;
 
 use App\Tilastot\Model\BusTours;
+use App\Tilastot\Model\Games;
+use App\Tilastot\Model\Standings;
+use App\Tilastot\Model\Rounds;
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\ModuleModel;
 use Contao\Template;
@@ -19,14 +22,31 @@ class BusToursModule extends AbstractFrontendModuleController
             'order' => 'tourdate ASC'
         ));
 
-        $bustourslist = array();
-
         if (!$bustours) {
             return new Response();
         }
 
-        $template->bustours = $bustours->fetchAll();
+        $bustourslist = $bustours->fetchAll();
+        foreach ($bustourslist as $key => $tour) {
+            $game = Games::findByPk($tour['game_id']);
+            if ($game) {
+                $bustourslist[$key]['home'] = Standings::findByIdAndRound($game->hometeam, $game->round, true);
+                $bustourslist[$key]['away'] = Standings::findByIdAndRound($game->awayteam, $game->round, true);
+                $bustourslist[$key]['season'] = Rounds::findByPkFiltered($game->round, true);
 
+                unset($bustourslist[$key]['game_id']);
+                unset($bustourslist[$key]['id']);
+                unset($bustourslist[$key]['tstamp']);
+                unset($bustourslist[$key]['round']);
+                unset($bustourslist[$key]['gamestatus']);
+                unset($bustourslist[$key]['hometeam']);
+                unset($bustourslist[$key]['awayteam']);
+                unset($bustourslist[$key]['spectators']);
+                unset($bustourslist[$key]['periodscore']);
+            }
+        }
+
+        $template->bustours = $bustourslist;
         $template->cssId = $model->cssID[0];
         $template->cssClass = $model->cssID[1];
 
