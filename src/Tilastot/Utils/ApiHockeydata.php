@@ -115,6 +115,19 @@ class ApiHockeydata
         }
         $r = Rounds::findById($round);
 
+        $timestampFile = 'last_ep_run_timestamp.txt';
+        $runEPUpdate = true;
+
+        if (file_exists($timestampFile)) {
+            $lastRun = file_get_contents($timestampFile);
+            $lastRunDate = new \DateTime($lastRun);
+            $currentDate = new \DateTime();
+
+            if ($lastRunDate->format('Y-m-d') === $currentDate->format('Y-m-d')) {
+                $runEPUpdate = false;
+            }
+        }
+
         $rosterData = json_decode(self::call('GetTeamDetails', $r->standingsid, $r->apikey, self::TEAM_ID));
         foreach ($rosterData->data->teamRoster as $player) {
 
@@ -145,12 +158,14 @@ class ApiHockeydata
 
             $p->alias = StringUtil::generateAlias($p->firstname . " " . $p->lastname);
 
-            if ($p->eliteprospectsid) {
+            if ($p->eliteprospectsid && $runEPUpdate) {
                 $rss = new \SimpleXMLElement('http://eliteprospects.com/rss_player_stats2.php?player=' . $p->eliteprospectsid, 0, true);
                 foreach ($rss->xpath('channel/item') as $item) {
                     $p->epstats = mb_convert_encoding($item->description, 'ISO-8859-1', 'UTF-8');
                     break;
                 }
+                
+                file_put_contents($timestampFile, (new \DateTime())->format('Y-m-d H:i:s'));
             }
 
             $p->tstamp = time();
