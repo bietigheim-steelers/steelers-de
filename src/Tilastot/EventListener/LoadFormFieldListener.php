@@ -18,10 +18,11 @@ class LoadFormFieldListener
     public function __invoke(Widget $widget, string $formId, array $formData, Form $form): Widget
     {
         if (is_array($widget->options) && ($widget->options[0]['value'] == 'gamedays' || $widget->options[0]['value'] == 'gamedays_away')) {
-            if($widget->options[0]['value'] == 'gamedays') {
-                $column = array('gamedate >= ? AND hometeam = ? AND id != ?');
-                $displayTeam = 'awayteam';
-            } else {
+
+            $column = array('gamedate >= ? AND hometeam = ? AND id != ?');
+            $displayTeam = 'awayteam';
+
+            if ($widget->options[0]['value'] == 'gamedays_away') {
                 $column = array('gamedate >= ? AND awayteam = ? AND id != ?');
                 $displayTeam = 'hometeam';
             }
@@ -34,7 +35,7 @@ class LoadFormFieldListener
                 $widget->options = array('value' => 'no-game-found', 'label' => "Kein Spiel gefunden.");
             } else {
                 $gameArray = $games->fetchAll();
-                $widget->options = array_map(function ($game) {
+                $widget->options = array_map(function ($game) use ($displayTeam) {
                     $away = Standings::findByIdAndRound($game[$displayTeam], $game['round'], true);
                     $date = \Contao\Date::parse('d.m.Y', $game['gamedate']);
                     $text = $date . ' - '  . $away['name'];
