@@ -1,8 +1,80 @@
 <?php $this->block('content'); ?>
-<div class="tilastot-camps defaultcontainer gridwrapper !px-2 md:px-0 block <?= $this->cssClass ?>"
-  <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
+<div class="defaultcontainer mod_schedule !mt-8 md:!mt-20">
   <?php
-  var_dump($this->bustours)
+  $lastMonth = 0;
+  $nextGameDone = true;
+  foreach ($this->bustours as $bustour) :
+    $gameMonth = date('m', $bustour['tourdate']);
+    if ($gameMonth != $lastMonth) :
   ?>
+      <?php if ($lastMonth != 0) : ?>
+        <div class="bottomborder"></div>
+      <?php
+      endif;
+      $lastMonth = $gameMonth;
+      ?>
+      <div class="titlerow">
+        <?= Contao\Date::parse('F', $bustour['tourdate']); ?>
+      </div>
+    <?php
+    endif;
+    ?>
+    <div class="topborder"></div>
+    <div class="row">
+      <div class=" datetime">
+        <div>
+          <div class="day"><?= Contao\Date::parse('l', $bustour['tourdate']); ?></div>
+          <div class="date"><?= Contao\Date::parse('d.m.Y', $bustour['tourdate']); ?></div>
+        </div>
+      </div>
+      <div class="round">
+        <div>
+          <div class="mb-1 text-lg leading-7">Abfahrtszeit: <strong><?= $bustour['tourtime'] ?> Uhr</strong></div>
+          <div class="mb-1 text-lg leading-7">Preis: <strong><?= $bustour['price'] ?>€</strong></div>
+          <div class="text-lg leading-7">Min. Teilnehmer: <strong><?= $bustour['minparticipants'] ?></strong></div>
+        </div>
+      </div>
+      <div class="game">
+        <div class="team">
+          <div class="logo">
+            <?php
+            $logoHome = $bustour['home']['logo'] ? '/' . $bustour['home']['logo'] : 'https://www.penny-del.org/assets/img/teams/dark/team_' . $bustour['home']['shortname'] . '.png';
+            echo $this->replaceInsertTags('{{image::' . $logoHome . '?width=100&height=100&mode=proportional&alt=' . $bustour['home']['name'] . '}}');
+            ?>
+          </div>
+          <div class="name"><?= $bustour['home']['name'] ?></div>
+        </div>
+        <div class="versus <?php if (!$bustour['ended']) : ?>not-ended<?php endif; ?>">
+          <?php if ($bustour['ended']) : ?>
+            <?= $bustour['homescore'] ?>:<?= $bustour['awayscore'] ?>
+            <?php
+            if ($bustour['resulttype'] == 'OT') {
+              echo "<small>n.V.</small>";
+            } elseif ($bustour['resulttype'] == 'SO') {
+              echo "<small>n.P.</small>";
+            }
+            ?>
+          <?php else : ?>
+            vs
+          <?php endif; ?>
+        </div>
+        <div class="team">
+          <div class="logo">
+            <?php
+            $logoAway = $bustour['away']['logo'] ? '/' . $bustour['away']['logo'] : 'https://www.penny-del.org/assets/img/teams/dark/team_' . $bustour['away']['shortname'] . '.png';
+            echo $this->replaceInsertTags('{{image::' . $logoAway . '?width=100&height=100&mode=proportional&alt=' . $bustour['away']['name'] . '}}');
+            ?>
+          </div>
+          <div class="name"><?= $bustour['away']['name'] ?></div>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="flex flex-wrap gap-4">
+            <a href="/fans/bustouren/anmelden"
+              class="btn-default">Jetzt anmelden</a>
+        </div>
+      </div>
+    </div>
+  <?php endforeach; ?>
 </div>
 <?php $this->endblock(); ?>

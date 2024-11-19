@@ -17,7 +17,12 @@ class LoadFormFieldListener
 {
     public function __invoke(Widget $widget, string $formId, array $formData, Form $form): Widget
     {
-        if (is_array($widget->options) && $widget->options[0]['value'] == 'gamedays') {
+        if (is_array($widget->options) && ($widget->options[0]['value'] == 'gamedays' || $widget->options[0]['value'] == 'gamedays_away')) {
+            if($widget->options[0]['value'] == 'gamedays') {
+                $column = array('gamedate >= ? AND hometeam = ? AND id != ?');
+            } else {
+                $column = array('gamedate >= ? AND awayteam = ? AND id != ?');
+            }
             $column = array('gamedate >= ? AND hometeam = ? AND id != ?');
             $games = Games::findAll(array(
                 'order'   => ' gamedate ASC',
