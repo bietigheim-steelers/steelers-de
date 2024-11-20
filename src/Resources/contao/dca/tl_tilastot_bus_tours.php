@@ -27,6 +27,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_bus_tours'] = array(
     'list' => array(
         'sorting' => array(
             'mode'                    => 11,
+            'flag'                    => DataContainer::SORT_MONTH_DESC,
             'fields'                  => array('tourdate'),
             'panelLayout'             => 'filter;search,limit'
         ),
