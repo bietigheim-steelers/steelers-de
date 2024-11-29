@@ -180,14 +180,14 @@
             currentGame.eventUrl
           "
           :href="currentGame.eventUrl"
-          :class="'link-text--big' + currentGame.cssClass"
+          :class="'link-text--big ' + currentGame.cssClass"
           >{{ currentGame.eventTitle }}</a
         >
         <span
           v-else-if="
             currentGame.gamedate * 1000 > Date.now() && currentGame.eventTitle
           "
-          :class="'link-text--big' + currentGame.cssClass"
+          :class="'link-text--big ' + currentGame.cssClass"
           >{{ currentGame.eventTitle }}</span
         >
         <a
