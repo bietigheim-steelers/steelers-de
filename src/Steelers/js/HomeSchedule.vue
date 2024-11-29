@@ -176,6 +176,23 @@
         <a
           v-if="
             currentGame.gamedate * 1000 > Date.now() &&
+            currentGame.eventTitle &&
+            currentGame.eventUrl
+          "
+          :href="currentGame.eventUrl"
+          class="link-text--big"
+          >{{ currentGame.eventTitle }}</a
+        >
+        <span
+          v-else-if="
+            currentGame.gamedate * 1000 > Date.now() && currentGame.eventTitle
+          "
+          class="link-text--big"
+          >{{ currentGame.eventTitle }}</span
+        >
+        <a
+          v-if="
+            currentGame.gamedate * 1000 > Date.now() &&
             currentGame.home.shortname == 'SCB'
           "
           :href="currentGame.eventimurl ? currentGame.eventimurl : '/tickets'"

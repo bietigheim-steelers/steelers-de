@@ -43,12 +43,16 @@ html {
   @apply bg-steelblue;
 }
 
+.btn-default.btn-pink {
+  @apply bg-fuchsia-500 text-black;
+}
+
 @media (min-width: 1024px) {
   .btn-default {
     letter-spacing: 0.15rem;
   }
 }
-.btn-default:hover {
+.btn-default:not(span):hover {
   @apply scale-105 shadow-lg;
 }
 
@@ -63,6 +67,19 @@ html {
   background-size: contain;
   background-image: url("/files/steelers/layout/btn-arrow.svg");
   width: 42px;
+  height: 21px;
+  position: relative;
+  top: 4px;
+  left: 4px;
+}
+
+span.btn-default::after {
+  content: "";
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-image: none;
+  width: 0px;
   height: 21px;
   position: relative;
   top: 4px;
