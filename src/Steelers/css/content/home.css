@@ -89,3 +89,7 @@
     @apply flex justify-between;
   }
 }
+
+#homeschedule .btn-pink {
+  @apply text-fuchsia-500;
+}

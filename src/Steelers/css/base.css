@@ -44,7 +44,7 @@ html {
 }
 
 .btn-default.btn-pink {
-  @apply bg-fuchsia-500 text-black;
+  @apply bg-fuchsia-500 text-fuchsia-900;
 }
 
 @media (min-width: 1024px) {
