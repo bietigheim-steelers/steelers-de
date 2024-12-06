@@ -23,7 +23,7 @@ $video_id = $queryParams['v'];
     </div>
   </div>
   <?php
-  if (in_array('Spielbericht', $this->categoriesList) && isset($this->arrData['game_id'])) :
+  if (isset($this->arrData['game_id'])) :
     $game = \App\Tilastot\Model\Games::findByPk($this->arrData['game_id']);
     if ($game) :
       $homeTeam = \App\Tilastot\Model\Standings::findByIdAndRound($game->hometeam, $game->round);
@@ -36,46 +36,60 @@ $video_id = $queryParams['v'];
           <div class="Gamestrip__Team relative flex w-full items-center Gamestrip__Team--left">
             <div class="Gamestrip__TeamContent flex tc w-full Gamestrip__TeamContent--left Gamestrip__TeamContent--post">
               <div class="Gamestrip__TeamContainer flex items-center">
-                <div class="Gamestrip__InfoLogo Gamestrip__InfoLogo--Left"><img alt="<?= $homeTeam['name'] ?>" class="Image Logo Gamestrip__Logo Gamestrip__Logo--xl Logo__xl" data-mptype="image" src="<?= $homeLogo ?>"></div>
+                <div class="Gamestrip__InfoLogo Gamestrip__InfoLogo--Left"><img alt="<?= $homeTeam['name'] ?>"
+                    class="Image Logo Gamestrip__Logo Gamestrip__Logo--xl Logo__xl" data-mptype="image"
+                    src="<?= $homeLogo ?>"></div>
                 <div class="Gamestrip__Info Gamestrip__Info--post hidden lg:block">
                   <div class="Gamestrip__InfoWrapper items-center flex">
                     <div class="ScoreCell__Truncate Gamestrip__Truncate h4 clr-gray-01">
-                      <p class="ScoreCell__TeamName ScoreCell__TeamName--displayName text-2xl font-bold"><?= $homeTeam['name'] ?></p>
+                      <p class="ScoreCell__TeamName ScoreCell__TeamName--displayName text-2xl font-bold">
+                        <?= $homeTeam['name'] ?></p>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="Gamestrip__ScoreContainer flex flex-col items-center justify-center relative">
-                <div class="Gamestrip__Score font-headline text-steelgreen relative tc w-full text-8xl text-right"><?= $game->homescore ?></div>
+                <div class="Gamestrip__Score font-headline text-steelgreen relative tc w-full text-8xl text-right">
+                  <?= $game->homescore ?></div>
               </div>
             </div>
           </div>
           <div class="Gamestrip__Overview__Wrapper">
-            <div class="Gamestrip__Overview max-w-[50px] md:max-w-[140px] relative items-center clr-gray-04 flex justify-center flex-col n8 Gamestrip__Overview">
+            <div
+              class="Gamestrip__Overview max-w-[50px] md:max-w-[140px] relative items-center clr-gray-04 flex justify-center flex-col n8 Gamestrip__Overview">
               <div class="Gamestrip__Time--wrapper">
-                <div class="ScoreCell__Time hidden md:block Gamestrip__Time ScoreCell__Time--post text-center font-thin text-gray-500"><?= Contao\Date::parse('d.m.Y', $game->gamedate); ?><br><?= $game->gametime ?><?php
-                                                                                                                                                                                                                      if ($game->resulttype == 'OT'):
-                                                                                                                                                                                                                      ?><br><span class="text-steelgreen font-headline text-xl uppercase">Overtime</span><?php endif; ?><?php
-                                                                                                                                                                                                                                                                                                                        if ($game->resulttype == 'SO'):
-                                                                                                                                                                                                                                                                                                                        ?><br><span class="text-steelgreen font-headline text-xl uppercase">Shootout</span><?php endif; ?></div>
-                <div class="ScoreCell__Time md:hidden Gamestrip__Time ScoreCell__Time--post text-center font-thin text-gray-500">vs.</div>
+                <div
+                  class="ScoreCell__Time hidden md:block Gamestrip__Time ScoreCell__Time--post text-center font-thin text-gray-500">
+                  <?= Contao\Date::parse('d.m.Y', $game->gamedate); ?><br><?= $game->gametime ?><?php
+                                                                                                if ($game->resulttype == 'OT'):
+                                                                                                ?><br><span
+                    class="text-steelgreen font-headline text-xl uppercase">Overtime</span><?php endif; ?><?php
+                                                                                                          if ($game->resulttype == 'SO'):
+                                                                                                          ?><br><span
+                    class="text-steelgreen font-headline text-xl uppercase">Shootout</span><?php endif; ?></div>
+                <div
+                  class="ScoreCell__Time md:hidden Gamestrip__Time ScoreCell__Time--post text-center font-thin text-gray-500">
+                  vs.</div>
               </div>
             </div>
           </div>
           <div class="Gamestrip__Team relative flex w-full items-center Gamestrip__Team--right Gamestrip__Team--winner">
             <div class="Gamestrip__TeamContent flex tc w-full Gamestrip__TeamContent--right Gamestrip__TeamContent--post">
               <div class="Gamestrip__TeamContainer flex items-center">
-                <div class="Gamestrip__InfoLogo Gamestrip__InfoLogo--Right"><img alt="<?= $awayTeam['name'] ?>" class="Image Logo Gamestrip__Logo Gamestrip__Logo--xl Logo__xl" src="<?= $awayLogo ?>"></div>
+                <div class="Gamestrip__InfoLogo Gamestrip__InfoLogo--Right"><img alt="<?= $awayTeam['name'] ?>"
+                    class="Image Logo Gamestrip__Logo Gamestrip__Logo--xl Logo__xl" src="<?= $awayLogo ?>"></div>
                 <div class="Gamestrip__Info Gamestrip__Info--post hidden lg:block">
                   <div class="Gamestrip__InfoWrapper items-center flex">
                     <div class="ScoreCell__Truncate Gamestrip__Truncate h4 clr-gray-01">
-                      <p class="ScoreCell__TeamName ScoreCell__TeamName--displayName text-2xl font-bold"><?= $awayTeam['name'] ?></p>
+                      <p class="ScoreCell__TeamName ScoreCell__TeamName--displayName text-2xl font-bold">
+                        <?= $awayTeam['name'] ?></p>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="Gamestrip__ScoreContainer flex flex-col items-center justify-center relative">
-                <div class="Gamestrip__Score font-headline text-steelgreen relative tc w-full text-8xl"><?= $game->awayscore ?></div>
+                <div class="Gamestrip__Score font-headline text-steelgreen relative tc w-full text-8xl">
+                  <?= $game->awayscore ?></div>
               </div>
             </div>
           </div>
@@ -83,7 +97,10 @@ $video_id = $queryParams['v'];
       </div>
     <?php endif; ?>
   <?php endif; ?>
-  <div class="ce_text max-w-screen-2xl px-2 lg:px-3 mb-8">
-    <iframe class="w-full aspect-video" style="max-height: calc(100vh - 150px); max-width: 100vw;" src="https://www.youtube-nocookie.com/embed/<?= $video_id; ?>" title="<?= $this->newsHeadline; ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+  <div class="ce_text px-2 lg:px-3 mb-8 bg-black w-full flex justify-center items-center">
+    <iframe class="w-full aspect-video max-w-screen-2xl" style="max-height: calc(100vh - 150px);"
+      src="https://www.youtube-nocookie.com/embed/<?= $video_id; ?>" title="<?= $this->newsHeadline; ?>" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
   </div>
 </div>
