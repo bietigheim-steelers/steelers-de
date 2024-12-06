@@ -1,0 +1,95 @@
+<?php
+
+if (!function_exists('downloadImage')) {
+  function downloadImage($video_url)
+  {
+    parse_str(parse_url($video_url, PHP_URL_QUERY), $queryParams);
+    $video_id = $queryParams['v'];
+    $url = 'https://img.youtube.com/vi/' . $video_id . '/hq2.jpg';
+    $tmpDir = TL_ROOT . '/system/tmp';
+    $localFile = $tmpDir . DIRECTORY_SEPARATOR . $video_id . '_hq2.jpg';
+
+    if (!file_exists($localFile)) {
+      $ch = curl_init($url);
+      $fp = fopen($localFile, 'wb');
+
+      curl_setopt($ch, CURLOPT_FILE, $fp);
+      curl_setopt($ch, CURLOPT_HEADER, 0);
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+      curl_exec($ch);
+      curl_close($ch);
+      fclose($fp);
+    }
+
+    return $localFile;
+  }
+}
+
+//load the preview image of the video locally
+$video_file = downloadImage($this->playerUrl);
+
+$figureBuilder = System::getContainer()
+  ->get(Contao\CoreBundle\Image\Studio\Studio::class)
+  ->createFigureBuilder();
+$figure = $figureBuilder->fromPath($video_file)->setSize([800, 450, 'crop'])->buildIfResourceExists();
+$ogimage = $figure->getImage()->getImg();
+
+?>
+<div class="group relative bg-white border border-gray-200 mx-2 xl:mx-4 flex flex-col overflow-hidden">
+  <div class="flex flex-col bg-white h-full">
+    <figure class="image_container relative">
+      <a href="<?= $this->link ?>" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 group">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" style="width: 70px" class="stroke-white transition-transform transform group-hover:scale-125">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z" />
+        </svg>
+      </a>
+      <img src="<?= $ogimage['src'] ?>" width="<?= $ogimage['width'] ?>" height="<?= $ogimage['height'] ?>" alt="<?= $this->newsHeadline ?>">
+    </figure>
+    <div class="p-5 grow flex flex-col">
+      <div class="text-gray-400 italic uppercase text-sm">
+        <?php
+        if (isset($this->arrData['game_id'])) {
+          $game = \App\Tilastot\Model\Games::findByPk($this->arrData['game_id']);
+          if ($game) {
+            $homeTeam = \App\Tilastot\Model\Standings::getTeamData($game->hometeam, $game->round, 'name');
+            $awayTeam = \App\Tilastot\Model\Standings::getTeamData($game->awayteam, $game->round, 'name');
+            echo $homeTeam . ' - ' . $awayTeam;
+          } else {
+            echo implode(', ', $this->categoriesList);
+          }
+        } else {
+          echo implode(', ', $this->categoriesList);
+        }
+        ?>
+      </div>
+
+      <?php
+      echo '<a href="' . $this->link . '" class="mt-1 text-xl text-steelgreen uppercase font-bold leading-6">';
+      if (in_array('Highlights', $this->categoriesList)) {
+        echo 'Highlights';
+      } elseif (in_array('Impressionen', $this->categoriesList)) {
+        echo 'Impressionen';
+      } elseif (in_array('Pressekonferenz', $this->categoriesList)) {
+        echo 'Pressekonferenz';
+      } else {
+        echo $this->newsHeadline;
+      }
+      echo '</a>';
+      ?>
+      <div class="mt-5 flex-1 flex flex-col justify-end">
+        <time class="text-sm text-steelgreen" datetime="<?= $this->datetime ?>"><?= date('d.m.Y', $this->time) ?></time>
+      </div>
+    </div>
+  </div>
+</div>
+<?php
+
+$schemaOrg = $this->getSchemaOrgData();
+
+if ($this->hasText) {
+  $schemaOrg['text'] = $this->rawHtmlToPlainText($this->text);
+}
+
+$this->addSchemaOrg($schemaOrg);

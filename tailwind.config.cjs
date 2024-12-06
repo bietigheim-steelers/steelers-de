@@ -44,6 +44,7 @@ module.exports = {
       },
       aspectRatio: {
         news: "4 / 5",
+        video: "16 / 9",
       },
       spacing: {
         defaultbig: "150px",

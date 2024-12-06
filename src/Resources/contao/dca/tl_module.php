@@ -78,6 +78,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['tilastot_partners_category'] = array(
 		'business' => 'Businesspartner',
 		'lounge' => 'Businesslounge',
 		'medien' => 'Medienpartner',
+		'video' => 'Videopartner',
 		'carpool' => 'Carpool Partner',
 		'team' => 'Teampartner',
 		'supporter' => 'Supporter',

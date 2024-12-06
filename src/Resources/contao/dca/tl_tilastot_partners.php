@@ -122,6 +122,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_partners'] = array(
                 'business' => 'Businesspartner',
                 'lounge' => 'Businesslounge',
                 'medien' => 'Medienpartner',
+                'video' => 'Videopartner',
                 'carpool' => 'Carpool Partner',
                 'team' => 'Teampartner',
                 'supporter' => 'Supporter',
