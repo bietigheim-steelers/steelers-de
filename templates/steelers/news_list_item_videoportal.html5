@@ -73,6 +73,8 @@ $ogimage = $figure->getImage()->getImg();
         echo 'Impressionen';
       } elseif (in_array('Pressekonferenz', $this->categoriesList)) {
         echo 'Pressekonferenz';
+      } elseif (in_array('Razorsharp', $this->categoriesList)) {
+        echo 'Razorsharp';
       } else {
         echo $this->newsHeadline;
       }
