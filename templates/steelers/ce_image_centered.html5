@@ -1,0 +1,5 @@
+<div class="bg-steelgreen flex justify-center">
+  <div class="z-10">
+    <?php $this->insert('image', $this->arrData); ?>
+  </div>
+</div>
