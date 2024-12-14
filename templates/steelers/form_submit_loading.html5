@@ -1,0 +1,26 @@
+<?php $this->extend('form_row'); ?>
+
+<?php $this->block('field'); ?>
+<?php if ($this->src): ?>
+<input type="image" src="<?= $this->src ?>" id="ctrl_<?= $this->id ?>"
+  class="submit<?php if ($this->class): ?> <?= $this->class ?><?php endif; ?>"
+  title="<?= Contao\StringUtil::specialchars($this->slabel) ?>"
+  alt="<?= Contao\StringUtil::specialchars($this->slabel) ?>" <?= $this->getAttributes() ?>>
+<?php else: ?>
+<button type="submit" id="ctrl_<?= $this->id ?>"
+  class="submit btn-default<?php if ($this->class): ?> <?= $this->class ?><?php endif; ?>"
+  <?= $this->getAttributes() ?>><?= $this->slabel ?></button>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var form = document.querySelector('form');
+  var submitButton = document.getElementById('ctrl_<?= $this->id ?>');
+
+  form.addEventListener('submit', function() {
+    submitButton.disabled = true;
+    submitButton.style.opacity = '0.5';
+    submitButton.innerHTML = 'Bitte warten...';
+  });
+});
+</script>
+<?php endif; ?>
+<?php $this->endblock(); ?>
