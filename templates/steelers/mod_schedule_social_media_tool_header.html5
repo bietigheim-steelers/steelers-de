@@ -1,0 +1,399 @@
+<div class="holema-table <?= $this->cssClass ?>" <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
+  <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    @media (min-width: 1024px) {
+      .container {
+        flex-direction: row;
+      }
+
+      .inputs {
+        margin-left: 20px;
+      }
+    }
+
+    .form-container {
+      display: flex;
+      flex-direction: column;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    textarea,
+    input[type="file"],
+    select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+  <div>
+    <div class="container">
+      <div class="inputs">
+        <div class="form-container">
+          <div class="form-group">
+            <table>
+              <thead>
+                <tr>
+                  <th>Datum</th>
+                  <th>Uhrzeit</th>
+                  <th>Heim</th>
+                  <th>Auswärts</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+                foreach ($this->games as $key => $game) {
+                  if ($game['away']['shortname'] == 'SCB') {
+                    continue;
+                  }
+                  $class = ($team['holemaid'] == $this->my_team) ? ' class="highlight-team"' : '';
+                  // finde next home game
+                  for ($i = $key + 1; $i < count($this->games); $i++) {
+                    if ($this->games[$i]['home']['shortname'] == 'SCB') {
+                      $nextGame = [
+                        'gamedate' => $this->games[$i]['gamedate'],
+                        'opponent' => $this->games[$i]['away']['shortname'],
+                        'opponent_name' => $this->games[$i]['away']['name'],
+                        'logo' => $this->games[$i]['away']['logo'],
+                      ];
+                      break;
+                    }
+                  }
+                ?>
+                  <tr>
+                    <td><?= \System::parseDate('d.m.Y', $game['gamedate']) ?></td>
+                    <td><?= $game['gametime'] ?> Uhr</td>
+                    <td><?= $game['home']['name'] ?></td>
+                    <td><?= $game['away']['name'] ?></td>
+                    <td><button
+                        onclick="generateImages('<?= $game['away']['logo'] ?>','<?= $game['home']['logo'] ?>','<?= $game['away']['shortname'] ?>','<?= $game['home']['shortname'] ?>','<?= $game['gamedate'] ?>')">generate</button>
+                    </td>
+                  </tr>
+                <?php
+                }
+                ?>
+              </tbody>
+            </table>
+
+          </div>
+          <div class="form-group">
+            <label for="uploadImage">Foto:</label>
+            <input type="file" id="uploadImage" accept="image/*">
+          </div>
+        </div>
+      </div>
+      <div>
+        <canvas id="header" width="1600" height="600"
+          style="max-width: 800px; max-height: 600px; border: 1px solid lightgrey; margin-top: 20px; aspect-ratio: 16 / 9;"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const canvas = document.getElementById('header');
+  const ctx = canvas.getContext('2d');
+
+  canvas.width = 1600;
+  canvas.height = 600;
+
+  let backgroundImage;
+
+  let imageX = 0;
+  let imageY = 0;
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragStartY = 0;
+  let scale = 1;
+  let lastScale = 1;
+
+  let gegnerText = '';
+  let gameTimestamp;
+
+  const imageLogo = new Image();
+
+  // Load the image
+  const image = new Image();
+  image.src = '/files/steelers/tools/social-media/empty_gameday.png';
+  image.onload = function() {
+    drawCanvas();
+  };
+
+  const fontC2 = new FontFace('Bahnschrift2',
+    'url(/files/steelers/tools/social-media/fonts/bahnschrift2.ttf)', {
+      weight: '100', // You can also use numeric values like '400', '700', etc.
+      style: 'normal',
+      stretch: 'condensed'
+    });
+  fontC2.load().then(function(loadedFont) {
+    document.fonts.add(loadedFont);
+    drawCanvas();
+  });
+
+  const fontC3 = new FontFace('Bahnschrift3',
+    'url(/files/steelers/tools/social-media/fonts/bahnschrift2.ttf)', {
+      weight: '700', // You can also use numeric values like '400', '700', etc.
+      style: 'normal',
+      stretch: 'condensed'
+    });
+  fontC3.load().then(function(loadedFont) {
+    document.fonts.add(loadedFont);
+    drawCanvas();
+  });
+
+  function drawCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (backgroundImage) {
+      if (isNaN(backgroundImage.width)) {
+        console.log('image not loaded')
+      }
+      ctx.drawImage(backgroundImage, imageX, imageY, backgroundImage.width * scale, backgroundImage.height * scale);
+    }
+    ctx.drawImage(image, 0, 0);
+
+
+    if (imageLogo.width > 0) {
+
+      const maxWidth = 120; // Replace with your desired max width
+      const maxHeight = 120; // Replace with your desired max height
+      const boxX = 1035; // X-coordinate of the box
+      const boxY = 210; // Y-coordinate of the box
+      const boxWidth = 240; // Width of the box
+      const boxHeight = 240; // Height of the box
+
+      let width = imageLogo.width;
+      let height = imageLogo.height;
+
+      height = height * (maxWidth / width);
+      width = maxWidth;
+
+      width = width * (maxHeight / height);
+      height = maxHeight;
+
+      // Calculate the coordinates to center the image within the box
+      const centerX = boxX + (boxWidth - width) / 2;
+      const centerY = boxY + (boxHeight - height) / 2;
+
+      createImageBitmap(imageLogo).then((bitmap) => {
+        ctx.drawImage(bitmap, centerX, centerY, width, height);
+      });
+    }
+
+
+    smalltext = 'STEELERS vs. ' + gegnerText.toUpperCase();
+    ctx.font = '100 34px Bahnschrift2';
+    ctx.fillStyle = '#046a38';
+
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'alphabetic';
+    var text1Width = (ctx.measureText(smalltext).width);
+    var text1Height = 143;
+
+    ctx.fillText(smalltext, 965, 425);
+
+
+    const weekday = new Date(gameTimestamp * 1000).toLocaleDateString('de-DE', {
+      weekday: 'long'
+    });
+    const date = new Date(gameTimestamp * 1000).toLocaleDateString('de-DE', {
+      day: '2-digit',
+      month: 'long',
+    });
+    const time = new Date(gameTimestamp * 1000).toLocaleTimeString('de-DE', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    }) + ' UHR';
+
+    const part1 = weekday.toUpperCase() + '  -  ';
+    const part2 = date.toUpperCase();
+    const part3 = '  -  ' + time;
+
+    ctx.font = '100 64px Bahnschrift2';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+
+    const bottomText1Width = ctx.measureText(part1).width;
+    const bottomText2Width = ctx.measureText(part2).width;
+    const bottomText3Width = ctx.measureText(part3).width;
+
+    const totalWidth = bottomText1Width + bottomText2Width + bottomText3Width;
+    const startX = 800 - totalWidth / 2;
+
+    ctx.fillText(part1, startX, 555);
+
+    ctx.font = '700 64px Bahnschrift3';
+    ctx.fillText(part2, startX + bottomText1Width, 555);
+
+    ctx.font = '100 64px Bahnschrift2';
+    ctx.fillText(part3, startX + bottomText1Width + bottomText2Width, 555)
+
+
+  }
+
+  // Handle image upload
+  document.getElementById('uploadImage').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const uploadedImage = new Image();
+        base64String = e.target.result;
+        const byteString = atob(base64String.split(',')[1]);
+        const mimeString = base64String.split(',')[0].split(':')[1].split(';')[0];
+        const ab = new ArrayBuffer(byteString.length);
+        const ia = new Uint8Array(ab);
+        for (let i = 0; i < byteString.length; i++) {
+          ia[i] = byteString.charCodeAt(i);
+        }
+        const blob = new Blob([ab], {
+          type: mimeString
+        });
+        const url = URL.createObjectURL(blob);
+        uploadedImage.src = url;
+
+        uploadedImage.onload = () => {
+          URL.revokeObjectURL(url); // Clean up the Blob URL
+          const targetWidth = 1600;
+          const originalWidth = uploadedImage.width;
+          scale = targetWidth / originalWidth;
+
+          backgroundImage = uploadedImage;
+          drawCanvas();
+        };
+        setTimeout(function() {
+
+        }, 100)
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+
+  // Initialize Hammer.js
+  const hammer = new Hammer(canvas);
+
+  // Handle touch events for dragging using Hammer.js
+  hammer.on('panstart', function(event) {
+    const rect = canvas.getBoundingClientRect();
+    const touchX = event.center.x - rect.left;
+    const touchY = event.center.y - rect.top;
+    isDragging = true;
+    dragStartX = touchX - imageX;
+    dragStartY = touchY - imageY;
+  });
+
+  hammer.on('panmove', function(event) {
+    if (isDragging) {
+      const rect = canvas.getBoundingClientRect();
+      imageX = event.center.x - rect.left - dragStartX;
+      imageY = event.center.y - rect.top - dragStartY;
+      drawCanvas();
+    }
+  });
+
+  hammer.on('panend pancancel', function() {
+    isDragging = false;
+  });
+
+  // Handle pinch events for resizing using Hammer.js
+  hammer.get('pinch').set({
+    enable: true
+  });
+
+  hammer.on('pinchstart', function() {
+    lastScale = scale;
+  });
+
+  hammer.on('pinchmove', function(event) {
+    scale = lastScale * event.scale;
+    drawCanvas();
+  });
+
+  // Handle mousewheel events for scaling
+  document.getElementById('header').addEventListener('wheel', function(event) {
+    event.preventDefault();
+    const scaleAmount = 0.01;
+    if (event.deltaY < 0) {
+      scale += scaleAmount;
+    } else {
+      scale -= scaleAmount;
+    }
+    drawCanvas();
+  });
+
+  function generateImages(logoAway, logoHome, teamAway, teamHome, gamedate) {
+
+    gameTimestamp = gamedate;
+    switch (teamAway) {
+      case 'EHF':
+        gegnerText = 'Passau';
+        break;
+      case 'DSC':
+        gegnerText = 'Deggendorf';
+        break;
+      case 'MEM':
+        gegnerText = 'Memmingen';
+        break;
+      case 'ECT':
+        gegnerText = 'Bad Tölz';
+        break;
+      case 'SEC':
+        gegnerText = 'Stuttgart';
+        break;
+      case 'OTB':
+        gegnerText = 'Bayreuth';
+        break;
+      case 'ECP':
+        gegnerText = 'Peiting';
+        break;
+      case 'HNF':
+        gegnerText = 'Heilbronn';
+        break;
+      case 'EVF':
+        gegnerText = 'Füssen';
+        break;
+      case 'LIN':
+        gegnerText = 'Lindau';
+        break;
+      case 'HEC':
+        gegnerText = 'Höchstadt';
+        break;
+      case 'SCR':
+        gegnerText = 'SC RIessersee';
+        break;
+      default:
+        console.log('unknown team ' + teamAway)
+    }
+    selectedOponent = teamAway;
+    imageLogo.src = logoAway;
+    imageLogo.onload = function() {
+      drawCanvas();
+    };
+
+  }
+</script>

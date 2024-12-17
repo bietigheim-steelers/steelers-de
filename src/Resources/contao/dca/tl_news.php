@@ -1,6 +1,8 @@
 <?php
 
 use App\Tilastot\Model\Standings;
+use Contao\NewsArchiveModel;
+use Contao\System;
 
 $GLOBALS['TL_DCA']['tl_news']['fields']['game_id'] = array(
   'label'                   => &$GLOBALS['TL_LANG']['tl_news']['game_id'],
@@ -16,6 +18,8 @@ $GLOBALS['TL_DCA']['tl_news']['palettes']['default'] = str_replace(
   '{game_legend},game_id;{date_legend}',
   $GLOBALS['TL_DCA']['tl_news']['palettes']['default']
 );
+
+$GLOBALS['TL_DCA']['tl_news']['config']['onsubmit_callback'][] = array('tl_games_for_news', 'updateVideoportal');
 
 class tl_games_for_news extends Backend
 {
@@ -44,5 +48,48 @@ class tl_games_for_news extends Backend
     }
 
     return $options;
+  }
+
+  public function updateVideoportal(DataContainer $dc) {
+    // Return if there is no active record (override all)
+    if (!$dc->activeRecord) {
+      return;
+    }
+
+    // Return if this is not the newsportal
+    if ($dc->activeRecord->pid != 7 || $dc->activeRecord->game_id == 0) {
+      return;
+    }
+
+    $aliasExists = function (string $alias) use ($dc): bool {
+      return $this->Database->prepare("SELECT id FROM tl_news WHERE alias=? AND id!=?")->execute($alias, $dc->id)->numRows > 0;
+    };
+
+    $category = null;
+
+    if (in_array('Highlights', $this->categoriesList)) {
+      $category = 'Highlights';
+    } elseif (in_array('Impressionen', $this->categoriesList)) {
+      $category = 'Impressionen';
+    } elseif (in_array('Pressekonferenz', $this->categoriesList)) {
+      $category = 'Pressekonferenz';
+    } elseif (in_array('Razorsharp', $this->categoriesList)) {
+      $category = 'Razorsharp';
+    }
+
+    $game = \App\Tilastot\Model\Games::findByPk($dc->activeRecord->game_id);
+    if($game && $category) {
+      $homeTeam = \App\Tilastot\Model\Standings::findByIdAndRound($game->hometeam, $game->round);
+      $awayTeam = \App\Tilastot\Model\Standings::findByIdAndRound($game->awayteam, $game->round);
+
+      $headline = Contao\Date::parse('d.m.Y', $game->gamedate) . " - " . $category . " - " . $homeTeam->name . " vs. " . $awayTeam->name;
+  
+      $arrSet['alias'] = System::getContainer()->get('contao.slug')->generate($headline, NewsArchiveModel::findByPk($dc->activeRecord->pid)->jumpTo, $aliasExists);
+      $arrSet['headline'] = $headline;
+
+      $this->Database->prepare("UPDATE tl_news %s WHERE id=?")->set($arrSet)->execute($dc->id);
+    }
+
+
   }
 }
