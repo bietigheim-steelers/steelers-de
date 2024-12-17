@@ -62,12 +62,12 @@ class tl_games_for_news extends Backend
     }
 
     $aliasExists = function (string $alias) use ($dc): bool {
-      return $this->Database->prepare("SELECT id FROM tl_news WHERE alias=? AND id!=?")->execute($alias, $dc->id)->numRows > 0;
+      return false;
     };
 
     $category = null;
 
-    if (in_array(29, $dc->activeRecords->categories)) {
+    if (in_array(29, $dc->activeRecord->categories)) {
       $category = 'Highlights';
     } elseif (in_array(33, $dc->activeRecord->categories)) {
       $category = 'Impressionen';
@@ -82,10 +82,12 @@ class tl_games_for_news extends Backend
       $homeTeam = \App\Tilastot\Model\Standings::findByIdAndRound($game->hometeam, $game->round);
       $awayTeam = \App\Tilastot\Model\Standings::findByIdAndRound($game->awayteam, $game->round);
 
-      $headline = Contao\Date::parse('d.m.Y', $game->gamedate) . " - " . $category . " - " . $homeTeam->name . " vs. " . $awayTeam->name;
+      $headline = Contao\Date::parse('d.m.Y', $game->gamedate) . " - " . $category . " - " . $homeTeam['name'] . " vs. " . $awayTeam['name'];
   
       $arrSet['alias'] = System::getContainer()->get('contao.slug')->generate($headline, NewsArchiveModel::findByPk($dc->activeRecord->pid)->jumpTo, $aliasExists);
       $arrSet['headline'] = $headline;
+      $arrSet['date'] = strtotime(date('Y-m-d', $game->gamedate) . ' ' . date('H:i:s', $game->gamedate));
+      $arrSet['time'] = $arrSet['date'];
 
       $this->Database->prepare("UPDATE tl_news %s WHERE id=?")->set($arrSet)->execute($dc->id);
     }
