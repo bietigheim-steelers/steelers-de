@@ -67,13 +67,13 @@ class tl_games_for_news extends Backend
 
     $category = null;
 
-    if (in_array('Highlights', $this->categoriesList)) {
+    if (in_array(29, $dc->activeRecords->categories)) {
       $category = 'Highlights';
-    } elseif (in_array('Impressionen', $this->categoriesList)) {
+    } elseif (in_array(33, $dc->activeRecord->categories)) {
       $category = 'Impressionen';
-    } elseif (in_array('Pressekonferenz', $this->categoriesList)) {
+    } elseif (in_array(30, $dc->activeRecord->categories)) {
       $category = 'Pressekonferenz';
-    } elseif (in_array('Razorsharp', $this->categoriesList)) {
+    } elseif (in_array(35, $dc->activeRecord->categories)) {
       $category = 'Razorsharp';
     }
 
