@@ -53,6 +53,9 @@ $GLOBALS['TL_MODELS']['tl_tilastot_partners'] = Partners::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_camps'] = Camps::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_bus_tours'] = BusTours::class;
 
+/* Hooks */
+array_unshift($GLOBALS['TL_HOOKS']['newsListFetchItems'], ['App\\Tilastot\\EventListener\\NewsListFetchItemsListener', 'videoportalFilter']);
+
 /* Cronjob */
 $GLOBALS['TL_CRON']['hourly'][] = array('App\\Tilastot\\Utils\\TilastotApi', 'refreshAll');
 
