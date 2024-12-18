@@ -1,6 +1,5 @@
 <?php
-// src/EventListener/NewsListFetchItemsListener.php
-namespace App\EventListener;
+namespace App\Tilastot\EventListener;
 
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Module;
