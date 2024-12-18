@@ -27,3 +27,7 @@ files/steelers/js
 *.sw?
 
 .env
+vendor
+assets
+composer.json
+composer.lock
