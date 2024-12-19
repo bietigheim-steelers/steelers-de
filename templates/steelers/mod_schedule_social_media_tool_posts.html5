@@ -86,6 +86,7 @@ foreach ($pngFiles as $file) {
           <option value="News">News</option>
           <option value="Preview">Preview</option>
           <option value="Matchup">Matchup</option>
+          <option value="Lineup">Lineup</option>
           <option value="Geburtstag">Geburtstag</option>
         </select>
       </p>
@@ -155,6 +156,7 @@ foreach ($pngFiles as $file) {
     const postConfig = {
       'Endstand_Home': ['smalltext', 'bgImage', 'result', 'periods', 'opponentAway'],
       'Matchup': ['headline', 'smalltext', 'opponentAway', 'matchup'],
+      'Lineup': ['headline', 'smalltext', 'lineup'],
       'Endstand_Away': ['smalltext', 'bgImage', 'result', 'periods', 'opponentAway'],
       'Gameday_Home': ['smalltext', 'bgImage', 'opponentAway', 'time', 'wby'],
       'Gameday_Away': ['smalltext', 'bgImage', 'opponentAway', 'time'],
@@ -177,6 +179,7 @@ foreach ($pngFiles as $file) {
     let opponentLogo;
     let opponentLogos = [];
     let opponentShortname;
+    let lineupData;
     let matchupData;
     let matchupDataFairplay;
     let matchupDataScoring;
@@ -378,6 +381,25 @@ foreach ($pngFiles as $file) {
           .then(data => {
             matchupDataPlayer = data.data.rows;
             drawCanvas();
+          });
+      }
+
+      if (selectedFile == 'Lineup') {
+        fetch(
+            //`https://api.hockeydata.net/data/ebel/Schedule?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=15881&referer=deb-online.live&widgetOptions={"gameStatus":[0,1,2],"semantic":true,"noScorers":true}`
+            `https://api.hockeydata.net/data/ebel/Schedule?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=15881&referer=deb-online.live&widgetOptions={"gameStatus":[3,4],"semantic":true,"noScorers":true}`
+          )
+          .then(response => response.json())
+          .then(data => {
+            nextGame = data.data.rows.find(row => (row.awayTeamId === 54744 || row.homeTeamId === 54744));
+            fetch(
+                `https://api.hockeydata.net/data/ebel/GetGameReport?apiKey=3c5a99d835fcb70156d40cd60d03f350&gameId=${nextGame.id}&referer=deb-online.live`
+              )
+              .then(response => response.json())
+              .then(data => {
+                lineupData = data.data;
+                drawCanvas();
+              });
           });
       }
 
@@ -679,7 +701,7 @@ foreach ($pngFiles as $file) {
             boxX = 745; // X-coordinate of the box
             boxY = 510; // Y-coordinate of the box
           }
-          if (selectedPost == 'Matchup') {
+          if (selectedPost == 'Matchup' || selectedPost == 'Lineup') {
             boxX = 660; // X-coordinate of the box
             boxY = 410; // Y-coordinate of the box
           }
@@ -772,6 +794,147 @@ foreach ($pngFiles as $file) {
             2) - playerWidth, 880);
         }
       }
+      if (config.includes('lineup')) {
+        if (lineupData) {
+          const fontNumber = '100 40px Bahnschrift2';
+          const fontName = '700 50px Bahnschrift2';
+          let startY = 500;
+          let kader;
+          const lineHeight = 64;
+
+          if (lineupData.gameData.homeTeamId == '54744') {
+            kader = lineupData.homeFieldPlayers;
+          } else {
+            kader = lineupData.awayFieldPlayers;
+          }
+
+          console.log(kader)
+          ctx.font = '100 50px Bahnschrift2';
+          ctx.fillStyle = 'white';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+
+          let countLines = 0;
+          let lineWidth;
+          let lineText;
+
+          [1, 2, 3, 4].forEach((line, index) => {
+            ctx.fillStyle = '#cccccc'; // Change to desired color
+            ctx.font = '100 20px PPFormula';
+            lineText = line + '. Reihe';
+            lineWidth = ctx.measureText(lineText.toUpperCase()).width;
+            ctx.fillText(lineText.toUpperCase(), 540, startY + (countLines * lineHeight));
+            countLines++;
+            lineText = '';
+
+            let playerX = 540; // Starting X position for player text
+            let totalWidth = 0;
+
+            // Calculate total width for LF, C, RF
+            ['LF', 'C', 'RF'].forEach((pos, index2) => {
+              const player = kader.find(player => player.lineupLine === line && player.position === pos);
+              if (player) {
+                const jerseyText = '#' + player.playerJerseyNr;
+                const nameText = ' ' + player.playerLastname + ' ';
+                ctx.font = fontNumber;
+                totalWidth += ctx.measureText(jerseyText).width
+                ctx.font = fontName;
+                totalWidth += ctx.measureText(nameText).width;
+              } else {
+                totalWidth += ctx.measureText(pos + ' ').width;
+              }
+            });
+
+            // Adjust starting X position to center the text
+            playerX = 540 - totalWidth / 2;
+
+            // Draw LF, C, RF
+            ['LF', 'C', 'RF'].forEach((pos, index2) => {
+              const player = kader.find(player => player.lineupLine === line && player.position === pos);
+              if (player) {
+                const jerseyText = '#' + player.playerJerseyNr;
+                const nameText = player.playerLastname + '  ';
+                ctx.font = fontNumber;
+                const jerseyWidth = ctx.measureText(jerseyText).width;
+                ctx.font = fontName;
+                const nameWidth = ctx.measureText(nameText).width;
+
+                // Draw playerJerseyNr in a different color
+                ctx.fillStyle = '#009cde'; // Change to desired color
+                ctx.font = fontNumber;
+                ctx.fillText(jerseyText, playerX + jerseyWidth / 2, startY + (countLines * lineHeight));
+                // Draw playerLastname in the default color
+                ctx.fillStyle = 'white'; // Change to desired color
+                ctx.font = fontName;
+                ctx.fillText(nameText, playerX + jerseyWidth + nameWidth / 2, startY + (countLines * lineHeight));
+
+                // Update playerX for the next player
+                playerX += jerseyWidth + nameWidth;
+              } else {
+                const posText = pos + ' ';
+                const posWidth = ctx.measureText(posText).width;
+                ctx.fillText(posText, playerX + posWidth / 2, startY + (countLines * lineHeight));
+                playerX += posWidth;
+              }
+            });
+
+            countLines++;
+
+            playerX = 540; // Reset X position for the next line of players
+            totalWidth = 0;
+
+            // Calculate total width for LD, RD
+            ['LD', 'RD'].forEach((pos, index2) => {
+              const player = kader.find(player => player.lineupLine === line && player.position === pos);
+              if (player) {
+                const jerseyText = '#' + player.playerJerseyNr;
+                const nameText = ' ' + player.playerLastname + ' ';
+                ctx.font = fontNumber;
+                totalWidth += ctx.measureText(jerseyText).width
+                ctx.font = fontName;
+                totalWidth += ctx.measureText(nameText).width;
+              } else {
+                totalWidth += ctx.measureText(pos + ' ').width;
+              }
+            });
+
+            // Adjust starting X position to center the text
+            playerX = 540 - totalWidth / 2;
+
+            // Draw LD, RD
+            ['LD', 'RD'].forEach((pos, index2) => {
+              const player = kader.find(player => player.lineupLine === line && player.position === pos);
+              if (player) {
+                const jerseyText = '#' + player.playerJerseyNr;
+                const nameText = player.playerLastname + '  ';
+                ctx.font = fontNumber;
+                const jerseyWidth = ctx.measureText(jerseyText).width;
+                ctx.font = fontName;
+                const nameWidth = ctx.measureText(nameText).width;
+
+                // Draw playerJerseyNr in a different color
+                ctx.fillStyle = '#009cde'; // Change to desired color
+                ctx.font = fontNumber;
+                ctx.fillText(jerseyText, playerX + jerseyWidth / 2, startY + (countLines * lineHeight));
+                // Draw playerLastname in the default color
+                ctx.fillStyle = 'white'; // Change to desired color
+                ctx.font = fontName;
+                ctx.fillText(nameText, playerX + jerseyWidth + nameWidth / 2, startY + (countLines * lineHeight));
+
+                // Update playerX for the next player
+                playerX += jerseyWidth + nameWidth;
+              } else {
+                const posText = pos + ' ';
+                const posWidth = ctx.measureText(posText).width;
+                ctx.fillText(posText, playerX + posWidth / 2, startY + (countLines * lineHeight));
+                playerX += posWidth;
+              }
+            });
+
+            countLines++;
+          });
+        }
+      } //end lineup
 
       if (config.includes('matchup')) {
         if (matchupDataScoring && matchupData && matchupDataFairplay && matchupDataPlayer) {
