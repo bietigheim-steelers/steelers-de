@@ -1,11 +1,11 @@
 <?php
-if ($this->addImage) :
+if ($this->useImage) :
   $ogimage = "background-image: url(" . $this->getImage($this->urlEncode($this->singleSRC), 500, 500, 'crop') . ");";
 endif;
 ?>
 <div
   class="px-8 py-12 mt-6 flex flex-col justify-between items-end hyperlink-card bg-cover bg-no-repeat bg-blend-overlay bg-center <?= $this->class ?>"
-  style="<?= $ogimage; ?>">
+  <?= $this->useImage ? 'style="'.$ogimage.'"':'';?>>
   <h5 class="uppercase text-3xl xl:text-4xl w-full text-center font-headline font-bold leading-tight text-steelgreen">
     <?php
     echo $this->headline;
