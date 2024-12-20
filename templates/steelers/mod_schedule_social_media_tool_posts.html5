@@ -391,7 +391,17 @@ foreach ($pngFiles as $file) {
           )
           .then(response => response.json())
           .then(data => {
-            nextGame = data.data.rows.find(row => (row.awayTeamId === 54744 || row.homeTeamId === 54744));
+            nextGame = data.data.rows.reverse().find(row => (row.awayTeamId === 54744 || row.homeTeamId === 54744));
+            console.log(nextGame);
+            if (nextGame.awayTeamId === 54744) {
+              smalltextInput.value = nextGame.scheduledDate.value + " vs. " + nextGame.homeTeamLongName;
+            } else {
+              smalltextInput.value = nextGame.scheduledDate.value + " vs. " + nextGame.awayTeamLongName;
+            }
+            smalltextInput.dispatchEvent(new Event('input'));
+            headlineInput.value = "Aufstellung";
+            headlineInput.dispatchEvent(new Event('input'));
+
             fetch(
                 `https://api.hockeydata.net/data/ebel/GetGameReport?apiKey=3c5a99d835fcb70156d40cd60d03f350&gameId=${nextGame.id}&referer=deb-online.live`
               )
@@ -426,7 +436,7 @@ foreach ($pngFiles as $file) {
 
     const fontC2 = new FontFace('Bahnschrift2',
       'url(/files/steelers/tools/social-media/fonts/bahnschrift2.ttf)', {
-        weight: '100', // You can also use numeric values like '400', '700', etc.
+        weight: '100',
         style: 'normal',
         stretch: 'condensed'
       });
@@ -437,7 +447,7 @@ foreach ($pngFiles as $file) {
 
     const fontC3 = new FontFace('Bahnschrift3',
       'url(/files/steelers/tools/social-media/fonts/bahnschrift2.ttf)', {
-        weight: '700', // You can also use numeric values like '400', '700', etc.
+        weight: '700',
         style: 'normal',
         stretch: 'condensed'
       });
@@ -796,38 +806,46 @@ foreach ($pngFiles as $file) {
       }
       if (config.includes('lineup')) {
         if (lineupData) {
-          const fontNumber = '100 40px Bahnschrift2';
-          const fontName = '700 50px Bahnschrift2';
+          const fontNumber = '50 35px Bahnschrift2';
+          const fontName = '700 45px Bahnschrift2';
           let startY = 500;
           let kader;
-          const lineHeight = 64;
+          let goalies;
+          const lineHeight = 54;
 
           if (lineupData.gameData.homeTeamId == '54744') {
             kader = lineupData.homeFieldPlayers;
+            goalies = lineupData.homeGoalKeepers;
           } else {
             kader = lineupData.awayFieldPlayers;
+            goalies = lineupData.awayGoalKeepers;
           }
 
-          console.log(kader)
           ctx.font = '100 50px Bahnschrift2';
           ctx.fillStyle = 'white';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
 
+          let initX = 540;
           let countLines = 0;
+          let spaceNumberName = 15;
           let lineWidth;
           let lineText;
 
-          [1, 2, 3, 4].forEach((line, index) => {
+          ['g', 1, 2, 3, 4].forEach((line, index) => {
             ctx.fillStyle = '#cccccc'; // Change to desired color
-            ctx.font = '100 20px PPFormula';
-            lineText = line + '. Reihe';
+            ctx.font = '100 25px PPFormula';
+            if (line == 'g') {
+              lineText = 'Torhüter';
+            } else {
+              lineText = line + '. Reihe';
+            }
             lineWidth = ctx.measureText(lineText.toUpperCase()).width;
-            ctx.fillText(lineText.toUpperCase(), 540, startY + (countLines * lineHeight));
+            ctx.fillText(lineText.toUpperCase(), 540, startY + (countLines * lineHeight) + 20);
             countLines++;
             lineText = '';
 
-            let playerX = 540; // Starting X position for player text
+            let playerX = initX; // Starting X position for player text
             let totalWidth = 0;
 
             // Calculate total width for LF, C, RF
@@ -837,16 +855,14 @@ foreach ($pngFiles as $file) {
                 const jerseyText = '#' + player.playerJerseyNr;
                 const nameText = ' ' + player.playerLastname + ' ';
                 ctx.font = fontNumber;
-                totalWidth += ctx.measureText(jerseyText).width
+                totalWidth += ctx.measureText(jerseyText).width + spaceNumberName
                 ctx.font = fontName;
                 totalWidth += ctx.measureText(nameText).width;
-              } else {
-                totalWidth += ctx.measureText(pos + ' ').width;
               }
             });
 
             // Adjust starting X position to center the text
-            playerX = 540 - totalWidth / 2;
+            playerX = initX - totalWidth / 2;
 
             // Draw LF, C, RF
             ['LF', 'C', 'RF'].forEach((pos, index2) => {
@@ -855,7 +871,7 @@ foreach ($pngFiles as $file) {
                 const jerseyText = '#' + player.playerJerseyNr;
                 const nameText = player.playerLastname + '  ';
                 ctx.font = fontNumber;
-                const jerseyWidth = ctx.measureText(jerseyText).width;
+                const jerseyWidth = ctx.measureText(jerseyText).width + spaceNumberName;
                 ctx.font = fontName;
                 const nameWidth = ctx.measureText(nameText).width;
 
@@ -870,45 +886,54 @@ foreach ($pngFiles as $file) {
 
                 // Update playerX for the next player
                 playerX += jerseyWidth + nameWidth;
-              } else {
-                const posText = pos + ' ';
-                const posWidth = ctx.measureText(posText).width;
-                ctx.fillText(posText, playerX + posWidth / 2, startY + (countLines * lineHeight));
-                playerX += posWidth;
               }
             });
 
-            countLines++;
+            if (line != 'g') {
+              countLines++;
+            }
 
-            playerX = 540; // Reset X position for the next line of players
+            playerX = initX; // Reset X position for the next line of players
             totalWidth = 0;
 
             // Calculate total width for LD, RD
             ['LD', 'RD'].forEach((pos, index2) => {
-              const player = kader.find(player => player.lineupLine === line && player.position === pos);
+              let player;
+              if (line == 'g' && pos == 'LD') {
+                player = goalies.find(player => player.isStartingPlayer === 1);
+              } else if (line == 'g' && pos == 'RD') {
+                player = goalies.find(player => player.isStartingPlayer != 1);
+              } else {
+                player = kader.find(player => player.lineupLine === line && player.position === pos);
+              }
               if (player) {
                 const jerseyText = '#' + player.playerJerseyNr;
                 const nameText = ' ' + player.playerLastname + ' ';
                 ctx.font = fontNumber;
-                totalWidth += ctx.measureText(jerseyText).width
+                totalWidth += ctx.measureText(jerseyText).width + spaceNumberName
                 ctx.font = fontName;
                 totalWidth += ctx.measureText(nameText).width;
-              } else {
-                totalWidth += ctx.measureText(pos + ' ').width;
               }
             });
 
             // Adjust starting X position to center the text
-            playerX = 540 - totalWidth / 2;
+            playerX = initX - totalWidth / 2;
 
             // Draw LD, RD
             ['LD', 'RD'].forEach((pos, index2) => {
-              const player = kader.find(player => player.lineupLine === line && player.position === pos);
+              let player;
+              if (line == 'g' && pos == 'LD') {
+                player = goalies.find(player => player.isStartingPlayer === 1);
+              } else if (line == 'g' && pos == 'RD') {
+                player = goalies.find(player => player.isStartingPlayer != 1);
+              } else {
+                player = kader.find(player => player.lineupLine === line && player.position === pos);
+              }
               if (player) {
                 const jerseyText = '#' + player.playerJerseyNr;
                 const nameText = player.playerLastname + '  ';
                 ctx.font = fontNumber;
-                const jerseyWidth = ctx.measureText(jerseyText).width;
+                const jerseyWidth = ctx.measureText(jerseyText).width + spaceNumberName;
                 ctx.font = fontName;
                 const nameWidth = ctx.measureText(nameText).width;
 
@@ -923,11 +948,6 @@ foreach ($pngFiles as $file) {
 
                 // Update playerX for the next player
                 playerX += jerseyWidth + nameWidth;
-              } else {
-                const posText = pos + ' ';
-                const posWidth = ctx.measureText(posText).width;
-                ctx.fillText(posText, playerX + posWidth / 2, startY + (countLines * lineHeight));
-                playerX += posWidth;
               }
             });
 
