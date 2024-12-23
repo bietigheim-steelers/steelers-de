@@ -6,6 +6,8 @@ use Contao\Module;
 use App\Tilastot\Model\Rounds;
 use App\Tilastot\Model\Games;
 use App\Tilastot\Model\Standings;
+use Contao\NewsModel;
+use Contao\Date;
 
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
@@ -30,12 +32,12 @@ class ScheduleModule extends AbstractFrontendModuleController
 			array_push($array, $model->tilastot_my_team);
 			array_push($array, $model->tilastot_my_team);
 		}
-		if($model->tilastot_schedule_type === 'results') {
+		if ($model->tilastot_schedule_type === 'results') {
 			$column[0] .= ' AND gamedate <= ?';
 			$order = ' gamedate DESC';
 			array_push($array, time());
 		}
-		if($model->tilastot_schedule_type === 'fixtures') {
+		if ($model->tilastot_schedule_type === 'fixtures') {
 			$column[0] .= ' AND gamedate >= ?';
 			array_push($array, time());
 		}
@@ -54,6 +56,23 @@ class ScheduleModule extends AbstractFrontendModuleController
 			$gameArray[$key]['home'] = Standings::findByIdAndRound($game['hometeam'], $game['round'], true);
 			$gameArray[$key]['away'] = Standings::findByIdAndRound($game['awayteam'], $game['round'], true);
 			$gameArray[$key]['season'] = Rounds::findByPkFiltered($game['round'], true);
+
+			// fetch videos for game
+			$t = NewsModel::getTable();
+			$newsArchives = array(7);
+			$time = Date::floorToMinute();
+			$arrOptions['limit']  = 6;
+			$arrOptions['offset'] = 0;
+
+			$gameArray[$key]['videos'] = NewsModel::findBy(
+				array(
+					"$t.pid IN(" . implode(',', array_map('\intval', $newsArchives)) . ")",
+					"$t.published='1' AND ($t.start='' OR $t.start<=$time) AND ($t.stop='' OR $t.stop>$time)",
+					"$t.game_id = '" . $gameArray[$key]['id'] . "'"
+				),
+				null,
+				$arrOptions
+			);
 
 			unset($gameArray[$key]['id']);
 			unset($gameArray[$key]['tstamp']);

@@ -387,11 +387,16 @@ foreach ($pngFiles as $file) {
       if (selectedFile == 'Lineup') {
         fetch(
             //`https://api.hockeydata.net/data/ebel/Schedule?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=15881&referer=deb-online.live&widgetOptions={"gameStatus":[0,1,2],"semantic":true,"noScorers":true}`
-            `https://api.hockeydata.net/data/ebel/Schedule?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=15881&referer=deb-online.live&widgetOptions={"gameStatus":[3,4],"semantic":true,"noScorers":true}`
+            `https://api.hockeydata.net/data/ebel/Schedule?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=15881&referer=deb-online.live&widgetOptions={"gameStatus":[0,1,2,3,4],"semantic":true,"noScorers":true}`
           )
           .then(response => response.json())
           .then(data => {
-            nextGame = data.data.rows.reverse().find(row => (row.awayTeamId === 54744 || row.homeTeamId === 54744));
+            //nextGame = data.data.rows.reverse().find(row => (row.awayTeamId === 54744 || row.homeTeamId === 54744));
+            const now = new Date().getTime();
+            nextGame = data.data.rows
+              .filter(row => (row.awayTeamId === 54744 || row.homeTeamId === 54744) && row.scheduledDate.sortValue >
+                now)
+              .sort((a, b) => a.scheduledDate.sortValue - b.scheduledDate.sortValue)[0];
             console.log(nextGame);
             if (nextGame.awayTeamId === 54744) {
               smalltextInput.value = nextGame.scheduledDate.value + " vs. " + nextGame.homeTeamLongName;
@@ -1000,7 +1005,8 @@ foreach ($pngFiles as $file) {
             shortenLastname(homeDataPlayer['playerLastname']) + " | " + homeDataPlayer['points'],
             homeDataFairplay['penaltyMinutes'].toString(),
             homeDataScoring['shotsOnGoal'].toString(),
-            Math.round(homeDataFairplay['powerplayPercentage'].toString()) + "% | " + Math.round(homeDataFairplay['penaltyKillingPercentage']).toString() + "%",
+            Math.round(homeDataFairplay['powerplayPercentage'].toString()) + "% | " + Math.round(homeDataFairplay[
+              'penaltyKillingPercentage']).toString() + "%",
           ].forEach((line, index) => {
             const lineWidth = ctx.measureText(line.toUpperCase()).width;
             ctx.fillText(line.toUpperCase(), 330, startY + (index * lineHeight));
@@ -1025,7 +1031,8 @@ foreach ($pngFiles as $file) {
               shortenLastname(awayDataPlayer['playerLastname']) + " | " + awayDataPlayer['points'],
               awayDataFairplay['penaltyMinutes'].toString(),
               awayDataScoring['shotsOnGoal'].toString(),
-              Math.round(awayDataFairplay['powerplayPercentage']).toString() + "% | " + Math.round(awayDataFairplay['penaltyKillingPercentage']).toString() + "%",
+              Math.round(awayDataFairplay['powerplayPercentage']).toString() + "% | " + Math.round(awayDataFairplay[
+                'penaltyKillingPercentage']).toString() + "%",
             ].forEach((line, index) => {
               const lineWidth = ctx.measureText(line.toUpperCase()).width;
               ctx.fillText(line.toUpperCase(), 750, startY + (index * lineHeight));
@@ -1310,7 +1317,8 @@ foreach ($pngFiles as $file) {
         playerWidth,
         playerHeight);
 
-      drawRoundedRect(ctx, x - 10, y + playerHeight, playerWidth + 20, 30, 10, decodeURIComponent(playerData[2]), playerData[1]);
+      drawRoundedRect(ctx, x - 10, y + playerHeight, playerWidth + 20, 30, 10, decodeURIComponent(playerData[2]),
+        playerData[1]);
     }
 
     function drawRoundedRect(ctx, x, y, width, height, radius, text) {
