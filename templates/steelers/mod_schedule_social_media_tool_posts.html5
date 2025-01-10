@@ -278,14 +278,26 @@ foreach ($pngFiles as $file) {
       });
     <?php endfor; ?>
 
-    logoSelect.addEventListener('change', function() {
+    let previousSelectedOptions = [];
+    let opponentLogosOrdered = [];
+
+    logoSelect.addEventListener('change', function(e) {
+      const currentSelectedOptions = Array.from(logoSelect.selectedOptions).map(option => option.value);
+      const addedOptions = currentSelectedOptions.filter(option => !previousSelectedOptions.includes(option));
+      const removedOptions = previousSelectedOptions.filter(option => !currentSelectedOptions.includes(option));
+
+      opponentLogosOrdered = opponentLogosOrdered.filter(logo => !removedOptions.includes(logo));
+      opponentLogosOrdered.push(...addedOptions);
+
+      previousSelectedOptions = currentSelectedOptions;
+
       if (logoSelect.selectedOptions.length > 1) {
         opponentLogo = false;
         opponentLogos = [];
-        for (let option of logoSelect.selectedOptions) {
-          const selectedLogo = option.value;
+        const reversedOrdered = opponentLogosOrdered.toReversed();
+        for (let src of reversedOrdered) {
           const img = new Image();
-          img.src = selectedLogo;
+          img.src = src;
           img.onload = function() {
             opponentLogos.push(img);
             drawCanvas();
