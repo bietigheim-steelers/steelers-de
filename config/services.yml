@@ -21,6 +21,13 @@ services:
       - "%woo_key%"
       - "%woo_secret%"
 
+  App\Tilastot\Controller\SocialMediaToolsUpload:
+    arguments:
+      - "%smt_tennant_id%"
+      - "%smt_client_id%"
+      - "%smt_client_secret%"
+      - "%smt_team_id%"
+
   App\Tilastot\EventListener\LoadFormFieldListener:
     tags:
       - { name: contao.hook, hook: LoadFormFieldListener }
