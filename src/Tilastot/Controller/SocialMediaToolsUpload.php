@@ -55,7 +55,7 @@ class SocialMediaToolsUpload
       $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
       if ($httpCode !== 201) {
-        return new JsonResponse(['error' => 'Failed to upload image', 'details' => $response], Response::HTTP_INTERNAL_SERVER_ERROR);
+        return new Response(json_encode(['error' => 'Failed to upload image', 'details' => $response]), Response::HTTP_INTERNAL_SERVER_ERROR);
       }
 
       curl_close($ch);
