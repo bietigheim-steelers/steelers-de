@@ -22,6 +22,8 @@ services:
       - "%woo_secret%"
 
   App\Tilastot\Controller\SocialMediaToolsUpload:
+    public: true
+    tags: [controller.service_arguments]
     arguments:
       - "%smt_tennant_id%"
       - "%smt_client_id%"
