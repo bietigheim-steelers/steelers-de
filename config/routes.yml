@@ -6,3 +6,8 @@ app.tilastot.controller:
   path: /seasonticket/order
   methods: POST
   schemes: [https]
+app.tilastot.postsController:
+  controller: App\Tilastot\Controller\SocialMediaToolsUpload::upload
+  path: /social-media-tools/posts/upload
+  methods: POST
+  schemes: [https]
