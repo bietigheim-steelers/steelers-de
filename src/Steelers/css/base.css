@@ -110,6 +110,9 @@ span.btn-default::after {
   @apply bg-steelgreen text-white;
 }
 
+.link-text--video {
+  @apply inline-block text-steelblue uppercase underline p-2 mt-4;
+}
 .link-text--big {
   @apply inline-block text-steelblue uppercase underline p-4 m-2 text-xl;
 }
