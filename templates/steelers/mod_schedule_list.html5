@@ -84,20 +84,19 @@
         <span class="btn-default btn-blue <?= $game['cssClass'] ?>"><?= $game['eventTitle'] ?></span>
         <?php endif; ?>
         <?php if ($game['ended'] && $game['videos']) : ?>
-        <?php while ($game['videos']->next()) : ?>
-        <a href="/video/<?= $game['videos']->alias ?>" class="btn-default"><?php
-                                                                                  $alias = $game['videos']->alias;
-                                                                                  if (strpos($alias, 'highlights') !== false) {
+        <?php foreach ($game['videos'] as $video) : ?>
+        <a href="/video/<?= $video ?>" class="btn-default"><?php
+                                                                                  if (strpos($video, 'highlights') !== false) {
                                                                                     echo 'Highlights';
-                                                                                  } elseif (strpos($alias, 'razorsharp') !== false) {
+                                                                                  } elseif (strpos($video, 'razorsharp') !== false) {
                                                                                     echo 'Razorsharp';
-                                                                                  } elseif (strpos($alias, 'pressekonferenz') !== false) {
+                                                                                  } elseif (strpos($video, 'pressekonferenz') !== false) {
                                                                                     echo 'Pressekonferenz';
-                                                                                  } elseif (strpos($alias, 'impressionen') !== false) {
+                                                                                  } elseif (strpos($video, 'impressionen') !== false) {
                                                                                     echo 'Impressionen';
                                                                                   }
                                                                                   ?></a>
-        <?php endwhile; ?>
+        <?php endforeach; ?>
         <?php endif; ?>
       </div>
     </div>

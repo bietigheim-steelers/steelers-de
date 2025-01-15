@@ -64,7 +64,7 @@ class ScheduleModule extends AbstractFrontendModuleController
 			$arrOptions['limit']  = 6;
 			$arrOptions['offset'] = 0;
 
-			$gameArray[$key]['videos'] = NewsModel::findBy(
+			$videos = NewsModel::findBy(
 				array(
 					"$t.pid IN(" . implode(',', array_map('\intval', $newsArchives)) . ")",
 					"$t.published='1' AND ($t.start='' OR $t.start<=$time) AND ($t.stop='' OR $t.stop>$time)",
@@ -73,6 +73,13 @@ class ScheduleModule extends AbstractFrontendModuleController
 				null,
 				$arrOptions
 			);
+
+			if ($videos !== null) {
+				$gameArray[$key]['videos'] = array();
+				while ($videos->next()) {
+					$gameArray[$key]['videos'][] = $videos->alias;
+				}
+			}
 
 			unset($gameArray[$key]['id']);
 			unset($gameArray[$key]['tstamp']);
