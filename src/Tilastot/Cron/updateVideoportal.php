@@ -13,7 +13,7 @@ use Contao\Database;
 // 
 
 /**
- * @CronJob("*\/30 * * * *")
+ * @CronJob("*\/10 * * * *")
  */
 class updateVideoportal
 {
