@@ -36,7 +36,7 @@ class updateVideoportal
         $this->log("Starting update process");
         
         $steelersFeed = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCaVaIAlCziRfT9A4Yw5cb5Q';
-        $spradeFeed = 'https://www.youtube.com/feeds/videos.xml?channel_id=UC6C9G2Gfsr0a3z3XHCBQcmw';
+        $spradeFeed = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpIteElx6nKfKsytUHq0g6xbsj';
         
         $steelersVideos = $this->getLatestVideos($steelersFeed);
         $spradeVideos = $this->getLatestVideos($spradeFeed);
