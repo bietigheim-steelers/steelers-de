@@ -116,7 +116,7 @@ class updateVideoportal
             return false;
         }
 
-        if($data['game']['date']) {
+        if(!$data['game']['date']) {
             $this->log("News entry with alias '$alias' skipped. No game found");
             return false;
         }
