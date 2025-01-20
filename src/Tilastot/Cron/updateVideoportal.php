@@ -57,13 +57,16 @@ class updateVideoportal
 
             $game = $this->determineGame($video);
             $headline = date('d.m.Y', $game['date']) . " - " . $display_category . " - " . $game['homeTeam']['name'] . " vs. " . $game['awayTeam']['name'];
-
-            $this->addNewsEntry([
-                'headline' => $headline,
-                'link' => $video['link'],
-                'game' => $game,
-                'categories' => [$category]
-            ]);
+            if($game['date']) {
+                $this->addNewsEntry([
+                    'headline' => $headline,
+                    'link' => $video['link'],
+                    'game' => $game,
+                    'categories' => [$category]
+                ]);
+            } else {
+                $this->log("News entry with headline '$headline' skipped. No game found");
+            }
 
         }
 
@@ -110,6 +113,11 @@ class updateVideoportal
 
         if ($existingEntry->numRows > 0) {
             $this->log("News entry with alias '$alias' already exists. Skipping.");
+            return false;
+        }
+
+        if($data['game']['date']) {
+            $this->log("News entry with alias '$alias' skipped. No game found");
             return false;
         }
 
