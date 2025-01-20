@@ -57,7 +57,7 @@ class updateVideoportal
 
             $game = $this->determineGame($video);
             $headline = date('d.m.Y', $game['date']) . " - " . $display_category . " - " . $game['homeTeam']['name'] . " vs. " . $game['awayTeam']['name'];
-            if($game['date']) {
+            if($game['date'] > 0) {
                 $this->addNewsEntry([
                     'headline' => $headline,
                     'link' => $video['link'],
