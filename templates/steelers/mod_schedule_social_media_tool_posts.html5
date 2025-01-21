@@ -88,6 +88,7 @@ foreach ($pngFiles as $file) {
           <option value="Matchup">Matchup</option>
           <option value="Lineup">Lineup</option>
           <option value="Geburtstag">Geburtstag</option>
+          <option value="Rückblick">Rückblick</option>
         </select>
       </p>
       <hr>
@@ -161,6 +162,7 @@ foreach ($pngFiles as $file) {
       'Gameday_Home': ['smalltext', 'bgImage', 'opponentAway', 'time', 'wby'],
       'Gameday_Away': ['smalltext', 'bgImage', 'opponentAway', 'time'],
       'News': ['headline', 'bgImage', 'smalltext', 'paragraph'],
+      'Rückblick': ['headline', 'bgImage', 'smalltext', 'paragraph', 'wohnbau'],
       'Geburtstag': ['bgImage', 'jerseynumber', 'paragraph'],
       'Preview': ['bgImage', 'opponentAway', 'paragraph'],
       'Starting_Six': ['smalltext', 'playerSelect1', 'playerSelect2', 'playerSelect3', 'playerSelect4',
@@ -264,6 +266,11 @@ foreach ($pngFiles as $file) {
     wby.onload = function() {
       drawCanvas();
     };
+    const wohnbau = new Image();
+    wohnbau.src = '/files/steelers/tools/social-media/wohnbau.svg';
+    wohnbau.onload = function() {
+      drawCanvas();
+    };
 
     <?php for ($i = 1; $i <= 6; $i++): ?>
       playerSelect<?= $i ?>.addEventListener('change', function() {
@@ -356,7 +363,10 @@ foreach ($pngFiles as $file) {
     });
 
     fileSelect.addEventListener('change', function() {
-      const selectedFile = fileSelect.value;
+      let selectedFile = fileSelect.value;
+      if (fileSelect.value === 'Rückblick') {
+        selectedFile = 'News';
+      }
       const img = new Image();
       img.src = '/files/steelers/tools/social-media/posts/empty' + selectedFile + '.png';
 
@@ -432,6 +442,9 @@ foreach ($pngFiles as $file) {
 
       img.onload = function() {
         // Clear the canvas before drawing the new image
+        if (fileSelect.value === 'Rückblick') {
+          selectedFile = fileSelect.value;
+        }
         updateInputsVisibility(selectedFile);
         config = postConfig[selectedFile];
         selectedPost = selectedFile;
@@ -1108,6 +1121,15 @@ foreach ($pngFiles as $file) {
         });
       }
 
+      if (wohnbau && config.includes('wohnbau')) {
+        let boxX = 50; // X-coordinate of the box
+        let boxY = 0; // Y-coordinate of the box
+
+        createImageBitmap(wohnbau).then((bitmap) => {
+          ctx.drawImage(bitmap, boxX, boxY, 300, 150);
+        });
+      }
+
     }
 
     function shortenLastname(input) {
@@ -1287,12 +1309,20 @@ foreach ($pngFiles as $file) {
                 allInputs[inputName].multiple = false;
               }
             }
+            if (inputName == 'headline') {
+              if (selectedPostType == 'Rückblick') {
+                allInputs[inputName].value = 'Rückblick';
+              }
+            }
             if (inputName == 'smalltext') {
               if (selectedPostType == 'Gameday_Home' || selectedPostType == 'Gameday_Away') {
                 allInputs[inputName].value = 'X. Spieltag';
               }
               if (selectedPostType == 'Endstand_Home' || selectedPostType == 'Endstand_Away') {
                 allInputs[inputName].value = '1.1.1970 vs. GEGNER';
+              }
+              if (selectedPostType == 'Rückblick') {
+                allInputs[inputName].value = 'gegner1 & gegner2';
               }
             }
           }
