@@ -21,6 +21,11 @@ services:
       - "%woo_key%"
       - "%woo_secret%"
 
+  App\Tilastot\Cron\postFacebookToWhatsApp:
+    arguments:
+      - "%whatsapp_token%"
+      - "%whatsapp_channel%"
+
   App\Tilastot\Controller\SocialMediaToolsUpload:
     public: true
     tags: [controller.service_arguments]
