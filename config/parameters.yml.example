@@ -1,3 +1,5 @@
 parameters:
   woo_key: abcd
   woo_secret: abcd
+  whatsapp_token: abcd
+  whatsapp_channel: abcd
