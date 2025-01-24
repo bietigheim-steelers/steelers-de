@@ -6,10 +6,42 @@
       $headlineNumber = floatval($this->headline);
       $formattedHeadline = number_format($headlineNumber, 0, ',', '.') . '€';
       ?>
-      <div style="--final-position-bar:  <?= $headlineNumber / 400 ?>%; border-radius: 15px 0 0 15px;"
-        class="whitespace-nowrap animate-bar h-10 bg-steelgreen text-white text-right p-2"><?= $formattedHeadline ?> von
-        40.000€
-      </div>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          var progressBar = document.getElementById('progressBar');
+          var counter = document.getElementById('counter');
+          var formattedHeadline = <?php echo $headlineNumber; ?>;
+          var duration = 2500;
+          var startTime = null;
+
+          function animateCounter(timestamp) {
+            if (!startTime) startTime = timestamp;
+            var progress = timestamp - startTime;
+            var currentCount = Math.min(Math.floor((progress / duration) * formattedHeadline), formattedHeadline);
+            progressBar.textContent = currentCount.toLocaleString('en-US', {
+              style: 'currency',
+              currency: 'EUR',
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0
+            }) + " von 40.000€";
+
+            if (progress < duration) {
+              requestAnimationFrame(animateCounter);
+            } else {
+              progressBar.textContent = formattedHeadline.toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'EUR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+              }) + " von 40.000€";
+            }
+          }
+
+          requestAnimationFrame(animateCounter);
+        });
+      </script>
+      <div id="progressBar" style="--final-position-bar:  <?= $headlineNumber / 400 ?>%; border-radius: 15px 0 0 15px;"
+        class="whitespace-nowrap animate-bar h-10 bg-steelgreen text-white text-right p-2">0 von 40.000€</div>
       <svg class="relative h-10" style="transform: scale(-1, 1) translateY(-2.5rem)" xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 184.43 98.64">
         <defs>
