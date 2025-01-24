@@ -3,7 +3,31 @@
 <?php $this->block('content'); ?>
 
 <div class="max-w-screen-2xl mx-auto relative mt-8 mb-20 md:my-20">
-  <ul class="<?= $this->level ?><?php if ($this->isActiveCategories): ?> active-categories<?php endif; ?> flex flex-wrap flex-row">
+  <div class="grid grid-cols-1 sm:hidden mx-2">
+    <select onchange="location = this.value;" aria-label="Wähle die gewünschte Kategorie aus" class="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-2 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-steelgreen">
+      <?php
+      $dom = new DOMDocument();
+      @$dom->loadHTML($this->categories);
+      $xpath = new DOMXPath($dom);
+      $liElements = $xpath->query('//li');
+
+      foreach ($liElements as $li) {
+        $aTag = $li->getElementsByTagName('a')->item(0);
+        $spanTag = $li->getElementsByTagName('span')->item(0);
+
+        if ($aTag) {
+          $href = $aTag->getAttribute('href');
+          $title = $aTag->nodeValue;
+          echo "<option value='$href'>$title</option>";
+        } elseif ($spanTag) {
+          $text = $spanTag->nodeValue;
+          echo "<option selected>$text</option>";
+        }
+      }
+      ?>
+    </select>
+  </div>
+  <ul class="<?= $this->level ?><?php if ($this->isActiveCategories): ?> active-categories<?php endif; ?> flex-wrap flex-row hidden sm:flex">
     <?= $this->categories ?>
   </ul>
 </div>
