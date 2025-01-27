@@ -1126,7 +1126,7 @@ foreach ($pngFiles as $file) {
         let boxY = 0; // Y-coordinate of the box
 
         createImageBitmap(wohnbau).then((bitmap) => {
-          ctx.drawImage(bitmap, boxX, boxY, 300, 150);
+          ctx.drawImage(bitmap, boxX, boxY, 310, 150);
         });
       }
 
