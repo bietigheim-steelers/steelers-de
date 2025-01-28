@@ -104,7 +104,7 @@
           " :href="currentGame.eventimurl ? currentGame.eventimurl : '/tickets'" class="link-text--big">Tickets
           kaufen</a>
         <span v-else-if="currentGame.videos && currentGame.videos.length == 0" class="link-text--big">&nbsp;</span>
-        <a v-for="video in currentGame.videos" :href="video" class="link-text--video">{{ getVideoType(video) }}</a>
+        <a v-for="video in currentGame.videos" :href="'/video/' + video" class="link-text--video">{{ getVideoType(video) }}</a>
 
       </p>
     </div>
