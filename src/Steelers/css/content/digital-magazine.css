@@ -1,0 +1,25 @@
+body.digital_magazine {
+  overflow: hidden;
+  background-color: #222;
+}
+body.digital_magazine .ce_gallery img {
+  max-height: 100vh;
+  height: auto;
+  width: auto;
+}
+
+body.digital_magazine .ce_gallery ul {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+}
+
+body.digital_magazine .ce_gallery ul li {
+  scroll-snap-align: center;
+  text-align: center;
+}
+
+body.digital_magazine .ce_gallery ul li .image_container {
+  display: flex;
+  justify-content: center;
+}
