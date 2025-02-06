@@ -1,4 +1,17 @@
 @import "tailwind.css";
 @import "base.css";
 @import "fonts/formula.css";
-@import "footer.css";
+
+.hyperlink_txt {
+  @apply btn-default w-full text-center mb-5;
+}
+
+.links-nav-logo {
+  @apply w-40 block mb-5;
+}
+
+.links-nav-logo .puckcolor,
+.links-nav-logo .starcolor {
+  @apply fill-white;
+  stroke-width: 0;
+}
