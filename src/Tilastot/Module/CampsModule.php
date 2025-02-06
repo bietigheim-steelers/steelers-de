@@ -18,10 +18,9 @@ class CampsModule extends AbstractFrontendModuleController
 	protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
 	{
 		$camps = Camps::findAll(array(
-			'column'  => array(
-				'published=1',
-			),
-			'order' => 'startdate ASC'
+			'order' => 'startdate ASC',
+			'column'  => array('published=?', 'startdate>?'),
+			'value'   => array(1, time())
 		));
 
 		$campslist = array();

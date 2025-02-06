@@ -6,6 +6,7 @@
     <div class="inside grid ce_wrapperStart grid-221">
       <?php foreach ($elements as $camp) : ?>
         <div class="ce_text prose block">
+          <h4><?= $camp['title'] ?></h4>
           <?php
           if ($camp['full']):
           ?>
