@@ -25,7 +25,10 @@
           aria-describedby="desc_<?= $option['id'] ?>">
         <span class="flex items-center">
           <span class="flex flex-col text-sm">
-            <span id="lbl_<?= $option['id'] ?>" class="font-medium text-gray-900"><?= $option['value'] ?></span>
+            <?php
+              $option_value = preg_replace('/_(.*?)_/', '<b>$1</b>', $option['value']);
+            ?>
+            <span id="lbl_<?= $option['id'] ?>" class="font-medium text-gray-900"><?= $option_value ?></span>
             <span class="text-gray-500">
             </span>
           </span>
