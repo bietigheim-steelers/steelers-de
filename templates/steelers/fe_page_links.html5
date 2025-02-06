@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="<?= $this->language ?>" <?php if ($this->isRTL) : ?> dir="rtl" <?php endif; ?>>
+
+<head>
+
+  <?php $this->block('head'); ?>
+  <meta charset="<?= $this->charset ?>">
+  <title><?= $this->title ?></title>
+  <base href="<?= $this->base ?>">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/files/steelers/icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/files/steelers/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/files/steelers/icons/favicon-16x16.png">
+  <link rel="manifest" href="/files/steelers/icons/site.webmanifest">
+  <link rel="mask-icon" href="/files/steelers/icons/safari-pinned-tab.svg" color="#046a38">
+  <link rel="shortcut icon" href="/files/steelers/icons/favicon.ico">
+  <meta name="msapplication-TileColor" content="#046a38">
+  <meta name="msapplication-config" content="/files/steelers/icons/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
+
+  <?php $this->block('meta'); ?>
+  <meta name="robots" content="<?= $this->robots ?>">
+  <meta name="description" content="<?= Contao\StringUtil::substr($this->description, 320) ?>">
+  <meta name="generator" content="Contao Open Source CMS">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <?php $this->endblock(); ?>
+  <meta property="og:title" content="<?php echo $this->pageTitle; ?> - <?php echo $this->mainTitle; ?>" />
+  <meta property="og:description" content="<?php echo $this->description; ?>" />
+  <meta property="og:url" content="{{env::url}}/{{env::request}}" />
+  <meta name="twitter:title" content="<?php echo $this->pageTitle; ?> - <?php echo $this->mainTitle; ?>">
+  <meta name="twitter:description" content="<?php echo $this->description; ?>">
+  <meta name="twitter:card" content="summary_large_image">
+  <?php
+  if ($GLOBALS['og:image']) {
+    echo '<meta name="twitter:image" content="' . $GLOBALS['og:image'] . '">';
+    echo '<meta name="twitter:card" content="summary_large_image">';
+    echo '<meta property="og:image" content="' . $GLOBALS['og:image'] . '" />';
+  } else {
+    echo '<meta name="twitter:image" content="{{env::url}}/files/steelers/teams/SCB.png">';
+    echo '<meta property="og:image" content="{{env::url}}/files/steelers/teams/SCB.png" />';
+  }
+  ?>
+
+  <?php if ($this->canonical) : ?>
+    <link rel="canonical" href="<?= $this->canonical ?>">
+  <?php endif; ?>
+
+  <?= $this->viewport ?>
+  <?= $this->framework ?>
+  <?= $this->stylesheets ?>
+  <?= $this->mooScripts ?>
+  <?= $this->head ?>
+  <?php $this->endblock(); ?>
+  <?php
+  // classes to avoid purging
+  // mt-10 mt-5 w-p60 h-p40 grid grid-cols-2 border-steelgreen border-gray-300 ring-2 ring-steelgreen max-w-xl max-w-2xl max-w-4xl min-w-xl min-w-2xl min-w-4xl
+  ?>
+</head>
+
+<body id="top" class="overflow-y-scroll <?= $this->class ?>" <?php if ($this->onload) : ?> onload="<?= $this->onload ?>"
+  <?php endif; ?>>
+  <?php $this->block('body'); ?>
+  <?php $this->sections('top'); ?>
+
+  <div id="wrapper">
+    <?php $this->sections('before'); ?>
+
+    <?php $this->block('container'); ?>
+    <div id="container">
+
+      <?php $this->block('main'); ?>
+      <main id="main">
+        <div class="inside">
+          <?= $this->main ?>
+        </div>
+        <?php $this->sections('main'); ?>
+      </main>
+      <?php $this->endblock(); ?>
+
+      <?php $this->block('left'); ?>
+      <?php if ($this->left) : ?>
+        <aside id="left">
+          <div class="inside">
+            <?= $this->left ?>
+          </div>
+        </aside>
+      <?php endif; ?>
+      <?php $this->endblock(); ?>
+
+      <?php $this->block('right'); ?>
+      <?php if ($this->right) : ?>
+        <aside id="right">
+          <div class="inside">
+            <?= $this->right ?>
+          </div>
+        </aside>
+      <?php endif; ?>
+      <?php $this->endblock(); ?>
+
+    </div>
+    <?php $this->endblock(); ?>
+
+    <?php $this->sections('after'); ?>
+
+    <?php $this->block('footer'); ?>
+    <?php if ($this->footer) : ?>
+      <footer id="footer">
+        <div class="inside">
+          <?= $this->footer ?>
+        </div>
+      </footer>
+    <?php endif; ?>
+    <?php $this->endblock(); ?>
+
+  </div>
+
+  <?php $this->sections('bottom'); ?>
+  <?php $this->endblock(); ?>
+
+  <?= $this->mootools ?>
+  <?= $this->jsonLdScripts ?>
+</body>
+
+</html>
