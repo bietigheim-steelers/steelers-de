@@ -24,8 +24,7 @@ class GeneratePageListener
     $mp = Mixpanel::getInstance($this->mixpanelProjectToken);
 
     $mp->identify($this->getUserId());
-    $mp->track("access", [
-      "path" => $_SERVER['REQUEST_URI'],
+    $mp->track($_SERVER['REQUEST_URI'], [
       "referer" => $_SERVER['HTTP_REFERER'],
       "agent" => $_SERVER['HTTP_USER_AGENT'],
     ]);
