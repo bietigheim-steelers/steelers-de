@@ -12,6 +12,7 @@ use Mixpanel;
 class GeneratePageListener
 {
   private string $mixpanelProjectToken;
+  private array $blacklist = ['assets', 'apple-touch-icon.png', 'apple-touch-icon-120x120.png'];
 
   public function __construct(string $mixpanel_project_token)
   {
@@ -28,6 +29,11 @@ class GeneratePageListener
     $queryParams = [];
     parse_str(parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $queryParams);
     $isFacebookReferer = isset($queryParams['fbclid']);
+
+    $pathElements = explode('/', trim($requestUri, '/'));
+    if (in_array($pathElements[0], $this->blacklist)) {
+      return;
+    }
 
     $mp->track($requestUri, [
       "referer" => $_SERVER['HTTP_REFERER'],
