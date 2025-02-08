@@ -38,6 +38,12 @@ services:
   App\Tilastot\EventListener\LoadFormFieldListener:
     tags:
       - { name: contao.hook, hook: LoadFormFieldListener }
+    arguments:
+      - "%mixpanel_project_token%"
+
+  App\Tilastot\EventListener\GeneratePageListener:
+    tags:
+      - { name: contao.hook, hook: generatePage }
 
   App\Tilastot\Module\ScheduleModule:
     tags:
