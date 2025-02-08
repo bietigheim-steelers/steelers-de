@@ -11,17 +11,24 @@ use Mixpanel;
 #[AsHook('generatePage')]
 class GeneratePageListener
 {
-  public function __invoke(): void
+  private string $mixpanelProjectToken;
+
+  public function __construct(string $mixpanel_project_token)
+  {
+    $this->mixpanelProjectToken = $mixpanel_project_token;
+  }
+
+  public function __invoke(PageModel $pageModel, LayoutModel $layout, PageRegular $pageRegular): void
   {
 
-    //$mp = Mixpanel::getInstance($mixpanel_project_token);
-    //
-    //$mp->identify($this->getUserId());
-    //$mp->track("access", [
-    //  "path" => $_SERVER['REQUEST_URI'],
-    //  "referer" => $_SERVER['HTTP_REFERER'],
-    //  "agent" => $_SERVER['HTTP_USER_AGENT'],
-    //]);
+    $mp = Mixpanel::getInstance($this->mixpanelProjectToken);
+
+    $mp->identify($this->getUserId());
+    $mp->track("access", [
+      "path" => $_SERVER['REQUEST_URI'],
+      "referer" => $_SERVER['HTTP_REFERER'],
+      "agent" => $_SERVER['HTTP_USER_AGENT'],
+    ]);
   }
 
   private function getUserId()
