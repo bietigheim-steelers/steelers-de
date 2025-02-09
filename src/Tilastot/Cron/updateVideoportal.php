@@ -34,13 +34,13 @@ class updateVideoportal
         file_put_contents($this->logFile, '');
 
         $this->log("Starting update process");
-        
+
         $steelersFeed = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCaVaIAlCziRfT9A4Yw5cb5Q';
         $spradeFeed = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpIteElx6nKfKsytUHq0g6xbsj';
-        
+
         $steelersVideos = $this->getLatestVideos($steelersFeed);
         $spradeVideos = $this->getLatestVideos($spradeFeed);
-        
+
         // Steelers Latest Videos
         foreach ($steelersVideos as $video) {
             $this->log("Check video: " . $video['title'] . " - " . $video['desc']);
@@ -57,7 +57,7 @@ class updateVideoportal
 
             $game = $this->determineGame($video);
             $headline = date('d.m.Y', $game['date']) . " - " . $display_category . " - " . $game['homeTeam']['name'] . " vs. " . $game['awayTeam']['name'];
-            if($game['date'] > 0) {
+            if ($game['date'] > 0) {
                 $this->addNewsEntry([
                     'headline' => $headline,
                     'link' => $video['link'],
@@ -67,7 +67,6 @@ class updateVideoportal
             } else {
                 $this->log("News entry with headline '$headline' skipped. No game found");
             }
-
         }
 
         // Sprade Latest Videos
@@ -93,7 +92,6 @@ class updateVideoportal
                 'game' => $game,
                 'categories' => [$this->currentSeasonCategory, $category]
             ]);
-
         }
     }
     private function addNewsEntry($data)
@@ -107,16 +105,16 @@ class updateVideoportal
         // Generate alias
         $alias = System::getContainer()->get('contao.slug')->generate($data['headline'], NewsArchiveModel::findByPk($this->pid)->jumpTo, $aliasExists);
 
-        // Check if an entry with the same alias already exists
-        $existingEntry = \Database::getInstance()->prepare("SELECT * FROM tl_news WHERE alias = ?")
-        ->execute($alias);
+        // Check if an entry with the same video URL already exists
+        $existingEntry = \Database::getInstance()->prepare("SELECT * FROM tl_news WHERE playerUrl = ?")
+            ->execute($data['link']);
 
         if ($existingEntry->numRows > 0) {
             $this->log("News entry with alias '$alias' already exists. Skipping.");
             return false;
         }
 
-        if(!$data['game']['date']) {
+        if (!$data['game']['date']) {
             $this->log("News entry with alias '$alias' skipped. No game found");
             return false;
         }
@@ -150,7 +148,7 @@ class updateVideoportal
         // Insert categories after creating the news entry
         foreach ($data['categories'] as $category) {
             \Database::getInstance()->prepare("INSERT INTO tl_news_categories (news_id, category_id) VALUES (?, ?)")
-            ->execute($insertId, $category);
+                ->execute($insertId, $category);
         }
 
 
