@@ -35,9 +35,14 @@ class GeneratePageListener
       return;
     }
 
+    $userAgent = $_SERVER['HTTP_USER_AGENT'];
+    if (stripos($userAgent, 'bot') !== false) {
+      return;
+    }
+
     $mp->track($requestUri, [
       "referer" => $_SERVER['HTTP_REFERER'],
-      "agent" => $_SERVER['HTTP_USER_AGENT'],
+      "agent" => $userAgent,
       "facebook_referer" => $isFacebookReferer,
     ]);
   }
