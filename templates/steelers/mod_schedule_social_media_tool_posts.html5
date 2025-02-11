@@ -1122,11 +1122,12 @@ foreach ($pngFiles as $file) {
       }
 
       if (wohnbau && config.includes('wohnbau')) {
-        let boxX = 50; // X-coordinate of the box
-        let boxY = 0; // Y-coordinate of the box
+        let boxX = 30; // X-coordinate of the box
+        let boxY = 30; // Y-coordinate of the box
+        let ratio = 1300 / 340;
 
         createImageBitmap(wohnbau).then((bitmap) => {
-          ctx.drawImage(bitmap, boxX, boxY, 310, 150);
+          ctx.drawImage(bitmap, boxX, boxY, 320, 320/ratio);
         });
       }
 
