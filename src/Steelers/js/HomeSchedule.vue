@@ -1,7 +1,7 @@
 <template>
-  <div class="mx-2 sm:mx-0 flex place-content-between flex-col h-full">
+  <div class="mx-2 sm:mx-0 flex flex-col h-full">
     <h5 class="uppercase font-bold text-3xl text-center">Spiele</h5>
-    <div class="grid grid-cols-12 gap-1" satyle="grid-template-rows: 1fr 1fr">
+    <div class="grid grid-cols-12 gap-1 mt-5" satyle="grid-template-rows: 1fr 1fr">
       <div class="col-span-2 self-center">
         <button @click="currentIndex--" :disabled="currentIndex === 0" aria-label="vorheriges Spiel">
           <svg xmlns="http://www.w3.org/2000/svg" :class="[
@@ -61,7 +61,7 @@
         {{ currentGame.away.name }}
       </div>
     </div>
-    <div class="border-t border-gray-400 my-5">
+    <div class="border-t border-gray-400 my-5 grow">
       <h6 class="font-bold text-2xl text-center pt-10">
         {{ currentGame.season.name }} - {{ currentGame.season.season }}
         <span v-if="currentGame.gameday > 0">- {{ currentGame.gameday }}. Spieltag</span>
@@ -104,11 +104,12 @@
           " :href="currentGame.eventimurl ? currentGame.eventimurl : '/tickets'" class="link-text--big">Tickets
           kaufen</a>
         <span v-else-if="currentGame.videos && currentGame.videos.length == 0" class="link-text--big">&nbsp;</span>
-        <a v-for="video in currentGame.videos" :href="'/video/' + video" class="link-text--video">{{ getVideoType(video) }}</a>
+        <a v-for="video in currentGame.videos" :href="'/video/' + video" class="link-text--video">{{ getVideoType(video)
+          }}</a>
 
       </p>
     </div>
-    <div class="text-center border-t border-gray-400 mb-12 pt-12 flex place-content-center gap-5">
+    <div class="text-center border-t border-gray-400 mb-12 pt-12 flex place-content-center gap-5 self-end">
       <a href="/saison/spielplan" class="btn-default">gesamter Spielplan</a>
     </div>
   </div>
