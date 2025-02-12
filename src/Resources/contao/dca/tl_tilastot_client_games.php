@@ -70,7 +70,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
     ),
     // Palettes
     'palettes' => array(
-        'default' => 'round,hometeam,awayteam,gameday,gamedate,gametime,location,spectators,periodscore,homescore,awayscore,resulttype,gamestatus,ended,magentaurl,eventimurl;eventUrl,eventTitle,cssClass'
+        'default' => 'round,hometeam,awayteam,gameday,gamedate,gametime,optional,location,spectators,periodscore,homescore,awayscore,resulttype,gamestatus,ended,magentaurl,eventimurl;eventUrl,eventTitle,cssClass'
     ),
     // Fields
     'fields'   => array(
@@ -190,6 +190,14 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
         ),
         'ended' => array(
             'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_client_games']['ended'],
+            'exclude'                 => true,
+            'search'                  => true,
+            'inputType'               => 'checkbox',
+            'eval'                    => array('tl_class' => 'w50'),
+            'sql'                     => "int(1) NOT NULL default '0'"
+        ),
+        'optional' => array(
+            'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_client_games']['optional'],
             'exclude'                 => true,
             'search'                  => true,
             'inputType'               => 'checkbox',
