@@ -28,14 +28,27 @@
       <div>
         <div class="day" id="<?= $isNextGame; ?>"><?= Contao\Date::parse('l', $game['gamedate']); ?></div>
         <div class="date"><?= Contao\Date::parse('d.m.Y', $game['gamedate']); ?></div>
-        <div class="time"><?= $game['gametime']; ?> Uhr</div>
+        <div class="time"><?= $game['gametime'] ? $game['gametime'] . " Uhr" : "" ?></div>
       </div>
     </div>
     <div class="round">
       <div>
         <div><strong><?= $game['season']['name'] ?></strong></div>
         <div><strong><?= $game['season']['season'] ?></strong></div>
-        <div>Spieltag <?= $game['gameday'] ?></div>
+        <div><?php
+              $gamedayParts = explode('-', $game['gameday']);
+              if ($gamedayParts[0] == '1/8') {
+                echo "Achtelfinale - Spiel " . $gamedayParts[1];
+              } else if ($gamedayParts[0] == '1/4') {
+                echo "Viertelfinale - Spiel " . $gamedayParts[1];
+              } else if ($gamedayParts[0] == '1/2') {
+                echo "Halbfinale - Spiel " . $gamedayParts[1];
+              } else if ($gamedayParts[0] == '1/1') {
+                echo "Finale - Spiel " . $gamedayParts[1];
+              } else {
+                echo "Spieltag " . $game['gameday'];   
+              }
+        ?></div>
       </div>
     </div>
     <div class="game">
