@@ -1,0 +1,48 @@
+<?php $this->block('content'); ?>
+<div class="defaultcontainer !mt-8 md:!mt-20 <?= $this->cssClass ?>" <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
+  <div class="default-table">
+    <div class="table-header">
+      <div class="sm:hidden">Pl.</div>
+      <div class="hidden sm:block">Platz</div>
+      <div class="!text-left col-span-2 sm:col-span-4">Spieler</div>
+      <div class="block lg:hidden col-span-1">Sp.</div>
+      <div class="hidden lg:block col-span-1">Spiele</div>
+      <div class="col-span-1">Tore</div>
+      <div class="block lg:hidden col-span-1">Vorl.</div>
+      <div class="hidden lg:block col-span-1">Vorlagen</div>
+      <div class="block lg:hidden col-span-1">Pkt.</div>
+      <div class="hidden lg:block col-span-1">Punkte</div>
+      <div class="block lg:hidden col-span-1">Str.</div>
+      <div class="hidden lg:block col-span-1">Strafen</div>
+      <div class="hidden sm:block sm:col-span-1">+/-</div>
+      <div class="block lg:hidden col-span-1">Sch.</div>
+      <div class="hidden lg:block col-span-1">Schüsse</div>
+
+    </div>
+    <?php
+    foreach ($this->players as $key => $player) {
+      $class = ($key % 2 == 0) ? 'bg-gray-200/50' : 'bg-white/50';
+      $ogimage = $this->getImage($this->urlEncode($player['profilePic']['path']), 65, 65, 'center_top');
+    ?>
+      <div class="table-row <?= $class ?>">
+        <div class="font-bold font-headline text-steelgreen sm:text-4xl lg:text-5xl"><?= $key + 1 ?></div>
+        <div class="!text-left font-bold col-span-2 sm:col-span-4 flex items-center text-ellipsis overflow-hidden">
+          <div class="logo" style="width: 65px; height: 65px; text-align: center;">
+            <?php if ($ogimage) : ?>
+              <a href="/spieler/<?= $player['alias'] ?>"><img src="<?= $ogimage ?>" alt="<?= $player['firstname'] ?> <?= $player['lastname'] ?>" style="max-height: 65px; max-width: 65px; margin: auto;"></a>
+            <?php endif; ?>
+          </div><a href="/spieler/<?= $player['alias'] ?>"><span class="hidden sm:inline text-gray-600 capitalize font-light"><?= $player['firstname'] ?></span>&nbsp;<?= $player['lastname'] ?></a>
+        </div>
+        <div class="col-span-1"><?= $player['games'] ?></div>
+        <div class="col-span-1"><?= $player['goals'] ?></div>
+        <div class="col-span-1"><?= $player['assists'] ?></div>
+        <div class="col-span-1"><strong><?= $player['points'] ?></strong></div>
+        <div class="col-span-1"><?= $player['penalties'] ?></div>
+        <div class="col-span-1"><?= ($player['plusminus'] > 0 ? '+' : '') . $player['plusminus'] ?></div>
+        <div class="col-span-1"><?= $player['shots'] ?></div>
+      </div>
+    <?php
+    }
+    ?>
+  </div>
+  <?php $this->endblock(); ?>

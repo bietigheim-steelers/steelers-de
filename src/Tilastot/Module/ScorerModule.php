@@ -2,7 +2,10 @@
 
 namespace App\Tilastot\Module;
 
-use Doctrine\ORM\EntityManagerInterface;
+use Contao\Database;
+
+use Contao\CoreBundle\Image\ImageFactoryInterface;
+
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\ModuleModel;
 use Contao\Template;
@@ -14,47 +17,37 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ScorerModule extends AbstractFrontendModuleController
 {
-	private $entityManager;
-
-	public function __construct(EntityManagerInterface $entityManager)
-	{
-		$this->entityManager = $entityManager;
-	}
 
 	protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
 	{
-		$qb = $this->entityManager->createQueryBuilder();
 
-		$qb->select('p, ps')
-		->from('App\Tilastot\Model\Players', 'p')
-		->leftJoin('App\Tilastot\Model\PlayerStats', 'ps', 'WITH', 'p.id = ps.pid')
-		->where('p.published = 1')
-		->orderBy('p.jersey', 'ASC');
-
-		$players = $qb->getQuery()->getResult();
+		$objDatabase = Database::getInstance();
+		$players = $objDatabase->prepare("
+    SELECT * 
+    FROM tl_tilastot_client_players 
+    LEFT JOIN tl_tilastot_client_stats 
+    ON (tl_tilastot_client_players.id = tl_tilastot_client_stats.pid) 
+    WHERE tl_tilastot_client_players.published = ? 
+    AND tl_tilastot_client_stats.games > 0 
+    ORDER BY tl_tilastot_client_stats.points DESC
+")->execute('1')->fetchAllAssoc();
 		$playerlist = array();
 
 		if (!$players) {
 			return new Response();
 		}
 
-		foreach ($players as $player) {
-			$p = $player[0]; // Player entity
-			$stats = $player['ps']; // PlayerStats entity
-
-			$pictures = StringUtil::deserialize($p->getPictures());
+		foreach ($players as $p) {
+			$pictures = StringUtil::deserialize($p['pictures']);
 
 			if (!empty($pictures) || is_array($pictures)) {
-				$files = ArrayUtil::sortByOrderField($pictures, StringUtil::deserialize($p->getOrderPictures()));
+				$files = ArrayUtil::sortByOrderField($pictures, StringUtil::deserialize($p['orderPictures']));
 				$allPictures = FilesModel::findMultipleByUuids($files)->fetchAll();
-				$p->setProfilePic(array_shift($allPictures));
-				$p->setPictures($allPictures);
+				$p['profilePic'] = array_shift($allPictures);
+				$p['pictures'] = $allPictures;
 			}
 
-			$playerlist[] = [
-				'player' => $p,
-				'stats' => $stats
-			];
+			$playerlist[] = $p;
 		}
 
 		$template->players = $playerlist;
