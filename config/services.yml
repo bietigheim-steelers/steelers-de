@@ -69,6 +69,12 @@ services:
         category: tilastot
         template: mod_roster
         type: roster
+  App\Tilastot\Module\ScorerModule:
+    tags:
+      - name: contao.frontend_module
+        category: tilastot
+        template: mod_scorer
+        type: scorer
   App\Tilastot\Module\PlayerModule:
     tags:
       - name: contao.frontend_module
