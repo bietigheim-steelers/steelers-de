@@ -23,7 +23,7 @@
       <div class="col-span-2 place-self-center">
         <div :title="currentGame.home.name"
           class="h-16 w-16 sm:h-20 sm:w-20 md:h-32 md:w-32 mx-2 md:mx-6 bg-contain bg-no-repeat bg-center"
-          :style="`background-image: url(${currentGame.home.logo})`"></div>
+          :style="currentGame.home.logo ? `background-image: url(${currentGame.home.logo})` : ''"></div>
       </div>
       <div class="col-span-4 place-self-center text-center font-bold font-headline">
         <span v-if="currentGame.ended > 0" class="text-4xl md:text-8xl whitespace-nowrap">{{ currentGame.homescore }} :
@@ -34,7 +34,7 @@
       <div class="col-span-2 place-self-center text-center">
         <div :title="currentGame.away.name"
           class="h-16 w-16 sm:h-20 sm:w-20 md:h-32 md:w-32 mx-2 md:mx-6 bg-contain bg-no-repeat bg-center"
-          :style="`background-image: url(${currentGame.away.logo})`"></div>
+          :style="currentGame.away.logo ?`background-image: url(${currentGame.away.logo})` : ''"></div>
       </div>
       <div class="col-span-2 place-self-center justify-self-end">
         <button @click="currentIndex++" :disabled="currentIndex + 1 === allGames.length" aria-label="nächstes Spiel">
@@ -109,7 +109,7 @@
 
       </p>
     </div>
-    <div class="text-center border-t border-gray-400 mb-12 pt-12 flex place-content-center gap-5 self-end">
+    <div class="text-center border-t border-gray-400 mb-12 pt-12 flex place-content-center gap-5">
       <a href="/saison/spielplan" class="btn-default">gesamter Spielplan</a>
     </div>
   </div>
