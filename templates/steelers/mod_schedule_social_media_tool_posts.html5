@@ -368,7 +368,14 @@ foreach ($pngFiles as $file) {
         selectedFile = 'News';
       }
       const img = new Image();
-      img.src = '/files/steelers/tools/social-media/posts/empty' + selectedFile + '.png';
+      <?php
+      // Define the directory path
+      $imagesPath = '/files/steelers/tools/social-media/posts/empty';
+      if ($_GET['design'] === 'playoffs') {
+        $imagesPath = '/files/steelers/tools/social-media/posts-playoffs/empty';
+      }
+      ?>
+      img.src = '<?= $imagesPath ?>' + selectedFile + '.png';
 
 
       if (selectedFile == 'Matchup') {
@@ -1127,7 +1134,7 @@ foreach ($pngFiles as $file) {
         let ratio = 1300 / 340;
 
         createImageBitmap(wohnbau).then((bitmap) => {
-          ctx.drawImage(bitmap, boxX, boxY, 320, 320/ratio);
+          ctx.drawImage(bitmap, boxX, boxY, 320, 320 / ratio);
         });
       }
 

@@ -74,7 +74,12 @@
         </p>
         <?php
         // Define the directory path
-        $directoryPath = '../files/steelers/tools/social-media/home';
+        $imagesPath = '/files/steelers/tools/social-media/home';
+        if ($_GET['design'] === 'playoffs') {
+          $imagesPath = '/files/steelers/tools/social-media/playoffs';
+        }
+        $directoryPath = "../$imagesPath";
+
 
         // Use glob to get all image files in the directory
         $imageFiles = glob($directoryPath . '/*.{png,webp,svg,jpg,jpeg,gif}', GLOB_BRACE);
@@ -317,7 +322,7 @@
 
               // Load the image
               const image<?= $key ?> = new Image();
-              image<?= $key ?>.src = '/files/steelers/tools/social-media/home/<?= basename($file) ?>';
+              image<?= $key ?>.src = '<?= $imagesPath ?>/<?= basename($file) ?>';
               image<?= $key ?>.onload = function() {
                 drawCanvas<?= $key ?>();
               };
