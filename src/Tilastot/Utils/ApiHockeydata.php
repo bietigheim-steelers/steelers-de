@@ -251,7 +251,9 @@ class ApiHockeydata
             $g->gametime = $game->scheduledTime;
             $g->round = $round;
             $g->periodscore = $game->periodResults;
-            $g->gameday = $game->gameDay;
+            if(!is_null($game->gameDay)) {
+                $g->gameday = $game->gameDay;
+            }
             $g->gamestatus = $game->gameStatus; // 4 = ended
             if ($game->isOvertime) {
                 $g->resulttype = 'OT';
