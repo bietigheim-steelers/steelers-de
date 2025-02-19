@@ -42,7 +42,7 @@
 }
 
 .nhl .Gamestrip__Team--left .Gamestrip__ScoreContainer {
-  padding-right: 16px
+  padding-right: 6px
 }
 
 .Gamestrip__Team--left .Gamestrip__InfoWrapper {
@@ -69,7 +69,7 @@
 }
 
 .nhl .Gamestrip__Team--right .Gamestrip__ScoreContainer {
-  padding-left: 16px
+  padding-left: 6px
 }
 
 .Gamestrip__Team--right .Gamestrip__InfoWrapper {
