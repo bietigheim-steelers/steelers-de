@@ -54,47 +54,62 @@ if ($game) :
   $awayTeam = $current_series['away'];
   $awayLogo = $this->getImage($current_series['away']['logo'], 100, 100, 'proportional');;
 ?>
-  <div class="mt-10 Gamestrip relative overflow-hidden nhl Gamestrip--xl Gamestrip--post bb py-3">
-    <h3 class="text-center">Playoffs 2025 - <?= $current_series['round'] ?> - Best Of <?= $current_series['bestof'] ?></h3>
+  <div
+    class="mt-16 Gamestrip relative overflow-hidden nhl Gamestrip--xl Gamestrip--post bb py-3 bg-bottom bg-cover text-white"
+    style="background-image: url('/files/steelers/layout/po_bg.png')">
+    <h3 class="text-center text-steelpogreen">Playoffs 2025 - <?= $current_series['round'] ?> - Best Of
+      <?= $current_series['bestof'] ?>
+    </h3>
     <div class="Gamestrip__Competitors relative flex Gamestrip__Competitors--border">
       <div class="Gamestrip__Team relative flex w-full items-center Gamestrip__Team--left">
         <div class="Gamestrip__TeamContent flex tc w-full Gamestrip__TeamContent--left Gamestrip__TeamContent--post">
           <div class="Gamestrip__TeamContainer flex items-center">
-            <div class="Gamestrip__InfoLogo Gamestrip__InfoLogo--Left"><img alt="<?= $homeTeam['name'] ?>" class="Image Logo Gamestrip__Logo Gamestrip__Logo--xl Logo__xl" data-mptype="image" src="<?= $homeLogo ?>"></div>
+            <div class="Gamestrip__InfoLogo Gamestrip__InfoLogo--Left"><img alt="<?= $homeTeam['name'] ?>"
+                class="Image Logo Gamestrip__Logo Gamestrip__Logo--xl Logo__xl" data-mptype="image"
+                src="<?= $homeLogo ?>"></div>
             <div class="Gamestrip__Info Gamestrip__Info--post hidden lg:block">
               <div class="Gamestrip__InfoWrapper items-center flex">
                 <div class="ScoreCell__Truncate Gamestrip__Truncate h4 clr-gray-01">
-                  <p class="ScoreCell__TeamName ScoreCell__TeamName--displayName text-2xl font-bold"><?= $homeTeam['name'] ?></p>
+                  <p class="ScoreCell__TeamName ScoreCell__TeamName--displayName text-2xl font-bold">
+                    <?= $homeTeam['name'] ?></p>
                 </div>
               </div>
             </div>
           </div>
           <div class="Gamestrip__ScoreContainer flex flex-col items-center justify-center relative">
-            <div class="Gamestrip__Score font-headline text-steelgreen relative tc w-full text-8xl text-right"><?= $current_series['wins_home'] ?></div>
+            <div class="Gamestrip__Score font-headline text-steelpogreen relative tc w-full text-8xl text-right">
+              <?= $current_series['wins_home'] ?></div>
           </div>
         </div>
       </div>
       <div class="Gamestrip__Overview__Wrapper">
-        <div class="Gamestrip__Overview max-w-[50px] md:max-w-[140px] relative items-center clr-gray-04 flex justify-center flex-col n8 Gamestrip__Overview">
+        <div
+          class="Gamestrip__Overview max-w-[50px] md:max-w-[140px] relative items-center clr-gray-04 flex justify-center flex-col n8 Gamestrip__Overview">
           <div class="Gamestrip__Time--wrapper">
-            <div class="ScoreCell__Time hidden sm:block Gamestrip__Time ScoreCell__Time--post text-center font-thin text-gray-500">vs.</div>
+            <div
+              class="ScoreCell__Time hidden sm:block Gamestrip__Time ScoreCell__Time--post text-center font-thin text-gray-500">
+              vs.</div>
           </div>
         </div>
       </div>
       <div class="Gamestrip__Team relative flex w-full items-center Gamestrip__Team--right Gamestrip__Team--winner">
         <div class="Gamestrip__TeamContent flex tc w-full Gamestrip__TeamContent--right Gamestrip__TeamContent--post">
           <div class="Gamestrip__TeamContainer flex items-center">
-            <div class="Gamestrip__InfoLogo Gamestrip__InfoLogo--Right"><img alt="<?= $current_series['away']['shortname'] ?>" class="Image Logo Gamestrip__Logo Gamestrip__Logo--xl Logo__xl" src="<?= $awayLogo ?>"></div>
+            <div class="Gamestrip__InfoLogo Gamestrip__InfoLogo--Right"><img
+                alt="<?= $current_series['away']['shortname'] ?>"
+                class="Image Logo Gamestrip__Logo Gamestrip__Logo--xl Logo__xl" src="<?= $awayLogo ?>"></div>
             <div class="Gamestrip__Info Gamestrip__Info--post hidden lg:block">
               <div class="Gamestrip__InfoWrapper items-center flex">
                 <div class="ScoreCell__Truncate Gamestrip__Truncate h4 clr-gray-01">
-                  <p class="ScoreCell__TeamName ScoreCell__TeamName--displayName text-2xl font-bold"><?= $awayTeam['name'] ?></p>
+                  <p class="ScoreCell__TeamName ScoreCell__TeamName--displayName text-2xl font-bold">
+                    <?= $awayTeam['name'] ?></p>
                 </div>
               </div>
             </div>
           </div>
           <div class="Gamestrip__ScoreContainer flex flex-col items-center justify-center relative">
-            <div class="Gamestrip__Score font-headline text-steelgreen relative tc w-full text-8xl"><?= $current_series['wins_away'] ?></div>
+            <div class="Gamestrip__Score font-headline text-steelpogreen relative tc w-full text-8xl">
+              <?= $current_series['wins_away'] ?></div>
           </div>
         </div>
       </div>
@@ -109,12 +124,13 @@ if ($game) :
           break;
         }
         ?>
-        <div class="flex flex-row border-b border-gray-200 py-2">
+        <div class="flex flex-row mb-2 py-2 bg-black/70">
           <div class="px-2 flex-none text-right pr-4"><?= date('d.m.', $game['gamedate']) ?></div>
           <div class="px-2 flex-none"><?= $game['gametime'] ?></div>
           <div class="px-2 flex-1"><?= $game['home']['shortname'] ?> - <?= $game['away']['shortname'] ?></div>
           <?php if ($game['ended']) : ?>
-            <div class="px-2 flex-none font-bold"><?= $game['homescore'] . ':' . $game['awayscore']; ?> <?= $game['resulttype'] ?></div>
+            <div class="px-2 flex-none font-bold"><?= $game['homescore'] . ':' . $game['awayscore']; ?>
+              <?= $game['resulttype'] ?></div>
           <?php elseif ($k >= $current_series['games_needed']) : ?>
             <div class="px-2 flex-none">(falls nötig)</div>
           <?php elseif ($game['home']['shortname'] == 'SCB'): ?>

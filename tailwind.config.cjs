@@ -4,10 +4,9 @@ module.exports = {
     "./templates/**/*.html5",
     "./src/**/*.js",
     "./src/**/*.vue",
-    './vueform.config.js',
-    './node_modules/@vueform/vueform/themes/tailwind/**/*.vue',
-    './node_modules/@vueform/vueform/themes/tailwind/**/*.js',
-
+    "./vueform.config.js",
+    "./node_modules/@vueform/vueform/themes/tailwind/**/*.vue",
+    "./node_modules/@vueform/vueform/themes/tailwind/**/*.js",
   ],
   theme: {
     extend: {
@@ -15,6 +14,7 @@ module.exports = {
         steelwhite: "#eef0eb",
         steelnav: "#046a38",
         steelgreen: "#046a38",
+        steelpogreen: "#00994c",
         steelblue: "#009cde",
         steellightgreen: "#046a38",
       },
@@ -109,7 +109,7 @@ module.exports = {
       strategy: "base", // only generate global styles
     }),
     require("@tailwindcss/aspect-ratio"),
-    require('@vueform/vueform/tailwind'),
+    require("@vueform/vueform/tailwind"),
     require("autoprefixer"),
   ],
   vfDarkMode: false,
