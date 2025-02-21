@@ -13,6 +13,11 @@ nav .grid-nav {
   z-index: 80;
 }
 
+.design__playoff .top-sticky-nav {
+  @apply bg-black bg-bottom bg-cover;
+  background-image: url('/files/steelers/layout/po_bg.png')
+}
+
 .top-sticky-nav::before {
   @apply bg-steelwhite transition-opacity;
   content: "";
