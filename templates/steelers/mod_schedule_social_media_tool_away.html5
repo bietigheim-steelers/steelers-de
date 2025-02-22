@@ -74,7 +74,11 @@
         </p>
         <?php
         // Define the directory path
-        $directoryPath = '../files/steelers/tools/social-media/away';
+        $imagesPath = '/files/steelers/tools/social-media/playoffs/away';
+        if ($_GET['design'] === 'regular') {
+          $imagesPath = '/files/steelers/tools/social-media/away';
+        }
+        $directoryPath = "../$imagesPath";
 
         // Use glob to get all image files in the directory
         $imageFiles = glob($directoryPath . '/*.{png,webp,svg,jpg,jpeg,gif}', GLOB_BRACE);
@@ -223,9 +227,9 @@
             };
             switch (teamhome) {
               case 'EHF':
-                winText = 'Sieg für die Black Hawks !';
+                winText = 'Sieg für die white Hawks !';
                 goalTop = 'Tor für die';
-                goalText = 'Black Hawks';
+                goalText = 'white Hawks';
                 ortText = 'Passau';
                 break;
               case 'DSC':
@@ -333,7 +337,7 @@
 
               // Load the image
               const image<?= $key ?> = new Image();
-              image<?= $key ?>.src = '/files/steelers/tools/social-media/away/<?= basename($file) ?>';
+              image<?= $key ?>.src = '<?= $imagesPath ?>/<?= basename($file) ?>';
               image<?= $key ?>.onload = function() {
                 drawCanvas<?= $key ?>();
               };
@@ -353,7 +357,7 @@
                     topText = 'ERÖFFNUNGSBULLY IN ' + ortText.toUpperCase() + "...";
 
                     ctx<?= $key ?>.font = '100 72px Bahnschrift Condensed';
-                    ctx<?= $key ?>.fillStyle = 'black';
+                    ctx<?= $key ?>.fillStyle = 'white';
                     var text1Width = ctx<?= $key ?>.measureText(topText).width + 10;
                     var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
                     ctx<?= $key ?>.fillText(topText, x1, 580);
@@ -371,7 +375,7 @@
 
                     topText = 'WEITER GEHT ES IN ' + ortText.toUpperCase() + "...";
                     ctx<?= $key ?>.font = '100 72px Bahnschrift Condensed';
-                    ctx<?= $key ?>.fillStyle = 'black';
+                    ctx<?= $key ?>.fillStyle = 'white';
                     var text1Width = ctx<?= $key ?>.measureText(topText).width + 10;
                     var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
                     ctx<?= $key ?>.fillText(topText, x1, 580);
@@ -399,7 +403,7 @@
                   ?>
                     // text for winner
                     ctx<?= $key ?>.font = '100 72px Bahnschrift Condensed';
-                    ctx<?= $key ?>.fillStyle = 'black';
+                    ctx<?= $key ?>.fillStyle = 'white';
                     var text1Width = ctx<?= $key ?>.measureText(winText).width + 10;
                     var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
                     ctx<?= $key ?>.fillText(winText, x1, 580);

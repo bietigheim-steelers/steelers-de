@@ -74,9 +74,9 @@
         </p>
         <?php
         // Define the directory path
-        $imagesPath = '/files/steelers/tools/social-media/home';
-        if ($_GET['design'] === 'playoffs') {
-          $imagesPath = '/files/steelers/tools/social-media/playoffs';
+        $imagesPath = '/files/steelers/tools/social-media/playoffs';
+        if ($_GET['design'] === 'regular') {
+          $imagesPath = '/files/steelers/tools/social-media/home';
         }
         $directoryPath = "../$imagesPath";
 

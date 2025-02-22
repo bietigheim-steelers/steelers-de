@@ -159,7 +159,7 @@ foreach ($pngFiles as $file) {
       'Matchup': ['headline', 'smalltext', 'opponentAway', 'matchup'],
       'Lineup': ['headline', 'smalltext', 'lineup'],
       'Endstand_Away': ['smalltext', 'bgImage', 'result', 'periods', 'opponentAway'],
-      'Gameday_Home': ['smalltext', 'bgImage', 'opponentAway', 'time', 'wby'],
+      'Gameday_Home': ['smalltext', 'bgImage', 'opponentAway', 'time'], // , 'wby' removed for PO
       'Gameday_Away': ['smalltext', 'bgImage', 'opponentAway', 'time'],
       'News': ['headline', 'bgImage', 'smalltext', 'paragraph'],
       'Rückblick': ['headline', 'bgImage', 'smalltext', 'paragraph', 'wohnbau'],
@@ -370,9 +370,9 @@ foreach ($pngFiles as $file) {
       const img = new Image();
       <?php
       // Define the directory path
-      $imagesPath = '/files/steelers/tools/social-media/posts/empty';
-      if ($_GET['design'] === 'playoffs') {
-        $imagesPath = '/files/steelers/tools/social-media/posts-playoffs/empty';
+      $imagesPath = '/files/steelers/tools/social-media/posts-playoffs/empty';
+      if ($_GET['design'] === 'regular') {
+        $imagesPath = '/files/steelers/tools/social-media/posts/empty';
       }
       ?>
       img.src = '<?= $imagesPath ?>' + selectedFile + '.png';
@@ -415,17 +415,17 @@ foreach ($pngFiles as $file) {
 
       if (selectedFile == 'Lineup') {
         fetch(
-            //`https://api.hockeydata.net/data/ebel/Schedule?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=15881&referer=deb-online.live&widgetOptions={"gameStatus":[0,1,2],"semantic":true,"noScorers":true}`
+            //`https://api.hockeydata.net/data/ebel/Schedule?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=15881&referer=deb-online.live&widgetOptions={"semantic":true,"noScorers":true}`
             `https://api.hockeydata.net/data/ebel/Schedule?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=15881&referer=deb-online.live&widgetOptions={"gameStatus":[0,1,2,3,4],"semantic":true,"noScorers":true}`
           )
           .then(response => response.json())
           .then(data => {
-            //nextGame = data.data.rows.reverse().find(row => (row.awayTeamId === 54744 || row.homeTeamId === 54744));
             const now = new Date().getTime();
             nextGame = data.data.rows
               .filter(row => (row.awayTeamId === 54744 || row.homeTeamId === 54744) && row.scheduledDate.sortValue >
                 now)
               .sort((a, b) => a.scheduledDate.sortValue - b.scheduledDate.sortValue)[0];
+            // nextGame = data.data.rows.reverse().find(row => (row.awayTeamId === 54744 || row.homeTeamId === 54744));
             console.log(nextGame);
             if (nextGame.awayTeamId === 54744) {
               smalltextInput.value = nextGame.scheduledDate.value + " vs. " + nextGame.homeTeamLongName;
@@ -559,7 +559,7 @@ foreach ($pngFiles as $file) {
         ctx.font = '700 143px Bahnschrift Condensed';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'alphabetic';
-        ctx.fillStyle = '#046a38';
+        ctx.fillStyle = '#00994C';
         var text1Width = (ctx.measureText(headline).width * textScale);
         var text1Height = (ctx.measureText(headline).fontBoundingBoxDescent * textScale);
         var x1 = (canvas.width / 2) / textScale;
@@ -578,7 +578,7 @@ foreach ($pngFiles as $file) {
         ctx.moveTo(startX, startY); // links unten
         ctx.lineTo(startX, startY - cornerSize); // links ecke
         ctx.lineTo(startX + cornerSize, startY - cornerSize); // links oben
-        ctx.strokeStyle = '#046a38';
+        ctx.strokeStyle = '#00994C';
         ctx.lineWidth = 4;
         ctx.stroke();
 
@@ -589,7 +589,7 @@ foreach ($pngFiles as $file) {
         ctx.moveTo(startX, startY); // recht unten
         ctx.lineTo(startX + cornerSize, startY); // rechts ecke
         ctx.lineTo(startX + cornerSize, startY - cornerSize); // rechts oben
-        ctx.strokeStyle = '#046a38';
+        ctx.strokeStyle = '#00994C';
         ctx.lineWidth = 4;
         ctx.stroke();
 
@@ -599,7 +599,7 @@ foreach ($pngFiles as $file) {
       if (config.includes('smalltext')) {
         smalltext = smalltext.toUpperCase();
         ctx.font = '100 34px Bahnschrift2';
-        ctx.fillStyle = '#046a38';
+        ctx.fillStyle = '#00994C';
         if (selectedPost == 'Endstand_Away') {
           ctx.fillStyle = '#878787';
         }
@@ -845,7 +845,7 @@ foreach ($pngFiles as $file) {
         if (lineupData) {
           const fontNumber = '50 35px Bahnschrift2';
           const fontName = '700 45px Bahnschrift2';
-          let startY = 500;
+          let startY = 450;
           let kader;
           let goalies;
           const lineHeight = 54;
