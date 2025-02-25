@@ -1,0 +1,4 @@
+<?php
+
+var_dump($this->biddings);
+var_dump($this->player);

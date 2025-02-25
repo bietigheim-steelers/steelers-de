@@ -99,6 +99,12 @@ services:
         category: tilastot
         template: mod_bustours
         type: bustours
+  App\Tilastot\Module\AuctionModule:
+    tags:
+      - name: contao.frontend_module
+        category: tilastot
+        template: mod_auction
+        type: auction
   App\Tilastot\ContentElement\WrapperBlockStart:
     tags:
       - name: contao.content_element
