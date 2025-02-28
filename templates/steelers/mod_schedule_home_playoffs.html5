@@ -2,7 +2,7 @@
 $po_series = [];
 
 foreach ($this->games as $key => $game) {
-  $series_id = $game['home']['shortname'] == 'SCB' ? $game['home']['shortname'] . '-' . $game['away']['shortname'] : $game['away']['shortname'] . '-' . $game['home']['shortname'];
+  $series_id = $game['home']['shortname'] == 'Steelers' ? $game['home']['shortname'] . '-' . $game['away']['shortname'] : $game['away']['shortname'] . '-' . $game['home']['shortname'];
   if (is_array($po_series[$series_id]['games'])) {
     // this is not the first game of the series
     $po_series[$series_id]['games'][] = $game;
@@ -133,7 +133,7 @@ if ($game) :
               <?= $game['resulttype'] ?></div>
           <?php elseif ($k >= $current_series['games_needed']) : ?>
             <div class="px-2 flex-none">(falls nötig)</div>
-          <?php elseif ($game['home']['shortname'] == 'SCB'): ?>
+          <?php elseif ($game['home']['shortname'] == 'Steelers'): ?>
             <div class="px-2 flex-none"><a class="text-steelblue underline" href="/ticketshop">Tickets</a></div>
           <?php endif; ?>
         </div>
