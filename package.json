@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@glidejs/glide": "^3.6.0",
+    "@panzoom/panzoom": "^4.6.0",
     "@vueform/vueform": "^1.9.9",
     "blaze-slider": "^1.8.0",
     "cpx": "^1.5.0",
