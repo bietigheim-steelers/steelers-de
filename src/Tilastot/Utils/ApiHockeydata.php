@@ -164,7 +164,7 @@ class ApiHockeydata
                     $p->epstats = mb_convert_encoding($item->description, 'ISO-8859-1', 'UTF-8');
                     break;
                 }
-                
+
                 file_put_contents($timestampFile, (new \DateTime())->format('Y-m-d H:i:s'));
             }
 
@@ -251,7 +251,9 @@ class ApiHockeydata
             $g->gametime = $game->scheduledTime;
             $g->round = $round;
             $g->periodscore = $game->periodResults;
-            $g->gameday = $game->gameDay;
+            if ($game->gameDay) {
+                $g->gameday = $game->gameDay;
+            }
             $g->gamestatus = $game->gameStatus; // 4 = ended
             if ($game->isOvertime) {
                 $g->resulttype = 'OT';
