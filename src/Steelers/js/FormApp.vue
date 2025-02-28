@@ -11,7 +11,7 @@
       @click="onRestartClick">Weitere DK bestellen</button>
   </div>
   <Vueform @response="handleResponse" ref="form$" :class="formDone ? 'hidden' : ''">
-    <div class="bg-white rounded-lg p-10 max-w-4xl m-auto shadow-box-circle col-span-12">
+    <div class="bg-white lg:rounded-lg p-5 lg:p-10 max-w-sm md:max-w-md lg:max-w-4xl m-auto shadow-box-circle col-span-12">
 
       <!-- Defining Form Steps -->
       <FormSteps @next="onNextStep">
