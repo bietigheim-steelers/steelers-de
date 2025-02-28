@@ -200,7 +200,7 @@ export default {
         return prices[form$.value.data.ticket_type]['J'][cat]
       } else if (form$.value.data.ticket_area === 'rollstuhl') {
         return prices[form$.value.data.ticket_type]['R1,R3,R4']['rollstuhl']
-      } else {
+      } else if (form$.value.data.seat_block) {
         let block = form$.value.data.seat_block.slice(-1)
         switch(block) {
           case 'A':
