@@ -1,23 +1,23 @@
     <style>
-.spinner {
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #000;
-  border-radius: 50%;
-  width: 12px;
-  height: 12px;
-  display: inline-block;
-  animation: spin 1s linear infinite;
-}
+      .spinner {
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-left-color: #000;
+        border-radius: 50%;
+        width: 12px;
+        height: 12px;
+        display: inline-block;
+        animation: spin 1s linear infinite;
+      }
 
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
 
-  100% {
-    transform: rotate(360deg);
-  }
-}
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     </style>
     <div class="holema-table <?= $this->cssClass ?>" <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
       <table>
@@ -50,18 +50,18 @@
               }
             }
           ?>
-          <script>
-          var nextGame<?= $key ?> = <?= json_encode($nextGame) ?>;
-          </script>
-          <tr>
-            <td><?= \System::parseDate('d.m.Y', $game['gamedate']) ?></td>
-            <td><?= $game['gametime'] ?> Uhr</td>
-            <td><?= $game['home']['name'] ?></td>
-            <td><?= $game['away']['name'] ?></td>
-            <td><button
-                onclick="generateImages('<?= $game['home']['logo'] ?>','<?= $game['away']['logo'] ?>','<?= $game['home']['shortname'] ?>','<?= $game['away']['shortname'] ?>', nextGame<?= $key ?>, '<?= $game['gamedate'] ?>')">generate</button>
-            </td>
-          </tr>
+            <script>
+              var nextGame<?= $key ?> = <?= json_encode($nextGame) ?>;
+            </script>
+            <tr>
+              <td><?= \System::parseDate('d.m.Y', $game['gamedate']) ?></td>
+              <td><?= $game['gametime'] ?> Uhr</td>
+              <td><?= $game['home']['name'] ?></td>
+              <td><?= $game['away']['name'] ?></td>
+              <td><button
+                  onclick="generateImages('<?= $game['home']['logo'] ?>','<?= $game['away']['logo'] ?>','<?= $game['home']['shortname'] ?>','<?= $game['away']['shortname'] ?>', nextGame<?= $key ?>, '<?= $game['gamedate'] ?>')">generate</button>
+              </td>
+            </tr>
           <?php
           }
           ?>
@@ -84,251 +84,251 @@
         $imageFiles = glob($directoryPath . '/*.{png,webp,svg,jpg,jpeg,gif}', GLOB_BRACE);
         ?>
         <script>
-        var selectedOponent;
-        var selectedGamedate;
-        var nextGame;
-        var winText;
-        var ortText = '';
-        var goalText = '';
-        var goalTop = 'Tor für die';
-        const imageLogo = new Image();
-        const nextGameLogo = new Image();
+          var selectedOponent;
+          var selectedGamedate;
+          var nextGame;
+          var winText;
+          var ortText = '';
+          var goalText = '';
+          var goalTop = 'Tor für die';
+          const imageLogo = new Image();
+          const nextGameLogo = new Image();
 
 
-        function checkButtons() {
-          var downloadButton = document.querySelector('button[onclick="downloadAllCanvases()"]');
-          var uploadButton = document.querySelector('button[onclick="uploadAllToTeams()"]');
-          if (selectedOponent) {
-            downloadButton.disabled = false;
-            uploadButton.disabled = false;
-          } else {
-            downloadButton.disabled = true;
-            uploadButton.disabled = true;
-          }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-          checkButtons();
-        });
-
-        function uploadAllToTeams() {
-          var button = document.querySelector('button[onclick="uploadAllToTeams()"]');
-          button.disabled = true;
-          button.innerHTML = 'Uploading... <span class="spinner"></span>';
-
-          var formData = new FormData();
-          var date = selectedGamedate;
-          var opponent = selectedOponent;
-
-          formData.append('date', date);
-          formData.append('opponent', opponent);
-
-          var canvases = document.querySelectorAll('canvas');
-          var promises = [];
-
-          canvases.forEach((canvas, index) => {
-            promises.push(new Promise((resolve) => {
-              canvas.toBlob(function(blob) {
-                var filename = opponent + '_' + canvas.id + '.png';
-                formData.append('images[]', blob, filename);
-                resolve();
-              }, 'image/png');
-            }));
-          });
-
-          Promise.all(promises).then(() => {
-            fetch('/social-media-tools/posts/upload', {
-                method: 'POST',
-                body: formData
-              })
-              .then(response => response.json())
-              .then(data => {
-                console.log('Success:', data);
-                button.disabled = false;
-                button.innerHTML = 'Upload All to Teams';
-              })
-              .catch((error) => {
-                console.error('Error:', error);
-                button.disabled = false;
-                button.innerHTML = 'Upload All to Teams';
-              });
-          });
-        }
-
-        const font = new FontFace('Bahnschrift', 'url(/files/steelers/tools/social-media/fonts/bahnschrift.ttf)');
-        font.load().then(function(loadedFont) {
-          document.fonts.add(loadedFont);
-          <?php
-            foreach ($imageFiles as $key => $file) {
-            ?>
-          drawCanvas<?= $key ?>();
-          <?php
+          function checkButtons() {
+            var downloadButton = document.querySelector('button[onclick="downloadAllCanvases()"]');
+            var uploadButton = document.querySelector('button[onclick="uploadAllToTeams()"]');
+            if (selectedOponent) {
+              downloadButton.disabled = false;
+              uploadButton.disabled = false;
+            } else {
+              downloadButton.disabled = true;
+              uploadButton.disabled = true;
             }
-            ?>
-        });
-
-        const fontC = new FontFace('Bahnschrift Condensed',
-          'url(/files/steelers/tools/social-media/fonts/bahnschrift.ttf)');
-        fontC.stretch = 'condensed';
-        fontC.load().then(function(loadedFont) {
-          document.fonts.add(loadedFont);
-          <?php
-            foreach ($imageFiles as $key => $file) {
-            ?>
-          drawCanvas<?= $key ?>();
-          <?php
-            }
-            ?>
-        });
-
-        const fontC2 = new FontFace('Bahnschrift2',
-          'url(/files/steelers/tools/social-media/fonts/bahnschrift2.ttf)', {
-            weight: '100', // You can also use numeric values like '400', '700', etc.
-            style: 'normal',
-            stretch: 'condensed'
-          });
-        fontC2.load().then(function(loadedFont) {
-          document.fonts.add(loadedFont);
-          <?php
-            foreach ($imageFiles as $key => $file) {
-            ?>
-          drawCanvas<?= $key ?>();
-          <?php
-            }
-            ?>
-        });
-
-
-        function generateImages(logohome, logoaway, teamhome, teamaway, nextGameParam, gamedate) {
-          selectedOponent = teamhome;
-          selectedGamedate = gamedate;
-          checkButtons();
-          imageLogo.src = logohome;
-          nextGameLogo.src = nextGameParam.logo;
-          nextGame = nextGameParam;
-          console.log('generateImages', nextGame)
-          imageLogo.onload = function() {
-            <?php
-              foreach ($imageFiles as $key => $file) {
-              ?>
-            drawCanvas<?= $key ?>();
-            <?php
-              }
-              ?>
-          };
-          nextGameLogo.onload = function() {
-            <?php
-              foreach ($imageFiles as $key => $file) {
-              ?>
-            drawCanvas<?= $key ?>();
-            <?php
-              }
-              ?>
-          };
-          switch (teamhome) {
-            case 'EHF':
-              winText = 'Sieg für die white Hawks !';
-              goalTop = 'Tor für die';
-              goalText = 'white Hawks';
-              ortText = 'Passau';
-              break;
-            case 'DSC':
-              winText = 'Sieg für Deggendorf !';
-              goalTop = 'Tor für';
-              goalText = 'Deggendorf';
-              ortText = 'Deggendorf';
-              break;
-            case 'MEM':
-              winText = 'Sieg für die Indians !';
-              goalTop = 'Tor für die';
-              goalText = 'Indians';
-              ortText = 'Memmingen';
-              break;
-            case 'ECT':
-              winText = 'Sieg für den EC Bad Tölz !';
-              goalTop = 'Tor für die';
-              goalText = 'Löwen';
-              ortText = 'Bad Tölz';
-              break;
-            case 'SEC':
-              winText = 'Sieg für die Rebels !';
-              goalTop = 'Tor für die';
-              goalText = 'Rebels';
-              ortText = 'Stuttgart';
-              break;
-            case 'OTB':
-              winText = 'Sieg für die Tigers !';
-              goalTop = 'Tor für die';
-              goalText = 'Tigers';
-              ortText = 'Bayreuth';
-              break;
-            case 'ECP':
-              winText = 'Sieg für Peiting !';
-              goalTop = 'Tor für den'
-              goalText = 'EC Peiting';
-              ortText = 'Peiting';
-              break;
-            case 'HNF':
-              winText = 'Sieg für Heilbronn !';
-              goalTop = 'Tor für die';
-              goalText = 'Falken';
-              ortText = 'Heilbronn';
-              break;
-            case 'EVF':
-              winText = 'Sieg für Füssen !';
-              goalTop = 'Tor für';
-              goalText = 'Füssen';
-              ortText = 'Füssen';
-              break;
-            case 'LIN':
-              winText = 'Sieg für Lindau !';
-              goalTop = 'Tor für die';
-              goalText = 'Islanders';
-              ortText = 'Lindau';
-              break;
-            case 'HEC':
-              winText = 'Sieg für Höchstadt !';
-              goalTop = 'Tor für die';
-              goalText = 'Alligators';
-              ortText = 'Höchstadt';
-              break;
-            case 'SCR':
-              winText = 'Sieg für den SC Riessersee !';
-              goalTop = 'Tor für den'
-              goalText = 'SCR';
-              ortText = 'Garmisch';
-              break;
-            case 'MEC':
-              winText = 'Sieg für die Saale Bulls !';
-              goalTop = 'Tor für die'
-              goalText = 'Saale Bulls';
-              ortText = 'Halle (Saale)';
-              break;
-            default:
-              console.log('unknown team ' + teamhome)
           }
 
-          winText = winText.toUpperCase()
+          document.addEventListener('DOMContentLoaded', function() {
+            checkButtons();
+          });
 
-        }
+          function uploadAllToTeams() {
+            var button = document.querySelector('button[onclick="uploadAllToTeams()"]');
+            button.disabled = true;
+            button.innerHTML = 'Uploading... <span class="spinner"></span>';
 
-        function downloadAllCanvases() {
-          <?php
+            var formData = new FormData();
+            var date = selectedGamedate;
+            var opponent = selectedOponent;
+
+            formData.append('date', date);
+            formData.append('opponent', opponent);
+
+            var canvases = document.querySelectorAll('canvas');
+            var promises = [];
+
+            canvases.forEach((canvas, index) => {
+              promises.push(new Promise((resolve) => {
+                canvas.toBlob(function(blob) {
+                  var filename = opponent + '_' + canvas.id + '.png';
+                  formData.append('images[]', blob, filename);
+                  resolve();
+                }, 'image/png');
+              }));
+            });
+
+            Promise.all(promises).then(() => {
+              fetch('/social-media-tools/posts/upload', {
+                  method: 'POST',
+                  body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                  console.log('Success:', data);
+                  button.disabled = false;
+                  button.innerHTML = 'Upload All to Teams';
+                })
+                .catch((error) => {
+                  console.error('Error:', error);
+                  button.disabled = false;
+                  button.innerHTML = 'Upload All to Teams';
+                });
+            });
+          }
+
+          const font = new FontFace('Bahnschrift', 'url(/files/steelers/tools/social-media/fonts/bahnschrift.ttf)');
+          font.load().then(function(loadedFont) {
+            document.fonts.add(loadedFont);
+            <?php
             foreach ($imageFiles as $key => $file) {
             ?>
-          downloadCanvas('<?= basename($file) ?>', selectedOponent + '_<?= basename($file) ?>');
-          <?php
+              drawCanvas<?= $key ?>();
+            <?php
             }
             ?>
-        }
+          });
 
-        function downloadCanvas(canvasId, filename) {
-          const canvas = document.getElementById(canvasId);
-          const link = document.createElement('a');
-          link.href = canvas.toDataURL('image/png');
-          link.download = filename;
-          link.click();
-        }
+          const fontC = new FontFace('Bahnschrift Condensed',
+            'url(/files/steelers/tools/social-media/fonts/bahnschrift.ttf)');
+          fontC.stretch = 'condensed';
+          fontC.load().then(function(loadedFont) {
+            document.fonts.add(loadedFont);
+            <?php
+            foreach ($imageFiles as $key => $file) {
+            ?>
+              drawCanvas<?= $key ?>();
+            <?php
+            }
+            ?>
+          });
+
+          const fontC2 = new FontFace('Bahnschrift2',
+            'url(/files/steelers/tools/social-media/fonts/bahnschrift2.ttf)', {
+              weight: '100', // You can also use numeric values like '400', '700', etc.
+              style: 'normal',
+              stretch: 'condensed'
+            });
+          fontC2.load().then(function(loadedFont) {
+            document.fonts.add(loadedFont);
+            <?php
+            foreach ($imageFiles as $key => $file) {
+            ?>
+              drawCanvas<?= $key ?>();
+            <?php
+            }
+            ?>
+          });
+
+
+          function generateImages(logohome, logoaway, teamhome, teamaway, nextGameParam, gamedate) {
+            selectedOponent = teamhome;
+            selectedGamedate = gamedate;
+            checkButtons();
+            imageLogo.src = logohome;
+            nextGameLogo.src = nextGameParam.logo;
+            nextGame = nextGameParam;
+            console.log('generateImages', nextGame)
+            imageLogo.onload = function() {
+              <?php
+              foreach ($imageFiles as $key => $file) {
+              ?>
+                drawCanvas<?= $key ?>();
+              <?php
+              }
+              ?>
+            };
+            nextGameLogo.onload = function() {
+              <?php
+              foreach ($imageFiles as $key => $file) {
+              ?>
+                drawCanvas<?= $key ?>();
+              <?php
+              }
+              ?>
+            };
+            switch (teamhome) {
+              case 'EHF':
+                winText = 'Sieg für die white Hawks !';
+                goalTop = 'Tor für die';
+                goalText = 'white Hawks';
+                ortText = 'Passau';
+                break;
+              case 'DSC':
+                winText = 'Sieg für Deggendorf !';
+                goalTop = 'Tor für';
+                goalText = 'Deggendorf';
+                ortText = 'Deggendorf';
+                break;
+              case 'MEM':
+                winText = 'Sieg für die Indians !';
+                goalTop = 'Tor für die';
+                goalText = 'Indians';
+                ortText = 'Memmingen';
+                break;
+              case 'ECT':
+                winText = 'Sieg für den EC Bad Tölz !';
+                goalTop = 'Tor für die';
+                goalText = 'Löwen';
+                ortText = 'Bad Tölz';
+                break;
+              case 'SEC':
+                winText = 'Sieg für die Rebels !';
+                goalTop = 'Tor für die';
+                goalText = 'Rebels';
+                ortText = 'Stuttgart';
+                break;
+              case 'OTB':
+                winText = 'Sieg für die Tigers !';
+                goalTop = 'Tor für die';
+                goalText = 'Tigers';
+                ortText = 'Bayreuth';
+                break;
+              case 'ECP':
+                winText = 'Sieg für Peiting !';
+                goalTop = 'Tor für den'
+                goalText = 'EC Peiting';
+                ortText = 'Peiting';
+                break;
+              case 'HNF':
+                winText = 'Sieg für Heilbronn !';
+                goalTop = 'Tor für die';
+                goalText = 'Falken';
+                ortText = 'Heilbronn';
+                break;
+              case 'EVF':
+                winText = 'Sieg für Füssen !';
+                goalTop = 'Tor für';
+                goalText = 'Füssen';
+                ortText = 'Füssen';
+                break;
+              case 'LIN':
+                winText = 'Sieg für Lindau !';
+                goalTop = 'Tor für die';
+                goalText = 'Islanders';
+                ortText = 'Lindau';
+                break;
+              case 'HEC':
+                winText = 'Sieg für Höchstadt !';
+                goalTop = 'Tor für die';
+                goalText = 'Alligators';
+                ortText = 'Höchstadt';
+                break;
+              case 'SCR':
+                winText = 'Sieg für den SC Riessersee !';
+                goalTop = 'Tor für den'
+                goalText = 'SCR';
+                ortText = 'Garmisch';
+                break;
+              case 'MEC':
+                winText = 'Sieg für die Saale Bulls !';
+                goalTop = 'Tor für die'
+                goalText = 'Saale Bulls';
+                ortText = 'Halle (Saale)';
+                break;
+              default:
+                console.log('unknown team ' + teamhome)
+            }
+
+            winText = winText.toUpperCase()
+
+          }
+
+          function downloadAllCanvases() {
+            <?php
+            foreach ($imageFiles as $key => $file) {
+            ?>
+              downloadCanvas('<?= basename($file) ?>', selectedOponent + '_<?= basename($file) ?>');
+            <?php
+            }
+            ?>
+          }
+
+          function downloadCanvas(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = filename;
+            link.click();
+          }
         </script>
         <?php
         // Check if any image files were found
@@ -336,182 +336,183 @@
           // Loop through the array and print each file name
           foreach ($imageFiles as $key => $file) {
         ?>
-        <canvas id="<?= basename($file) ?>" width="1080" height="1920" style="width: 300px;"></canvas>
-        <script>
-        const canvas<?= $key ?> = document.getElementById('<?= basename($file) ?>');
-        const ctx<?= $key ?> = canvas<?= $key ?>.getContext('2d');
+            <canvas id="<?= basename($file) ?>" width="1080" height="1920" style="width: 300px;"></canvas>
+            <script>
+              const canvas<?= $key ?> = document.getElementById('<?= basename($file) ?>');
+              const ctx<?= $key ?> = canvas<?= $key ?>.getContext('2d');
 
-        // Load the image
-        const image<?= $key ?> = new Image();
-        image<?= $key ?>.src = '<?= $imagesPath ?>/<?= basename($file) ?>';
-        image<?= $key ?>.onload = function() {
-          drawCanvas<?= $key ?>();
-        };
+              // Load the image
+              const image<?= $key ?> = new Image();
+              image<?= $key ?>.src = '<?= $imagesPath ?>/<?= basename($file) ?>';
+              image<?= $key ?>.onload = function() {
+                drawCanvas<?= $key ?>();
+              };
 
-        function drawCanvas<?= $key ?>() {
-          ctx<?= $key ?>.clearRect(0, 0, canvas<?= $key ?>.width, canvas<?= $key ?>.height);
-          ctx<?= $key ?>.drawImage(image<?= $key ?>, 0, 0);
+              function drawCanvas<?= $key ?>() {
+                ctx<?= $key ?>.clearRect(0, 0, canvas<?= $key ?>.width, canvas<?= $key ?>.height);
+                ctx<?= $key ?>.drawImage(image<?= $key ?>, 0, 0);
 
-          var topText = '';
+                var topText = '';
 
-          <?php
+                <?php
                 $filename = 'Erstes_Drittel.png';
 
                 switch (basename($file)) {
                   case 'Spielbeginn.png':
                 ?>
-          topText = 'ERÖFFNUNGSBULLY IN ' + ortText.toUpperCase() + "...";
+                    topText = 'ERÖFFNUNGSBULLY IN ' + ortText.toUpperCase() + "...";
 
-          ctx<?= $key ?>.font = '100 72px Bahnschrift Condensed';
-          ctx<?= $key ?>.fillStyle = 'white';
-          var text1Width = ctx<?= $key ?>.measureText(topText).width + 10;
-          var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
-          ctx<?= $key ?>.fillText(topText, x1, 580);
-          const maxWidth = 350; // Replace with your desired max width
-          const maxHeight = 350; // Replace with your desired max height
-          const boxX = 0; // X-coordinate of the box
-          const boxY = 680; // Y-coordinate of the box
-          const boxWidth = 1080; // Width of the box
-          const boxHeight = 280; // Height of the box
-          <?php
+                    ctx<?= $key ?>.font = '100 72px Bahnschrift Condensed';
+                    ctx<?= $key ?>.fillStyle = 'white';
+                    var text1Width = ctx<?= $key ?>.measureText(topText).width + 10;
+                    var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
+                    ctx<?= $key ?>.fillText(topText, x1, 580);
+                    const maxWidth = 350; // Replace with your desired max width
+                    const maxHeight = 350; // Replace with your desired max height
+                    const boxX = 0; // X-coordinate of the box
+                    const boxY = 680; // Y-coordinate of the box
+                    const boxWidth = 1080; // Width of the box
+                    const boxHeight = 280; // Height of the box
+                  <?php
                     break;
                   case 'Beginn_Drittes_Drittel.png':
                   case 'Beginn_Zweites_Drittel.png':
                   ?> // text for winner
 
-          topText = 'WEITER GEHT ES IN ' + ortText.toUpperCase() + "...";
-          ctx<?= $key ?>.font = '100 72px Bahnschrift Condensed';
-          ctx<?= $key ?>.fillStyle = 'white';
-          var text1Width = ctx<?= $key ?>.measureText(topText).width + 10;
-          var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
-          ctx<?= $key ?>.fillText(topText, x1, 580);
-          const maxWidth = 350; // Replace with your desired max width
-          const maxHeight = 350; // Replace with your desired max height
-          const boxX = 0; // X-coordinate of the box
-          const boxY = 800; // Y-coordinate of the box
-          const boxWidth = 1080; // Width of the box
-          const boxHeight = 350; // Height of the box
-          <?php
+                    topText = 'WEITER GEHT ES IN ' + ortText.toUpperCase() + "...";
+                    ctx<?= $key ?>.font = '100 72px Bahnschrift Condensed';
+                    ctx<?= $key ?>.fillStyle = 'white';
+                    var text1Width = ctx<?= $key ?>.measureText(topText).width + 10;
+                    var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
+                    ctx<?= $key ?>.fillText(topText, x1, 580);
+                    const maxWidth = 350; // Replace with your desired max width
+                    const maxHeight = 350; // Replace with your desired max height
+                    const boxX = 0; // X-coordinate of the box
+                    const boxY = 800; // Y-coordinate of the box
+                    const boxWidth = 1080; // Width of the box
+                    const boxHeight = 350; // Height of the box
+                  <?php
                     break;
                   case 'Drittels_Drittel.png':
                   case 'Erstes_Drittel.png':
                   case 'Zweites_Drittel.png':
+                  case 'Overtime.png':
                   ?>
-          const maxWidth = 200; // Replace with your desired max width
-          const maxHeight = 200; // Replace with your desired max height
-          const boxX = 255; // X-coordinate of the box
-          const boxY = 800; // Y-coordinate of the box
-          const boxWidth = 240; // Width of the box
-          const boxHeight = 240; // Height of the box
-          <?php
+                    const maxWidth = 200; // Replace with your desired max width
+                    const maxHeight = 200; // Replace with your desired max height
+                    const boxX = 255; // X-coordinate of the box
+                    const boxY = 800; // Y-coordinate of the box
+                    const boxWidth = 240; // Width of the box
+                    const boxHeight = 240; // Height of the box
+                  <?php
                     break;
                   case 'Sieg_Gegner.png':
                   ?>
-          // text for winner
-          ctx<?= $key ?>.font = '100 72px Bahnschrift Condensed';
-          ctx<?= $key ?>.fillStyle = 'white';
-          var text1Width = ctx<?= $key ?>.measureText(winText).width + 10;
-          var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
-          ctx<?= $key ?>.fillText(winText, x1, 580);
-          <?php
+                    // text for winner
+                    ctx<?= $key ?>.font = '100 72px Bahnschrift Condensed';
+                    ctx<?= $key ?>.fillStyle = 'white';
+                    var text1Width = ctx<?= $key ?>.measureText(winText).width + 10;
+                    var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
+                    ctx<?= $key ?>.fillText(winText, x1, 580);
+                  <?php
                   case 'Sieg_Steelers.png':
                   ?>
-          const maxWidth = 200; // Replace with your desired max width
-          const maxHeight = 200; // Replace with your desired max height
-          const boxX = 255; // X-coordinate of the box
-          const boxY = 640; // Y-coordinate of the box
-          const boxWidth = 240; // Width of the box
-          const boxHeight = 240; // Height of the box
+                    const maxWidth = 200; // Replace with your desired max width
+                    const maxHeight = 200; // Replace with your desired max height
+                    const boxX = 255; // X-coordinate of the box
+                    const boxY = 640; // Y-coordinate of the box
+                    const boxWidth = 240; // Width of the box
+                    const boxHeight = 240; // Height of the box
 
-          if (nextGame) {
-            // Function to format the date
-            function formatDate(timestamp) {
-              const date = new Date(parseInt(timestamp) * 1000);
-              const options = {
-                weekday: 'long',
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-              };
-              let formattedDate = date.toLocaleDateString('de-DE', options);
-              // Replace comma with minus
-              formattedDate = formattedDate.replace(',', ' -');
-              return formattedDate;
-            }
+                    if (nextGame) {
+                      // Function to format the date
+                      function formatDate(timestamp) {
+                        const date = new Date(parseInt(timestamp) * 1000);
+                        const options = {
+                          weekday: 'long',
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric'
+                        };
+                        let formattedDate = date.toLocaleDateString('de-DE', options);
+                        // Replace comma with minus
+                        formattedDate = formattedDate.replace(',', ' -');
+                        return formattedDate;
+                      }
 
-            var titleGameText = "Nächstes Heimspiel".toUpperCase()
-            ctx<?= $key ?>.font = '100 50px Bahnschrift2';
-            ctx<?= $key ?>.fillStyle = 'white';
-            var text1Width = ctx<?= $key ?>.measureText(titleGameText).width + 10;
-            var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
-            ctx<?= $key ?>.fillText(titleGameText, x1, 1800);
+                      var titleGameText = "Nächstes Heimspiel".toUpperCase()
+                      ctx<?= $key ?>.font = '100 50px Bahnschrift2';
+                      ctx<?= $key ?>.fillStyle = 'white';
+                      var text1Width = ctx<?= $key ?>.measureText(titleGameText).width + 10;
+                      var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
+                      ctx<?= $key ?>.fillText(titleGameText, x1, 1800);
 
-            const formattedDate = formatDate(nextGame.gamedate).toUpperCase();
-            var gameText = formattedDate + ' - ' + nextGame.opponent_name + '';
-            gameText = gameText.toUpperCase()
-            ctx<?= $key ?>.font = '700 50px Bahnschrift Condensed';
-            ctx<?= $key ?>.fillStyle = 'white';
-            var text1Width = ctx<?= $key ?>.measureText(gameText).width + 10;
-            var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
-            ctx<?= $key ?>.fillText(gameText, x1, 1860);
+                      const formattedDate = formatDate(nextGame.gamedate).toUpperCase();
+                      var gameText = formattedDate + ' - ' + nextGame.opponent_name + '';
+                      gameText = gameText.toUpperCase()
+                      ctx<?= $key ?>.font = '700 50px Bahnschrift Condensed';
+                      ctx<?= $key ?>.fillStyle = 'white';
+                      var text1Width = ctx<?= $key ?>.measureText(gameText).width + 10;
+                      var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
+                      ctx<?= $key ?>.fillText(gameText, x1, 1860);
 
-          }
+                    }
 
 
-          <?php
+                  <?php
                     break;
                   case 'Tor_Gegner.png':
                   ?>
-          goalText = goalText.toUpperCase()
-          goalTop = goalTop.toUpperCase()
-          // text for goal
-          ctx<?= $key ?>.font = '100 150px Bahnschrift Condensed';
-          ctx<?= $key ?>.fillStyle = 'white';
-          var text1Width = ctx<?= $key ?>.measureText(goalTop).width;
-          var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
-          ctx<?= $key ?>.fillText(goalTop, x1, 235);
-          // text for goal
-          ctx<?= $key ?>.font = '700 150px Bahnschrift Condensed';
-          ctx<?= $key ?>.fillStyle = 'white';
-          var text1Width = ctx<?= $key ?>.measureText(goalText).width + 10;
-          var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
-          ctx<?= $key ?>.fillText(goalText, x1, 375);
-          <?php
+                    goalText = goalText.toUpperCase()
+                    goalTop = goalTop.toUpperCase()
+                    // text for goal
+                    ctx<?= $key ?>.font = '100 150px Bahnschrift Condensed';
+                    ctx<?= $key ?>.fillStyle = 'white';
+                    var text1Width = ctx<?= $key ?>.measureText(goalTop).width;
+                    var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
+                    ctx<?= $key ?>.fillText(goalTop, x1, 235);
+                    // text for goal
+                    ctx<?= $key ?>.font = '700 150px Bahnschrift Condensed';
+                    ctx<?= $key ?>.fillStyle = 'white';
+                    var text1Width = ctx<?= $key ?>.measureText(goalText).width + 10;
+                    var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
+                    ctx<?= $key ?>.fillText(goalText, x1, 375);
+                  <?php
                   case 'Tor_Steelers.png':
                   ?>
-          const maxWidth = 200; // Replace with your desired max width
-          const maxHeight = 200; // Replace with your desired max height
-          const boxX = 255; // X-coordinate of the box
-          const boxY = 1030; // Y-coordinate of the box
-          const boxWidth = 240; // Width of the box
-          const boxHeight = 240; // Height of the box
-          <?php
+                    const maxWidth = 200; // Replace with your desired max width
+                    const maxHeight = 200; // Replace with your desired max height
+                    const boxX = 255; // X-coordinate of the box
+                    const boxY = 1030; // Y-coordinate of the box
+                    const boxWidth = 240; // Width of the box
+                    const boxHeight = 240; // Height of the box
+                <?php
                     break;
                   default:
                     break;
                 }
                 ?>
-          if (imageLogo.width > 0) {
+                if (imageLogo.width > 0) {
 
-            let width = imageLogo.width;
-            let height = imageLogo.height;
+                  let width = imageLogo.width;
+                  let height = imageLogo.height;
 
-            height = height * (maxWidth / width);
-            width = maxWidth;
+                  height = height * (maxWidth / width);
+                  width = maxWidth;
 
-            width = width * (maxHeight / height);
-            height = maxHeight;
+                  width = width * (maxHeight / height);
+                  height = maxHeight;
 
-            // Calculate the coordinates to center the image within the box
-            const centerX = boxX + (boxWidth - width) / 2;
-            const centerY = boxY + (boxHeight - height) / 2;
+                  // Calculate the coordinates to center the image within the box
+                  const centerX = boxX + (boxWidth - width) / 2;
+                  const centerY = boxY + (boxHeight - height) / 2;
 
-            createImageBitmap(imageLogo).then((bitmap) => {
-              ctx<?= $key ?>.drawImage(bitmap, centerX, centerY, width, height);
-            });
-          }
-        }
-        </script>
+                  createImageBitmap(imageLogo).then((bitmap) => {
+                    ctx<?= $key ?>.drawImage(bitmap, centerX, centerY, width, height);
+                  });
+                }
+              }
+            </script>
         <?php
           }
         }
