@@ -46,89 +46,97 @@
   @apply static text-base text-gray-800;
 }
 
+.st0 {
+  fill: #FFFFFF;
+  stroke: #000000;
+  stroke-miterlimit: 10;
+}
 
-      .st0 {
-        fill: #FFFFFF;
-        stroke: #000000;
-        stroke-miterlimit: 10;
-      }
+.st1 {
+  fill: #F9B233;
+  stroke: #000000;
+  stroke-width: 0.5;
+  stroke-miterlimit: 10;
+}
 
-      .st1 {
-        fill: #F9B233;
-        stroke: #000000;
-        stroke-width: 0.5;
-        stroke-miterlimit: 10;
-      }
+.st1.active {
+  fill: #046a38;
+  stroke: #000000;
+  stroke-width: 0.5;
+  stroke-miterlimit: 10;
+}
 
-      .st1.active {
-        fill: #046a38;
-        stroke: #ffffff;
-        stroke-width: 0.5;
-        stroke-miterlimit: 10;
-      }
+.st {
+  fill: #000000;
+  color: #000000;
+  font-size: 6px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+  pointer-events: none;
+}
 
-      .st2 {
-        font-family: 'ArialNarrow';
-      }
+.st2 {
+  font-family: 'ArialNarrow';
+}
 
-      .st3 {
-        font-size: 8.1502px;
-      }
+.st3 {
+  font-size: 8.1502px;
+}
 
-      .st4 {
-        fill: #DADADA;
-      }
+.st4 {
+  fill: #DADADA;
+}
 
-      .st5 {
-        font-size: 13.5837px;
-      }
+.st5 {
+  font-size: 13.5837px;
+}
 
-      .st6 {
-        fill: #FFED00;
-        stroke: #000000;
-        stroke-width: 0.5;
-        stroke-miterlimit: 10;
-      }
+.st6 {
+  fill: #FFED00;
+  stroke: #000000;
+  stroke-width: 0.5;
+  stroke-miterlimit: 10;
+}
 
-      .st7 {
-        font-size: 5.4429px;
-      }
+.st7 {
+  font-size: 5.4429px;
+}
 
-      .st8 {
-        fill: #1D71B8;
-      }
+.st8 {
+  fill: #1D71B8;
+}
 
-      .st9 {
-        fill: #E6007E;
-      }
+.st9 {
+  fill: #E6007E;
+}
 
-      .st10 {
-        fill: #FFFFFF;
-      }
+.st10 {
+  fill: #FFFFFF;
+}
 
-      .st11 {
-        font-size: 8.7086px;
-      }
+.st11 {
+  font-size: 8.7086px;
+}
 
-      .st12 {
-        font-size: 7.62px;
-      }
+.st12 {
+  font-size: 7.62px;
+}
 
-      .st13 {
-        fill: #C6C6C6;
-      }
+.st13 {
+  fill: #C6C6C6;
+}
 
-      .st14 {
-        font-size: 10.8857px;
-      }
+.st14 {
+  font-size: 10.8857px;
+}
 
-      .st15 {
-        fill: #DADADA;
-        stroke: #000000;
-        stroke-width: 0.5;
-        stroke-miterlimit: 10;
-      }
+.st15 {
+  fill: #DADADA;
+  stroke: #000000;
+  stroke-width: 0.5;
+  stroke-miterlimit: 10;
+}
 
-      .st16 {
-        font-size: 22px;
-      }
+.st16 {
+  font-size: 22px;
+}
