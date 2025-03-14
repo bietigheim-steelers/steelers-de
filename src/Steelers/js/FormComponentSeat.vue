@@ -12,7 +12,8 @@
         x="0px" y="0px" viewBox="0 0 1683.78 1190.55" style="enable-background:new 0 0 1683.78 1190.55;"
         xml:space="preserve">
         <rect x="136.82" y="552.68" class="st0" width="1405.19" height="102.58" />
-        <g>
+        <g data-block="I" data-row="9">
+          <rect data-seat="1" data-block="I" data-row="9" x="79.68" y="339.08" class="st1" width="10" height="10" />
           <rect data-seat="2" data-block="I" data-row="9" x="93.33" y="339.08" class="st1" width="10" height="10" />
           <rect data-seat="3" data-block="I" data-row="9" x="106.97" y="339.08" class="st1" width="10" height="10" />
           <rect data-seat="4" data-block="I" data-row="9" x="120.62" y="339.08" class="st1" width="10" height="10" />
@@ -23,7 +24,8 @@
           <rect data-seat="9" data-block="I" data-row="9" x="188.86" y="339.08" class="st1" width="10"
             height="10" />
           <rect data-seat="10" data-block="I" data-row="9" x="202.51" y="339.08" class="st1" width="10" height="10" />
-          <rect x="79.68" y="339.08" class="st1" width="10" height="10" />
+        </g>
+        <g>          
           <rect x="147.92" y="463.74" class="st1" width="10" height="10" />
           <rect x="161.56" y="463.74" class="st1" width="10" height="10" />
           <rect x="175.21" y="463.74" class="st1" width="10" height="10" />
@@ -6928,8 +6930,6 @@ export default {
         minScale: 1,
         maxScale: 9,
         contain: "outside",
-        // startX: -5000,
-        // startY: -5000,
       });
 
       seatingPlan.addEventListener("wheel", instance.zoomWithWheel);
@@ -6959,7 +6959,11 @@ export default {
       const row = event.target.getAttribute('data-row');
       event.target.classList.toggle('active');
       console.log('Rect clicked:', { seat, block, row });
-      // Add your custom logic here
+      form$.value.update({
+        seat_block: block,
+        seat_seat: seat,
+        seat_row: row,
+      })
     }
 
     return {
