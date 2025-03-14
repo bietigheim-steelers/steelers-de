@@ -197,6 +197,23 @@
             ?>
           });
 
+          const fontC3 = new FontFace('Bahnschrift3',
+            'url(/files/steelers/tools/social-media/fonts/bahnschrift2.ttf)', {
+              weight: '700',
+              style: 'normal',
+              stretch: 'condensed'
+            });
+          fontC3.load().then(function(loadedFont) {
+            document.fonts.add(loadedFont);
+            <?php
+            foreach ($imageFiles as $key => $file) {
+            ?>
+              drawCanvas<?= $key ?>();
+            <?php
+            }
+            ?>
+          });
+
           function generateImages(logoAway, logoHome, teamAway, teamHome, nextGameParam, gamedate) {
             selectedOponent = teamAway;
             selectedGamedate = gamedate;
@@ -288,6 +305,12 @@
                 goalTop = 'Tor für die'
                 goalText = 'Saale Bulls';
                 ortText = 'Halle (Saale)';
+                break;
+              case 'LEI':
+                winText = 'Sieg für die Icefighters !';
+                goalTop = 'Tor für die'
+                goalText = 'Icefighters';
+                ortText = 'Leipzig';
                 break;
               default:
                 console.log('unknown team ' + teamAway)
@@ -410,7 +433,7 @@
                       }
 
                       var titleGameText = "Nächstes Heimspiel".toUpperCase()
-                      ctx<?= $key ?>.font = '100 50px Bahnschrift2';
+                      ctx<?= $key ?>.font = '100 52px Bahnschrift2';
                       ctx<?= $key ?>.fillStyle = 'white';
                       var text1Width = ctx<?= $key ?>.measureText(titleGameText).width + 10;
                       var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
@@ -419,11 +442,11 @@
                       const formattedDate = formatDate(nextGame.gamedate).toUpperCase();
                       var gameText = formattedDate + ' - ' + nextGame.opponent_name + '';
                       gameText = gameText.toUpperCase()
-                      ctx<?= $key ?>.font = '700 50px Bahnschrift Condensed';
+                      ctx<?= $key ?>.font = '700 50px Bahnschrift3';
                       ctx<?= $key ?>.fillStyle = 'white';
                       var text1Width = ctx<?= $key ?>.measureText(gameText).width + 10;
                       var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
-                      ctx<?= $key ?>.fillText(gameText, x1, 1840);
+                      ctx<?= $key ?>.fillText(gameText, x1, 1840.5);
 
                     }
 
@@ -441,7 +464,7 @@
                     var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
                     ctx<?= $key ?>.fillText(goalTop, x1, 235);
                     // text for goal
-                    ctx<?= $key ?>.font = '700 150px Bahnschrift Condensed';
+                    ctx<?= $key ?>.font = '700 150px Bahnschrift3';
                     ctx<?= $key ?>.fillStyle = 'white';
                     var text1Width = ctx<?= $key ?>.measureText(goalText).width + 10;
                     var x1 = (canvas<?= $key ?>.width - text1Width) / 2;
