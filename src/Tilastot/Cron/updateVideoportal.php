@@ -36,10 +36,13 @@ class updateVideoportal
         $this->log("Starting update process");
 
         $steelersFeed = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCaVaIAlCziRfT9A4Yw5cb5Q';
-        $spradeFeed = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpIteElx6nKfKsytUHq0g6xbsj';
+        $spradeFeed1 = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpIteElx6nKfKsytUHq0g6xbsj';
+        $spradeFeed2 = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpItdGEy0y2NDwVvXxJvn8LXU6';
 
         $steelersVideos = $this->getLatestVideos($steelersFeed);
-        $spradeVideos = $this->getLatestVideos($spradeFeed);
+        $spradeVideos1 = $this->getLatestVideos($spradeFeed1);
+        $spradeVideos2 = $this->getLatestVideos($spradeFeed2);
+        $spradeVideos = array_merge($spradeVideos1, $spradeVideos2);
 
         // Steelers Latest Videos
         foreach ($steelersVideos as $video) {
