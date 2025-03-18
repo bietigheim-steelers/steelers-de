@@ -380,7 +380,7 @@ foreach ($pngFiles as $file) {
 
       if (selectedFile == 'Matchup') {
         fetch(
-            `https://api.hockeydata.net/data/ebel/Standings?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=17570&referer=deb-online.live`
+            `https://steelers.de/tools/deb_wrapper.php?page=Standings?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=17570&referer=deb-online.live`
           )
           .then(response => response.json())
           .then(data => {
@@ -388,7 +388,7 @@ foreach ($pngFiles as $file) {
             drawCanvas();
           });
         fetch(
-            `https://api.hockeydata.net/data/ebel/TeamFairplay?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=17570&referer=deb-online.live`
+            `https://steelers.de/tools/deb_wrapper.php?page=TeamFairplay?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=17570&referer=deb-online.live`
           )
           .then(response => response.json())
           .then(data => {
@@ -396,7 +396,7 @@ foreach ($pngFiles as $file) {
             drawCanvas();
           });
         fetch(
-            `https://api.hockeydata.net/data/ebel/TeamScoringEfficiency?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=17570&referer=deb-online.live`
+            `https://steelers.de/tools/deb_wrapper.php?page=TeamScoringEfficiency?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=17570&referer=deb-online.live`
           )
           .then(response => response.json())
           .then(data => {
@@ -404,7 +404,7 @@ foreach ($pngFiles as $file) {
             drawCanvas();
           });
         fetch(
-            `https://api.hockeydata.net/data/ebel/LeaderFieldPlayers?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=17570&referer=deb-online.live`
+            `https://steelers.de/tools/deb_wrapper.php?page=LeaderFieldPlayers?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=17570&referer=deb-online.live`
           )
           .then(response => response.json())
           .then(data => {
@@ -416,7 +416,7 @@ foreach ($pngFiles as $file) {
       if (selectedFile == 'Lineup') {
         fetch(
             //`https://api.hockeydata.net/data/ebel/Schedule?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=17570&referer=deb-online.live&widgetOptions={"semantic":true,"noScorers":true}`
-            `https://api.hockeydata.net/data/ebel/Schedule?apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=17570&referer=deb-online.live&widgetOptions={"gameStatus":[0,1,2,3,4],"semantic":true,"noScorers":true}`
+            `https://steelers.de/tools/deb_wrapper.php?page=Schedule&apiKey=3c5a99d835fcb70156d40cd60d03f350&divisionId=17570&referer=deb-online.live&widgetOptions={"gameStatus":[0,1,2,3,4],"semantic":true,"noScorers":true}`
           )
           .then(response => response.json())
           .then(data => {
@@ -437,7 +437,7 @@ foreach ($pngFiles as $file) {
             headlineInput.dispatchEvent(new Event('input'));
 
             fetch(
-                `https://api.hockeydata.net/data/ebel/GetGameReport?apiKey=3c5a99d835fcb70156d40cd60d03f350&gameId=${nextGame.id}&referer=deb-online.live`
+                `https://steelers.de/tools/deb_wrapper.php?page=GetGameReport?apiKey=3c5a99d835fcb70156d40cd60d03f350&gameId=${nextGame.id}&referer=deb-online.live`
               )
               .then(response => response.json())
               .then(data => {
