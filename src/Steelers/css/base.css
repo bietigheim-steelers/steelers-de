@@ -56,6 +56,10 @@ html {
   @apply scale-105 shadow-lg;
 }
 
+.group:hover .btn-default {
+  @apply scale-105 shadow-lg;
+}
+
 .formbody .error {
   color: darkred;
 }

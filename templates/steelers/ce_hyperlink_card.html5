@@ -3,16 +3,17 @@ if ($this->useImage) :
   $ogimage = "background-image: url(" . $this->getImage($this->urlEncode($this->singleSRC), 500, 500, 'crop') . ");";
 endif;
 ?>
-<div
-  class="px-8 py-12 mt-6 flex flex-col justify-between items-end hyperlink-card bg-cover bg-no-repeat bg-blend-overlay bg-center <?= $this->class ?>"
-  <?= $this->useImage ? 'style="'.$ogimage.'"':'';?>>
-  <h5 class="uppercase text-3xl xl:text-4xl w-full text-center font-headline font-bold leading-tight text-steelgreen">
+<a href="<?= $this->href ?>"
+  class="group px-8 py-12 mt-6 flex flex-col justify-between items-end hyperlink-card duration-300 bg-black/60 hover:bg-steelgreen bg-cover bg-no-repeat bg-blend-overlay transition-all bg-center <?= $this->class ?>"
+  <?= $this->useImage ? 'style="' . $ogimage . '"' : ''; ?>>
+  <h5
+    class="uppercase text-3xl xl:text-4xl w-full text-center font-headline font-bold leading-tight transition-all !text-white">
     <?php
     echo $this->headline;
     ?></h5>
   <div class="mx-auto mt-8 text-center">
     <div class="bg-white">
-      <a class="btn-default my-4 mx-5" href="<?= $this->href ?>"><?= $this->linkTitle; ?></a>
+      <span class="btn-default my-4 mx-5" href="<?= $this->href ?>"><?= $this->linkTitle; ?></span>
     </div>
   </div>
-</div>
+</a>

@@ -1,11 +1,3 @@
-.hyperlink-card {
-  @apply bg-steelgreen;
-}
-
-.hyperlink-card h5 {
-  @apply text-white;
-}
-
 .frontpage-5050 .hyperlink-card {
   width: 90%;
   height: 18rem;
