@@ -1,0 +1,192 @@
+{
+  "sections": {
+    "A": {
+      "id": "A",
+      "name": "Block A",
+      "seat_label_direction": "rtl",
+      "grid_start": 44,
+      "rows": {
+        "1": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "2": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "3": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "4": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "5": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "6": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "7": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "8": {
+          "seats": 13,
+          "grid_start": 5.5
+        },
+        "9": {
+          "seats": 16,
+          "grid_start": 4
+        },
+        "10": {
+          "seats": 16,
+          "grid_start": 4
+        },
+        "11": {
+          "seats": 16,
+          "grid_start": 4
+        },
+        "12": {
+          "seats": 16,
+          "grid_start": 4
+        }
+      }
+    },
+    "L": {
+      "id": "L",
+      "name": "Block L",
+      "seat_label_direction": "rtl",
+      "grid_start": 18,
+      "rows": {
+        "1": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "2": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "3": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "4": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "5": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "6": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "7": {
+          "seats": 24,
+          "grid_start": 0
+        },
+        "8": {
+          "seats": 13,
+          "grid_start": 5.5
+        },
+        "9": {
+          "seats": 16,
+          "grid_start": 4
+        },
+        "10": {
+          "seats": 16,
+          "grid_start": 4
+        },
+        "11": {
+          "seats": 16,
+          "grid_start": 4
+        },
+        "12": {
+          "seats": 16,
+          "grid_start": 4
+        }
+      }
+    },
+    "K": {
+      "id": "K",
+      "name": "Block K",
+      "seat_label_direction": "rtl",
+      "grid_start": 0,
+      "rows": {
+        "1": {
+          "seats": 10,
+          "grid_start": 6
+        },
+        "2": {
+          "seats": 10,
+          "grid_start": 6
+        },
+        "3": {
+          "seats": 11,
+          "grid_start": 5
+        },
+        "4": {
+          "seats": 12,
+          "grid_start": 4
+        },
+        "5": {
+          "seats": 13,
+          "grid_start": 3
+        },
+        "6": {
+          "seats": 13,
+          "grid_start": 3
+        },
+        "7": {
+          "seats": 14,
+          "grid_start": 2
+        },
+        "8": {
+          "seats": 9,
+          "grid_start": 1
+        },
+        "9": {
+          "seats": 12,
+          "grid_start": 0
+        },
+        "10": {
+          "seats": 12,
+          "grid_start": 0
+        },
+        "11": {
+          "seats": 11,
+          "grid_start": 1
+        },
+        "12": {
+          "seats": 9,
+          "grid_start": 3
+        },
+        "13": {
+          "seats": 14,
+          "grid_start": 5,
+          "skip": [8,9]
+
+        },
+        "14": {
+          "seats": 12,
+          "grid_start": 7,
+          "skip": [6,7]
+        },
+        "15": {
+          "seats": 9,
+          "grid_start": 10,
+          "skip": [3,4]
+        },
+        "16": {
+          "seats": 7,
+          "grid_start": 12
+        }
+      }
+    }
+  }
+}
