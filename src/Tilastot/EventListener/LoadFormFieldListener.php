@@ -46,7 +46,7 @@ class LoadFormFieldListener
             }
         } else if (is_array($widget->options) && $widget->options[0]['value'] == 'spielerliste') {
             $spieler = Players::findAll(array(
-                'order'   => ' lastname ASC',
+                'order'   => ' jersey ASC',
                 'column'  => array('published=? AND position != ?'),
                 'value'   => array(1, 'Staff')
             ));
@@ -55,7 +55,7 @@ class LoadFormFieldListener
             } else {
                 $spielerArray = $spieler->fetchAll();
                 $widget->options = array_map(function ($s) {
-                    return array('value' => $s['alias'], 'label' => $s['lastname'] . ', ' . $s['firstname']);
+                    return array('value' => $s['alias'], 'label' => '#'.$s['jersey'] .' - '. $s['lastname'] . ', ' . $s['firstname']);
                 }, $spielerArray);
             }
         } else if (is_array($widget->options) && $widget->options[0]['value'] == 'porschecamps') {
