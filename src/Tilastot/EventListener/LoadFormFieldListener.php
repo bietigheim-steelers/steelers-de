@@ -10,6 +10,7 @@ use App\Tilastot\Model\Games;
 use App\Tilastot\Model\Standings;
 use App\Tilastot\Model\Camps;
 use App\Tilastot\Model\BusTours;
+use App\Tilastot\Model\Players;
 
 /**
  * @Hook("loadFormField")
@@ -20,7 +21,7 @@ class LoadFormFieldListener
     {
         if (is_array($widget->options) && ($widget->options[0]['value'] == 'gamedays' || $widget->options[0]['value'] == 'gamedays_away')) {
 
-            $column = array('gamedate >= ? AND hometeam = ? AND id != ?');
+            $column = array('gamedate >= ? AND hometeam = ? AND id != ? AND optional != ?');
             $displayTeam = 'awayteam';
 
             if ($widget->options[0]['value'] == 'gamedays_away') {
@@ -30,7 +31,7 @@ class LoadFormFieldListener
             $games = Games::findAll(array(
                 'order'   => ' gamedate ASC',
                 'column'  => $column,
-                'value'   => array(time() + (10 * 60 * 60), 54744, 2668692721)
+                'value'   => array(time() + (10 * 60 * 60), 54744, 2668692721, true)
             ));
             if (!$games) {
                 $widget->options = array('value' => 'no-game-found', 'label' => "Kein Spiel gefunden.");
@@ -38,10 +39,24 @@ class LoadFormFieldListener
                 $gameArray = $games->fetchAll();
                 $widget->options = array_map(function ($game) use ($displayTeam) {
                     $away = Standings::findByIdAndRound($game[$displayTeam], $game['round'], true);
-                    $date = \Contao\Date::parse('d.m.Y', $game['gamedate']);
+                    $date = \Contao\Date::parse('D d.m.Y', $game['gamedate']);
                     $text = $date . ' - '  . $away['name'];
                     return array('value' => $text, 'label' => $text);
                 }, $gameArray);
+            }
+        } else if (is_array($widget->options) && $widget->options[0]['value'] == 'spielerliste') {
+            $spieler = Players::findAll(array(
+                'order'   => ' lastname ASC',
+                'column'  => array('published=? AND position != ?'),
+                'value'   => array(1, 'Staff')
+            ));
+            if (!$spieler) {
+                $widget->options = array('value' => 'no-player-found', 'label' => "Keine Spieler gefunden.");
+            } else {
+                $spielerArray = $spieler->fetchAll();
+                $widget->options = array_map(function ($s) {
+                    return array('value' => $s['alias'], 'label' => $s['lastname'] . ', ' . $s['firstname']);
+                }, $spielerArray);
             }
         } else if (is_array($widget->options) && $widget->options[0]['value'] == 'porschecamps') {
             $column = array('gamedate >= ? AND hometeam = ?');
