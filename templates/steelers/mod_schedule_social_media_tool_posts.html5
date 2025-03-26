@@ -163,7 +163,7 @@ foreach ($pngFiles as $file) {
       'Gameday_Away': ['smalltext', 'bgImage', 'opponentAway', 'time'],
       'News': ['headline', 'bgImage', 'smalltext', 'paragraph'],
       'Rückblick': ['headline', 'bgImage', 'smalltext', 'paragraph', 'wohnbau'],
-      'Geburtstag': ['bgImage', 'jerseynumber', 'paragraph'],
+      'Geburtstag': ['bgImage', 'jerseynumber', 'paragraph', 'alwa'],
       'Preview': ['bgImage', 'opponentAway', 'paragraph'],
       'Starting_Six': ['smalltext', 'playerSelect1', 'playerSelect2', 'playerSelect3', 'playerSelect4',
         'playerSelect5', 'playerSelect6'
@@ -269,6 +269,11 @@ foreach ($pngFiles as $file) {
     const wohnbau = new Image();
     wohnbau.src = '/files/steelers/tools/social-media/wohnbau.svg';
     wohnbau.onload = function() {
+      drawCanvas();
+    };
+    const alwa = new Image();
+    alwa.src = '/files/steelers/tools/social-media/alwa.svg';
+    alwa.onload = function() {
       drawCanvas();
     };
 
@@ -496,6 +501,15 @@ foreach ($pngFiles as $file) {
     const fontF = new FontFace('PPFormula', 'url(/files/steelers/tools/social-media/fonts/PPFormula.otf)');
 
     fontF.load().then(function(loadedFont) {
+      document.fonts.add(loadedFont);
+      drawCanvas();
+    }).catch(function(error) {
+      console.error('Font loading failed:', error);
+    });
+
+    const fontH = new FontFace('Denise', 'url(/files/steelers/tools/social-media/fonts/Denise_Handwriting.ttf)');
+
+    fontH.load().then(function(loadedFont) {
       document.fonts.add(loadedFont);
       drawCanvas();
     }).catch(function(error) {
@@ -1136,6 +1150,23 @@ foreach ($pngFiles as $file) {
         createImageBitmap(wohnbau).then((bitmap) => {
           ctx.drawImage(bitmap, boxX, boxY, 320, 320 / ratio);
         });
+      }
+
+      if (alwa && config.includes('alwa')) {
+        let boxX = (1080 / 2) - 150; // X-coordinate of the box
+        let boxY = 10; // Y-coordinate of the box
+
+        createImageBitmap(alwa).then((bitmap) => {
+          ctx.drawImage(bitmap, boxX, boxY);
+        });
+
+        ctx.font = '100 70px Denise';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'alphabetic';
+        var textWidth = ctx.measureText('wünscht').width
+        var x1 = (1080 - textWidth) / 2;
+        ctx.fillText('wünscht', x1, 170);
+
       }
 
     }
