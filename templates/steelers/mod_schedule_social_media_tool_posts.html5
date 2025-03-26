@@ -1153,14 +1153,17 @@ foreach ($pngFiles as $file) {
       }
 
       if (alwa && config.includes('alwa')) {
-        let boxX = (1080 / 2) - 150; // X-coordinate of the box
+        let boxX = (1080 / 2) - 112; // X-coordinate of the box
         let boxY = 10; // Y-coordinate of the box
 
-        createImageBitmap(alwa).then((bitmap) => {
+        createImageBitmap(alwa, {
+          resizeWidth: 224,
+          resizeHeight: 100
+        }).then((bitmap) => {
           ctx.drawImage(bitmap, boxX, boxY);
         });
 
-        ctx.font = '100 70px Denise';
+        ctx.font = '100 50px Bahnschrift Condensed';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'alphabetic';
         var textWidth = ctx.measureText('wünscht').width
