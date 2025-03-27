@@ -9,6 +9,7 @@ export default defineConfig({
   build: {
     outDir: "files/steelers/js/",
     assetsDir: "./",
+    emptyOutDir: false,
     rollupOptions: {
       input: {
         form: "src/Steelers/js/main.js",
