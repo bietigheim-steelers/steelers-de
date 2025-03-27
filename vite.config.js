@@ -16,7 +16,7 @@ export default defineConfig({
       },
       output: {
         manualChunks: {},
-        entryFileNames: "[name].js",
+        entryFileNames: "index.js",
       },
     },
   },
