@@ -1,4 +1,4 @@
-import { resolve } from 'path'
+import { resolve } from "path";
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 
@@ -10,6 +10,9 @@ export default defineConfig({
     outDir: "files/steelers/js/",
     assetsDir: "./",
     rollupOptions: {
+      input: {
+        form: "src/Steelers/js/main.js",
+      },
       output: {
         manualChunks: {},
         entryFileNames: "[name].js",
