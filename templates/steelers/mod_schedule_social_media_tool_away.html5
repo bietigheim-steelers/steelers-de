@@ -326,6 +326,12 @@
                 goalText = 'Icefighters';
                 ortText = 'Leipzig';
                 break;
+              case 'TIL':
+                winText = 'Sieg für die Trappers !';
+                goalTop = 'Tor für die'
+                goalText = 'Trappers';
+                ortText = 'Tilburg';
+                break;
               default:
                 console.log('unknown team ' + teamhome)
             }
