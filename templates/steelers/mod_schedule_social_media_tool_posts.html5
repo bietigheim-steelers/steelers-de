@@ -948,13 +948,13 @@ foreach ($pngFiles as $file) {
             playerX = initX; // Reset X position for the next line of players
             totalWidth = 0;
 
-            // Calculate total width for LD, RD
+            // Calculate total width for LD, RD and goalies
             ['LD', 'RD'].forEach((pos, index2) => {
               let player;
               if (line == 'g' && pos == 'LD') {
                 player = goalies.find(player => player.isStartingPlayer === 1);
               } else if (line == 'g' && pos == 'RD') {
-                player = goalies.find(player => player.isStartingPlayer != 1);
+                player = goalies.find(player => (player.isStartingPlayer != 1 && player.playerJerseyNr != 53));
               } else {
                 player = kader.find(player => player.lineupLine === line && player.position === pos);
               }

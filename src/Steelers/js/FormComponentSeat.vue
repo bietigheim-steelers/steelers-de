@@ -1,5 +1,7 @@
 <template>
   <GroupElement :name="'my_seat'">
+    <div class="px-4">{{ block }}</div>
+    <div class="px-4">Reihe {{ row }}</div>
     <ul class="col-span-12">
       <li class="grid grid-cols-3 gap-4 w-full" v-for="additonal_seat in additonal_seats">
         <div class="px-4">{{ block }}</div>
@@ -7,15 +9,14 @@
         <div class="px-4">Platz {{ additonal_seat }}</div>
       </li>
     </ul>
-    <div class="col-span-12">
+    <div class="col-span-12" id="seatingPlan">
       <FormComponentSeatingPlan></FormComponentSeatingPlan>
     </div>
   </GroupElement>
 </template>
 
 <script>
-import { inject, computed, ref, onMounted, onUnmounted } from 'vue'
-import Panzoom from '@panzoom/panzoom'
+import { inject, computed, ref } from 'vue'
 import FormComponentSeatingPlan from "./FormComponentSeatingPlan.vue";
 
 export default {
@@ -79,16 +80,6 @@ export default {
 
     const row = computed(() => {
       return form$.value.data.seat_row
-    })
-
-    onMounted(() => {
-      //seatingPlan = document.querySelector("#seatingPlan");
-      //const instance = Panzoom(seatingPlan, {
-      //  minScale: 1,
-      //  maxScale: 9,
-      //  contain: "outside",
-      //});
-
     })
 
     return {

@@ -1,6 +1,6 @@
 <template>
   <v-group>
-    <SeatingPlanSeat v-for="seat in row.seats" :key="`${section.id}_${rowNumber}_${seat}`" :rowNumber="rowNumber" :seat="seat"
+    <SeatingPlanSeat v-for="seat in row.seats" :key="`${section.id}_${rowNumber}_${seat}`" :rowNumber="rowNumber" :section="section" :seat="seat"
       :row="row" :seatLabel="getSeatLabel(seat)" />
   </v-group>
 </template>
@@ -38,6 +38,14 @@ export default {
         seatLabel = (row.seats - seat) + 1
         if (Array.isArray(row.skip)) {
           const skipCount = row.skip.filter(skipSeat => skipSeat >= seat).length;
+          seatLabel -= skipCount;
+        }
+      }
+      if(section.seat_label_direction === 'ltl') {
+
+        seatLabel = seat
+        if (Array.isArray(row.skip)) {
+          const skipCount = row.skip.filter(skipSeat => skipSeat <= seat).length;
           seatLabel -= skipCount;
         }
       }
