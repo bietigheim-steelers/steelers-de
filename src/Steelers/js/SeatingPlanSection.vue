@@ -1,8 +1,9 @@
 <template>
   <v-group>
-    <v-text :x="x" :y="y" :width="sectionWidth" :height="sectionHeight" verticalAlign="middle" align="center" :text="section.id"
-      :fontSize="250" fill="#ccc" />
-    <SeatingPlanRow v-for="(row, key) in section.rows" :key="key" :row="row" :rowNumber="key.toString()" :section="section" />
+    <v-text :x="x" :y="y" :width="sectionWidth" :height="sectionHeight" verticalAlign="middle" align="center"
+      :text="section.id" :fontSize="250" fill="#ccc" />
+    <SeatingPlanRow v-for="(row, key) in section.rows" :key="key" :row="row" :rowNumber="key.toString()"
+      :section="section" />
   </v-group>
 </template>
 

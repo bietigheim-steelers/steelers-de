@@ -1,15 +1,10 @@
 <template>
-  <v-stage
-    ref="stageRef"
-    :config="config"
-    @wheel="handleWheel"
-    @touchstart="handleTouchStart"
-    @touchmove="handleTouchMove"
-    @mousedown="handleMouseDown"
-    @mousemove="handleMouseMove"
-    @mouseup="handleMouseUp"
-    @mouseleave="handleMouseUp"
-  >
+  <v-stage ref="stageRef" :config="config" @wheel="handleWheel" @touchstart="handleTouchStart"
+    @touchmove="handleTouchMove" @mousedown="handleMouseDown" @mousemove="handleMouseMove" @mouseup="handleMouseUp"
+    @mouseleave="handleMouseUp">
+    <v-layer>
+      <v-ellipse :x="1270" :y="840" :radiusX="1600" :radiusY="1000" stroke="black" :strokeWidth="5"></v-ellipse>
+    </v-layer>
     <v-layer>
       <SeatingPlanSection v-for="section in sections" :key="section.id" :section="section" />
     </v-layer>
@@ -67,7 +62,6 @@ export default {
         y: pointer.y - mousePointTo.y * newScale,
       };
       stage.position(newPos);
-      stage.batchDraw();
     };
 
     const handleTouchStart = (e) => {
@@ -93,7 +87,6 @@ export default {
         stage.scale({ x: newScale, y: newScale });
 
         lastTouchDistance = newDistance;
-        stage.batchDraw();
       }
     };
 
@@ -117,7 +110,6 @@ export default {
           x: stage.x() + dx,
           y: stage.y() + dy,
         });
-        stage.batchDraw();
       }
 
       lastPointerPosition = pointerPosition;
@@ -138,7 +130,6 @@ export default {
         const stage = stageRef.value.getStage();
         stage.scale({ x: 0.25, y: 0.25 });
         stage.position({ x: 0, y: 0 });
-        stage.batchDraw();
       });
     });
 

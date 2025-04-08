@@ -12,7 +12,7 @@
         <div class="px-4">Platz {{ additonal_seat }}</div>
       </li>
     </ul>
-    <div class="col-span-12" id="seatingPlan">
+    <div class="col-span-12" id="seatingPlan" style="border: 1px solid #d1d5db; border-radius: 0.25rem;">
       <FormComponentSeatingPlan></FormComponentSeatingPlan>
     </div>
   </GroupElement>

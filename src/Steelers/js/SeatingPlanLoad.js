@@ -7,9 +7,10 @@ export const loadSeats = async () => {
     if (!loadPromise) {
       loadPromise = (async () => {
         try {
-          const response = await fetch('/src/Steelers/js/booked_seats.json');
+          const response = await fetch('/files/steelers/tools/seatingPlan/booked_seats.json');
           if (!response.ok) {
-            throw new Error(`Failed to load JSON: ${response.statusText}`);
+            console.error('Error loading booked seats');
+            return [];
           }
           bookedSeats = await response.json();
           isLoaded = true;
