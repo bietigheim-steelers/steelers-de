@@ -1,25 +1,23 @@
 <template>
-  <div>
-    <v-stage
-      ref="stageRef"
-      :config="config"
-      @wheel="handleWheel"
-      @touchstart="handleTouchStart"
-      @touchmove="handleTouchMove"
-      @mousedown="handleMouseDown"
-      @mousemove="handleMouseMove"
-      @mouseup="handleMouseUp"
-      @mouseleave="handleMouseUp"
-    >
-      <v-layer>
-        <SeatingPlanSection v-for="section in sections" :key="section.id" :section="section" />
-      </v-layer>
-    </v-stage>
-  </div>
+  <v-stage
+    ref="stageRef"
+    :config="config"
+    @wheel="handleWheel"
+    @touchstart="handleTouchStart"
+    @touchmove="handleTouchMove"
+    @mousedown="handleMouseDown"
+    @mousemove="handleMouseMove"
+    @mouseup="handleMouseUp"
+    @mouseleave="handleMouseUp"
+  >
+    <v-layer>
+      <SeatingPlanSection v-for="section in sections" :key="section.id" :section="section" />
+    </v-layer>
+  </v-stage>
 </template>
 
 <script>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, provide, reactive } from 'vue';
 import SeatingPlanSection from './SeatingPlanSection.vue';
 import seats from './seats.json';
 import { loadSeats } from './SeatingPlanLoad.js'
@@ -31,6 +29,7 @@ export default {
   },
   setup() {
     const stageRef = ref(null);
+    const seatRefs = reactive({}); // Shared object for SeatingPlanSeat refs
     const config = ref({
       width: 700,
       height: 400,
@@ -44,6 +43,9 @@ export default {
     let lastTouchDistance = 0;
     let isDragging = false;
     let lastPointerPosition = null;
+
+    provide('stageRef', stageRef);
+    provide('seatRefs', seatRefs);
 
     const handleWheel = (e) => {
       e.evt.preventDefault();

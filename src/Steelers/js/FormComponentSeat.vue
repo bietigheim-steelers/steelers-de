@@ -1,7 +1,10 @@
 <template>
   <GroupElement :name="'my_seat'">
-    <div class="px-4">{{ block }}</div>
-    <div class="px-4">Reihe {{ row }}</div>
+    <div class="col-span-12">
+      <TextElement :name="'seat_block'" rules="required" placeholder="Block" />
+      <TextElement :name="'seat_row'" @change="onSeatChange" rules="required" placeholder="Reihe" />
+      <TextElement :name="'seat_seat'" @change="onSeatChange" rules="required" placeholder="Platz" />
+    </div>
     <ul class="col-span-12">
       <li class="grid grid-cols-3 gap-4 w-full" v-for="additonal_seat in additonal_seats">
         <div class="px-4">{{ block }}</div>
@@ -48,7 +51,6 @@ export default {
           'Block L',
         ]
       }
-
     })
 
     function onSeatChange() {
