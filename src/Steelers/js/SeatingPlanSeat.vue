@@ -2,7 +2,7 @@
   <v-group v-if="!row.skip || (row.skip && !row.skip.includes(seat))">
     <v-circle :radius="(seat_size.w / 2)" :fill="colors.circle" :strokeWidth=".5" :stroke="colors.circle_stroke" :x="x"
       :y="y"></v-circle>
-    <v-text :x="x - (seat_size.w/2)" @click="clickHandler" :width="seat_size.w"
+    <v-text :x="x - (seat_size.w/2)" @click="clickHandler" @tap="clickHandler" :width="seat_size.w"
       :height="seat_size.h" :y="y - (seat_size.h / 2)" :text="seatLabel" :fill="colors.text" :fontSize="(seat_size.w/2)"
       align="center" verticalAlign="middle" />
   </v-group>

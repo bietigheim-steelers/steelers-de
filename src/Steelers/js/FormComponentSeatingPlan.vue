@@ -1,7 +1,7 @@
 <template>
   <v-stage ref="stageRef" :config="config" @wheel="handleWheel" @touchstart="handleTouchStart"
-    @touchmove="handleTouchMove" @mousedown="handleMouseDown" @mousemove="handleMouseMove" @mouseup="handleMouseUp"
-    @mouseleave="handleMouseUp">
+    @touchmove="handleTouchMove" @touchend="handleTouchEnd" @mousedown="handleMouseDown"
+    @mousemove="handleMouseMove" @mouseup="handleMouseUp" @mouseleave="handleMouseUp">
     <v-layer>
       <v-ellipse :x="1270" :y="840" :radiusX="1600" :radiusY="1000" stroke="black" :strokeWidth="5"></v-ellipse>
     </v-layer>
@@ -36,6 +36,7 @@ export default {
     const maxScale = 3; // Maximum zoom level
     const minScale = 0.25; // Minimum zoom level
     let lastTouchDistance = 0;
+    let lastTouchPosition = null; // Track last touch position for dragging
     let isDragging = false;
     let lastPointerPosition = null;
 
@@ -70,6 +71,9 @@ export default {
         const touch1 = e.evt.touches[0];
         const touch2 = e.evt.touches[1];
         lastTouchDistance = getDistance(touch1, touch2);
+      } else if (e.evt.touches.length === 1) {
+        const touch = e.evt.touches[0];
+        lastTouchPosition = { x: touch.clientX, y: touch.clientY };
       }
     };
 
@@ -87,6 +91,28 @@ export default {
         stage.scale({ x: newScale, y: newScale });
 
         lastTouchDistance = newDistance;
+      } else if (e.evt.touches.length === 1) {
+        const touch = e.evt.touches[0];
+        const stage = stageRef.value.getStage();
+
+        if (lastTouchPosition) {
+          const dx = touch.clientX - lastTouchPosition.x;
+          const dy = touch.clientY - lastTouchPosition.y;
+
+          stage.position({
+            x: stage.x() + dx,
+            y: stage.y() + dy,
+          });
+        }
+
+        lastTouchPosition = { x: touch.clientX, y: touch.clientY };
+      }
+    };
+
+    const handleTouchEnd = (e) => {
+      if (e.evt.touches.length === 0) {
+        lastTouchDistance = 0;
+        lastTouchPosition = null;
       }
     };
 
@@ -140,6 +166,7 @@ export default {
       handleWheel,
       handleTouchStart,
       handleTouchMove,
+      handleTouchEnd,
       handleMouseDown,
       handleMouseMove,
       handleMouseUp,
