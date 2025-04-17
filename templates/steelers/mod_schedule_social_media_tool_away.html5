@@ -332,6 +332,12 @@
                 goalText = 'Trappers';
                 ortText = 'Tilburg';
                 break;
+              case 'HSC':
+                winText = 'Sieg für die Scorpions !';
+                goalTop = 'Tor für die'
+                goalText = 'Scorpions';
+                ortText = 'Hannover';
+                break;
               default:
                 console.log('unknown team ' + teamhome)
             }
