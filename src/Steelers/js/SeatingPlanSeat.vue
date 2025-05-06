@@ -38,17 +38,15 @@ export default {
   },
   setup(props) {
     const form$ = inject('form$');
-    const stageRef = inject('stageRef');
-    const seatRefs = inject('seatRefs');
 
     const seatRef = ref(null); // Local ref for this instance
     const grid_size = {
-      "width": 22,
-      "height": 26
+      "width": 20,
+      "height": 28
     }
     const seat_size = {
-      "w": 18,
-      "h": 18
+      "w": 16,
+      "h": 16
     }
     const colors = computed(() => {
       if(booked.value) {
@@ -72,45 +70,42 @@ export default {
       };
     });
     const booked = ref(false)
-    const selected = ref(false)
     const { seat, row, rowNumber, seatLabel, section } = props;
-    const x = grid_size.width * seat + row.grid_start * grid_size.width;
-    const y = grid_size.height * parseInt(rowNumber) + section.grid_top * grid_size.height;
+    const x = grid_size.width * seat + row.grid_start * grid_size.width + 20;
+    const y = grid_size.height * parseInt(rowNumber) + 20;
     const seatId = `${section.id}_${row.rowLabel || rowNumber}_${seatLabel}`;
+    const selected = computed(() => {
+      return seatId === `${form$.value.data.seat_block}_${form$.value.data.seat_row}_${form$.value.data.seat_seat}`;
+    });
+
 
     // Register this instance in the shared refs object
     onMounted(async () => {
       const bookedSeats = await loadSeats();
       booked.value = bookedSeats.includes(seatId);
-      // Register the entire component instance in the shared refs object
-      seatRefs[seatId] = () => {
-        selected.value = false; // Reset selected state when the component is unmounted
-      };
     });
 
     const clickHandler = () => {
+
       if (booked.value) {
         return;
       }
 
-      // Deselect all seats
-      Object.values(seatRefs).forEach(ref => {
-        ref(); // Access and manipulate the `selected` ref of other instances
-      });
-
       // Toggle the current seat's selected state
       if (selected.value) {
-        selected.value = false;
+        form$.value.update({
+          seat_block: "",
+          seat_seat: "",
+          seat_row: "",
+        });
       } else {
         form$.value.update({
           seat_block: section.id,
           seat_seat: seatLabel,
           seat_row: row.rowLabel || rowNumber,
         });
-        selected.value = true;
       }
     }
-    
     
     return {
       seat,
@@ -121,7 +116,7 @@ export default {
       clickHandler,
       row,
       seatLabel,
-      seatRef, // Expose local ref
+      seatRef,
     };
   }
 };

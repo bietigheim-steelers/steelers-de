@@ -31,3 +31,4 @@ vendor
 assets
 composer.json
 composer.lock
+booked_seats.json

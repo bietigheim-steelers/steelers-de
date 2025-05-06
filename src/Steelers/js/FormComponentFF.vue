@@ -1,5 +1,5 @@
 <template>
-  <GroupElement name="ff" v-if="Date.now() < Date.parse('31 Jul 2024 23:59:59 GMT')"
+  <GroupElement name="ff" v-if="Date.now() < Date.parse('31 Jul 2026 23:59:59 GMT')"
     :conditions="[['ticket_category', '!=', null], ['ticket_category', '!=', 'familie1'], ['ticket_category', '!=', 'familie2'], ['ticket_category', '!=', 'familie3']]">
     <RadiogroupElement @change="onFFChange" name="family_and_friends" default="no" :items="[
       { value: 'werben', label: 'Ich will jemanden werben', description: '(zur Ablage im Smartphone)' },
@@ -47,8 +47,8 @@ export default {
         ]
       }
       return [
-        { value: 'plastik', label: 'Klassische Plastikkarte' },
-        { value: 'mobile_plastik', label: 'Klassische Plastikkarte + mobile Dauerkarte' },
+        { value: 'plastik', label: 'Klassische Plastikkarte', description: 'zzgl. 3.00€' },
+        { value: 'mobile_plastik', label: 'Klassische Plastikkarte + mobile Dauerkarte', description: 'zzgl. 3.00€' },
         { value: 'mobile', label: 'Mobile Dauerkarte', description: '(zur Ablage im Smartphone)' },
       ]
     })

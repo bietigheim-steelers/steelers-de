@@ -29,7 +29,7 @@ export default {
   },
   setup(props) {
     const { row, section, rowNumber } = props;
-    row.grid_start = row.grid_start + section.grid_start;
+    row.grid_start = row.grid_start;
 
     const getSeatLabel = function(seat) {
       let seatLabel = seat;

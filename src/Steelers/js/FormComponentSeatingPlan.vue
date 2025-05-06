@@ -1,18 +1,43 @@
 <template>
-  <v-stage ref="stageRef" :config="config" @wheel="handleWheel" @touchstart="handleTouchStart"
-    @touchmove="handleTouchMove" @touchend="handleTouchEnd" @mousedown="handleMouseDown"
-    @mousemove="handleMouseMove" @mouseup="handleMouseUp" @mouseleave="handleMouseUp">
-    <v-layer>
-      <v-ellipse :x="1270" :y="840" :radiusX="1600" :radiusY="1000" stroke="black" :strokeWidth="5"></v-ellipse>
+  <v-stage ref="stageRef" :config="{
+    width: stageWidth,
+    height: stageHeight,
+    scaleX: scale,
+    scaleY: scale
+  }">
+    <v-layer v-if="selectedSection==null" key="sectionSelection">
+      <v-image v-if="seatingImage" :config="{
+        x: 0,
+        y: 0,
+        image: seatingImage,
+        width: 700,
+        height: 700
+      }" />
+      <v-shape v-for="(config, id) in block" :config="config" @click="clickSection(id)" />
     </v-layer>
-    <v-layer>
-      <SeatingPlanSection v-for="section in sections" :key="section.id" :section="section" />
+    <v-layer v-else key="sectionSelected">
+      <SeatingPlanSection :key="'sectionSelected__' + selectedSection.id" :section="selectedSection" />
+      <v-rect :config="{
+        x: 40,
+        y: 640,
+        width: 600,
+        height: 40,
+        fill: '#046a38'
+      }" @click="selectedSection = null"></v-rect>
+      <v-text :config="{
+        x: 300,
+        y: 646,
+        text: 'Zurück',
+        fontSize: 28,
+        fill: '#fff'
+      }" @click="selectedSection = null" />
     </v-layer>
   </v-stage>
 </template>
 
 <script>
-import { ref, onMounted, nextTick, provide, reactive } from 'vue';
+import { ref, onMounted, provide, reactive, computed, onUnmounted, nextTick } from 'vue';
+import { useImage } from 'vue-konva';
 import SeatingPlanSection from './SeatingPlanSection.vue';
 import seats from './seats.json';
 import { loadSeats } from './SeatingPlanLoad.js'
@@ -23,153 +48,186 @@ export default {
     SeatingPlanSection,
   },
   setup() {
+    const selectedSection = ref(null);
     const stageRef = ref(null);
-    const seatRefs = reactive({}); // Shared object for SeatingPlanSeat refs
-    const config = ref({
-      width: 700,
-      height: 400,
-      draggable: false, // Disable default dragging
-    });
+    const scale = ref(1);
+    const seatRefs = reactive({});
     const sections = seats.sections;
-
-    const scaleBy = 1.6; // Zoom factor
-    const maxScale = 3; // Maximum zoom level
-    const minScale = 0.25; // Minimum zoom level
-    let lastTouchDistance = 0;
-    let lastTouchPosition = null; // Track last touch position for dragging
-    let isDragging = false;
-    let lastPointerPosition = null;
+    const [seatingImage] = useImage('/files/steelers/layout/Saalplan_Homepage_1024_1024.png');
 
     provide('stageRef', stageRef);
     provide('seatRefs', seatRefs);
 
-    const handleWheel = (e) => {
-      e.evt.preventDefault();
-      const stage = stageRef.value.getStage();
-      const oldScale = stage.scaleX();
-      const pointer = stage.getPointerPosition();
+    const sceneWidth = 700;
+    const sceneHeight = 700;
 
-      const mousePointTo = {
-        x: (pointer.x - stage.x()) / oldScale,
-        y: (pointer.y - stage.y()) / oldScale,
-      };
-
-      let newScale = e.evt.deltaY > 0 ? oldScale / scaleBy : oldScale * scaleBy;
-      newScale = Math.max(minScale, Math.min(maxScale, newScale)); // Clamp scale
-      stage.scale({ x: newScale, y: newScale });
-
-      const newPos = {
-        x: pointer.x - mousePointTo.x * newScale,
-        y: pointer.y - mousePointTo.y * newScale,
-      };
-      stage.position(newPos);
-    };
-
-    const handleTouchStart = (e) => {
-      if (e.evt.touches.length === 2) {
-        e.evt.preventDefault();
-        const touch1 = e.evt.touches[0];
-        const touch2 = e.evt.touches[1];
-        lastTouchDistance = getDistance(touch1, touch2);
-      } else if (e.evt.touches.length === 1) {
-        const touch = e.evt.touches[0];
-        lastTouchPosition = { x: touch.clientX, y: touch.clientY };
-      }
-    };
-
-    const handleTouchMove = (e) => {
-      if (e.evt.touches.length === 2) {
-        e.evt.preventDefault();
-        const stage = stageRef.value.getStage();
-        const touch1 = e.evt.touches[0];
-        const touch2 = e.evt.touches[1];
-        const newDistance = getDistance(touch1, touch2);
-
-        const oldScale = stage.scaleX();
-        let newScale = (oldScale * newDistance) / lastTouchDistance;
-        newScale = Math.max(minScale, Math.min(maxScale, newScale)); // Clamp scale
-        stage.scale({ x: newScale, y: newScale });
-
-        lastTouchDistance = newDistance;
-      } else if (e.evt.touches.length === 1) {
-        const touch = e.evt.touches[0];
-        const stage = stageRef.value.getStage();
-
-        if (lastTouchPosition) {
-          const dx = touch.clientX - lastTouchPosition.x;
-          const dy = touch.clientY - lastTouchPosition.y;
-
-          stage.position({
-            x: stage.x() + dx,
-            y: stage.y() + dy,
-          });
-        }
-
-        lastTouchPosition = { x: touch.clientX, y: touch.clientY };
-      }
-    };
-
-    const handleTouchEnd = (e) => {
-      if (e.evt.touches.length === 0) {
-        lastTouchDistance = 0;
-        lastTouchPosition = null;
-      }
-    };
-
-    const handleMouseDown = (e) => {
-      isDragging = true;
-      const stage = stageRef.value.getStage();
-      lastPointerPosition = stage.getPointerPosition();
-    };
-
-    const handleMouseMove = (e) => {
-      if (!isDragging) return;
-
-      const stage = stageRef.value.getStage();
-      const pointerPosition = stage.getPointerPosition();
-
-      if (lastPointerPosition) {
-        const dx = pointerPosition.x - lastPointerPosition.x;
-        const dy = pointerPosition.y - lastPointerPosition.y;
-
-        stage.position({
-          x: stage.x() + dx,
-          y: stage.y() + dy,
-        });
-      }
-
-      lastPointerPosition = pointerPosition;
-    };
-
-    const handleMouseUp = () => {
-      isDragging = false;
-      lastPointerPosition = null;
-    };
-
-    const getDistance = (p1, p2) => {
-      return Math.sqrt(Math.pow(p1.clientX - p2.clientX, 2) + Math.pow(p1.clientY - p2.clientY, 2));
-    };
+    // Computed properties for stage dimensions
+    const stageWidth = computed(() => sceneWidth * scale.value);
+    const stageHeight = computed(() => sceneHeight * scale.value);
 
     onMounted(() => {
       loadSeats()
-      nextTick(() => {
-        const stage = stageRef.value.getStage();
-        stage.scale({ x: 0.25, y: 0.25 });
-        stage.position({ x: 0, y: 0 });
-      });
     });
 
+    const clickSection = (section) => {
+      selectedSection.value = sections[section];
+    };
+
+    const updateSize = () => {
+      const container = document.getElementById("form__season_ticket");
+      const containerWidth = container.offsetWidth > 780 ? 700 : container.offsetWidth - 80;
+      scale.value = containerWidth / sceneWidth;
+    };
+
+    // Add event listeners
+    onMounted(() => {
+      nextTick(() => {
+        updateSize();
+      });      
+      window.addEventListener('resize', updateSize);
+    });
+
+    // Clean up
+    onUnmounted(() => {
+      window.removeEventListener('resize', updateSize);
+    });
+
+    const block = {
+      'A': {
+        sceneFunc: (context, shape) => {
+          context.beginPath();
+          context.moveTo(304, 485);
+          context.lineTo(395, 485);
+          context.lineTo(395, 537);
+          context.lineTo(379, 537);
+          context.lineTo(379, 562);
+          context.lineTo(320, 562);
+          context.lineTo(320, 537);
+          context.lineTo(304, 537);
+          context.closePath();
+          context.fillStrokeShape(shape);
+        },
+        stroke: 'black',
+        strokeWidth: 1
+      },
+      'B': {
+        sceneFunc: (context, shape) => {
+          context.beginPath();
+          context.moveTo(402, 485);
+          context.lineTo(493, 485);
+          context.lineTo(493, 537);
+          context.lineTo(481, 537);
+          context.lineTo(481, 562);
+          context.lineTo(424, 562);
+          context.lineTo(424, 537);
+          context.lineTo(402, 537);
+          context.closePath();
+          context.fillStrokeShape(shape);
+        },
+        stroke: 'black',
+        strokeWidth: 1
+      },
+      'G': {
+        sceneFunc: (context, shape) => {
+          context.beginPath();
+          context.moveTo(304, 217);
+          context.lineTo(304, 166);
+          context.lineTo(320, 166);
+          context.lineTo(320, 135);
+          context.lineTo(282, 135);
+          context.lineTo(282, 80);
+          context.lineTo(417, 80);
+          context.lineTo(417, 135);
+          context.lineTo(380, 135);
+          context.lineTo(380, 166);
+          context.lineTo(395, 166);
+          context.lineTo(395, 217);
+          context.closePath();
+          context.fillStrokeShape(shape);
+        },
+        stroke: 'black',
+        strokeWidth: 1
+      },
+      'H': {
+        sceneFunc: (context, shape) => {
+          context.beginPath();
+          context.moveTo(206, 217);
+          context.lineTo(206, 166);
+          context.lineTo(217, 166);
+          context.lineTo(217, 90);
+          context.lineTo(274, 68);
+          context.lineTo(274, 166);
+          context.lineTo(297, 166);
+          context.lineTo(297, 217);
+          context.closePath();
+          context.fillStrokeShape(shape);
+        },
+        stroke: 'black',
+        strokeWidth: 1
+      },
+      'I': {
+        sceneFunc: (context, shape) => {
+          context.beginPath();
+          context.moveTo(131, 157);
+          context.lineTo(210, 94);
+          context.lineTo(210, 134);
+          context.lineTo(188, 134);
+          context.lineTo(188, 165);
+          context.lineTo(199, 165);
+          context.lineTo(199, 217);
+          context.lineTo(167, 217);
+          context.closePath();
+          context.fillStrokeShape(shape);
+        },
+        stroke: 'black',
+        strokeWidth: 1
+      },
+      'K': {
+        sceneFunc: (context, shape) => {
+          context.beginPath();
+          context.moveTo(167, 485);
+          context.lineTo(199, 485);
+          context.lineTo(199, 537);
+          context.lineTo(188, 537);
+          context.lineTo(188, 568);
+          context.lineTo(210, 568);
+          context.lineTo(210, 609);
+          context.lineTo(131, 546);
+          context.closePath();
+          context.fillStrokeShape(shape);
+        },
+        stroke: 'black',
+        strokeWidth: 1
+      },
+      'L': {
+        sceneFunc: (context, shape) => {
+          context.beginPath();
+          context.moveTo(206, 485);
+          context.lineTo(297, 485);
+          context.lineTo(297, 537);
+          context.lineTo(275, 537);
+          context.lineTo(275, 562);
+          context.lineTo(218, 562);
+          context.lineTo(218, 537);
+          context.lineTo(206, 537);
+          context.closePath();
+          context.fillStrokeShape(shape);
+        },
+        stroke: 'black',
+        strokeWidth: 1
+      },
+    };
+
     return {
-      config,
+      stageWidth,
+      stageHeight,
+      scale,
       sections,
       stageRef,
-      handleWheel,
-      handleTouchStart,
-      handleTouchMove,
-      handleTouchEnd,
-      handleMouseDown,
-      handleMouseMove,
-      handleMouseUp,
+      clickSection,
+      selectedSection,
+      seatingImage,
+      block,
     };
   },
 };

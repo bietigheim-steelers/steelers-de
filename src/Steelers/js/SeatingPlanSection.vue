@@ -1,7 +1,7 @@
 <template>
   <v-group>
     <v-text :x="x" :y="y" :width="sectionWidth" :height="sectionHeight" verticalAlign="middle" align="center"
-      :text="section.id" :fontSize="250" fill="#ccc" />
+      :text="section.id" :fontSize="280" fill="#ccc" />
     <SeatingPlanRow v-for="(row, key) in section.rows" :key="key" :row="row" :rowNumber="key.toString()"
       :section="section" />
   </v-group>
@@ -25,16 +25,15 @@ export default {
     const { section } = props;
     let sectionWidth = 0;
     let sectionHeight = 0;
-    let x = 0;
-    let y = 0;
+    let x = 50;
+    let y = 50;
 
     const rowsArray = Object.values(section.rows);
-    sectionWidth = 22 * Math.max(...rowsArray.map(row => row.seats + row.grid_start));
-    sectionHeight = 26 * 16;
-    x = 22 * section.grid_start;
-    y = 26 * section.grid_top;
+    sectionWidth = 26 * Math.max(...rowsArray.map(row => row.seats + row.grid_start));
+    sectionHeight = 30 * 16;
 
-    if (section.row_direction === 'down') {
+    
+    if (section.row_direction === 'down' && !section.rows[1].hasOwnProperty('rowLabel')) {
       section.rows = Object.entries(section.rows)
         .reverse()
         .map(([key, row]) => ({ ...row, rowLabel: key }));

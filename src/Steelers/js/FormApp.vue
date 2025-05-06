@@ -11,7 +11,7 @@
       @click="onRestartClick">Weitere DK bestellen</button>
   </div>
   <Vueform @response="handleResponse" ref="form$" :class="formDone ? 'hidden' : ''">
-    <div class="bg-white lg:rounded-lg p-5 lg:p-10 max-w-full lg:max-w-4xl m-auto shadow-box-circle col-span-12">
+    <div id="form__season_ticket" class="bg-white lg:rounded-lg p-5 lg:p-10 max-w-full lg:max-w-4xl m-auto shadow-box-circle col-span-12">
 
       <!-- Defining Form Steps -->
       <FormSteps @next="onNextStep">
@@ -19,7 +19,8 @@
         <FormStep name="my_season_ticket" label="Meine Dauerkarte"
           :elements="['ticket_type', 'ticket_area', 'ticket_category', 'ticket_form', 'ticket_form2', 'ticket_seats', 'ticket_seats_rollstuhl', 'ff']"
           :labels="{
-            next: 'Weiter',
+  next: 'Weiter',
+  previous: 'Zurück'
           }" />
 
         <FormStep name="my_payment" label="Bezahlung" :elements="['ticket_payment']" :labels="{
@@ -48,7 +49,7 @@
           { value: 'basic', label: 'Dauerkarte <b>BASIC</b>', description: 'Alle Hauptrundenspiele' },
         ]" view="blocks">
           <template #label>
-            <div class="text-lg leading-tight mt-2">Ich möchte folgende Dauerkarte 2024/2025 rechtsverbindlich
+            <div class="text-lg leading-tight mt-2">Ich möchte folgende Dauerkarte 2025/2026 rechtsverbindlich
               bestellen:</div>
           </template>
         </RadiogroupElement>
@@ -56,6 +57,7 @@
         <RadiogroupElement name="ticket_area" @change="onAreaChange" :conditions="[['ticket_type', '!=', null]]"
           rules="required" :items="[
             { value: 'stehplatz', label: 'Stehplatz', description: 'EgeTrans Block' },
+            { value: 'stehplatz', label: 'Stehplatz', description: 'D Block' },
             { value: 'sitzplatz', label: 'Sitzplatz' },
             { value: 'rollstuhl', label: 'Rollstuhlfahrer' },
           ]" view="blocks">
@@ -84,8 +86,6 @@
             label: 12,
             wrapper: 12,
           }" />
-          <img class="col-start-4 col-span-6"
-            src="https://steelers.de/files/steelers/layout/Saalplan_Homepage_1024_1024.webp" />
           <template #label>
             <div class="text-lg leading-tight mt-2">Mein Platz:</div>
           </template>
@@ -174,7 +174,7 @@
           { value: 'nein', label: 'Nein' },
         ]" view="tabs">
           <template #label>
-            <div class="text-lg leading-tight mt-8">Ich hatte in der Saison 2023/2024 bereits eine Dauerkarte:</div>
+            <div class="text-lg leading-tight mt-8">Ich hatte in der Saison 2024/2025 bereits eine Dauerkarte:</div>
           </template>
         </RadiogroupElement>
 

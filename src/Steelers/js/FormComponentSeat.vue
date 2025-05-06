@@ -1,9 +1,24 @@
 <template>
   <GroupElement :name="'my_seat'">
     <div class="col-span-12">
-      <TextElement :name="'seat_block'" rules="required" placeholder="Block" />
-      <TextElement :name="'seat_row'" @change="onSeatChange" rules="required" placeholder="Reihe" />
-      <TextElement :name="'seat_seat'" @change="onSeatChange" rules="required" placeholder="Platz" />
+      <SelectElement :name="'seat_block'" @change="onSeatChange" rules="required" placeholder="Block" :native="false"
+        :items="seat_blocks" :columns="{
+          container: 4,
+          label: 12,
+          wrapper: 12,
+        }" />
+      <SelectElement :name="'seat_row'" @change="onSeatChange" rules="required" placeholder="Reihe" :native="false"
+        :items="Object.assign({}, Array.from({ length: 21 }, (_, i) => 'Reihe '.concat(i)))" :columns="{
+          container: 4,
+          label: 12,
+          wrapper: 12,
+        }" />
+      <SelectElement :name="'seat_seat'" @change="onSeatChange" rules="required" placeholder="Platz" :native="false"
+        :items="Object.assign({}, Array.from({ length: max_seats }, (_, i) => 'Platz '.concat(i)))" :columns="{
+          container: 4,
+          label: 12,
+          wrapper: 12,
+        }" />
     </div>
     <ul class="col-span-12">
       <li class="grid grid-cols-3 gap-4 w-full" v-for="additonal_seat in additonal_seats">
@@ -34,21 +49,21 @@ export default {
     const seat_blocks = computed(() => {
       if (form$.value.data.ticket_category && form$.value.data.ticket_category.includes('familie')) {
         return [
-          'Block C',
-          'Block I',
-          'Block K',
+          'C',
+          'I',
+          'K',
         ]
       } else {
         return [
-          'Block A',
-          'Block B',
-          'Block C',
-          'Block F',
-          'Block G',
-          'Block H',
-          'Block I',
-          'Block K',
-          'Block L',
+          'A',
+          'B',
+          'C',
+          'F',
+          'G',
+          'H',
+          'I',
+          'K',
+          'L',
         ]
       }
     })
