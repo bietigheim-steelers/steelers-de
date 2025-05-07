@@ -22,8 +22,7 @@
         ) }}</span><br>
     </div>
     <div class="col-span-12" v-if="form_data.ticket_area == 'sitzplatz'">
-      {{ form_data.seat_block }} - Reihe {{ parseInt(form_data.seat_row) + 1 }} - Platz {{ parseInt(form_data.seat_seat)
-      + 1 }}
+      {{ form_data.seat_block }} - Reihe {{ parseInt(form_data.seat_row) }} - Platz {{ parseInt(form_data.seat_seat) }}
       - {{ ticket_category
       }} - <span :class="isFF ? 'line-through' : ''">{{
         new

@@ -65,10 +65,6 @@ export default {
     const stageWidth = computed(() => sceneWidth * scale.value);
     const stageHeight = computed(() => sceneHeight * scale.value);
 
-    onMounted(() => {
-      loadSeats()
-    });
-
     const clickSection = (section) => {
       selectedSection.value = sections[section];
     };
@@ -81,6 +77,7 @@ export default {
 
     // Add event listeners
     onMounted(() => {
+      loadSeats()
       nextTick(() => {
         updateSize();
       });      
@@ -121,6 +118,57 @@ export default {
           context.lineTo(424, 562);
           context.lineTo(424, 537);
           context.lineTo(402, 537);
+          context.closePath();
+          context.fillStrokeShape(shape);
+        },
+        stroke: 'black',
+        strokeWidth: 1
+      },
+      'C': {
+        sceneFunc: (context, shape) => {
+          context.beginPath();
+          context.moveTo(532, 485);
+          context.lineTo(569, 546);
+          context.lineTo(488, 609);
+          context.lineTo(488, 567);
+          context.lineTo(511, 567);
+          context.lineTo(511, 537);
+          context.lineTo(500, 537);
+          context.lineTo(500, 485);
+          context.closePath();
+          context.fillStrokeShape(shape);
+        },
+        stroke: 'black',
+        strokeWidth: 1
+      },
+      'E': {
+        sceneFunc: (context, shape) => {
+          context.beginPath();
+          context.moveTo(500, 217);
+          context.lineTo(500, 166);
+          context.lineTo(511, 166);
+          context.lineTo(511, 135);
+          context.lineTo(488, 135);
+          context.lineTo(488, 94);
+          context.lineTo(568, 157);
+          context.lineTo(532, 217);
+          context.closePath();
+          context.fillStrokeShape(shape);
+        },
+        stroke: 'black',
+        strokeWidth: 1
+      },
+      'F': {
+        sceneFunc: (context, shape) => {
+          context.beginPath();
+          context.moveTo(403, 217);
+          context.lineTo(403, 166);
+          context.lineTo(423, 166);
+          context.lineTo(423, 68);
+          context.lineTo(481, 89);
+          context.lineTo(481, 165);
+          context.lineTo(493, 165);
+          context.lineTo(493, 217);
           context.closePath();
           context.fillStrokeShape(shape);
         },

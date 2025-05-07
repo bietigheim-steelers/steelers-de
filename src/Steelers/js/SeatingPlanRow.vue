@@ -2,6 +2,22 @@
   <v-group>
     <SeatingPlanSeat v-for="seat in row.seats" :key="`${section.id}_${rowNumber}_${seat}`" :rowNumber="rowNumber" :section="section" :seat="seat"
       :row="row" :seatLabel="getSeatLabel(seat)" />
+      <v-text :config="{
+        x: 0,
+        y: textY,
+        text: row.rowLabel || rowNumber,
+        fontSize: 12,
+        align: 'right',
+        fill: '#000'
+      }" />
+      <v-text :config="{
+        x: textX,
+        y: textY,
+        text: row.rowLabel || rowNumber,
+        fontSize: 12,
+        align: 'right',
+        fill: '#000'
+      }" />
   </v-group>
 </template>
 
@@ -29,6 +45,10 @@ export default {
   },
   setup(props) {
     const { row, section, rowNumber } = props;
+    const textY = 28 * parseInt(rowNumber) + 14;
+    const rowsArray = Object.values(section.rows);
+    const textX = 20 * Math.max(...rowsArray.map(row => row.seats + row.grid_start)) + 40;
+
     row.grid_start = row.grid_start;
 
     const getSeatLabel = function(seat) {
@@ -56,6 +76,8 @@ export default {
       row,
       rowNumber,
       section,
+      textY,
+      textX,
       getSeatLabel
     };
   }

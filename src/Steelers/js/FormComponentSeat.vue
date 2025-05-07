@@ -8,13 +8,13 @@
           wrapper: 12,
         }" />
       <SelectElement :name="'seat_row'" @change="onSeatChange" rules="required" placeholder="Reihe" :native="false"
-        :items="Object.assign({}, Array.from({ length: 21 }, (_, i) => 'Reihe '.concat(i)))" :columns="{
+        :items="seat_rows" :columns="{
           container: 4,
           label: 12,
           wrapper: 12,
         }" />
       <SelectElement :name="'seat_seat'" @change="onSeatChange" rules="required" placeholder="Platz" :native="false"
-        :items="Object.assign({}, Array.from({ length: max_seats }, (_, i) => 'Platz '.concat(i)))" :columns="{
+        :items="seatsArray" :columns="{
           container: 4,
           label: 12,
           wrapper: 12,
@@ -34,8 +34,10 @@
 </template>
 
 <script>
-import { inject, computed, ref } from 'vue'
+import { inject, computed, ref, onMounted } from 'vue'
 import FormComponentSeatingPlan from "./FormComponentSeatingPlan.vue";
+import seatsImport from './seats.json';
+import { loadSeats } from './SeatingPlanLoad.js'
 
 export default {
   components: {
@@ -43,9 +45,13 @@ export default {
   },
   setup() {
     const form$ = inject('form$')
-
     const additonal_seats = ref([])
+    const seats = JSON.parse(JSON.stringify(seatsImport))
+    const bookedSeats = ref([])
 
+    onMounted(async () => {
+      bookedSeats.value = await loadSeats();
+    });
     const seat_blocks = computed(() => {
       if (form$.value.data.ticket_category && form$.value.data.ticket_category.includes('familie')) {
         return [
@@ -66,6 +72,32 @@ export default {
           'L',
         ]
       }
+    })
+
+    const seat_rows = computed(() => {
+      if (form$.value.data.seat_block) {
+        return Object.keys(seats.sections[form$.value.data.seat_block].rows).map(key => {
+          const row = seats.sections[form$.value.data.seat_block].rows[key];
+          return row.hasOwnProperty('rowLabel') ? row.rowLabel : key;
+        });
+      }
+      return []
+    })
+
+    const seatsArray = computed(() => {
+      if (form$.value.data.seat_row && form$.value.data.seat_block) {
+        let seat_count = 0
+        seat_count = seats.sections[form$.value.data.seat_block].rows[form$.value.data.seat_row].seats
+        if (seats.sections[form$.value.data.seat_block].rows[form$.value.data.seat_row].skip) {
+          seat_count -= seats.sections[form$.value.data.seat_block].rows[form$.value.data.seat_row].skip.length
+        }
+        return Array.from({ length: seat_count }, (_, i) => {
+          const seatNumber = i + 1;
+          const disabled = bookedSeats.value.includes(`${form$.value.data.seat_block}_${form$.value.data.seat_row}_${seatNumber}`)
+          return { value: seatNumber, label: `Platz ${seatNumber}`, disabled }
+        })
+      }
+      return []
     })
 
     function onSeatChange() {
@@ -101,8 +133,10 @@ export default {
 
     return {
       seat_blocks,
+      seat_rows,
       max_seats,
       block,
+      seatsArray,
       row,
       onSeatChange,
       additonal_seats,
