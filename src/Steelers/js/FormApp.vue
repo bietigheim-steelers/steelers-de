@@ -11,7 +11,8 @@
       @click="onRestartClick">Weitere DK bestellen</button>
   </div>
   <Vueform @response="handleResponse" ref="form$" :class="formDone ? 'hidden' : ''">
-    <div id="form__season_ticket" class="bg-white lg:rounded-lg p-5 lg:p-10 max-w-full lg:max-w-4xl m-auto shadow-box-circle col-span-12">
+    <div id="form__season_ticket"
+      class="bg-white lg:rounded-lg p-5 lg:p-10 max-w-full lg:max-w-4xl m-auto shadow-box-circle col-span-12">
 
       <!-- Defining Form Steps -->
       <FormSteps @next="onNextStep">
@@ -44,9 +45,9 @@
       <!-- Defining form elements -->
       <FormElements>
 
-        <RadiogroupElement name="ticket_type" rules="required" :items="[
-          { value: 'plus', label: 'Dauerkarte <b>PLUS</b>', description: 'Alle Vorbereitungsspiele + alle Hauptrundenspiele + alle Playoff-Heimspiele' },
-          { value: 'basic', label: 'Dauerkarte <b>BASIC</b>', description: 'Alle Hauptrundenspiele' },
+        <RadiogroupElement name="ticket_type" @change="onTypeChange" rules="required" :items="[
+  { value: 'plus', label: 'Dauerkarte <b>PLUS</b> <small>ab ' + getPriceText('plus') +'</small>', description: 'Alle Vorbereitungsspiele + alle Hauptrundenspiele + alle Playoff-Heimspiele' },
+  { value: 'basic', label: 'Dauerkarte <b>BASIC</b> <small>ab ' + getPriceText('basic') +'</small>', description: 'Alle Hauptrundenspiele' },
         ]" view="blocks">
           <template #label>
             <div class="text-lg leading-tight mt-2">Ich möchte folgende Dauerkarte 2025/2026 rechtsverbindlich
@@ -55,12 +56,7 @@
         </RadiogroupElement>
 
         <RadiogroupElement name="ticket_area" @change="onAreaChange" :conditions="[['ticket_type', '!=', null]]"
-          rules="required" :items="[
-            { value: 'stehplatz', label: 'Stehplatz', description: 'EgeTrans Block' },
-            { value: 'stehplatz', label: 'Stehplatz', description: 'D Block' },
-            { value: 'sitzplatz', label: 'Sitzplatz' },
-            { value: 'rollstuhl', label: 'Rollstuhlfahrer' },
-          ]" view="blocks">
+          rules="required" :items="ticketAreaItems" view="blocks">
           <template #label>
             <div class="text-lg leading-tight mt-2">Mein gewünschter Bereich:</div>
           </template>
@@ -219,14 +215,38 @@ import FormComponentSeat from "./FormComponentSeat.vue";
 import FormComponentCategory from "./FormComponentCategory.vue";
 import FormComponentFF from "./FormComponentFF.vue";
 import FormOverview from "./FormOverview.vue";
-
+import { getLowestPrice } from './TicketPriceCalculator.js'
+import { ref, computed } from 'vue'
 
 export default {
   mixins: [Vueform],
   setup: useVueform,
+  mounted() {
+    this.isMounted = true; //needed for the ref in the computed property to work
+  },
+  computed: {
+    ticketAreaItems() {
+      const getPriceText = (type, category = null, area = null) => {
+        return new
+          Intl.NumberFormat('de-DE',
+            { style: 'currency', currency: 'EUR' }).format(
+              getLowestPrice(type, category, area),
+            )
+      }
+
+      return [
+        { value: 'stehplatz', label: 'Stehplatz <small>ab ' + getPriceText(this.selected_type, null, 'stehplatz') + '</small>' },
+        { value: 'sitzplatz', label: 'Sitzplatz <small>ab ' + getPriceText(this.selected_type, null, 'C') + '</small>' },
+        { value: 'rollstuhl', label: 'Rollstuhlfahrer <small>' + getPriceText(this.selected_type, null, 'rollstuhl') + '</small>' },
+      ]
+    }
+  },
   methods: {
     onAreaChange() {
       this.$refs.form$.el$('ticket_category').reset()
+    },
+    onTypeChange(newType) {
+      this.selected_type = newType;
     },
     onRestartClick() {
       this.formDone = false
@@ -234,6 +254,13 @@ export default {
     onNextStep() {
       window.scrollTo(0, 100)
       this.$refs.form$.messageBag.clear()
+    },
+    getPriceText(type, category = null, area = null) {
+      return new
+        Intl.NumberFormat('de-DE',
+          { style: 'currency', currency: 'EUR' }).format(
+            getLowestPrice(type, category, area),
+          )
     },
     handleResponse(response, form$) {
       if (response.status == 200) {
@@ -249,7 +276,9 @@ export default {
   },
   data() {
     return {
-      formDone: false
+      formDone: false,
+      isMounted: false,
+      selected_type: null,
     }
   },
   components: {

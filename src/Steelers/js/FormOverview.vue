@@ -6,7 +6,7 @@
         <span class="flex-grow-0 font-bold whitespace-nowrap flex-shrink-0 text-steelgreen">Meine Dauerkarte <b
             class="uppercase">{{
             form_data.ticket_type }}</b>
-          2024/2025</span>
+          2025/2026</span>
       </div>
       <div class="text-sm text-steelblue"><a href="" @click.prevent="handleChangeDauerkarte">Ändern</a></div>
     </div>
@@ -82,85 +82,11 @@
 
 <script>
 import { inject, computed } from 'vue'
+import { ticketPrice } from './TicketPriceCalculator.js'
 
 export default {
   setup(props, context) {
     const form$ = inject('form$')
-
-    const prices = {
-      "plus": {
-        "A,G": {
-          "vollzahler": 720,
-          "ermaessigt": 624,
-          "jugendlich": 432,
-          "kind": 360,
-          "behinderung": 360
-        },
-        "B,F,H,L": {
-          "vollzahler": 624,
-          "ermaessigt": 528,
-          "jugendlich": 384,
-          "kind": 312,
-          "behinderung": 312
-        },
-        "C,I,K": {
-          "vollzahler": 528,
-          "ermaessigt": 456,
-          "jugendlich": 312,
-          "kind": 264,
-          "behinderung": 264,
-          "familie1": 792,
-          "familie2": 1056,
-          "familie3": 1200
-        },
-        "J": {
-          "vollzahler": 384,
-          "ermaessigt": 336,
-          "jugendlich": 240,
-          "kind": 192,
-          "behinderung": 192
-        },
-        "R1,R3,R4": {
-          "rollstuhl": 336
-        }
-      },
-      "basic": {
-        "A,G": {
-          "vollzahler": 570,
-          "ermaessigt": 494,
-          "jugendlich": 342,
-          "kind": 285,
-          "behinderung": 285,
-        },
-        "B,F,H,L": {
-          "vollzahler": 494,
-          "ermaessigt": 418,
-          "jugendlich": 304,
-          "kind": 247,
-          "behinderung": 247
-        },
-        "C,I,K": {
-          "vollzahler": 418,
-          "ermaessigt": 361,
-          "jugendlich": 247,
-          "kind": 209,
-          "behinderung": 209,
-          "familie1": 627,
-          "familie2": 836,
-          "familie3": 950
-        },
-        "J": {
-          "vollzahler": 304,
-          "ermaessigt": 266,
-          "jugendlich": 190,
-          "kind": 152,
-          "behinderung": 152
-        },
-        "R1,R3,R4": {
-          "rollstuhl": 266
-        }
-      }
-    }
 
     const categories = {
       "vollzahler": "Vollzahler",
@@ -191,35 +117,12 @@ export default {
     })
 
     const ticket_price = computed(() => {
-      let cat = form$.value.data.ticket_category
-      if(['rentner', 'student', 'azubi', 'schueler', 'mitglied'].includes(cat)) {
-        cat = 'ermaessigt'
-      }
-      if (form$.value.data.ticket_area === 'stehplatz') {
-        return prices[form$.value.data.ticket_type]['J'][cat]
-      } else if (form$.value.data.ticket_area === 'rollstuhl') {
-        return prices[form$.value.data.ticket_type]['R1,R3,R4']['rollstuhl']
-      } else if (form$.value.data.seat_block) {
-        let block = form$.value.data.seat_block.slice(-1)
-        switch(block) {
-          case 'A':
-          case 'G':
-            block = 'A,G'
-            break
-          case 'B':
-          case 'F':
-          case 'H':
-          case 'L':
-            block = 'B,F,H,L'
-            break
-          case 'C':
-          case 'I':
-          case 'K':
-            block = 'C,I,K'
-        }
-        return prices[form$.value.data.ticket_type][block][cat]
-      }
-      return 0;
+      return ticketPrice(
+        form$.value.data.ticket_type,
+        form$.value.data.ticket_category,
+        form$.value.data.ticket_area,
+        form$.value.data.seat_block,
+      )
     })
 
     // `Shipping address` data

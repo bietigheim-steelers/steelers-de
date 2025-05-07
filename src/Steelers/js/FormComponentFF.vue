@@ -12,7 +12,7 @@
     <TextElement name="ff_old_dk" rules="required" placeholder=" Name des werbenden DK Inhabers"
       :conditions="[['ff.family_and_friends', '==', 'geworben']]" />
     <template #label>
-      <div class="text-lg leading-tight mt-2">Family & Friends:</div>
+      <div class="text-lg leading-tight mt-2">Family + Friends:</div>
     </template>
   </GroupElement>
 
@@ -42,8 +42,8 @@ export default {
     const ticketFormItems = computed(() => {
       if (form$.value.data.family_and_friends == 'werben' || form$.value.data.family_and_friends == 'geworben') {
         return [
-          { value: 'plastik', label: 'Klassische Plastikkarte' },
-          { value: 'mobile_plastik', label: 'Klassische Plastikkarte + mobile Dauerkarte' },
+          { value: 'plastik', label: 'Klassische Plastikkarte', description: 'zzgl. 3.00€' },
+          { value: 'mobile_plastik', label: 'Klassische Plastikkarte + mobile Dauerkarte', description: 'zzgl. 3.00€' },
         ]
       }
       return [
