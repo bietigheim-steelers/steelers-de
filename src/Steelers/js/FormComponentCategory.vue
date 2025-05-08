@@ -15,11 +15,22 @@ export default {
     const form$ = inject('form$')
 
     const getPriceText = (type, category = null, area = null) => {
-      return new
+      let $text = '';
+      if(area=='sitzplatz') {
+        $text = 'ab '
+      } else {
+        $text = '('
+      }
+      $text += new
         Intl.NumberFormat('de-DE',
           { style: 'currency', currency: 'EUR' }).format(
             getLowestPrice(type, category, area),
           )
+
+      if (area !== 'sitzplatz') {
+        $text += ')'
+      }
+      return $text
     }
 
     const ticket_items = computed(() => {

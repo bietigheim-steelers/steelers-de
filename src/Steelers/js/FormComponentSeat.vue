@@ -38,6 +38,7 @@ import { inject, computed, ref, onMounted } from 'vue'
 import FormComponentSeatingPlan from "./FormComponentSeatingPlan.vue";
 import seatsImport from './seats.json';
 import { loadSeats } from './SeatingPlanLoad.js'
+import { ticketPriceFormatted } from './TicketPriceCalculator.js'
 
 export default {
   components: {
@@ -61,15 +62,16 @@ export default {
         ]
       } else {
         return [
-          'A',
-          'B',
-          'C',
-          'F',
-          'G',
-          'H',
-          'I',
-          'K',
-          'L',
+          { value: 'A', label: `Block A - ${ticketPriceFormatted(form$.value.data.ticket_type,form$.value.data.ticket_category,'sitzplatz','A')}` },
+          {
+            value: 'B', label: `Block B - ${ticketPriceFormatted(form$.value.data.ticket_type, form$.value.data.ticket_category, 'sitzplatz', 'B')}` },
+          { value: 'C', label: `Block C - ${ticketPriceFormatted(form$.value.data.ticket_type, form$.value.data.ticket_category, 'sitzplatz', 'C')}` },
+          { value: 'F', label: `Block F - ${ticketPriceFormatted(form$.value.data.ticket_type, form$.value.data.ticket_category, 'sitzplatz', 'F')}` },
+          { value: 'G', label: `Block G - ${ticketPriceFormatted(form$.value.data.ticket_type, form$.value.data.ticket_category, 'sitzplatz', 'G')}` },
+          { value: 'H', label: `Block H - ${ticketPriceFormatted(form$.value.data.ticket_type, form$.value.data.ticket_category, 'sitzplatz', 'H')}` },
+          { value: 'I', label: `Block I - ${ticketPriceFormatted(form$.value.data.ticket_type, form$.value.data.ticket_category, 'sitzplatz', 'I')}` },
+          { value: 'K', label: `Block K - ${ticketPriceFormatted(form$.value.data.ticket_type, form$.value.data.ticket_category, 'sitzplatz', 'K')}` },
+          { value: 'L', label: `Block L - ${ticketPriceFormatted(form$.value.data.ticket_type, form$.value.data.ticket_category, 'sitzplatz', 'L')}` },
         ]
       }
     })

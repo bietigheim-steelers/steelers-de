@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { ref, onMounted, provide, reactive, computed, onUnmounted, nextTick } from 'vue';
+import { inject, ref, onMounted, provide, reactive, computed, onUnmounted, nextTick } from 'vue';
 import { useImage } from 'vue-konva';
 import SeatingPlanSection from './SeatingPlanSection.vue';
 import seats from './seats.json';
@@ -48,6 +48,7 @@ export default {
     SeatingPlanSection,
   },
   setup() {
+    const form$ = inject('form$');
     const selectedSection = ref(null);
     const stageRef = ref(null);
     const scale = ref(1);
@@ -66,6 +67,12 @@ export default {
     const stageHeight = computed(() => sceneHeight * scale.value);
 
     const clickSection = (section) => {
+      if (!form$.value.data.seat_row && !form$.value.data.seat_seat) {
+        form$.value.update({
+          seat_block: section,
+        });
+
+      }
       selectedSection.value = sections[section];
     };
 
@@ -135,23 +142,6 @@ export default {
           context.lineTo(511, 537);
           context.lineTo(500, 537);
           context.lineTo(500, 485);
-          context.closePath();
-          context.fillStrokeShape(shape);
-        },
-        stroke: 'black',
-        strokeWidth: 1
-      },
-      'E': {
-        sceneFunc: (context, shape) => {
-          context.beginPath();
-          context.moveTo(500, 217);
-          context.lineTo(500, 166);
-          context.lineTo(511, 166);
-          context.lineTo(511, 135);
-          context.lineTo(488, 135);
-          context.lineTo(488, 94);
-          context.lineTo(568, 157);
-          context.lineTo(532, 217);
           context.closePath();
           context.fillStrokeShape(shape);
         },

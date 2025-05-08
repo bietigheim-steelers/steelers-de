@@ -74,6 +74,9 @@ const prices = {
 }
 
 export const ticketPrice = (type, category, area, ticket_block) => {
+  if(!type || !prices[type]) {
+    return 0; // Return 0 if the type is not found
+  }
       let cat = category
       if(['rentner', 'student', 'azubi', 'schueler', 'mitglied'].includes(cat)) {
         cat = 'ermaessigt'
@@ -104,6 +107,16 @@ export const ticketPrice = (type, category, area, ticket_block) => {
       }
       return 0;
 };
+
+export const ticketPriceFormatted = (type, category, area, ticket_block) => {
+  const price = ticketPrice(type, category, area, ticket_block);
+  return new Intl.NumberFormat('de-DE', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(price);
+}
 
 export const getLowestPrice = (type, category = null, area = null) => {
   let lowestPrice = Infinity;
