@@ -11,6 +11,7 @@
 <script>
 import { onMounted, ref, computed, inject } from 'vue';
 import { loadSeats } from './SeatingPlanLoad.js'
+import reservedSeats from './reservedSeats.json'
 
 export default {
   name: 'SeatingPlanSeat',
@@ -63,6 +64,13 @@ export default {
           text: 'white'
         };
       }
+      if(reserved) {
+        return {
+          circle: '#dadada',
+          circle_stroke: 'blue',
+          text: 'blue'
+        };
+      }
       return {
         circle: '#eee',
         circle_stroke: '#444',
@@ -74,6 +82,7 @@ export default {
     const x = grid_size.width * seat + row.grid_start * grid_size.width + 20;
     const y = grid_size.height * parseInt(rowNumber) + 20;
     const seatId = `${section.id}_${row.rowLabel || rowNumber}_${seatLabel}`;
+    const reserved = reservedSeats.includes(seatId);
     const selected = computed(() => {
       return seatId === `${form$.value.data.seat_block}_${form$.value.data.seat_row}_${form$.value.data.seat_seat}`;
     });

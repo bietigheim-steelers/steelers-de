@@ -27,6 +27,10 @@
         <div class="px-4">Platz {{ additonal_seat }}</div>
       </li>
     </ul>
+    <div class="col-span-12 text-sm text-gray-500">
+      <p>* Blau markierte Sitzplätze sind vorreserviert. Diese können zunächst nur
+        von den aktuellen Dauerkarteninhaber bestellt werden.</p>
+    </div>
     <div class="col-span-12" id="seatingPlan" style="border: 1px solid #d1d5db; border-radius: 0.25rem;">
       <FormComponentSeatingPlan></FormComponentSeatingPlan>
     </div>
