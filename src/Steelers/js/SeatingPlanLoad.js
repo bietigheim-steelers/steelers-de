@@ -1,5 +1,5 @@
 let isLoaded = false;
-let bookedSeats = [];
+let data = {};
 let loadPromise = null;
 
 export const loadSeats = async () => {
@@ -7,15 +7,17 @@ export const loadSeats = async () => {
     if (!loadPromise) {
       loadPromise = (async () => {
         try {
-          const response = await fetch('/files/steelers/tools/seatingPlan/booked_seats.json');
+          const response = await fetch(
+            "/files/steelers/tools/seatingPlan/booked_seats.json"
+          );
           if (!response.ok) {
-            console.error('Error loading booked seats');
+            console.error("Error loading booked seats");
             return [];
           }
-          bookedSeats = await response.json();
+          data = await response.json();
           isLoaded = true;
         } catch (error) {
-          console.error('Error loading JSON:', error);
+          console.error("Error loading JSON:", error);
           throw error;
         } finally {
           loadPromise = null;
@@ -24,5 +26,5 @@ export const loadSeats = async () => {
     }
     await loadPromise;
   }
-  return bookedSeats;
+  return data;
 };

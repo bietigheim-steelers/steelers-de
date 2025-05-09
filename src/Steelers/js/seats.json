@@ -65,20 +65,20 @@
       "grid_top": 44,
       "rows": {
         "1": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "2": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "3": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "4": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "5": {
           "seats": 24,
@@ -97,7 +97,7 @@
           "grid_start": 5.5
         },
         "9": {
-          "seats": 16,
+          "seats": 15,
           "grid_start": 4
         },
         "10": {
@@ -172,18 +172,17 @@
         "13": {
           "seats": 14,
           "grid_start": 0,
-          "skip": [6,7]
-
+          "skip": [6, 7]
         },
         "14": {
           "seats": 12,
           "grid_start": 0,
-          "skip": [6,7]
+          "skip": [6, 7]
         },
         "15": {
           "seats": 9,
           "grid_start": 0,
-          "skip": [6,7]
+          "skip": [6, 7]
         },
         "16": {
           "seats": 7,
@@ -254,27 +253,27 @@
         "14": {
           "seats": 16,
           "grid_start": 0,
-          "skip": [7,8]
+          "skip": [7, 8]
         },
         "15": {
           "seats": 14,
           "grid_start": 0,
-          "skip": [7,8]
+          "skip": [7, 8]
         },
         "16": {
           "seats": 11,
           "grid_start": 0,
-          "skip": [7,8]
+          "skip": [7, 8]
         },
         "17": {
           "seats": 9,
           "grid_start": 0,
-          "skip": [7,8]
+          "skip": [7, 8]
         },
         "18": {
           "seats": 6,
           "grid_start": 0,
-          "skip": [7,8]
+          "skip": [7, 8]
         },
         "19": {
           "seats": 3,
@@ -291,24 +290,24 @@
       "grid_top": 0,
       "rows": {
         "1": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "2": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "3": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "4": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "5": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "6": {
           "seats": 24,
@@ -319,12 +318,12 @@
           "grid_start": 0
         },
         "8": {
-          "seats": 13,
-          "grid_start": 5.5
+          "seats": 24,
+          "grid_start": 0
         },
         "9": {
-          "seats": 16,
-          "grid_start": 4
+          "seats": 13,
+          "grid_start": 5.5
         },
         "10": {
           "seats": 16,
@@ -385,24 +384,24 @@
       "grid_top": 2,
       "rows": {
         "1": {
-          "seats": 24,
-          "grid_start": 4
+          "seats": 23,
+          "grid_start": 4.5
         },
         "2": {
-          "seats": 24,
-          "grid_start": 4
+          "seats": 23,
+          "grid_start": 4.5
         },
         "3": {
-          "seats": 24,
-          "grid_start": 4
+          "seats": 23,
+          "grid_start": 4.5
         },
         "4": {
-          "seats": 24,
-          "grid_start": 4
+          "seats": 23,
+          "grid_start": 4.5
         },
         "5": {
-          "seats": 24,
-          "grid_start": 4
+          "seats": 23,
+          "grid_start": 4.5
         },
         "6": {
           "seats": 24,
@@ -413,12 +412,12 @@
           "grid_start": 4
         },
         "8": {
-          "seats": 13,
-          "grid_start": 9.5
+          "seats": 24,
+          "grid_start": 4
         },
         "9": {
-          "seats": 16,
-          "grid_start": 8
+          "seats": 13,
+          "grid_start": 9.5
         },
         "10": {
           "seats": 16,
@@ -439,31 +438,32 @@
         "14": {
           "seats": 32,
           "grid_start": 0,
-          "skip": [7,8,25,26]
+          "skip": [7, 8, 25, 26]
         },
         "15": {
           "seats": 32,
           "grid_start": 0,
-          "skip": [7,8,25,26]
+          "skip": [7, 8, 25, 26]
         },
         "16": {
           "seats": 32,
           "grid_start": 0,
-          "skip": [7,8,25,26]
+          "skip": [7, 8, 25, 26]
         },
         "17": {
           "seats": 32,
           "grid_start": 0,
-          "skip": [7,8,25,26]
+          "skip": [7, 8, 25, 26]
         },
         "18": {
           "seats": 32,
           "grid_start": 0,
-          "skip": [7,8,25,26]
+          "skip": [7, 8, 25, 26]
         },
         "19": {
-          "seats": 13,
-          "grid_start": 8
+          "seats": 19,
+          "grid_start": 0,
+          "skip": [7, 8]
         }
       }
     },
@@ -476,24 +476,24 @@
       "grid_top": 0,
       "rows": {
         "1": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "2": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "3": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "4": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "5": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "6": {
           "seats": 24,
@@ -504,12 +504,12 @@
           "grid_start": 0
         },
         "8": {
-          "seats": 13,
-          "grid_start": 5.5
+          "seats": 24,
+          "grid_start": 0
         },
         "9": {
-          "seats": 16,
-          "grid_start": 4
+          "seats": 13,
+          "grid_start": 5.5
         },
         "10": {
           "seats": 16,
@@ -624,22 +624,22 @@
         "14": {
           "seats": 16,
           "grid_start": 5,
-          "skip": [9,10]
+          "skip": [9, 10]
         },
         "15": {
           "seats": 14,
           "grid_start": 7,
-          "skip": [7,8]
+          "skip": [7, 8]
         },
         "16": {
           "seats": 11,
           "grid_start": 10,
-          "skip": [4,5]
+          "skip": [4, 5]
         },
         "17": {
           "seats": 9,
           "grid_start": 12,
-          "skip": [2,3]
+          "skip": [2, 3]
         },
         "18": {
           "seats": 6,
@@ -709,18 +709,17 @@
         "13": {
           "seats": 14,
           "grid_start": 5,
-          "skip": [8,9]
-
+          "skip": [8, 9]
         },
         "14": {
           "seats": 12,
           "grid_start": 7,
-          "skip": [6,7]
+          "skip": [6, 7]
         },
         "15": {
           "seats": 9,
           "grid_start": 10,
-          "skip": [3,4]
+          "skip": [3, 4]
         },
         "16": {
           "seats": 7,
@@ -736,20 +735,20 @@
       "grid_top": 44,
       "rows": {
         "1": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "2": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "3": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "4": {
-          "seats": 24,
-          "grid_start": 0
+          "seats": 23,
+          "grid_start": 0.5
         },
         "5": {
           "seats": 24,
@@ -768,7 +767,7 @@
           "grid_start": 5.5
         },
         "9": {
-          "seats": 16,
+          "seats": 15,
           "grid_start": 4
         },
         "10": {
