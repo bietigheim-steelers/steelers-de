@@ -23,12 +23,12 @@
     <ul class="col-span-12">
       <li class="grid grid-cols-3 gap-4 w-full" v-for="additonal_seat in additonal_seats">
         <div class="px-4">{{ block }}</div>
-        <div class="px-4">Reihe {{ parseInt(row) + 1 }}</div>
+        <div class="px-4">Reihe {{ parseInt(row) }}</div>
         <div class="px-4">Platz {{ additonal_seat }}</div>
       </li>
     </ul>
     <div class="col-span-12 text-sm text-gray-500">
-      <p>* Blau markierte Sitzplätze sind vorreserviert. Diese können zunächst nur
+      <p>* Blau markierte Sitzplätze sind vorreserviert.<br>Diese können zunächst nur
         von den aktuellen Dauerkarteninhaber bestellt werden.</p>
     </div>
     <div class="col-span-12" id="seatingPlan" style="border: 1px solid #d1d5db; border-radius: 0.25rem;">
@@ -60,9 +60,9 @@ export default {
     const seat_blocks = computed(() => {
       if (form$.value.data.ticket_category && form$.value.data.ticket_category.includes('familie')) {
         return [
-          'C',
-          'I',
-          'K',
+          { value: 'C', label: `C - ${ticketPriceFormatted(form$.value.data.ticket_type, form$.value.data.ticket_category, 'sitzplatz', 'C')}`},
+          { value: 'I', label: `I - ${ticketPriceFormatted(form$.value.data.ticket_type, form$.value.data.ticket_category, 'sitzplatz', 'C')}`},
+          { value: 'K', label: `K - ${ticketPriceFormatted(form$.value.data.ticket_type, form$.value.data.ticket_category, 'sitzplatz', 'C')}`},
         ]
       } else {
         return [
@@ -110,10 +110,10 @@ export default {
       let seats = []
       if (form$.value.data.seat_block && form$.value.data.seat_seat && form$.value.data.seat_row) {
         if (form$.value.data.ticket_category.includes('familie')) {
-          seats.push(parseInt(form$.value.data.seat_seat) + 2, parseInt(form$.value.data.seat_seat) + 3)
+          seats.push(parseInt(form$.value.data.seat_seat) + 1, parseInt(form$.value.data.seat_seat) + 2)
         }
         if (form$.value.data.ticket_category == 'familie3') {
-          seats.push(parseInt(form$.value.data.seat_seat) + 4)
+          seats.push(parseInt(form$.value.data.seat_seat) + 3)
         }
       }
       additonal_seats.value = seats

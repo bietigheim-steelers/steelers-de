@@ -96,7 +96,10 @@ export default {
       window.removeEventListener('resize', updateSize);
     });
 
-    const block = {
+
+    const block = computed(() => {
+      let blocks = {
+
       'A': {
         sceneFunc: (context, shape) => {
           context.beginPath();
@@ -254,7 +257,19 @@ export default {
         stroke: 'black',
         strokeWidth: 1
       },
-    };
+      }
+
+      if (form$.value.data.ticket_category && form$.value.data.ticket_category.includes('familie')) {
+        // Filter to keep only keys 'E', 'I', and 'K'
+        blocks = Object.fromEntries(
+          Object.entries(blocks).filter(([key]) => ['C', 'I', 'K'].includes(key))
+        );
+      }
+
+      return blocks;
+    });
+
+  
 
     return {
       stageWidth,
