@@ -79,7 +79,7 @@ export default {
           text: "white",
         };
       }
-      if (reserved) {
+      if (reserved.value) {
         return {
           circle: "#dadada",
           circle_stroke: "blue",
