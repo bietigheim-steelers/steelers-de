@@ -16,18 +16,17 @@
     "behinderung": "Fan mit Behinderung ab 50%",
     "rollstuhl": "Rollstuhlfahrer inkl. Begleitperson",
 } %}
-
   <table>
     <tr>
     <td>{{ ticket_type|upper }}</td>
     <td>{{ seat_block }}</td>
     {% if seat_row  %}
-    <td>{{ seat_row + 1 }}</td>
+    <td>{{ seat_row }}</td>
     {% else %}
     <td>/</td>
     {% endif %}
     {% if seat_seat  %}
-    <td>{{ seat_seat + 1 }}</td>
+    <td>{{ seat_seat }}</td>
     {% else %}
     <td>/</td>
     {% endif %}
@@ -46,6 +45,32 @@
     <td>{{ customer_last_season }}</td>
     <td>{{ "now"|date("j/n/y") }}</td>
     <td></td>
+    </tr>
+  </table>
+<br>
+<br>
+Eventim:
+<br>
+<br>
+
+  <table>
+    <tr>
+    <td>{{ seat_block }}</td>
+    {% if seat_row  %}
+    <td>{{ seat_row }}</td>
+    {% else %}
+    <td>0</td>
+    {% endif %}
+    {% if seat_seat  %}
+    <td>{{ seat_seat }}</td>
+    {% else %}
+    <td>0</td>
+    {% endif %}
+    <td>{{ customer_firstname }}</td>
+    <td>{{ customer_name }}</td>
+    <td>{{ eventim_category }}</td>
+    <td>{{ eventim_account }}</td>
+    <td>{{ customer_email }}</td>
     </tr>
   </table>
 

@@ -37,7 +37,17 @@ class SeasonTicketController {
 
     $email2->to('ticketing@steelers.de');
     $email2->htmlTemplate('@Contao_App/email_season_ticket_order.html.twig');
-    $email2->context(array_merge($data, ['raw_data' => json_encode($data, JSON_PRETTY_PRINT)]));
+    $eventimCategory = $this->getEventimCategory(
+        $data['ticket_area'],
+        $data['ticket_category'],
+        substr($data['seat_block'], -1),
+        $data['ff_new_dk']
+    );
+
+    $email2->context(array_merge($data, [
+        'raw_data' => json_encode($data, JSON_PRETTY_PRINT),
+        'eventim_category' => $eventimCategory
+    ]));
     
     $mailer->send($email2);
 
@@ -150,5 +160,52 @@ class SeasonTicketController {
     $mappedBlock = $blockMap[$block] ?? null;
 
     return $mappedBlock ? $this->getPrices($type, $mappedBlock, $category) : 0;
+  }
+
+  private function getEventimCategory($area, $category, $block, $ff_new_dk): string
+  {
+    $blockMap = [
+        'A' => 'PK 1',
+        'G' => 'PK 1',
+        'B' => 'PK 2',
+        'F' => 'PK 2',
+        'H' => 'PK 2',
+        'L' => 'PK 2',
+        'C' => 'PK 3',
+        'I' => 'PK 3',
+        'K' => 'PK 3',
+        'J' => 'PK Stehplatz',
+    ];
+
+    $categoryMap = [
+        'vollzahler' => ' Sitzplatz',
+        'ermaessigt' => ' Ermäßigt',
+        'jugendlich' => ' Jugendlich',
+        'kind' => ' Kind',
+        'behinderung' => ' Fan mit Behinderung ab 50 %',
+        'familie1' => ' Familienkarte 1',
+        'familie2' => ' Familienkarte 2',
+        'familie3' => ' Familienkarte 3',
+        'rollstuhl' => ' Rollstuhlfahrer + Begleitperson',
+    ];
+
+    $mappedBlock = $blockMap[$block] ?? null;
+    $mappedCategory = $categoryMap[$category] ?? '';
+    $mappedFF = '';
+
+    if ($area === 'stehplatz') {
+        $mappedBlock = 'PK Stehplatz';
+    } elseif ($area === 'rollstuhl') {
+        $mappedBlock = 'PK Rollstuhlfahrer + Begleitperson';
+    }
+
+    if($ff_new_dk) {
+      if($category === 'vollzahler') {
+        $mappedCategory = ' Vollzahler';
+      }
+        $mappedFF .= '_Family_Friends';
+    }
+
+    return $mappedBlock . $mappedCategory . $mappedFF;
   }
 }
