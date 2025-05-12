@@ -187,6 +187,13 @@ foreach ($pngFiles as $file) {
     let matchupDataScoring;
     let matchupDataPlayer;
 
+    <?php if ($_GET['design'] == 'regular'): ?>
+      const colorGreen = '#046a38';
+    <?php else: ?>
+      const colorGreen = '#00994C';
+    <?php endif; ?>
+
+
     <?php for ($i = 1; $i <= 6; $i++): ?>
       let selectedPlayer<?= $i ?> = '';
     <?php endfor; ?>
@@ -574,7 +581,7 @@ foreach ($pngFiles as $file) {
         ctx.font = '700 143px Bahnschrift Condensed';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'alphabetic';
-        ctx.fillStyle = '#00994C';
+        ctx.fillStyle = colorGreen;
         var text1Width = (ctx.measureText(headline).width * textScale);
         var text1Height = (ctx.measureText(headline).fontBoundingBoxDescent * textScale);
         var x1 = (canvas.width / 2) / textScale;
@@ -593,7 +600,7 @@ foreach ($pngFiles as $file) {
         ctx.moveTo(startX, startY); // links unten
         ctx.lineTo(startX, startY - cornerSize); // links ecke
         ctx.lineTo(startX + cornerSize, startY - cornerSize); // links oben
-        ctx.strokeStyle = '#00994C';
+        ctx.strokeStyle = colorGreen;
         ctx.lineWidth = 4;
         ctx.stroke();
 
@@ -604,7 +611,7 @@ foreach ($pngFiles as $file) {
         ctx.moveTo(startX, startY); // recht unten
         ctx.lineTo(startX + cornerSize, startY); // rechts ecke
         ctx.lineTo(startX + cornerSize, startY - cornerSize); // rechts oben
-        ctx.strokeStyle = '#00994C';
+        ctx.strokeStyle = colorGreen;
         ctx.lineWidth = 4;
         ctx.stroke();
 
@@ -614,7 +621,7 @@ foreach ($pngFiles as $file) {
       if (config.includes('smalltext')) {
         smalltext = smalltext.toUpperCase();
         ctx.font = '100 34px Bahnschrift2';
-        ctx.fillStyle = '#00994C';
+        ctx.fillStyle = colorGreen;
         if (selectedPost == 'Endstand_Away') {
           ctx.fillStyle = '#878787';
         }
