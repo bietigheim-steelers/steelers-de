@@ -27,7 +27,7 @@ class SeasonTicketController {
     $email->htmlTemplate('@Contao_App/email_season_ticket_confirmation.html.twig');
     $email->context($data);
     
-    //$mailer->send($email);
+    $mailer->send($email);
 
 
     $email2 = new TemplatedEmail();
@@ -49,7 +49,7 @@ class SeasonTicketController {
         'eventim_category' => $eventimCategory
     ]));
 
-    //$mailer->send($email2);
+    $mailer->send($email2);
 
     // Add the selected ticket to the booked seats file
     $filePath = '/usr/www/users/steelg/2022/files/steelers/tools/seatingPlan/booked_seats.json';
