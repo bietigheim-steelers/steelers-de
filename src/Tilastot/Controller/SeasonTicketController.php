@@ -8,7 +8,6 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 use Contao\Email;
-use Symfony\Component\Filesystem\Filesystem;
 
 class SeasonTicketController {
   public function order(Request $request, MailerInterface $mailer, ContaoFramework $framework): Response
@@ -28,7 +27,7 @@ class SeasonTicketController {
     $email->htmlTemplate('@Contao_App/email_season_ticket_confirmation.html.twig');
     $email->context($data);
     
-    $mailer->send($email);
+    //$mailer->send($email);
 
 
     $email2 = new TemplatedEmail();
@@ -49,21 +48,21 @@ class SeasonTicketController {
         'raw_data' => json_encode($data, JSON_PRETTY_PRINT),
         'eventim_category' => $eventimCategory
     ]));
-    
-    $mailer->send($email2);
+
+    //$mailer->send($email2);
 
     // Add the selected ticket to the booked seats file
-    $filesystem = new Filesystem();
-    $filePath = __DIR__ . '/../../../../files/steelers/tools/seatingPlan/booked_seats.json';
+    $filePath = '/usr/www/users/steelg/2022/files/steelers/tools/seatingPlan/booked_seats.json';
 
-    if ($filesystem->exists($filePath)) {
-        $bookedSeats = json_decode(file_get_contents($filePath), true);
-        $newSeat = $data['seat_block'] . '_' . $data['seat_row'] . '_' . $data['seat_number'];
-        if (!in_array($newSeat, $bookedSeats)) {
-            $bookedSeats[] = $newSeat;
-            file_put_contents($filePath, json_encode($bookedSeats, JSON_PRETTY_PRINT));
-        }
+    if (file_exists($filePath)) {
+      $bookedSeats = json_decode(file_get_contents($filePath), true);
+      $newSeat = $data['seat_block'] . '_' . $data['seat_row'] . '_' . $data['seat_seat'];
+      if (!in_array($newSeat, $bookedSeats['booked'])) {
+        $bookedSeats['booked'][] = $newSeat;
+        file_put_contents($filePath, json_encode($bookedSeats, JSON_PRETTY_PRINT));
+      }
     }
+
 
     return new Response('order successful');
   }
