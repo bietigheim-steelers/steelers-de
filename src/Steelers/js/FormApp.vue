@@ -99,7 +99,7 @@
                 getPriceText('plus') +
                 '</small>',
               description:
-                'Alle Vorbereitungsspiele + alle Hauptrundenspiele + alle möglichen Spiele in den Pre-Playoffs/Playoffs/Playdowns',
+                'Alle Vorbereitungsspiele + alle Hauptrundenspiele<br>+ alle möglichen Spiele in den Pre-Playoffs/Playoffs/Playdowns',
             },
             {
               value: 'basic',
@@ -202,17 +202,6 @@
           </template>
           <template #after>
             <div class="mt-2">
-              Der Dauerkartenverkauf ist unterteilt in zwei Verkaufsphasen:<br />
-              <ul>
-                <li>
-                  1. Phase: 01.07.2024 bis 31.07.2024 (Zahlungseingang muss bis
-                  spätestens 31.07.2024 erfolgen)
-                </li>
-                <li>
-                  2. Phase: 01.08.2024 bis 15.09.2024 (Zahlungseingang muss bis
-                  spätestens 15.09.2024 erfolgen)
-                </li>
-              </ul>
               Die Ausgabe der Dauerkarte (schätzungsweise ab Mitte August)
               erfolgt nur bei vorheriger Bezahlung
             </div>

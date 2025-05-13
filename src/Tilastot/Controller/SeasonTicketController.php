@@ -8,6 +8,7 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 use Contao\Email;
+use Symfony\Component\Filesystem\Filesystem;
 
 class SeasonTicketController {
   public function order(Request $request, MailerInterface $mailer, ContaoFramework $framework): Response
@@ -50,6 +51,19 @@ class SeasonTicketController {
     ]));
     
     $mailer->send($email2);
+
+    // Add the selected ticket to the booked seats file
+    $filesystem = new Filesystem();
+    $filePath = __DIR__ . '/../../../../files/steelers/tools/seatingPlan/booked_seats.json';
+
+    if ($filesystem->exists($filePath)) {
+        $bookedSeats = json_decode(file_get_contents($filePath), true);
+        $newSeat = $data['seat_block'] . '_' . $data['seat_row'] . '_' . $data['seat_number'];
+        if (!in_array($newSeat, $bookedSeats)) {
+            $bookedSeats[] = $newSeat;
+            file_put_contents($filePath, json_encode($bookedSeats, JSON_PRETTY_PRINT));
+        }
+    }
 
     return new Response('order successful');
   }
