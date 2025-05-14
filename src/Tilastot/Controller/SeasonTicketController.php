@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Tilastot\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -9,10 +10,11 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 use Contao\Email;
 
-class SeasonTicketController {
+class SeasonTicketController
+{
   public function order(Request $request, MailerInterface $mailer, ContaoFramework $framework): Response
   {
-    
+
     $framework->initialize();
     $data = $request->request->all();
 
@@ -26,27 +28,27 @@ class SeasonTicketController {
     $email->to($data['customer_email']);
     $email->htmlTemplate('@Contao_App/email_season_ticket_confirmation.html.twig');
     $email->context($data);
-    
+
     $mailer->send($email);
 
 
     $email2 = new TemplatedEmail();
-    $email2->subject('Dauerkarte Bestellung - ' . $data['customer_firstname'] .' '. $data['customer_name']);
+    $email2->subject('Dauerkarte Bestellung - ' . $data['customer_firstname'] . ' ' . $data['customer_name']);
     $email2->from('webseite@steelers.de');
     $email2->replyTo($data['customer_email']);
 
     $email2->to('ticketing@steelers.de');
     $email2->htmlTemplate('@Contao_App/email_season_ticket_order.html.twig');
     $eventimCategory = $this->getEventimCategory(
-        $data['ticket_area'],
-        $data['ticket_category'],
-        substr($data['seat_block'], -1),
-        $data['ff_new_dk']
+      $data['ticket_area'],
+      $data['ticket_category'],
+      substr($data['seat_block'], -1),
+      $data['ff_new_dk']
     );
 
     $email2->context(array_merge($data, [
-        'raw_data' => json_encode($data, JSON_PRETTY_PRINT),
-        'eventim_category' => $eventimCategory
+      'raw_data' => json_encode($data, JSON_PRETTY_PRINT),
+      'eventim_category' => $eventimCategory
     ]));
 
     $mailer->send($email2);
@@ -72,76 +74,76 @@ class SeasonTicketController {
     $prices = [
       "plus" => [
         "A,G" => [
-          "vollzahler" => 720,
-          "ermaessigt" => 624,
-          "jugendlich" => 432,
-          "kind" => 360,
-          "behinderung" => 360
+          "vollzahler" => 785,
+          "ermaessigt" => 677,
+          "jugendlich" => 465,
+          "kind" => 392,
+          "behinderung" => 392,
         ],
         "B,F,H,L" => [
-          "vollzahler" => 624,
-          "ermaessigt" => 528,
-          "jugendlich" => 384,
-          "kind" => 312,
-          "behinderung" => 312
+          "vollzahler" => 680,
+          "ermaessigt" => 572,
+          "jugendlich" => 418,
+          "kind" => 334,
+          "behinderung" => 334,
         ],
         "C,I,K" => [
-          "vollzahler" => 528,
-          "ermaessigt" => 456,
-          "jugendlich" => 312,
-          "kind" => 264,
-          "behinderung" => 264,
-          "familie1" => 792,
-          "familie2" => 1056,
-          "familie3" => 1200
+          "vollzahler" => 575,
+          "ermaessigt" => 502,
+          "jugendlich" => 337,
+          "kind" => 287,
+          "behinderung" => 287,
+          "familie1" => 855,
+          "familie2" => 1133,
+          "familie3" => 1296,
         ],
-        "J" => [
-          "vollzahler" => 384,
-          "ermaessigt" => 336,
-          "jugendlich" => 240,
-          "kind" => 192,
-          "behinderung" => 192
+        J => [
+          "vollzahler" => 418,
+          "ermaessigt" => 370,
+          "jugendlich" => 263,
+          "kind" => 203,
+          "behinderung" => 203,
         ],
         "R1,R3,R4" => [
-          "rollstuhl" => 336
-        ]
+          "rollstuhl" => 360,
+        ],
       ],
       "basic" => [
         "A,G" => [
-          "vollzahler" => 570,
-          "ermaessigt" => 494,
-          "jugendlich" => 342,
-          "kind" => 285,
-          "behinderung" => 285,
+          "vollzahler" => 686,
+          "ermaessigt" => 592,
+          "jugendlich" => 405,
+          "kind" => 343,
+          "behinderung" => 343,
         ],
         "B,F,H,L" => [
-          "vollzahler" => 494,
-          "ermaessigt" => 418,
-          "jugendlich" => 304,
-          "kind" => 247,
-          "behinderung" => 247
+          "vollzahler" => 592,
+          "ermaessigt" => 499,
+          "jugendlich" => 364,
+          "kind" => 291,
+          "behinderung" => 291,
         ],
         "C,I,K" => [
-          "vollzahler" => 418,
-          "ermaessigt" => 361,
-          "jugendlich" => 247,
-          "kind" => 209,
-          "behinderung" => 209,
-          "familie1" => 627,
-          "familie2" => 836,
-          "familie3" => 950
+          "vollzahler" => 499,
+          "ermaessigt" => 436,
+          "jugendlich" => 291,
+          "kind" => 249,
+          "behinderung" => 249,
+          "familie1" => 748,
+          "familie2" => 998,
+          "familie3" => 1144,
         ],
-        "J" => [
-          "vollzahler" => 304,
-          "ermaessigt" => 266,
-          "jugendlich" => 190,
-          "kind" => 152,
-          "behinderung" => 152
+        J => [
+          "vollzahler" => 364,
+          "ermaessigt" => 322,
+          "jugendlich" => 129.74,
+          "kind" => 129.74,
+          "behinderung" => 176,
         ],
         "R1,R3,R4" => [
-          "rollstuhl" => 266
-        ]
-      ]
+          "rollstuhl" => 312,
+        ],
+      ],
     ];
 
     return $prices[$type][$block][$category];
@@ -154,7 +156,7 @@ class SeasonTicketController {
     if ($area === 'stehplatz') {
       return $this->getPrices($type, 'J', $category);
     }
-    if ($area === 'rollstuhl') { 
+    if ($area === 'rollstuhl') {
       return $this->getPrices($type, 'R1,R3,R4', 'rollstuhl');
     }
 
@@ -178,28 +180,28 @@ class SeasonTicketController {
   private function getEventimCategory($area, $category, $block, $ff_new_dk): string
   {
     $blockMap = [
-        'A' => 'PK 1',
-        'G' => 'PK 1',
-        'B' => 'PK 2',
-        'F' => 'PK 2',
-        'H' => 'PK 2',
-        'L' => 'PK 2',
-        'C' => 'PK 3',
-        'I' => 'PK 3',
-        'K' => 'PK 3',
-        'J' => 'PK Stehplatz',
+      'A' => 'PK 1',
+      'G' => 'PK 1',
+      'B' => 'PK 2',
+      'F' => 'PK 2',
+      'H' => 'PK 2',
+      'L' => 'PK 2',
+      'C' => 'PK 3',
+      'I' => 'PK 3',
+      'K' => 'PK 3',
+      'J' => 'PK Stehplatz',
     ];
 
     $categoryMap = [
-        'vollzahler' => ' Sitzplatz',
-        'ermaessigt' => ' Ermäßigt',
-        'jugendlich' => ' Jugendlich',
-        'kind' => ' Kind',
-        'behinderung' => ' Fan mit Behinderung ab 50 %',
-        'familie1' => ' Familienkarte 1',
-        'familie2' => ' Familienkarte 2',
-        'familie3' => ' Familienkarte 3',
-        'rollstuhl' => ' Rollstuhlfahrer + Begleitperson',
+      'vollzahler' => ' Sitzplatz',
+      'ermaessigt' => ' Ermäßigt',
+      'jugendlich' => ' Jugendlich',
+      'kind' => ' Kind',
+      'behinderung' => ' Fan mit Behinderung ab 50 %',
+      'familie1' => ' Familienkarte 1',
+      'familie2' => ' Familienkarte 2',
+      'familie3' => ' Familienkarte 3',
+      'rollstuhl' => ' Rollstuhlfahrer + Begleitperson',
     ];
 
     $mappedBlock = $blockMap[$block] ?? null;
@@ -207,16 +209,16 @@ class SeasonTicketController {
     $mappedFF = '';
 
     if ($area === 'stehplatz') {
-        $mappedBlock = 'PK Stehplatz';
+      $mappedBlock = 'PK Stehplatz';
     } elseif ($area === 'rollstuhl') {
-        $mappedBlock = 'PK Rollstuhlfahrer + Begleitperson';
+      $mappedBlock = 'PK Rollstuhlfahrer + Begleitperson';
     }
 
-    if($ff_new_dk) {
-      if($category === 'vollzahler') {
+    if ($ff_new_dk) {
+      if ($category === 'vollzahler') {
         $mappedCategory = ' Vollzahler';
       }
-        $mappedFF .= '_Family_Friends';
+      $mappedFF .= '_Family_Friends';
     }
 
     return $mappedBlock . $mappedCategory . $mappedFF;
