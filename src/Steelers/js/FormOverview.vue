@@ -156,7 +156,7 @@ export default {
       student: "Student",
       azubi: "Auszubildender",
       schueler: "Schüler über 18 Jahre",
-      mitglied: "SC Mitglied",
+      mitglied: "SC Mitglied / PURE Mitglied",
       jugendlich: "Jugendlicher (13-17 Jahre)",
       kind: "Kind (8-12 Jahre)",
       behinderung: "Fan mit Behinderung ab 50%",

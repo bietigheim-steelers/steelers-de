@@ -301,7 +301,7 @@
             input-type="number"
             rules="required"
             :conditions="[['ticket_category', '==', 'mitglied']]"
-            placeholder="Mitgliedsnummer"
+            placeholder="Mitgliedsnummer (SC/PURE)"
             :columns="{
               container: 6,
               label: 3,
