@@ -29,3 +29,9 @@ export const loadSeats = async () => {
   }
   return data;
 };
+
+export const resetSeats = () => {
+  isLoaded = false;
+  data = {};
+  loadPromise = null;
+};

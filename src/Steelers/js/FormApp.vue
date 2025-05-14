@@ -385,7 +385,7 @@ import FormComponentCategory from "./FormComponentCategory.vue";
 import FormComponentFF from "./FormComponentFF.vue";
 import FormOverview from "./FormOverview.vue";
 import { getLowestPrice } from "./TicketPriceCalculator.js";
-import { ref, computed } from "vue";
+import { resetSeats } from "./SeatingPlanLoad.js";
 
 export default {
   mixins: [Vueform],
@@ -435,6 +435,7 @@ export default {
       this.selected_type = newType;
     },
     onRestartClick() {
+      resetSeats();
       this.formDone = false;
     },
     onNextStep() {
