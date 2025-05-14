@@ -8,7 +8,8 @@ export const loadSeats = async () => {
       loadPromise = (async () => {
         try {
           const response = await fetch(
-            "/files/steelers/tools/seatingPlan/booked_seats.json"
+            "/files/steelers/tools/seatingPlan/booked_seats.json?t=" +
+              Date.now()
           );
           if (!response.ok) {
             console.error("Error loading booked seats");
