@@ -58,11 +58,25 @@ class SeasonTicketController
 
     if (file_exists($filePath)) {
       $bookedSeats = json_decode(file_get_contents($filePath), true);
-      $newSeat = $data['seat_block'] . '_' . $data['seat_row'] . '_' . $data['seat_seat'];
-      if (!in_array($newSeat, $bookedSeats['booked'])) {
-        $bookedSeats['booked'][] = $newSeat;
-        file_put_contents($filePath, json_encode($bookedSeats, JSON_PRETTY_PRINT));
+      $baseSeat = (int)$data['seat_seat'];
+      $block = $data['seat_block'];
+      $row = $data['seat_row'];
+      $seatsToBlock = 1;
+
+      if (in_array($data['ticket_category'], ['familie1', 'familie'])) {
+        $seatsToBlock = 2;
+      } elseif ($data['ticket_category'] === 'familie3') {
+        $seatsToBlock = 3;
       }
+
+      for ($i = 0; $i < $seatsToBlock; $i++) {
+        $seatNum = $baseSeat + $i;
+        $newSeat = $block . '_' . $row . '_' . $seatNum;
+        if (!in_array($newSeat, $bookedSeats['booked'])) {
+          $bookedSeats['booked'][] = $newSeat;
+        }
+      }
+      file_put_contents($filePath, json_encode($bookedSeats, JSON_PRETTY_PRINT));
     }
 
 
