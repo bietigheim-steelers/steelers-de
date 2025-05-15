@@ -165,7 +165,7 @@
             rules="required"
             placeholder="Block"
             :native="false"
-            :items="['Block R1', 'Block R3', 'Block R4']"
+            :items="['Block R1', 'Block R4']"
             :columns="{
               container: 4,
               label: 12,
