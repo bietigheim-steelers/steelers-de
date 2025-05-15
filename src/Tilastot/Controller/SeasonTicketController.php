@@ -63,7 +63,7 @@ class SeasonTicketController
       $row = $data['seat_row'];
       $seatsToBlock = 1;
 
-      if (in_array($data['ticket_category'], ['familie1', 'familie'])) {
+      if (in_array($data['ticket_category'], ['familie1', 'familie2'])) {
         $seatsToBlock = 3;
       } elseif ($data['ticket_category'] === 'familie3') {
         $seatsToBlock = 4;

@@ -62,12 +62,7 @@
         Platz {{ parseInt(form_data.seat_seat) + 2 }}
         <br />
       </template>
-      <template
-        v-if="
-          form_data.ticket_category == 'familie1' ||
-          form_data.ticket_category == 'familie2'
-        "
-      >
+      <template v-if="form_data.ticket_category == 'familie3'">
         {{ form_data.seat_block }} - Reihe {{ parseInt(form_data.seat_row) }} -
         Platz {{ parseInt(form_data.seat_seat) + 3 }}
         <br />
