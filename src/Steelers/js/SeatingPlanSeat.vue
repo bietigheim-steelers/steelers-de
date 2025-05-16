@@ -81,9 +81,9 @@ export default {
       }
       if (reserved.value) {
         return {
-          circle: "#dadada",
-          circle_stroke: "blue",
-          text: "blue",
+          circle: "#c76464",
+          circle_stroke: "darkred",
+          text: "white",
         };
       }
       return {

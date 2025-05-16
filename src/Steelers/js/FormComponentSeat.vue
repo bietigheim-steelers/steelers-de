@@ -53,7 +53,7 @@
     </ul>
     <div class="col-span-12 text-sm text-gray-500">
       <p>
-        * Blau markierte Sitzplätze sind vorreserviert.<br />Diese können
+        * Rot markierte Sitzplätze sind vorreserviert.<br />Diese können
         zunächst nur von den aktuellen Dauerkarteninhaber bestellt werden.
       </p>
     </div>
