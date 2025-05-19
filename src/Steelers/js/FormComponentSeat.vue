@@ -83,10 +83,12 @@ export default {
     const additonal_seats = ref([]);
     const seats = JSON.parse(JSON.stringify(seatsImport));
     const bookedSeats = ref([]);
+    const reservedSeats = ref([]);
 
     onMounted(async () => {
       const seatsData = await loadSeats();
       bookedSeats.value = seatsData.booked;
+      reservedSeats.value = seatsData.reserved;
     });
     const seat_blocks = computed(() => {
       if (
@@ -243,7 +245,16 @@ export default {
           const disabled = bookedSeats.value.includes(
             `${form$.value.data.seat_block}_${form$.value.data.seat_row}_${seatNumber}`
           );
-          return { value: seatNumber, label: `Platz ${seatNumber}`, disabled };
+          const reserved = reservedSeats.value.includes(
+            `${form$.value.data.seat_block}_${form$.value.data.seat_row}_${seatNumber}`
+          )
+            ? " (reserviert)"
+            : "";
+          return {
+            value: seatNumber,
+            label: `Platz ${seatNumber}${reserved}`,
+            disabled,
+          };
         });
       }
       return [];
