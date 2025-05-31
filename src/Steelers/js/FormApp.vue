@@ -202,10 +202,7 @@
           </template>
           <template #after>
             <div class="mt-2">
-              <b
-                >Die Dauerkarte muss bis spätestens 31.05.2025 bezahlt
-                werden!</b
-              >
+              
               <br /><br />
               Die Ausgabe der Dauerkarte (schätzungsweise ab Mitte August)
               erfolgt nur bei vorheriger Bezahlung
