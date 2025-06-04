@@ -1173,6 +1173,7 @@ foreach ($pngFiles as $file) {
 
         ctx.font = '100 50px Bahnschrift Condensed';
         ctx.textAlign = 'left';
+        ctx.fillStyle = 'black';
         ctx.textBaseline = 'alphabetic';
         var textWidth = ctx.measureText('wünscht').width
         var x1 = (1080 - textWidth) / 2;
