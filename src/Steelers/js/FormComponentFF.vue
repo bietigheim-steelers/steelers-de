@@ -1,7 +1,7 @@
 <template>
   <GroupElement
     name="ff"
-    v-if="Date.now() < Date.parse('31 Jul 2026 23:59:59 GMT')"
+    v-if="Date.now() < Date.parse('15 May 2025 23:59:59 GMT')"
     :conditions="[
       ['ticket_category', '!=', null],
       ['ticket_category', '!=', 'jugendlich'],
