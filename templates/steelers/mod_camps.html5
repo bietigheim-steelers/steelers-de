@@ -1,21 +1,44 @@
 <?php $this->block('content'); ?>
-<div class="tilastot-camps defaultcontainer gridwrapper !px-2 md:px-0 block <?= $this->cssClass ?>"
+<div class="defaultcontainer gridwrapper !px-2 md:px-0 block <?= $this->cssClass ?>"
   <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
   <?php foreach ($this->camps as $category => $elements) : ?>
     <h3 title="<?= $category ?>"><?= $category ?></h3>
-    <div class="inside grid ce_wrapperStart grid-221">
-      <?php foreach ($elements as $camp) : ?>
-        <div class="ce_text prose block">
-          <h4><?= $camp['title'] ?></h4>
-          <?php
-          if ($camp['full']):
-          ?>
-            <p class="text-red-600 font-bold">ausgebucht - Warteliste</p>
-          <?php endif; ?>
-          <?= $camp['description']; ?>
+    <?php
+    $count = 0;
+    foreach ($elements as $camp) :
+      $count++;
+    ?>
+      <div class="grid md:p-0 md:grid-cols-2 items-start gap-8">
+        <?php if ($count % 2 == 0): ?>
+          <div class="overflow-hidden border-t-4 border-gray-800 pt-10">
+            <a href="https://steelers.de/files/steelers/content/nachwuchs/porschecamp/galerie/2019/img_6655_-_kopie.jpg" class="glightbox">
+              <img src="https://steelers.de/files/steelers/content/nachwuchs/porschecamp/galerie/2019/img_6655_-_kopie.jpg" alt="Zeitnahme">
+            </a>
+          </div>
+        <?php endif; ?>
+        <div class="md:pt-10 flex flex-col items-start">
+          <h4 class="text-2xl text-black font-sans uppercase font-bold !mt-0"><?= $camp['title'] ?></h4>
+          <div class="mt-2 leading-relaxed prose">
+            <?php
+            if ($camp['full']):
+            ?>
+              <p class="text-red-600 font-bold">ausgebucht! - Warteliste</p>
+            <?php endif; ?>
+            <?= $camp['description']; ?>
+          </div>
+          <div class="center" style="margin-bottom: 2rem;">
+            <a href="/porschecamp/anmeldung" class="btn-default">Anmelden</a>
+          </div>
         </div>
-      <?php endforeach; ?>
-    </div>
+        <?php if ($count % 2 == 1): ?>
+          <div class="overflow-hidden border-t-4 border-gray-800 pt-10">
+            <a href="https://steelers.de/files/steelers/content/nachwuchs/porschecamp/galerie/2019/img_6802_-_kopie.jpg" class="glightbox">
+              <img src="https://steelers.de/files/steelers/content/nachwuchs/porschecamp/galerie/2019/img_6802_-_kopie.jpg" alt="Zeitnahme">
+            </a>
+          </div>
+        <?php endif; ?>
+      </div>
+    <?php endforeach; ?>
   <?php endforeach; ?>
 </div>
 <?php $this->endblock(); ?>
