@@ -3,83 +3,83 @@
 
 <head>
 
-  <?php $this->block('head'); ?>
-  <meta charset="<?= $this->charset ?>">
-  <title><?= $this->title ?></title>
-  <base href="<?= $this->base ?>">
+	<?php $this->block('head'); ?>
+	<meta charset="<?= $this->charset ?>">
+	<title><?= $this->title ?></title>
+	<base href="<?= $this->base ?>">
 
-  <link rel="apple-touch-icon" sizes="180x180" href="/files/steelers/icons/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/files/steelers/icons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/files/steelers/icons/favicon-16x16.png">
-  <link rel="manifest" href="/files/steelers/icons/site.webmanifest">
-  <link rel="mask-icon" href="/files/steelers/icons/safari-pinned-tab.svg" color="#046a38">
-  <link rel="shortcut icon" href="/files/steelers/icons/favicon.ico">
-  <meta name="msapplication-TileColor" content="#046a38">
-  <meta name="msapplication-config" content="/files/steelers/icons/browserconfig.xml">
-  <meta name="theme-color" content="#ffffff">
+	<link rel="apple-touch-icon" sizes="180x180" href="/files/steelers/icons/apple-touch-icon.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="/files/steelers/icons/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="/files/steelers/icons/favicon-16x16.png">
+	<link rel="manifest" href="/files/steelers/icons/site.webmanifest">
+	<link rel="mask-icon" href="/files/steelers/icons/safari-pinned-tab.svg" color="#046a38">
+	<link rel="shortcut icon" href="/files/steelers/icons/favicon.ico">
+	<meta name="msapplication-TileColor" content="#046a38">
+	<meta name="msapplication-config" content="/files/steelers/icons/browserconfig.xml">
+	<meta name="theme-color" content="#ffffff">
 
-  <?php $this->block('meta'); ?>
-  <meta name="robots" content="<?= $this->robots ?>">
-  <meta name="description" content="<?= Contao\StringUtil::substr($this->description, 320) ?>">
-  <meta name="generator" content="Contao Open Source CMS">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-  <?php $this->endblock(); ?>
-  <meta property="og:title" content="<?php echo $this->pageTitle; ?> - <?php echo $this->mainTitle; ?>" />
-  <meta property="og:description" content="<?php echo $this->description; ?>" />
-  <meta property="og:url" content="{{env::url}}/{{env::request}}" />
-  <meta name="twitter:title" content="<?php echo $this->pageTitle; ?> - <?php echo $this->mainTitle; ?>">
-  <meta name="twitter:description" content="<?php echo $this->description; ?>">
-  <meta name="twitter:card" content="summary_large_image">
-  <?php
-  if ($GLOBALS['og:image']) {
-    echo '<meta name="twitter:image" content="' . $GLOBALS['og:image'] . '">';
-    echo '<meta name="twitter:card" content="summary_large_image">';
-    echo '<meta property="og:image" content="' . $GLOBALS['og:image'] . '" />';
-  } else {
-    echo '<meta name="twitter:image" content="{{env::url}}/files/steelers/teams/SCB.png">';
-    echo '<meta property="og:image" content="{{env::url}}/files/steelers/teams/SCB.png" />';
-  }
-  ?>
+	<?php $this->block('meta'); ?>
+	<meta name="robots" content="<?= $this->robots ?>">
+	<meta name="description" content="<?= Contao\StringUtil::substr($this->description, 320) ?>">
+	<meta name="generator" content="Contao Open Source CMS">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<?php $this->endblock(); ?>
+	<meta property="og:title" content="<?php echo $this->pageTitle; ?> - <?php echo $this->mainTitle; ?>" />
+	<meta property="og:description" content="<?php echo $this->description; ?>" />
+	<meta property="og:url" content="{{env::url}}/{{env::request}}" />
+	<meta name="twitter:title" content="<?php echo $this->pageTitle; ?> - <?php echo $this->mainTitle; ?>">
+	<meta name="twitter:description" content="<?php echo $this->description; ?>">
+	<meta name="twitter:card" content="summary_large_image">
+	<?php
+	if ($GLOBALS['og:image']) {
+		echo '<meta name="twitter:image" content="' . $GLOBALS['og:image'] . '">';
+		echo '<meta name="twitter:card" content="summary_large_image">';
+		echo '<meta property="og:image" content="' . $GLOBALS['og:image'] . '" />';
+	} else {
+		echo '<meta name="twitter:image" content="{{env::url}}/files/steelers/teams/SCB.png">';
+		echo '<meta property="og:image" content="{{env::url}}/files/steelers/teams/SCB.png" />';
+	}
+	?>
 
-  <?php if ($this->canonical) : ?>
-    <link rel="canonical" href="<?= $this->canonical ?>">
-  <?php endif; ?>
+	<?php if ($this->canonical) : ?>
+		<link rel="canonical" href="<?= $this->canonical ?>">
+	<?php endif; ?>
 
-  <?= $this->viewport ?>
-  <?= $this->framework ?>
-  <?= $this->stylesheets ?>
-  <?= $this->mooScripts ?>
-  <?= $this->head ?>
-  <?php $this->endblock(); ?>
-  <?php
-  // classes to avoid purging
-  // mt-10 mt-5 w-p60 h-p40 grid grid-cols-2 border-steelgreen border-gray-300 ring-2 ring-steelgreen max-w-xl max-w-2xl max-w-4xl min-w-xl min-w-2xl min-w-4xl
-  ?>
+	<?= $this->viewport ?>
+	<?= $this->framework ?>
+	<?= $this->stylesheets ?>
+	<?= $this->mooScripts ?>
+	<?= $this->head ?>
+	<?php $this->endblock(); ?>
+	<?php
+	// classes to avoid purging
+	// mt-10 mt-5 w-p60 h-p40 grid grid-cols-2 border-steelgreen border-gray-300 ring-2 ring-steelgreen max-w-xl max-w-2xl max-w-4xl min-w-xl min-w-2xl min-w-4xl
+	?>
 </head>
 
 <body id="top" class="overflow-y-scroll min-h-screen h-full bg-cover bg-center <?= $this->class ?>"
-  <?php if ($this->onload) : ?> onload="<?= $this->onload ?>" <?php endif; ?>
-  style="background-image: url('/files/steelers/layout/arena-bg.jpg');">
-  <div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-      <div class="bg-white/30 backdrop-blur-sm drop-shadow-md px-5 py-5 shadow sm:rounded-lg sm:px-12">
-        <svg class="links-nav-logo m-auto" version="1.1" viewBox="0 0 211.074 135">
-          <g>
-            <path class="puckcolor"
-              d="M127.802,76.581c0.754-0.874,1.512-1.675,2.28-2.419
+	<?php if ($this->onload) : ?> onload="<?= $this->onload ?>" <?php endif; ?>
+	style="background-image: url('/files/steelers/layout/arena-bg2.jpg');">
+	<div class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
+		<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
+			<div class="bg-white/20 backdrop-blur-lg drop-shadow-md px-5 py-5 shadow sm:rounded-lg sm:px-12">
+				<svg class="links-nav-logo m-auto" version="1.1" viewBox="0 0 211.074 135">
+					<g>
+						<path class="puckcolor"
+							d="M127.802,76.581c0.754-0.874,1.512-1.675,2.28-2.419
 				c0.57,0.302,1.162,0.542,1.773,0.72c-0.878,1.478-1.058,2.837-0.466,3.975c1.041,1.997,3.957,2.897,11.479,2.044
 				c1.647-0.187,3.506-0.479,5.622-0.838c4.43-0.747,9.326-1.879,14.276-3.303c8.532-2.446,17.189-5.688,23.753-8.933
 				c-3.122,2.22-6.82,4.337-10.833,6.245c-7.595,3.612-16.186,6.553-23.713,8.48c-2.148,0.552-4.22,1.028-6.18,1.397
 				c-5.879,1.105-10.885,1.309-14.957,0.674c-0.968-0.149-1.934-0.316-2.698-0.656C125.143,82.664,124.455,80.459,127.802,76.581" />
-            <polygon class="starcolor"
-              points=" 140.24,22.131 146.662,15.341 155.572,18.789 150.404,11.866 155.82,7.508 148.654,8.056 143.42,0.927 142.759,9.195 134.379,12.056 142.669,13.769 " />
-            <polygon class="starcolor" fill=" #10B75A" points="102.768,17.307 100.652,29.171 108.628,18.845 120.519,22.108 
+						<polygon class="starcolor"
+							points=" 140.24,22.131 146.662,15.341 155.572,18.789 150.404,11.866 155.82,7.508 148.654,8.056 143.42,0.927 142.759,9.195 134.379,12.056 142.669,13.769 " />
+						<polygon class="starcolor" fill=" #10B75A" points="102.768,17.307 100.652,29.171 108.628,18.845 120.519,22.108 
 				112.951,13.866 119.794,7.025 109.934,8.817 101.956,0 102.293,11.139 91.531,16.149 			" />
-            <polygon class="starcolor"
-              points=" 68.582,35.955 68.014,44.773 72.917,36.612 82.091,38.034 75.778,32.487 80.1,27.038 73.25,29.178 66.5,23.36 67.7,31.576 60.32,36.062 " />
-            <path class="puckcolor"
-              d="M210.429,78.85c-1.191,3.707-4.082,6.675-6.809,9.697
+						<polygon class="starcolor"
+							points=" 68.582,35.955 68.014,44.773 72.917,36.612 82.091,38.034 75.778,32.487 80.1,27.038 73.25,29.178 66.5,23.36 67.7,31.576 60.32,36.062 " />
+						<path class="puckcolor"
+							d="M210.429,78.85c-1.191,3.707-4.082,6.675-6.809,9.697
 				c-3.556,3.525-8.008,6.712-12.616,9.26c-0.828,0.459-1.753,0.996-2.709,1.506c-5.957,3.148-12.436,5.38-19.056,7.27
 				c-8.626,2.217-15.404,3.813-18.287,4.41c-3.831,0.791-8.25,1.843-13.149,3.963c-4.137,1.795-5.481,2.725-9.741,5.313
 				c-4.259,2.593-9.53,5.186-14.374,6.452c-2.424,0.635-4.772,1.234-7.618,1.699c-2.846,0.467-6.169,0.795-10.667,0.955
@@ -106,16 +106,16 @@
 				c-0.746-1.867-2.531-2.919-4.804-3.636c0.374-0.837,0.479-1.613,0.474-2.229c-0.002-0.205-0.017-0.427-0.05-0.664
 				c2.734,0.586,5.302,1.554,6.649,3.002c1.101,1.178,1.646,1.757,2.557,4.552c0.669,2.055,1.02,3.655,1.934,7.498
 				c0.64,2.678,1.088,4.689,1.365,6.378c0.248,1.535,0.318,2.828,0.339,4.009C211.104,76.031,211.001,77.238,210.429,78.85" />
-            <path fill="#FFFFFF" d="M163.903,90.709c0,0-9.256,2.999-19.021,4.85
+						<path fill="#FFFFFF" d="M163.903,90.709c0,0-9.256,2.999-19.021,4.85
 				c-10.75,2.043-15.961,1.614-20.127,1.068c-2.136-0.281-5.249-1.412-6.896-3.238c-0.572-0.842-1.228-1.643-1.841-2.465
 				c0,0,0.266,0.803,0.716,2.086c0.477,1.375,1.166,3.211,1.985,5.188c0.616,1.482,2.237,1.893,3.945,2.256
 				c0.158,0.036,0.338,0.092,0.554,0.137c1.533,0.289,4.571,0.578,10.373-0.252c1.935-0.275,4.144-0.652,6.754-1.24
 				c2.92-0.658,5.925-1.493,8.711-2.413C157.261,93.966,163.903,90.709,163.903,90.709" />
-            <path fill="#FFFFFF" d="M40.145,123.102c-0.092-0.863-1.094-1.867-3.456-1.672l-1.043,0.158
+						<path fill="#FFFFFF" d="M40.145,123.102c-0.092-0.863-1.094-1.867-3.456-1.672l-1.043,0.158
 				c-2.499,0.455-4.628,1.514-7.571,2.9c-3.138,1.478-4.279,2.102-8.631,3.828c-5.75,2.283-15.058,4.58-15.058,4.58
 				s1.948-0.116,5.252-0.574c3.305-0.459,8.052-1.311,13.719-2.842c6.479-1.752,8.441-2.187,12.186-3.269
 				C39.291,125.126,40.242,124.025,40.145,123.102" />
-            <path fill="#FFFFFF" d="M151.225,41.292l0.002,0.004L151.225,41.292 M164.603,54.525l0.001,0.003
+						<path fill="#FFFFFF" d="M151.225,41.292l0.002,0.004L151.225,41.292 M164.603,54.525l0.001,0.003
 				L164.603,54.525 M129.464,65.054l0.002,0.005L129.464,65.054 M64.644,83.726l0.001,0.003L64.644,83.726z M5.425,108.336
 				L5.425,108.336L5.425,108.336z M6.85,113.427c-1.551,0-2.992-0.253-4.174-0.904c-1.26-0.695-2.132-1.777-2.521-3.128
 				c-0.532-1.828,0.283-4.164,2.909-8.324c0.027-0.043,2.873-4.281,5.463-5.094c1.134-0.355,1.998-0.093,2.523,0.19
@@ -148,8 +148,8 @@
 				c-3.973,1.148-7.834-0.305-10.436-3.633c-2.989,4.616-6.887,9.613-11.522,10.952c-1.864,0.539-3.663,0.378-5.202-0.472
 				c-1.513-0.834-2.628-2.246-3.243-4.1c-1.616,2.337-4.099,4.771-7.781,7.203c-7.387,4.879-16.569,7.744-19.208,8.507
 				C12.352,112.719,9.446,113.427,6.85,113.427" />
-            <path fill="#10b75a"
-              d="M180.775,32.578c-0.361,0.505-13.592,23.179-16.337,23.976
+						<path fill="#10b75a"
+							d="M180.775,32.578c-0.361,0.505-13.592,23.179-16.337,23.976
 				c-0.959,0.276-2.147-0.246-2.44-1.273c-0.738-2.555,1.473-6.564,2.865-8.699c1.115-1.639,2.058-3.004,1.484-4.986
 				c-0.458-1.112-1.234-1.927-2.546-2.864c-0.861-0.582-4.095,1.146-9.866,3.713c0.09-0.649,0.08-1.269-0.105-1.91
 				c-0.166-0.577-0.85-0.929-1.485-0.743c-1.536,0.441-6.743,6.959-5.411,11.564c0.387,1.345,0.955,1.744,2.334,1.485
@@ -189,20 +189,20 @@
 				 M96.967,60.267c0.3-0.005,0.538,0.193,0.636,0.53c0.378,1.07-2.142,6.637-7.213,10.185c0.505-4.72,3.301-8.853,6.259-10.609
 				C96.751,60.31,96.866,60.269,96.967,60.267 M74.158,66.845c0.3-0.006,0.538,0.196,0.637,0.53
 				c0.377,1.07-2.143,6.637-7.214,10.184c0.505-4.718,3.301-8.855,6.259-10.607C73.943,66.886,74.058,66.847,74.158,66.845" />
-          </g>
-        </svg>
-        <div>
-          <?= $this->main ?>
-        </div>
-        <p class="mt-10 text-center text-sm/6 text-black">
-          <a href="/impressum">Impressum</a>
-        </p>
-      </div>
+					</g>
+				</svg>
+				<div>
+					<?= $this->main ?>
+				</div>
+				<p class="mt-10 text-center text-sm/6 text-black">
+					<a href="/impressum">Impressum</a>
+				</p>
+			</div>
 
-    </div>
-  </div>
-  <?= $this->mootools ?>
-  <?= $this->jsonLdScripts ?>
+		</div>
+	</div>
+	<?= $this->mootools ?>
+	<?= $this->jsonLdScripts ?>
 </body>
 
 </html>
