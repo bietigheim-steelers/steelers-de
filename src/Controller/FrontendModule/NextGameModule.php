@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Tilastot\Module;
+namespace App\Module;
 
-use App\Tilastot\Model\Rounds;
-use App\Tilastot\Model\Games;
-use App\Tilastot\Model\Standings;
+use App\Model\Rounds;
+use App\Model\Games;
+use App\Model\Standings;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\ModuleModel;

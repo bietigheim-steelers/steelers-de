@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tilastot\Module;
+namespace App\Module;
 
 use Contao\Database;
 

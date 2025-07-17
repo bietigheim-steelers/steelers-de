@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tilastot\Module;
+namespace App\Module;
 
-use App\Tilastot\Model\Players;
+use App\Model\Players;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\ModuleModel;

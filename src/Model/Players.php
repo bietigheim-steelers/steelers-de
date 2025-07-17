@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tilastot\Model;
+namespace App\Model;
 
 use Contao\Database;
 use Contao\Model;

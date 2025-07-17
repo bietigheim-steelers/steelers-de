@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tilastot\Utils;
+namespace App\Utils;
 
 use Contao\StringUtil;
-use App\Tilastot\Model\Rounds;
-use App\Tilastot\Model\Games;
-use App\Tilastot\Model\Standings;
-use App\Tilastot\Model\Players;
-use App\Tilastot\Model\PlayerStats;
+use App\Model\Rounds;
+use App\Model\Games;
+use App\Model\Standings;
+use App\Model\Players;
+use App\Model\PlayerStats;
 
 class ApiHolema
 {

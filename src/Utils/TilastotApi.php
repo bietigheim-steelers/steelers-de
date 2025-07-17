@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tilastot\Utils;
+namespace App\Utils;
 
 use Contao\StringUtil;
 
-use App\Tilastot\Model\Rounds;
-use App\Tilastot\Model\Standings;
-use App\Tilastot\Utils\ApiDEL;
-use App\Tilastot\Utils\ApiHolema;
-use App\Tilastot\Utils\ApiHockeydata;
+use App\Model\Rounds;
+use App\Model\Standings;
+use App\Utils\ApiDEL;
+use App\Utils\ApiHolema;
+use App\Utils\ApiHockeydata;
 
 class TilastotApi
 {

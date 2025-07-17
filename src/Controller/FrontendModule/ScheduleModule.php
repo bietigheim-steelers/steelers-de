@@ -2,9 +2,9 @@
 
 namespace App\Controller\FrontendModule;
 
-use App\Tilastot\Model\Rounds;
-use App\Tilastot\Model\Games;
-use App\Tilastot\Model\Standings;
+use App\Model\Rounds;
+use App\Model\Games;
+use App\Model\Standings;
 use Contao\NewsModel;
 use Contao\Date;
 

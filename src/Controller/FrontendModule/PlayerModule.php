@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tilastot\Module;
+namespace App\Module;
 
-use App\Tilastot\Model\Players;
-use App\Tilastot\Model\PlayerStats;
+use App\Model\Players;
+use App\Model\PlayerStats;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\ModuleModel;

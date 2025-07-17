@@ -9,12 +9,12 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tilastot\Model;
+namespace App\Model;
 
 use Contao\Database;
 use Contao\Model;
 use Contao\System;
-use App\Tilastot\Model\Rounds;
+use App\Model\Rounds;
 
 class Standings extends Model
 {

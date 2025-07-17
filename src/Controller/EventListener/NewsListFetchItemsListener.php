@@ -1,5 +1,5 @@
 <?php
-namespace App\Tilastot\EventListener;
+namespace App\Controller\EventListener;
 
 use Contao\Module;
 use Contao\Date;

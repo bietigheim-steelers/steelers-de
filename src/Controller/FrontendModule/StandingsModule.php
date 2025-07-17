@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tilastot\Module;
+namespace App\Module;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
-use App\Tilastot\Model\Standings;
+use App\Model\Standings;
 use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
 use Contao\ModuleModel;
 use Contao\PageModel;

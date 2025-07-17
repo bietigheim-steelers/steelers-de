@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Tilastot\Module;
+namespace App\Module;
 
-use App\Tilastot\Model\Camps;
+use App\Model\Camps;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use Contao\ModuleModel;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tilastot\Page;
+namespace App\Page;
 
 use Contao\CoreBundle\ServiceAnnotation\Page;
 use Contao\CoreBundle\Exception\PageNotFoundException;
@@ -11,7 +11,7 @@ use Contao\Environment;
 use Contao\System;
 use Symfony\Component\HttpFoundation\Response;
 
-use App\Tilastot\Model\Players;
+use App\Model\Players;
 
 /**
  * @Page(contentComposition=true)

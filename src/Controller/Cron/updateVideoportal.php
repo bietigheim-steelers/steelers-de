@@ -1,16 +1,14 @@
 <?php
 
-namespace App\Tilastot\Cron;
+namespace App\Controller\Cron;
 
 use Contao\CoreBundle\ServiceAnnotation\CronJob;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use App\Tilastot\Model\Standings;
-use App\Tilastot\Model\Games;
+use App\Model\Standings;
+use App\Model\Games;
 use Contao\NewsArchiveModel;
 use Contao\System;
 use Contao\Database;
-
-// 
 
 /**
  * @CronJob("*\/10 * * * *")

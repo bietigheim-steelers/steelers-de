@@ -9,13 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Tilastot\Module;
+namespace App\Module;
 
 use Contao\BackendModule;
-use App\Tilastot\Model\Rounds;
-use App\Tilastot\Utils\ApiDEL;
-use App\Tilastot\Utils\ApiHockeydata;
-use App\Tilastot\Utils\ApiHolema;
+use App\Model\Rounds;
+use App\Utils\ApiDEL;
+use App\Utils\ApiHockeydata;
+use App\Utils\ApiHolema;
 
 class RefreshModule extends BackendModule
 {

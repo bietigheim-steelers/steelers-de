@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Tilastot\EventListener;
+namespace App\Controller\EventListener;
 
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Form;
 use Contao\Widget;
 
-use App\Tilastot\Model\Games;
-use App\Tilastot\Model\Standings;
-use App\Tilastot\Model\Camps;
-use App\Tilastot\Model\BusTours;
-use App\Tilastot\Model\Players;
+use App\Model\Games;
+use App\Model\Standings;
+use App\Model\Camps;
+use App\Model\BusTours;
+use App\Model\Players;
 
 /**
  * @Hook("loadFormField")
