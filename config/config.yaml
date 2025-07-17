@@ -1,9 +1,6 @@
 contao:
   backend:
-    attributes:
-      app-name: 'My App'
-      app-version: 1.2.3
-    badge_title: develop
+    badge_title: steelers.de
   image:
     sizes:
       topnews:

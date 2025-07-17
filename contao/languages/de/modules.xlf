@@ -1,0 +1,22 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="contao/languages/en/modules.php" source-language="de" target-language="de">
+    <body>
+      <trans-unit id="MOD.tilastot_rounds.0">
+        <source>Spielzeiten</source>
+        <target>Spielzeiten</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_rounds.1">
+        <source>Hier können Spielzeiten / Spielrunden bearbeitet werden.</source>
+        <target>Hier können Spielzeiten / Spielrunden bearbeitet werden.</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_bus_tours.0">
+        <source>Bustouren</source>
+        <target>Bustouren</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_bus_tours.1">
+        <source>Auswärtsfahrten verwalten.</source>
+        <target>Auswärtsfahrten verwalten.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
