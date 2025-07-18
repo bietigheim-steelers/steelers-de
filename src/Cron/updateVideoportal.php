@@ -10,7 +10,7 @@ use Contao\NewsArchiveModel;
 use Contao\System;
 use Contao\Database;
 
-#[AsCronJob('*\/10 * * * *')]
+#[AsCronJob('*/10 * * * *')]
 class updateVideoportal
 {
     private $framework;
