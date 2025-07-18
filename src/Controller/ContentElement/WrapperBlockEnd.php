@@ -9,7 +9,7 @@ use Contao\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[AsContentElement(category: 'wrapper')]
+#[AsContentElement('rowEnd', category: 'wrapper')]
 class WrapperBlockEnd extends AbstractContentElementController
 {
   protected function getResponse(Template $template, ContentModel $model, Request $request): Response
