@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module;
+namespace App\Controller\FrontendModule;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
 use App\Model\Standings;

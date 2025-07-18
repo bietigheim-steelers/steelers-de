@@ -1,5 +1,5 @@
 <?php
-namespace App\Module;
+namespace App\Controller\FrontendModule;
 
 use App\Model\BusTours;
 use App\Model\Games;

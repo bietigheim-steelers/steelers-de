@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Page;
+namespace App\Controller\Page;
 
 use Contao\CoreBundle\ServiceAnnotation\Page;
 use Contao\CoreBundle\Exception\PageNotFoundException;

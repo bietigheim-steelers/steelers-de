@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller\EventListener;
+namespace App\EventListener;
 
 use Contao\Module;
 use Contao\Date;

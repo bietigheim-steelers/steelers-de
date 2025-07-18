@@ -1,5 +1,6 @@
 <?php
 
+use Contao\DataContainer;
 /*
  * This file is part of the TilastotClientBundle.
  *

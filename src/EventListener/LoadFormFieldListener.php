@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\EventListener;
+namespace App\EventListener;
 
 use Contao\CoreBundle\ServiceAnnotation\Hook;
 use Contao\Form;

@@ -1,6 +1,8 @@
 <?php
 
 use App\Tilastot\Model\Standings;
+use Contao\DataContainer;
+use Contao\Backend;
 
 /*
  * This file is part of the DelClientBundle.

@@ -1,4 +1,5 @@
 <?php
+use Contao\Backend;
 
 use App\Tilastot\Model\Standings;
 use Contao\NewsArchiveModel;

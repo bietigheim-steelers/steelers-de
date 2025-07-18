@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Module;
+namespace App\Controller\FrontendModule;
 
 use Contao\BackendModule;
 use App\Model\Rounds;

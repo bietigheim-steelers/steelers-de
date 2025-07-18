@@ -1,5 +1,7 @@
 <?php
 
+use Contao\DataContainer;
+use Contao\Backend;
 /*
  * This file is part of the DelClientBundle.
  *
