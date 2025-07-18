@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller\Cron;
+namespace App\Cron;
 
-use Contao\CoreBundle\ServiceAnnotation\CronJob;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCronJob;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use App\Model\Standings;
 use App\Model\Games;
@@ -10,9 +10,7 @@ use Contao\NewsArchiveModel;
 use Contao\System;
 use Contao\Database;
 
-/**
- * @CronJob("*\/10 * * * *")
- */
+#[AsCronJob('*\/10 * * * *')]
 class updateVideoportal
 {
     private $framework;
