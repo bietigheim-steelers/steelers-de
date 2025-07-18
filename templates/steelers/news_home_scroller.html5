@@ -17,21 +17,14 @@ if (!function_exists('tokenTruncate')) {
     return trim(implode(array_slice($parts, 0, $last_part)));
   }
 }
-try {
-  $container = \Contao\System::getContainer();
-  $rootDir = $container->getParameter('kernel.project_dir');
-
-  $image = $container->get('contao.image.picture_factory')->create($rootDir . '/'  . $this->arrData['singleSRC'], 11);
-  $sources = $image->getSources();
-  $imageObj = $sources[0]['src'];
-  $imageUrl = $imageObj->getUrl($rootDir);
-} catch (Exception $e) {
-  $imageUrl = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 511, 637, 'crop');
-}
 ?>
 <div class="swiper-slide bg-white h-full">
   <a href="<?= $this->link ?>" data-bigimage="<?= $this->arrData['singleSRC'] ?>">
-    <img src="<?= $imageUrl ?>" class="aspect-news w-full" alt="<?= $this->newsHeadline ?>" loading="lazy" /></a>
+    <?php
+    if (array_key_exists('singleSRC', $this->arrData) && !empty($this->arrData['picture'])):
+      $this->insert('image', $this->arrData['singleSRC']);
+    endif;
+    ?>
   <div class="p-5 grow flex flex-col">
     <div class="text-gray-400 italic uppercase">
       <?php if (count($this->categoriesList) > 0) : ?>
@@ -46,10 +39,10 @@ try {
             echo implode(', ', $this->categoriesList);
           }
         } else {
-         echo implode(', ', $this->categoriesList);
+          echo implode(', ', $this->categoriesList);
         }
         ?>
-      <?php endif; ?>&nbsp;
+        <?php endif; ?>&nbsp;
     </div>
     <?php
     // needs to be done like that to avoid empty space at the beginning

@@ -20,3 +20,12 @@ contao:
               height: 600
               resize_mode: crop
               densities: 2x, 3x
+      news_image:
+        width: 511
+        height: 637
+        resize_mode: crop
+        css_class: aspect-news w-full
+        formats:
+          jpg: [webp, jpg]
+          webp: [webp, jpg]
+          png: [webp, png]

@@ -34,6 +34,8 @@
         weiterlesen</a></div>
   </div>
   <?php
-  $this->insert('picture_default', $this->arrData['picture']);
+  if(array_key_exists('picture', $this->arrData) && !empty($this->arrData['picture'])):
+    $this->insert('picture_default', $this->arrData['picture']);
+  endif;
   ?>
 </div>

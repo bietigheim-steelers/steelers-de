@@ -80,7 +80,7 @@ class Standings extends Model
 
 	public static function findByIdAndRound($tilastotid, $round, $justName = false)
 	{
-		if (self::$localCache['r' . $round]['t' . $tilastotid]) {
+		if (array_key_exists('r' . $round, self::$localCache) && array_key_exists('t' . $tilastotid, self::$localCache['r' . $round])) {
 			$return = self::$localCache['r' . $round]['t' . $tilastotid];
 		} else {
 			$result = Standings::findAll(array(
