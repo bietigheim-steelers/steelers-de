@@ -9,6 +9,54 @@
         <source>Hier können Spielzeiten / Spielrunden bearbeitet werden.</source>
         <target>Hier können Spielzeiten / Spielrunden bearbeitet werden.</target>
       </trans-unit>
+      <trans-unit id="MOD.tilastot_refresh.0">
+        <source>Aktualisieren</source>
+        <target>Aktualisieren</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_refresh.1">
+        <source>Hier können alle Daten von Holema manuell aktualisiert werden.</source>
+        <target>Hier können alle Daten von Holema manuell aktualisiert werden.</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_games.0">
+        <source>Spielplan</source>
+        <target>Spielplan</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_games.1">
+        <source>Hier können alle Spiele bzw. Spielpläne bearbeitet werden.</source>
+        <target>Hier können alle Spiele bzw. Spielpläne bearbeitet werden.</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_standings.0">
+        <source>Teams / Tabelle</source>
+        <target>Teams / Tabelle</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_standings.1">
+        <source>Hier können Teams und Tabellenstand bearbeitet werden.</source>
+        <target>Hier können Teams und Tabellenstand bearbeitet werden.</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_players.0">
+        <source>Spieler / Scorer</source>
+        <target>Spieler / Scorer</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_players.1">
+        <source>Spieler und Spielerstatistik verwalten.</source>
+        <target>Spieler und Spielerstatistik verwalten.</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_partners.0">
+        <source>Partner</source>
+        <target>Partner</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_partners.1">
+        <source>Partner verwalten.</source>
+        <target>Partner verwalten.</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_camps.0">
+        <source>Porsche Camps</source>
+        <target>Porsche Camps</target>
+      </trans-unit>
+      <trans-unit id="MOD.tilastot_camps.1">
+        <source>Porsche Camps verwalten.</source>
+        <target>Porsche Camps verwalten.</target>
+      </trans-unit>
       <trans-unit id="MOD.tilastot_bus_tours.0">
         <source>Bustouren</source>
         <target>Bustouren</target>
@@ -16,6 +64,50 @@
       <trans-unit id="MOD.tilastot_bus_tours.1">
         <source>Auswärtsfahrten verwalten.</source>
         <target>Auswärtsfahrten verwalten.</target>
+      </trans-unit>
+      <trans-unit id="FMD.schedule.0">
+        <source>Spielplan</source>
+        <target>Spielplan</target>
+      </trans-unit>
+      <trans-unit id="FMD.schedule.1">
+        <source>Tilastot Spielplan</source>
+        <target>Tilastot Spielplan</target>
+      </trans-unit>
+      <trans-unit id="FMD.standings.0">
+        <source>Tabelle</source>
+        <target>Tabelle</target>
+      </trans-unit>
+      <trans-unit id="FMD.standings.1">
+        <source>Tilastot Tabelle</source>
+        <target>Tilastot Tabelle</target>
+      </trans-unit>
+      <trans-unit id="tl_module.tilastot_round.0">
+        <source>Spielzeit</source>
+        <target>Spielzeit</target>
+      </trans-unit>
+      <trans-unit id="tl_module.tilastot_round.1">
+        <source>Die Spielzeit für die die Tabelle angezeigt werden soll.</source>
+        <target>Die Spielzeit für die die Tabelle angezeigt werden soll.</target>
+      </trans-unit>
+      <trans-unit id="tl_module.tilastot_table_rows.0">
+        <source>Plätze</source>
+        <target>Plätze</target>
+      </trans-unit>
+      <trans-unit id="tl_module.tilastot_table_rows.1">
+        <source>Wie viele Plätze sollen angezeigt werden. (für die Tabelle gilt: Es wird versucht der 1. Platz anzuzeigen. Sollte das nicht möglich sein, werden wenn möglich zwei Plätze hinter dem gewählten Team angezeigt.)</source>
+        <target>Wie viele Plätze sollen angezeigt werden. (für die Tabelle gilt: Es wird versucht der 1. Platz anzuzeigen. Sollte das nicht möglich sein, werden wenn möglich zwei Plätze hinter dem gewählten Team angezeigt.)</target>
+      </trans-unit>
+      <trans-unit id="tl_module.tilastot_my_team.0">
+        <source>Hervorgehobenes Team</source>
+        <target>Hervorgehobenes Team</target>
+      </trans-unit>
+      <trans-unit id="tl_module.tilastot_my_team.1">
+        <source>An diesem Team wird immer angezeigt, ungeachtet der gewählten Anzahl an Tabellenplätze.</source>
+        <target>An diesem Team wird immer angezeigt, ungeachtet der gewählten Anzahl an Tabellenplätze.</target>
+      </trans-unit>
+      <trans-unit id="tl_module.tilastot_legend">
+        <source>Client Einstellungen</source>
+        <target>Client Einstellungen</target>
       </trans-unit>
     </body>
   </file>

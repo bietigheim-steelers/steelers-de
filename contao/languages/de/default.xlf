@@ -1,0 +1,90 @@
+<?xml version="1.0" ?><xliff version="1.1">
+  <file datatype="php" original="contao/languages/de/default.php" source-language="de" target-language="de">
+    <body>
+      <trans-unit id="CTE.rowStart.0">
+        <source>Block mit Überschrift</source>
+        <target>Block mit Überschrift</target>
+      </trans-unit>
+      <trans-unit id="CTE.rowStart.1">
+        <source>Steelers spezfischer Block mit Überschrift</source>
+        <target>Steelers spezfischer Block mit Überschrift</target>
+      </trans-unit>
+      <trans-unit id="CTE.rowEnd.0">
+        <source>Ende Block mit Überschrift</source>
+        <target>Ende Block mit Überschrift</target>
+      </trans-unit>
+      <trans-unit id="CTE.rowEnd.1">
+        <source>Steelers spezfischer Block mit Überschrift</source>
+        <target>Steelers spezfischer Block mit Überschrift</target>
+      </trans-unit>
+      <trans-unit id="MSC.delId.0">
+        <source>DEL ID der aktuellen Runde</source>
+        <target>DEL ID der aktuellen Runde</target>
+      </trans-unit>
+      <trans-unit id="MSC.delId.1">
+        <source>Trage hier die ID der aktuelle Runde ein.</source>
+        <target>Trage hier die ID der aktuelle Runde ein.</target>
+      </trans-unit>
+      <trans-unit id="MSC.tilastot_legend">
+        <source>Statistiken Einstellungen</source>
+        <target>Statistiken Einstellungen</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.name">
+        <source>Mannschaft</source>
+        <target>Mannschaft</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.shortname">
+        <source>Team</source>
+        <target>Team</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.city">
+        <source>Stadt</source>
+        <target>Stadt</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.games">
+        <source>Spiele</source>
+        <target>Spiele</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.rw">
+        <source>Siege</source>
+        <target>Siege</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.ow">
+        <source>OT-Siege</source>
+        <target>OT-Siege</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.pw">
+        <source>Penalty-Siege</source>
+        <target>Penalty-Siege</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.pl">
+        <source>Penalty-Niederlagen</source>
+        <target>Penalty-Niederlagen</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.ol">
+        <source>OT-Niederlagen</source>
+        <target>OT-Niederlagen</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.rl">
+        <source>Niederlagen</source>
+        <target>Niederlagen</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.points">
+        <source>Punkte</source>
+        <target>Punkte</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.goalsfor">
+        <source>Tore</source>
+        <target>Tore</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.goalsagainst">
+        <source>Gegentore</source>
+        <target>Gegentore</target>
+      </trans-unit>
+      <trans-unit id="tilastot_standings_columns.penalties">
+        <source>Strafzeiten</source>
+        <target>Strafzeiten</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
