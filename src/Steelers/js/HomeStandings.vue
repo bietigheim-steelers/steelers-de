@@ -19,7 +19,7 @@
             </tr>
             <tr
               :class="[
-                row.tilastotid === '54744' ? 'text-steelgreen font-bold' : '',
+                row.tilastotid === myTeam ? 'text-steelgreen font-bold' : '',
               ]"
             >
               <td class="text-center py-2 pr-2">{{ row.rank }}</td>
@@ -51,4 +51,5 @@
 
 <script setup>
 const standings = window.tilastot_standings;
+const myTeam = window.tilastot_standings_team;
 </script>
