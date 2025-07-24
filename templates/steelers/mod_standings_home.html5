@@ -2,7 +2,7 @@
 <div class="basis-full lg:basis-1/2">
   <script>
     window.tilastot_standings = <?= json_encode($this->standings, JSON_PRETTY_PRINT) ?>;
-    window.tilastot_standings_team = <?= $this->my_team ?>;
+    window.tilastot_standings_team = '<?= $this->my_team ?>';
   </script>
   <div id="homestandings" class="h-full"></div>
 </div>
