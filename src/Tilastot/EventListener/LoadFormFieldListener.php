@@ -31,7 +31,7 @@ class LoadFormFieldListener
             $games = Games::findAll(array(
                 'order'   => ' gamedate ASC',
                 'column'  => $column,
-                'value'   => array(time() + (10 * 60 * 60), 54744, 2668692721, true)
+                'value'   => array(time() + (10 * 60 * 60), 36, 2668692721, true)
             ));
             if (!$games) {
                 $widget->options = array('value' => 'no-game-found', 'label' => "Kein Spiel gefunden.");
@@ -55,7 +55,7 @@ class LoadFormFieldListener
             } else {
                 $spielerArray = $spieler->fetchAll();
                 $widget->options = array_map(function ($s) {
-                    return array('value' => $s['alias'], 'label' => '#'.$s['jersey'] .' - '. $s['lastname'] . ', ' . $s['firstname']);
+                    return array('value' => $s['alias'], 'label' => '#' . $s['jersey'] . ' - ' . $s['lastname'] . ', ' . $s['firstname']);
                 }, $spielerArray);
             }
         } else if (is_array($widget->options) && $widget->options[0]['value'] == 'porschecamps') {
