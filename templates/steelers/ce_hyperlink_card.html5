@@ -7,7 +7,7 @@ endif;
   class="group px-8 py-12 mt-6 flex flex-col justify-between items-end hyperlink-card duration-300 bg-black/60 hover:bg-steelgreen bg-cover bg-no-repeat bg-blend-overlay transition-all bg-center <?= $this->class ?>"
   <?= $this->useImage ? 'style="' . $ogimage . '"' : ''; ?>>
   <h5
-    class="uppercase text-3xl xl:text-4xl w-full text-center font-headline font-bold leading-tight transition-all !text-white">
+    class="uppercase text-3xl xl:text-4xl w-full text-center font-headline font-bold tracking-widest leading-tight transition-all !text-white">
     <?php
     echo $this->headline;
     ?></h5>
