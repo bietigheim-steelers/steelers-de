@@ -28,6 +28,14 @@
       format("woff2"),
     url("/files/steelers/fonts/ABCWhyteInktrap-SuperItalic.woff") format("woff");
 }
+@font-face {
+  font-family: "GroteskItalic";
+  font-style: italic;
+  font-display: swap;
+  src: url("/files/steelers/fonts/PPRightGrotesk-TallBlackItalic.woff")
+      format("woff2"),
+    url("/files/steelers/fonts/PPRightGrotesk-TallBlackItalic.woff") format("woff");
+}
 
 body,
 html {

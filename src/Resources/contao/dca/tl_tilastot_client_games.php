@@ -70,7 +70,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
     ),
     // Palettes
     'palettes' => array(
-        'default' => 'round,hometeam,awayteam,gameday,gamedate,gametime,optional,location,spectators,periodscore,homescore,awayscore,resulttype,gamestatus,ended,magentaurl,eventimurl;eventUrl,eventTitle,cssClass'
+        'default' => 'round,hometeam,awayteam,gameday,gamedate,gametime,optional,location,spectators,periodscore,homescore,awayscore,resulttype,gamestatus,ended,magentaurl,eventimurl;eventUrl,eventTitle;gameConfig;cssClass'
     ),
     // Fields
     'fields'   => array(
@@ -234,6 +234,21 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
             'inputType'               => 'text',
             'eval'                    => array('maxlength' => 255, 'tl_class' => 'w50'),
             'sql'                     => "varchar(255) NOT NULL default ''"
+        ),
+        'gameConfig' => array(
+            'exclude'                 => true,
+            'search'                  => true,
+            'inputType'               => 'checkboxWizard',
+            'options'                 => array(
+                'birthdayVideo' => 'Geburtstagsvideo',
+                'groupPackage1' => 'Gruppentickets Paket 1',
+                'groupPackage2' => 'Gruppentickets Paket 2',
+                'groupPackage3' => 'Gruppentickets Paket 3',
+                'groupPackage4' => 'Gruppentickets Paket 4',
+                'groupPackage5' => 'Gruppentickets Paket 5',
+            ),
+            'eval'                    => array('multiple' => true),
+            'sql'       => 'text NULL',
         ),
         'cssClass' => array(
             'exclude'                 => true,

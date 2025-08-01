@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1505.743" height="1154.541" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1505.743 1154.541">
+  <defs>
+    <style>
+      .b1 {
+        fill: #009cde;
+      }
+    </style>
+    <pattern id="c" x="0" y="0" width="12.35" height="12.35" patternUnits="userSpaceOnUse">
+      <circle r="3.664" cx="4" cy="4" class="b1"/>
+    </pattern>
+    <pattern id="c1" href="#c" patternTransform="rotate(2.8)"/>
+    <pattern id="c2" href="#c" patternTransform="rotate(40)"/>
+    <pattern id="c3" href="#c" patternTransform="rotate(94)"/>
+    <pattern id="c4" href="#c" patternTransform="rotate(20)"/>
+    <pattern id="c5" href="#c" patternTransform="rotate(28)"/>
+    <pattern id="c6" href="#c" patternTransform="rotate(116)"/>
+    <pattern id="c7" href="#c" patternTransform="rotate(128)"/>
+    <pattern id="c8" href="#c" patternTransform="rotate(60)"/>
+    <pattern id="c9" href="#c" patternTransform="rotate(-20)"/>
+  </defs>
+  <polygon class="b1" points="660.009 574.143 -152.813 262.096 -183.663 114.820 660.009 574.143"/>
+  <polygon class="b1" points="766.897 491.561 980.743 -393.043 1118.300 -454.036 766.897 491.561"/>
+  <polygon class="b1" points="715.634 492.262 566.552 -144.724 471.681 76.639 715.634 492.262"/>
+  <polygon class="b1" points="766.897 491.561 785.657 -49.853 862.743 107.834 766.897 491.561"/>
+  <polygon class="b1" points="808.820 506.846 1550.729 -199.787 1390.691 194.920 808.820 506.846"/>
+  <polygon points="672.161 555.410 93.480 129.284 -135.679 119.190 672.161 555.410" fill="url(#c1)"/>
+  <polygon points="686.269 514.850 259.352 56.310 428.764 -88.253 686.269 514.850" fill="url(#c2)"/>
+  <polygon points="790.438 478.504 1638.626 -441.066 1137.833 -352.860 790.438 478.504" fill="url(#c3)"/>
+  <polygon class="b1" points="-73.205 668.382 483.527 616.187 120.947 509.164 -73.205 668.382"/>
+  <polygon class="b1" points="-120.128 -102.936 484.105 383.839 105.753 -87.124 -120.128 -102.936"/>
+  <polygon class="b1" points="426.505 281.063 672.651 537.335 601.874 368.675 426.505 281.063"/>
+  <polygon class="b1" points="239.242 636.433 665.326 607.474 488.037 562.479 239.242 636.433"/>
+  
+  
+  <polygon class="b1" points="939.713 264.112 1546.731 -449.045 1326.337 -407.448 939.713 264.112"/>
+  
+  
+  
+  
+  
+  
+<polygon points="665.443 581.719 -50.602 609.390 32.409 390.849 665.443 581.719" fill="url(#c5)"/><polygon points="747.257 492.262 610.321 15.670 791.661 -357.457 747.257 492.262" fill="url(#c8)"/></svg>

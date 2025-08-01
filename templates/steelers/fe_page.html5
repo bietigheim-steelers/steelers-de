@@ -64,8 +64,8 @@
   <?php $this->sections('top'); ?>
 
   <div id="wrapper">
-    <img src="files/steelers/layout/star-background.svg" class="fixed top-24 pointer-events-none opacity-25 w-full"
-      alt="STEELERS Sterne" />
+    <img src="files/steelers/layout/muster-bg.svg" class="fixed pointer-events-none" style="opacity: 0.10; left: -20vw; width: 120vw; max-width: 120vw; min-height: 100vh;"
+      alt="" role="presentation"/>
 
     <header id="header">
       <div class="inside">

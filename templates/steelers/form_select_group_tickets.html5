@@ -1,0 +1,109 @@
+<?php $this->extend('form_row'); ?>
+
+<?php $this->block('label'); ?>
+<?php if ($this->label) : ?>
+    <label for="ctrl_<?= $this->id ?>" <?php if ($this->class) : ?> class="<?= $this->class ?>" <?php endif; ?>>
+        <?php if ($this->mandatory) : ?>
+            <?= $this->label ?><span class="mandatory">*</span>
+        <?php else : ?>
+            <?= $this->label ?>
+        <?php endif; ?>
+    </label>
+<?php endif; ?>
+<?php $this->endblock(); ?>
+
+<?php $this->block('field'); ?>
+<?php if ($this->hasErrors()) : ?>
+    <p class="error"><?= $this->getErrorAsString() ?></p>
+<?php endif; ?>
+
+<?php if ($this->multiple) : ?>
+    <input type="hidden" name="<?= '[]' == substr($this->name, -2) ? substr($this->name, 0, -2) : $this->name ?>" value="">
+<?php endif; ?>
+
+<select name="<?= $this->name ?>" id="ctrl_<?= $this->id ?>" class="<?= $this->class ?>" <?= $this->getAttributes() ?>>
+    <?php foreach ($this->getOptions() as $option) : ?>
+        <?php if ('group_start' == $option['type']) : ?>
+            <optgroup label="<?= $option['label'] ?>">
+            <?php endif; ?>
+
+            <?php if ('option' == $option['type']) : ?>
+                <option value="<?= $option['value'] ?>" <?= $option['selected'] ?>><?= $option['label'] ?></option>
+            <?php endif; ?>
+
+            <?php if ('group_end' == $option['type']) : ?>
+            </optgroup>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</select>
+<script>
+    <?php
+    $games = \App\Tilastot\Model\Games::findAll(array(
+        'order'   => ' gamedate ASC',
+        'column'  => array('gamedate >= ? AND hometeam = ? AND optional != ?'),
+        'value'   => array(time() + (10 * 60 * 60), 36, true)
+    ));
+    $gameArray = $games->fetchAll();
+
+    $filteredGames = array_map(function ($game) {
+        $away = \App\Tilastot\Model\Standings::findByIdAndRound($game['awayteam'], $game['round'], true);
+        $date = \Contao\Date::parse('D d.m.Y', $game['gamedate']);
+        $text = $date . ' - '  . $away['name'];
+        return [
+            'key' => $text,
+            'awayteam' => $away['name'],
+            'date' => $date,
+            'gameconfig' => unserialize($game['gameConfig'])
+        ];
+    }, $gameArray);
+
+    echo 'const games = ' . json_encode($filteredGames) . ';';
+    ?>
+    console.log(games);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const spieltagSelect = document.querySelector('select[name="Spieltag"]');
+        if (spieltagSelect) {
+            spieltagSelect.addEventListener('change', function() {
+                updatePackages();
+            });
+        }
+        updatePackages();
+    });
+
+    function updatePackages() {
+        const selectedGameKey = document.querySelector('select[name="Spieltag"]').value;
+        const packagesSelect = document.getElementById('ctrl_<?= $this->id ?>');
+
+        // Clear the selection
+        packagesSelect.value = '';
+
+        const selectedGame = games.find(game => game.key === selectedGameKey);
+
+        if (selectedGame && selectedGame.gameconfig) {
+            const options = packagesSelect.querySelectorAll('option');
+
+            options.forEach(function(option) {
+                const isInGameConfig = selectedGame.gameconfig.some(config => config == option.value);
+
+                if (isInGameConfig) {
+                    option.disabled = true;
+                    if (!option.textContent.includes(' (ausverkauft)')) {
+                        option.textContent += ' (ausverkauft)';
+                    }
+                } else {
+                    option.disabled = false;
+                    option.textContent = option.textContent.replace(' (ausverkauft)', '');
+                }
+            });
+        } else {
+            const options = packagesSelect.querySelectorAll('option');
+            options.forEach(function(option) {
+                option.disabled = false;
+                option.textContent = option.textContent.replace(' (ausverkauft)', '');
+            });
+        }
+
+    }
+</script>
+<?php $this->endblock(); ?>

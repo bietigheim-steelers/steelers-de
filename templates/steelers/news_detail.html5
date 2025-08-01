@@ -87,7 +87,7 @@ $GLOBALS['og:image'] = $this->Environment->base . $ogimage;
       <?php endif; ?>
     <?php endif; ?>
   <div class="ce_text defaultcontainer mb-8">
-    <div class="!my-8 md:!my-32 max-w-5xl mx-auto bg-steelwhite/80 relative z-20 backdrop-blur-lg prose">
+    <div class="!my-8 md:!my-32 px-8 py-8 max-w-5xl mx-auto bg-steelwhite/60 relative z-20 backdrop-blur-lg prose">
       <?php
       if ($this->pid == 6 && array_intersect(array_keys($this->categories), [7, 8, 9, 10, 11, 12, 13, 19, 27])):
       ?>
