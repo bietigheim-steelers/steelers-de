@@ -40,9 +40,9 @@
   font-family: "GroteskBlack";
   font-style: italic;
   font-display: swap;
-  src: url("/files/steelers/fonts/PPRightGrotesk-SpatialBlack.woff2")
+  src: url("/files/steelers/fonts/PPRightGrotesk-CompactBlack.woff2")
       format("woff2"),
-    url("/files/steelers/fonts/PPRightGrotesk-SpatialBlack.woff") format("woff");
+    url("/files/steelers/fonts/PPRightGrotesk-CompactBlack.woff") format("woff");
 }
 
 body,
