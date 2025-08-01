@@ -1,9 +1,9 @@
 #main .block-headline {
   @apply italic; 
   color: #009cde;
-  font-family: "WhyteItalic", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family: "GroteskBlackItalic", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   text-transform: uppercase;
-  font-size: clamp(4em, 15vw, 16em);
+  font-size: clamp(4em, 15vw, 15em);
   text-shadow: 1px 1px white, -1px -1px white;
   max-width: 100%;
   overflow-x: clip;
@@ -11,7 +11,7 @@
 }
 
 #main .block-headline.headline--small {
-  font-size: clamp(4em, 15vw, 12em);
+  font-size: clamp(4em, 15vw, 11em);
   line-height: 8rem;
   position: relative;
   top: -4rem;

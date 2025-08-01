@@ -86,14 +86,14 @@ module.exports = {
           "sans-serif",
         ],
         headline: [
-          "Whyte",
+          "GroteskBlack",
           "Lucida Sans Unicode",
           "Geneva",
           "Verdana",
           "sans-serif",
         ],
         headlineItalic: [
-          "WhyteItalic",
+          "GroteskBlackItalic",
           "Lucida Sans Unicode",
           "Geneva",
           "Verdana",
