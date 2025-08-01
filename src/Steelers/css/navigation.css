@@ -38,7 +38,7 @@ nav .grid-nav {
 
 .top-sticky-nav li {
   @apply uppercase text-lg relative;
-  font-family: "Whyte", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family: "GroteskBlack", "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .header-nav-logo {

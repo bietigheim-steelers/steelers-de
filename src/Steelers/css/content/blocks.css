@@ -6,12 +6,13 @@
   font-size: clamp(4em, 15vw, 15em);
   text-shadow: 1px 1px white, -1px -1px white;
   max-width: 100%;
-  overflow-x: clip;
+  overflow: visible;
   padding: 0 0.5rem 0 0.5rem;
 }
 
 #main .block-headline.headline--small {
   font-size: clamp(4em, 15vw, 11em);
+  overflow: visible;
   line-height: 8rem;
   position: relative;
   top: -4rem;
