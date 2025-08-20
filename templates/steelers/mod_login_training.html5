@@ -1,0 +1,71 @@
+<!-- indexer::stop -->
+<div class="<?= $this->class ?> defaultcontainer !px-0 !my-6">
+  <div class="grid md:p-0 items-start gap-8">
+    <div class="overflow-hidden border-t-4 border-gray-800">
+    </div>
+    <div class="flex flex-col items-start">
+
+      <div class="<?= $this->class ?> <?= $this->logout ? 'logout' : 'login' ?> block"
+        <?= $this->cssID ?><?php if ($this->style): ?> style="<?= $this->style ?>" <?php endif; ?>>
+
+        <?php if ($this->headline): ?>
+          <<?= $this->hl ?>><?= $this->headline ?></<?= $this->hl ?>>
+        <?php endif; ?>
+
+        <form<?php if ($this->action): ?> action="<?= $this->action ?>" <?php endif; ?> id="<?= $this->formId ?>"
+          method="post">
+          <div class="formbody">
+            <?php if ($this->message): ?>
+              <p class="error"><?= $this->message ?></p>
+            <?php endif; ?>
+            <input type="hidden" name="FORM_SUBMIT" value="<?= $this->formId ?>">
+            <input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>">
+            <input type="hidden" name="_target_path" value="<?= $this->targetPath ?>">
+            <input type="hidden" name="_always_use_target_path" value="<?= $this->forceTargetPath ?>">
+            <?php if ($this->logout): ?>
+              <p class="login_info"><?= $this->loggedInAs ?><br><?= $this->lastLogin ?></p>
+            <?php elseif ($this->twoFactorEnabled): ?>
+              <h3><?= $this->twoFactorAuthentication ?></h3>
+              <div class="widget widget-text">
+                <label for="verify"><?= $this->authCode ?></label>
+                <input type="text" name="verify" id="verify" class="text" value="" autocapitalize="off"
+                  autocomplete="one-time-code" required>
+              </div>
+              <div class="widget widget-checkbox">
+                <fieldset class="checkbox_container">
+                  <span><input type="checkbox" name="trusted" id="trusted" value="1" class="tl_checkbox"> <label
+                      for="trusted"><?= $this->trans('MSC.twoFactorTrustDevice') ?></label></span>
+                </fieldset>
+              </div>
+            <?php else: ?>
+              <input type="hidden" name="username" id="username" class="text" value="trainingszeiten" autocapitalize="off"
+                autocomplete="username" required>
+              <div class="widget widget-password">
+                <label for="password"><?= $this->password ?></label>
+                <input type="password" name="password" id="password" class="text password" value=""
+                  autocomplete="current-password" required>
+                <button type="submit" class="submit btn-default">Trainingszeiten anzeigen</button>
+              </div>
+              <?php if ($this->autologin): ?>
+                <div class="widget widget-checkbox">
+                  <fieldset class="checkbox_container">
+                    <span><input type="checkbox" name="autologin" id="autologin" value="1" class="checkbox"> <label
+                        for="autologin"><?= $this->autoLabel ?></label></span>
+                  </fieldset>
+                </div>
+              <?php endif; ?>
+            <?php endif; ?>
+            <div class="widget widget-submit">
+
+              <?php if ($this->twoFactorEnabled): ?>
+                <a href="<?= $this->route('contao_frontend_logout') ?>"><?= $this->cancel ?> ›</a>
+              <?php endif; ?>
+            </div>
+          </div>
+          </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- indexer::continue -->
