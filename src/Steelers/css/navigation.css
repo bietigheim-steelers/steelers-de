@@ -221,6 +221,6 @@ nav .grid-nav {
   font-weight: bold; /* Bold text */
 }
 
-nav .level_1>.nav--blue a {
+.level_1>.nav--blue a {
   @apply bg-steelblue;
 }
