@@ -1,0 +1,3 @@
+<div class="ce_hyperlink btn-default mx-auto !block w-fit">
+  <a href="<?= $this->href ?>" class="hyperlink_txt" title="<?= $this->titleText; ?>"><?= $this->linkTitle; ?></a>
+</div>
