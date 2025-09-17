@@ -9,29 +9,28 @@
     <div class="mb-0 !pb-0 xl:p-5">
       <h3 class="text-5xl font-sans inline-block md:block uppercase font-bold text-black">
         <span class="block lg:hidden font-headlineItalic player-number mt-20">#<?= $this->player['jersey']; ?></span>
-        <?= $this->player['firstname'] ?> <?= $this->player['lastname'] ?><br><span
-          class="player-subheadline"><?php
-                                      switch ($this->player['position']) {
-                                        case 'GK':
-                                        case 'G':
-                                          echo "Goalie";
-                                          break;
-                                        case 'DE':
-                                        case 'D':
-                                          echo "Verteidiger";
-                                          break;
-                                        case 'FO':
-                                        case 'F':
-                                        case 'C':
-                                        case 'LW':
-                                        case 'CE':
-                                        case 'RW':
-                                          echo "Stürmer";
-                                          break;
-                                        default:
-                                          echo $this->player['position'];
-                                      }
-                                      ?></span>
+        <?= $this->player['firstname'] ?> <?= $this->player['lastname'] ?><br><span class="player-subheadline"><?php
+                                                                                                                switch ($this->player['position']) {
+                                                                                                                  case 'GK':
+                                                                                                                  case 'G':
+                                                                                                                    echo "Goalie";
+                                                                                                                    break;
+                                                                                                                  case 'DE':
+                                                                                                                  case 'D':
+                                                                                                                    echo "Verteidiger";
+                                                                                                                    break;
+                                                                                                                  case 'FO':
+                                                                                                                  case 'F':
+                                                                                                                  case 'C':
+                                                                                                                  case 'LW':
+                                                                                                                  case 'CE':
+                                                                                                                  case 'RW':
+                                                                                                                    echo "Stürmer";
+                                                                                                                    break;
+                                                                                                                  default:
+                                                                                                                    echo $this->player['position'];
+                                                                                                                }
+                                                                                                                ?></span>
       </h3>
       <div class="flex flex-col justify-end h-full pt-2 w-3/4">
         <div class="text-sm uppercase">Geboren</div>
@@ -107,10 +106,10 @@
     <div class="sm:w-4/5 mx-auto relative my-20">
       <div class="grid md:p-0 md:grid-cols-2 items-start gap-8">
         <div class="overflow-hidden border-t-4 border-gray-800 pt-10">
-          <?php if ($this->player['profilePic']) :  ?>
+          <?php if ($this->player['pictures'][2]) :  ?>
             <?php
-            $image = $this->getImage($this->urlEncode($this->player['profilePic']['path']), 600, 800, 'crop');
-            $imageUrl = $this->Environment->base . $image;
+            $leftImage = $this->getImage($this->urlEncode($this->player['pictures'][2]['path']), 600, 400, 'crop');
+            $imageUrl = $this->Environment->base . $leftImage;
             ?>
             <a href="<?= $imageUrl ?>" class="glightbox">
               <img src="<?= $imageUrl; ?>" alt="<?= $this->player['firstname'] . ' ' . $this->player['lastname']; ?>"
