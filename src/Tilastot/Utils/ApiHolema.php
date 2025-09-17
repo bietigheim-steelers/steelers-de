@@ -118,7 +118,9 @@ class ApiHolema
             $p->jersey = $player->jersey;
             $p->position = $player->position;
             $p->nationality = $player->nationality;
-            $p->shoots = $player->shoots;
+            if ($player->shoots) {
+                $p->shoots = $player->shoots;
+            }
             $p->birthday = mktime(0, 0, 0, $birthday['month'], $birthday['day'], $birthday['year']);
             $p->birthplace = $player->birthplace ? $player->birthplace : '';
             $p->height = $player->height;
@@ -178,7 +180,7 @@ class ApiHolema
         $data = json_decode(self::call('games.json/' . $r->standingsid . '/' . self::TEAM_ID, $r->apikey));
 
         foreach ($data->schedule->games->game as $game) {
-            if(in_array($game->{'@id'}, self::IGNORED_GAMES)) {
+            if (in_array($game->{'@id'}, self::IGNORED_GAMES)) {
                 // skip games from the ignored list
                 continue;
             }
