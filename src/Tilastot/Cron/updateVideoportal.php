@@ -19,7 +19,7 @@ class updateVideoportal
 {
     private $framework;
     private $pid = 7;
-    private $currentSeasonCategory = 32;
+    private $currentSeasonCategory = 36;
     private $logFile = 'debug_cronjob.log';
     public function __construct(ContaoFramework $framework)
     {
@@ -36,13 +36,15 @@ class updateVideoportal
         $this->log("Starting update process");
 
         $steelersFeed = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCaVaIAlCziRfT9A4Yw5cb5Q';
-        $spradeFeed1 = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpIteElx6nKfKsytUHq0g6xbsj';
-        $spradeFeed2 = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpItdGEy0y2NDwVvXxJvn8LXU6';
+        $setvFeed1 = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCy7nHxKl2ZQ9ZkxFlvt8lWQ';
+        // $spradeFeed1 = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpIteElx6nKfKsytUHq0g6xbsj';
+        // $spradeFeed2 = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpItdGEy0y2NDwVvXxJvn8LXU6';
 
         $steelersVideos = $this->getLatestVideos($steelersFeed);
-        $spradeVideos1 = $this->getLatestVideos($spradeFeed1);
-        $spradeVideos2 = $this->getLatestVideos($spradeFeed2);
-        $spradeVideos = array_merge($spradeVideos1, $spradeVideos2);
+        $setvVideos1 = $this->getLatestVideos($setvFeed1);
+        // $spradeVideos1 = $this->getLatestVideos($spradeFeed1);
+        // $spradeVideos2 = $this->getLatestVideos($spradeFeed2);
+        // $spradeVideos = array_merge($spradeVideos1, $spradeVideos2);
 
         // Steelers Latest Videos
         foreach ($steelersVideos as $video) {
@@ -72,8 +74,8 @@ class updateVideoportal
             }
         }
 
-        // Sprade Latest Videos
-        foreach ($spradeVideos as $video) {
+        // SportEurope.TV Latest Videos
+        foreach ($setvVideos1 as $video) {
             if (strpos($video['title'], 'Bietigheim') == false) {
                 continue;
             }
