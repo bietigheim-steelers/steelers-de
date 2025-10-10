@@ -1,6 +1,8 @@
 <?php
-$ogimage = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 750, 938, 'crop');
-$GLOBALS['og:image'] = $this->Environment->base . $ogimage;
+if($this->addImage) {
+  $ogimage = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 750, 938, 'crop');
+  $GLOBALS['og:image'] = $this->Environment->base . $ogimage;
+}
 
 parse_str(parse_url($this->playerUrl, PHP_URL_QUERY), $queryParams);
 $video_id = $queryParams['v'];

@@ -29,11 +29,19 @@ if (!function_exists('downloadImage')) {
 //load the preview image of the video locally
 $video_file = downloadImage($this->playerUrl);
 
-$figureBuilder = System::getContainer()
-  ->get(Contao\CoreBundle\Image\Studio\Studio::class)
-  ->createFigureBuilder();
-$figure = $figureBuilder->fromPath($video_file)->setSize([800, 450, 'crop'])->buildIfResourceExists();
-$ogimage = $figure->getImage()->getImg();
+if($video_file!=="") {
+  $figureBuilder = System::getContainer()
+    ->get(Contao\CoreBundle\Image\Studio\Studio::class)
+    ->createFigureBuilder();
+  $figure = $figureBuilder->fromPath($video_file)->setSize([800, 450, 'crop'])->buildIfResourceExists();
+  $ogimage = $figure->getImage()->getImg();
+} else {
+  $ogimage = [
+    'src' => 'https://placehold.co/600x400?text=Bild%20nicht%20gefunden',
+    'width' => 600,
+    'height' => 400
+  ];
+}
 
 ?>
 <div class="group relative bg-white border border-gray-200 mx-2 xl:mx-4 flex flex-col overflow-hidden">
