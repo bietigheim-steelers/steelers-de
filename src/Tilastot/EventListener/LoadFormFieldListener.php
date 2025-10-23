@@ -19,7 +19,39 @@ class LoadFormFieldListener
 {
     public function __invoke(Widget $widget, string $formId, array $formData, Form $form): Widget
     {
-        if (is_array($widget->options) && ($widget->options[0]['value'] == 'gamedays' || $widget->options[0]['value'] == 'gamedays_away')) {
+        if (is_array($widget->options) && $widget->options[0]['value'] == 'gamedays_group') {
+
+            $column = array('gamedate >= ? AND hometeam = ? AND id != ? AND optional != ?');
+            $displayTeam = 'awayteam';
+
+            $games = Games::findAll(array(
+                'order'   => ' gamedate ASC',
+                'column'  => $column,
+                'value'   => array(time() + (10 * 60 * 60), 36, 2668692721, true)
+            ));
+
+            if (!$games) {
+                $widget->options = array('value' => 'no-game-found', 'label' => "Kein Spiel gefunden.");
+            } else {
+                $gameArray = $games->fetchAll();
+                $options = array_map(function ($game) use ($displayTeam, $widget) {
+
+                    $gameConfig = unserialize($game['gameConfig']);
+                    $away = Standings::findByIdAndRound($game[$displayTeam], $game['round'], true);
+                    $date = \Contao\Date::parse('D d.m.Y', $game['gamedate']);
+                    $text = $date . ' - '  . $away['name'];
+                    if(in_array($widget->options[0]['label'], $gameConfig)) {
+                        $disabled = 'disabled="disabled"';
+                        $text .= ' (ausverkauft)';
+                    } else {
+                        $disabled = '';
+                    }
+                    return array('value' => $text, 'label' => $text, 'disabled' => $disabled);
+                }, $gameArray);
+                array_unshift($options, array('value' => '', 'label' => 'Bitte Spiel wählen...'));
+                $widget->options = $options;
+            }
+        } else if (is_array($widget->options) && ($widget->options[0]['value'] == 'gamedays' || $widget->options[0]['value'] == 'gamedays_away')) {
 
             $column = array('gamedate >= ? AND hometeam = ? AND id != ? AND optional != ?');
             $displayTeam = 'awayteam';

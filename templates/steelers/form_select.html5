@@ -28,7 +28,7 @@
             <?php endif; ?>
 
             <?php if ('option' == $option['type']) : ?>
-                <option value="<?= $option['value'] ?>" <?= $option['selected'] ?>><?= $option['label'] ?></option>
+                <option value="<?= $option['value'] ?>" <?= $option['selected'] ?><?= $option['disabled'] ?>><?= $option['label'] ?></option>
             <?php endif; ?>
 
             <?php if ('group_end' == $option['type']) : ?>
