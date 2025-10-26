@@ -85,13 +85,17 @@ class updateVideoportal
 
             $category = 0;
 
-            if (strpos($video['title'], 'Highlights') >= 0) {
+
+            if (strpos($video['title'], 'Highlights') !== false) {
                 $display_category = 'Highlights';
                 $category = 29;
-            } elseif (strpos($video['title'], 'Pressekonferenz') >= 0) {
+            } elseif (strpos($video['title'], 'Pressekonferenz') !== false) {
                 $display_category = 'Pressekonferenz';
                 $category = 30;
             }
+
+            var_dump($video['title'], $display_category, $category);
+
 
             if ($category == 0) {
                 continue;
