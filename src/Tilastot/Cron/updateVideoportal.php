@@ -83,12 +83,18 @@ class updateVideoportal
             }
             $game = $this->determineGame($video);
 
-            if (strpos($video['title'], 'Highlights') > 0) {
+            $category = 0;
+
+            if (strpos($video['title'], 'Highlights') >= 0) {
                 $display_category = 'Highlights';
                 $category = 29;
-            } elseif (strpos($video['title'], 'Pressekonferenz') > 0) {
+            } elseif (strpos($video['title'], 'Pressekonferenz') >= 0) {
                 $display_category = 'Pressekonferenz';
                 $category = 30;
+            }
+
+            if ($category == 0) {
+                continue;
             }
 
             $headline = date('d.m.Y', $game['date']) . " - " . $display_category . " - " . $game['homeTeam']['name'] . " vs. " . $game['awayTeam']['name'];
