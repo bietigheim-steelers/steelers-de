@@ -37,14 +37,16 @@ class updateVideoportal
 
         $steelersFeed = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCaVaIAlCziRfT9A4Yw5cb5Q';
         $setvFeed1 = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCy7nHxKl2ZQ9ZkxFlvt8lWQ';
+        $del2Feed1 = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLLj7IG0GXbwpeJEamF3R2Iy2LDasYFDZR';
         // $spradeFeed1 = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpIteElx6nKfKsytUHq0g6xbsj';
         // $spradeFeed2 = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpItdGEy0y2NDwVvXxJvn8LXU6';
 
         $steelersVideos = $this->getLatestVideos($steelersFeed);
         $setvVideos1 = $this->getLatestVideos($setvFeed1);
+        $del2Videos1 = $this->getLatestVideos($del2Feed1);
         // $spradeVideos1 = $this->getLatestVideos($spradeFeed1);
         // $spradeVideos2 = $this->getLatestVideos($spradeFeed2);
-        // $spradeVideos = array_merge($spradeVideos1, $spradeVideos2);
+        $setvVideos = array_merge($setvVideos1, $del2Videos1);
 
         // Steelers Latest Videos
         foreach ($steelersVideos as $video) {
@@ -75,7 +77,7 @@ class updateVideoportal
         }
 
         // SportEurope.TV Latest Videos
-        foreach ($setvVideos1 as $video) {
+        foreach ($setvVideos as $video) {
             if (strpos($video['title'], 'Bietigheim') == false) {
                 continue;
             }
