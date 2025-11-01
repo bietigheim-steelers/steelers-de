@@ -8,6 +8,19 @@ require 'recipe/contao.php';
 set('repository', 'git@github.com:bietigheim-steelers/steelers-de.git');
 set('git_tty', true);
 
+set('shared_dirs', [
+  'assets/images',
+  'contao-manager',
+  'files/steelers/fonts',
+  'files/steelers/icons',
+  'files/steelers/layout',
+  'files/steelers/tools',
+  '{{public_path}}/share',
+  'system/config',
+  'var/backups',
+  'var/logs',
+]);
+
 add('shared_files', ['config/config.yml']);
 
 set('bin/php', function () {
