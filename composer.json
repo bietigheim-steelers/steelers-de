@@ -1,0 +1,58 @@
+{
+  "type": "project",
+  "require": {
+    "automattic/woocommerce": "^3.1",
+    "christianbarkowsky/contao-tiny-compress-images": "^2.1",
+    "codefog/contao-news_categories": "^3.4",
+    "con4gis/pwa": "^2.5",
+    "contao/calendar-bundle": "4.13.*",
+    "contao/comments-bundle": "4.13.*",
+    "contao/conflicts": "*@dev",
+    "contao/faq-bundle": "4.13.*",
+    "contao/listing-bundle": "4.13.*",
+    "contao/manager-bundle": "4.13.*",
+    "contao/news-bundle": "4.13.*",
+    "contao/newsletter-bundle": "4.13.*",
+    "dieschittigs/contao-wrapper-bundle": "^0.1.0",
+    "heimrichhannot/contao-multifileupload-bundle": "^1.9",
+    "heimrichhannot/contao-news_media": "^1.2",
+    "heimrichhannot/contao-utils-bundle": "2.239.2",
+    "inspiredminds/contao-mailer-command": "^1.0",
+    "markocupic/gallery-creator-bundle": "^1.2",
+    "menatwork/contao-multicolumnwizard-bundle": "^3.5",
+    "mixpanel/mixpanel-php": "^2.6",
+    "oveleon/contao-cookiebar": " 1.16.6",
+    "terminal42/contao-conditionalformfields": "^3.0",
+    "terminal42/contao-mp_forms": "^4.4",
+    "terminal42/notification_center": "1.6.18"
+  },
+  "require-dev": {
+    "contao/manager-plugin": "^2.0"
+  },
+  "extra": {
+    "public-dir": "public",
+    "contao-component-dir": "assets",
+    "contao-manager-plugin": "App\\Tilastot\\ContaoManager\\ContaoManagerPlugin"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "@php vendor/bin/contao-setup"
+    ],
+    "post-update-cmd": [
+      "@php vendor/bin/contao-setup"
+    ]
+  },
+  "config": {
+    "allow-plugins": {
+      "contao-components/installer": true,
+      "contao/manager-plugin": true,
+      "contao-community-alliance/composer-plugin": true,
+      "php-http/discovery": true
+    }
+  }
+}
