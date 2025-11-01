@@ -19,9 +19,8 @@ set('bin/composer', function () {
 
 task('build', function () {
   cd('{{release_path}}');
-  run('nvm use 16');
-  run('npm ci');
-  run('npm run build');
+  run('~/.nvm/versions/node/v16.20.2/bin/npm ci');
+  run('~/.nvm/versions/node/v16.20.2/bin/npm run build');
 });
 
 // Hosts
