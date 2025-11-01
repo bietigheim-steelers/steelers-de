@@ -23,8 +23,7 @@ set('use_nvm', function () {
 
 task('build', function () {
   cd('{{release_path}}');
-  run('{{use_nvm}} && npm ci');
-  run('npm run build');
+  run('{{use_nvm}} && npm ci && npm run build');
 });
 
 // Hosts
