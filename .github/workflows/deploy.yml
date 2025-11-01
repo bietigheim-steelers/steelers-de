@@ -1,4 +1,4 @@
-on: 
+on:
   push:
     branches:
       - main
@@ -8,40 +8,26 @@ jobs:
     name: 🇸🇱 Deploy
     runs-on: ubuntu-latest
     steps:
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v4
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
 
-    - name: 🏗 build css and js
-      uses: actions/setup-node@v3
-      env:
-        COMPOSE_TLS_VERSION: TLSv1_2
-      with:
-        node-version: 16
-    - run: npm ci
-    - run: npm run build
+      - name: 🏗 build css and js
+        uses: actions/setup-node@v3
+        env:
+          COMPOSE_TLS_VERSION: TLSv1_2
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: npm run build
 
-    - name: 🚢 deploy files to prod
-      uses: burnett01/rsync-deployments@7.0.1
-      with:
-        switches: -avzr --exclude='/*.*' --exclude='.git/' --exclude='node_modules/'
-        path: ./
-        remote_path: ${{ secrets.DEPLOY_PATH }}
-        remote_host: ${{ secrets.DEPLOY_HOST }}
-        remote_port: ${{ secrets.DEPLOY_PORT }}
-        remote_user: ${{ secrets.DEPLOY_USER }}
-        remote_key: ${{ secrets.DEPLOY_KEY }}
-        remote_key_pass: ${{ secrets.DEPLOY_KEY_PASS }}
+      - name: 🐘 Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
 
-    - name: rebuild cache on prod
-      uses: appleboy/ssh-action@v1.1.0
-      with:
-        host: ${{ secrets.DEPLOY_HOST }}
-        username: ${{ secrets.DEPLOY_USER }}
-        key: ${{ secrets.DEPLOY_KEY }}
-        port: ${{ secrets.DEPLOY_PORT }}
-        passphrase: ${{ secrets.DEPLOY_KEY_PASS }}
-        script: |
-          cd ${{ secrets.DEPLOY_PATH }}
-          cd src/
-          chmod 744 updateTheme.sh
-          ./updateTheme.sh
+      - name: 🚀 Deploy
+        uses: deployphp/action@v1
+        with:
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          dep: deploy
+          deployer-version: "7.5.12"
