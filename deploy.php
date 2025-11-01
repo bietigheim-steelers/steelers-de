@@ -8,6 +8,8 @@ require 'recipe/contao.php';
 set('repository', 'git@github.com:bietigheim-steelers/steelers-de.git');
 set('git_tty', true);
 
+add('shared_files', ['config/config.yml']);
+
 set('bin/php', function () {
   return '/usr/bin/php7.4';
 });
