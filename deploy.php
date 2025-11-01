@@ -16,11 +16,15 @@ set('bin/php', function () {
 set('bin/composer', function () {
   return '{{bin/php}} ~/bin/composer.phar';
 });
+set('nvm', 'source ~/.nvm/nvm.sh');
+set('use_nvm', function () {
+  return '{{nvm}} && nvm use 16 && node --version';
+});
 
 task('build', function () {
   cd('{{release_path}}');
-  run('~/.nvm/versions/node/v16.20.2/bin/npm ci');
-  run('~/.nvm/versions/node/v16.20.2/bin/npm run build');
+  run('{{use_nvm}} && npm ci');
+  run('npm run build');
 });
 
 // Hosts
