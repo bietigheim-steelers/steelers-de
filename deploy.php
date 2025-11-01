@@ -17,6 +17,12 @@ set('bin/composer', function () {
   return '{{bin/php}} ~/bin/composer.phar';
 });
 
+task('build', function () {
+  cd('{{release_path}}');
+  run('nvm use 16');
+  run('npm ci');
+  run('npm run build');
+});
 
 // Hosts
 host('steelers.de')
@@ -27,3 +33,4 @@ host('steelers.de')
 // Hooks
 after('deploy:failed', 'deploy:unlock');
 after('deploy:publish', 'deploy:cleanup');
+after('deploy:update_code', 'build');
