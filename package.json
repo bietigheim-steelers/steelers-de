@@ -3,9 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "css-dev": "npx tailwindcss -i ./src/Steelers/css/main.css -o ./files/steelers/css/steelers.css --watch --config tailwind.config.cjs",
-    "css-build": "npx tailwindcss -i ./src/Steelers/css/main.css -o ./files/steelers/css/steelers.css --minify --config tailwind.config.cjs",
-    "css-links-build": "npx tailwindcss -i ./src/Steelers/css/links.css -o ./files/steelers/css/links.css --minify --config tailwind-links.config.cjs",
+    "css-dev": "npx tailwindcss -i ./src/Steelers/css/main.css -o ./files/css/steelers.css --watch --config tailwind.config.cjs",
+    "css-build": "npx tailwindcss -i ./src/Steelers/css/main.css -o ./files/css/steelers.css --minify --config tailwind.config.cjs",
+    "css-links-build": "npx tailwindcss -i ./src/Steelers/css/links.css -o ./files/css/links.css --minify --config tailwind-links.config.cjs",
     "js-dev": "vite",
     "js-build": "vite build && vite build --config vite-form.config.js",
     "build": "npm run css-build && npm run css-links-build && npm run js-build",

@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [vue()],
   optimizeDeps: { include: ["lodash.throttle", "lodash.orderby"] },
   build: {
-    outDir: "files/steelers/js/",
+    outDir: "files/js/",
     assetsDir: "./",
     emptyOutDir: false,
     rollupOptions: {

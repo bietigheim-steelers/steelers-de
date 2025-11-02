@@ -11,10 +11,7 @@ set('git_tty', true);
 set('shared_dirs', [
   'assets/images',
   'contao-manager',
-  'files/steelers/fonts',
-  'files/steelers/icons',
-  'files/steelers/layout',
-  'files/steelers/tools',
+  'files/steelers',
   '{{public_path}}/share',
   'system/config',
   'var/backups',
