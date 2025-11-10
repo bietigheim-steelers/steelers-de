@@ -1,11 +1,12 @@
 on:
   push:
     branches:
-      - main
-name: 🇸🇱 Deploy steelers.de (Production) 🇸🇱
+      - "**"
+      - "!main"
+name: 🇸🇱 Deploy steelers.de (Dev) 🇸🇱
 jobs:
   web-deploy:
-    name: 🇸🇱 Deploy to Production
+    name: 🇸🇱 Deploy to Dev
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Get latest code
@@ -16,9 +17,9 @@ jobs:
         with:
           php-version: "7.4"
 
-      - name: 🚀 Deploy to prod
+      - name: 🚀 Deploy to dev
         uses: deployphp/action@v1
         with:
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          dep: deploy stage=prod
+          dep: deploy stage=dev
           deployer-version: "7.5.12"
