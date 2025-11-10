@@ -21,7 +21,7 @@ set('shared_dirs', [
 add('shared_files', ['config/config.yml']);
 
 set('bin/php', function () {
-  return '/usr/bin/php7.4';
+  return '/usr/bin/php8.4';
 });
 set('bin/composer', function () {
   return '{{bin/php}} ~/bin/composer.phar';
