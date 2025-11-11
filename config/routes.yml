@@ -1,6 +1,3 @@
-app.tilastot.utils:
-  resource: ../src/Utils
-  type: annotation
 app.tilastot.controller:
   controller: App\Controller\SeasonTicketController::order
   path: /seasonticket/order
