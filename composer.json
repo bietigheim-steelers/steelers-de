@@ -10,13 +10,12 @@
     "contao/listing-bundle": "5.6.*",
     "contao/manager-bundle": "5.6.*",
     "contao/news-bundle": "5.6.*",
-    "inspiredminds/contao-mailer-command": "^1.0",
     "menatwork/contao-multicolumnwizard-bundle": "^3.5",
     "mixpanel/mixpanel-php": "^2.6",
-    "oveleon/contao-cookiebar": " 1.16.6",
-    "terminal42/contao-conditionalformfields": "^3.0",
-    "terminal42/contao-mp_forms": "^4.4",
-    "terminal42/notification_center": "1.6.18"
+    "oveleon/contao-cookiebar": "^2.3",
+    "terminal42/contao-conditionalformfields": "^3.1",
+    "terminal42/contao-mp_forms": "^5.2",
+    "terminal42/notification_center": "^2.5"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.0"
