@@ -3,115 +3,96 @@ services:
     autowire: true
     autoconfigure: true
     public: false
-  App\Tilastot\:
-    resource: ../src/Tilastot
-    exclude: ../src/Tilastot/{Entity,Migrations,Model,Resources,Tests,Widget}
+  App\:
+    resource: ../src
+    exclude: ../src/{Entity,Migrations,Model,Resources,Tests,Widget}
 
-  App\Tilastot\Utils\:
-    resource: ../src/Tilastot/Utils
+  App\Utils\:
+    resource: ../src/Utils
     public: true
 
-  App\Tilastot\Controller\:
-    resource: ../src/Tilastot/Controller
-    public: true
-    tags: [controller.service_arguments]
-
-  App\Tilastot\Cron\getLatestProductsCron:
-    arguments:
-      - "%woo_key%"
-      - "%woo_secret%"
-
-  App\Tilastot\Cron\postFacebookToWhatsApp:
-    arguments:
-      - "%whatsapp_token%"
-      - "%whatsapp_channel%"
-
-  App\Tilastot\Controller\SocialMediaToolsUpload:
+  App\Controller\:
+    resource: ../src/Controller
     public: true
     tags: [controller.service_arguments]
-    arguments:
-      - "%smt_tennant_id%"
-      - "%smt_client_id%"
-      - "%smt_client_secret%"
-      - "%smt_team_id%"
 
-  App\Tilastot\EventListener\LoadFormFieldListener:
+  App\EventListener\LoadFormFieldListener:
     tags:
       - { name: contao.hook, hook: LoadFormFieldListener }
 
-  App\Tilastot\EventListener\GeneratePageListener:
+  App\EventListener\GeneratePageListener:
     tags:
       - { name: contao.hook, hook: generatePage }
     arguments:
       - "%mixpanel_project_token%"
 
-  App\Tilastot\Module\ScheduleModule:
+  App\Module\ScheduleModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_schedule
         type: schedule
-  App\Tilastot\Module\NextGameModule:
+  App\Module\NextGameModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_nextgame
         type: nextgame
-  App\Tilastot\Module\StandingsModule:
+  App\Module\StandingsModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_standings
         type: standings
-  App\Tilastot\Module\RosterModule:
+  App\Module\RosterModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_roster
         type: roster
-  App\Tilastot\Module\ScorerModule:
+  App\Module\ScorerModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_scorer
         type: scorer
-  App\Tilastot\Module\PlayerModule:
+  App\Module\PlayerModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_player
         type: player
-  App\Tilastot\Module\PartnersModule:
+  App\Module\PartnersModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_partners
         type: partners
-  App\Tilastot\Module\CampsModule:
+  App\Module\CampsModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_camps
         type: camps
-  App\Tilastot\Module\BusToursModule:
+  App\Module\BusToursModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_bustours
         type: bustours
-  App\Tilastot\Module\AuctionModule:
+  App\Module\AuctionModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_auction
         type: auction
-  App\Tilastot\ContentElement\WrapperBlockStart:
+  App\ContentElement\WrapperBlockStart:
     tags:
       - name: contao.content_element
         category: grid
         template: wrapper_block_start
         type: rowStart
-  App\Tilastot\ContentElement\WrapperBlockEnd:
+  App\ContentElement\WrapperBlockEnd:
     tags:
       - name: contao.content_element
         category: grid

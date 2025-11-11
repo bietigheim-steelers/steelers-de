@@ -1,13 +1,8 @@
 app.tilastot.utils:
-  resource: ../src/Tilastot/Utils
+  resource: ../src/Utils
   type: annotation
 app.tilastot.controller:
-  controller: App\Tilastot\Controller\SeasonTicketController::order
+  controller: App\Controller\SeasonTicketController::order
   path: /seasonticket/order
-  methods: POST
-  schemes: [https]
-app.tilastot.postsController:
-  controller: App\Tilastot\Controller\SocialMediaToolsUpload::upload
-  path: /social-media-tools/posts/upload
   methods: POST
   schemes: [https]
