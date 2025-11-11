@@ -9,15 +9,15 @@
  * file that was distributed with this source code.
  */
 
-use App\Tilastot\Model\Rounds;
-use App\Tilastot\Model\Games;
-use App\Tilastot\Model\Standings;
-use App\Tilastot\Model\Players;
-use App\Tilastot\Model\PlayerStats;
-use \App\Tilastot\Module\RefreshModule;
-use App\Tilastot\Model\Partners;
-use App\Tilastot\Model\Camps;
-use App\Tilastot\Model\BusTours;
+use App\Model\Rounds;
+use App\Model\Games;
+use App\Model\Standings;
+use App\Model\Players;
+use App\Model\PlayerStats;
+use App\Module\RefreshModule;
+use App\Model\Partners;
+use App\Model\Camps;
+use App\Model\BusTours;
 
 /* Backend Module */
 
@@ -53,11 +53,8 @@ $GLOBALS['TL_MODELS']['tl_tilastot_partners'] = Partners::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_camps'] = Camps::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_bus_tours'] = BusTours::class;
 
-/* Hooks */
-array_unshift($GLOBALS['TL_HOOKS']['newsListFetchItems'], ['App\\Tilastot\\EventListener\\NewsListFetchItemsListener', '__invoke']);
-
 /* Cronjob */
-$GLOBALS['TL_CRON']['hourly'][] = array('App\\Tilastot\\Utils\\TilastotApi', 'refreshAll');
+$GLOBALS['TL_CRON']['hourly'][] = array('App\\Utils\\TilastotApi', 'refreshAll');
 
 /* Wrapper */
 $GLOBALS['TL_WRAPPERS']['start'][] = 'rowStart';
