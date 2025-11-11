@@ -41,13 +41,17 @@ host('steelers.de')
   ->setLabels(['stage' => 'prod'])
   ->set('hostname', 'web01.steelers.de')
   ->set('remote_user', 'scsteelers_deployer_website')
-  ->set('deploy_path', '~/web/2022-steelers-de');
+  ->set('deploy_path', '~/web/2022-steelers-de')
+  ->set('branch', 'main');
 
 host('dev.steelers.de')
   ->setLabels(['stage' => 'dev'])
   ->set('hostname', 'web01.steelers.de')
   ->set('remote_user', 'scsteelers_deployer_dev')
-  ->set('deploy_path', '~/web/dev-steelers-de');
+  ->set('deploy_path', '~/web/dev-steelers-de')
+  ->set('branch', function () {
+    return get('branch_override', get('default_branch', 'main'));
+  });
 
 // Hooks
 after('deploy:failed', 'deploy:unlock');

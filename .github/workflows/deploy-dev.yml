@@ -21,5 +21,5 @@ jobs:
         uses: deployphp/action@v1
         with:
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          dep: deploy stage=dev
+          dep: deploy stage=dev -o branch_override=${{ github.ref_name }}
           deployer-version: "7.5.12"
