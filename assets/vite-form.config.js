@@ -7,12 +7,12 @@ export default defineConfig({
   plugins: [vue()],
   optimizeDeps: { include: ["lodash.throttle", "lodash.orderby"] },
   build: {
-    outDir: "files/js/",
+    outDir: "../files/js/",
     assetsDir: "./",
     emptyOutDir: false,
     rollupOptions: {
       input: {
-        form: "src/Steelers/js/form.js",
+        form: "./js/form.js",
       },
       output: {
         manualChunks: {},

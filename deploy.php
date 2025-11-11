@@ -28,11 +28,11 @@ set('bin/composer', function () {
 });
 set('nvm', 'source ~/.nvm/nvm.sh');
 set('use_nvm', function () {
-  return '{{nvm}} && nvm use 16 && node --version';
+  return '{{nvm}} && nvm use 24 && node --version';
 });
 
 task('build', function () {
-  cd('{{release_path}}');
+  cd('{{release_path}}/assets');
   run('{{use_nvm}} && npm ci && npm run build');
 });
 
