@@ -11,8 +11,8 @@ env
 node_modules
 dist
 dist-ssr
-files/css
-files/js
+files/steelers/css
+files/steelers/js
 *.local
 
 # Editor directories and files
@@ -28,4 +28,5 @@ files/js
 
 .env
 vendor
+assets
 booked_seats.json

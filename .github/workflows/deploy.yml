@@ -14,7 +14,16 @@ jobs:
       - name: 🐘 Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: "8.4"
+          php-version: "7.4"
+
+      - name: 🏗 build css and js
+        uses: actions/setup-node@v3
+        env:
+          COMPOSE_TLS_VERSION: TLSv1_2
+        with:
+          node-version: 16
+      - run: npm ci
+      - run: npm run build
 
       - name: 🚀 Deploy to prod
         uses: deployphp/action@v1

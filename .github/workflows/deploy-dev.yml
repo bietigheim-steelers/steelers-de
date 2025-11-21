@@ -17,9 +17,18 @@ jobs:
         with:
           php-version: "8.4"
 
+      - name: 🏗 build css and js
+        uses: actions/setup-node@v3
+        env:
+          COMPOSE_TLS_VERSION: TLSv1_2
+        with:
+          node-version: 24
+      - run: npm ci
+      - run: npm run build
+
       - name: 🚀 Deploy to dev
         uses: deployphp/action@v1
         with:
           private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          dep: deploy stage=dev -o branch_override=${{ github.ref_name }}
+          dep: deploy stage=dev
           deployer-version: "7.5.12"
