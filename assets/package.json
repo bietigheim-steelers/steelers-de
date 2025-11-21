@@ -8,7 +8,7 @@
     "css-links-build": "npx tailwindcss -i ./css/links.css -o ../files/css/links.css --minify --config tailwind-links.config.cjs",
     "js-dev": "vite",
     "js-build": "vite build && vite build --config vite-form.config.js && touch ../files/js/.public",
-    "build": "npm run css-build && npm run css-links-build && npm run js-build"
+    "build": "npm run css-build && npm run css-links-build && npm run js-build && touch ../files/css/.public"
   },
   "devDependencies": {
     "@tailwindcss/aspect-ratio": "^0.4.0",

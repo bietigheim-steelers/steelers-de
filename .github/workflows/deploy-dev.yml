@@ -23,8 +23,8 @@ jobs:
           COMPOSE_TLS_VERSION: TLSv1_2
         with:
           node-version: 24
-      - run: npm ci
-      - run: npm run build
+      - run: cd assets && npm ci
+      - run: cd assets && npm run build
 
       - name: 🚀 Deploy to dev
         uses: deployphp/action@v1
