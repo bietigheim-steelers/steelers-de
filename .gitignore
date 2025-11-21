@@ -28,5 +28,7 @@ files/steelers/js
 
 .env
 vendor
-assets
+assets/*/
+!assets/css/
+!assets/js/
 booked_seats.json
