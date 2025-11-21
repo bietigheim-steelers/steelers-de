@@ -64,5 +64,4 @@ host('dev.steelers.de')
 
 // Hooks
 after('deploy:failed', 'deploy:unlock');
-after('deploy:update_code', 'build');
 after('deploy:success', 'cachetool:clear:opcache');
