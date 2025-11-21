@@ -15,7 +15,7 @@ jobs:
 
       - name: 🗄️ Dump and Import Database
         run: |
-          ssh scsteelers_deployer_website@steelers.de << 'EOF'
+          ssh scsteelers_deployer_dev@steelers.de << 'EOF'
             # Load database credentials from file
             source ~/db-credentials.env
             
