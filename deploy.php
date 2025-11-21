@@ -19,6 +19,26 @@ set('shared_dirs', [
   'var/logs',
 ]);
 
+desc('Upload project files');
+task('deploy:update_code', function () {
+  foreach (
+    [
+      'config',
+      'contao',
+      'files/steelers',
+      'files/js',
+      'files/css',
+      'templates',
+      'src',
+      '.env',
+      'composer.json',
+      'composer.lock',
+    ] as $src
+  ) {
+    upload($src, '{{release_path}}/', ['options' => ['--recursive', '--relative']]);
+  }
+});
+
 add('shared_files', ['config/config.yml']);
 
 set('bin/php', function () {
@@ -26,15 +46,6 @@ set('bin/php', function () {
 });
 set('bin/composer', function () {
   return '{{bin/php}} ~/bin/composer.phar';
-});
-set('nvm', 'source ~/.nvm/nvm.sh');
-set('use_nvm', function () {
-  return '{{nvm}} && nvm use 16 && node --version';
-});
-
-task('build', function () {
-  cd('{{release_path}}');
-  run('{{use_nvm}} && npm ci && npm run build');
 });
 
 // Hosts
