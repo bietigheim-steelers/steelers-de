@@ -46,6 +46,8 @@ set('bin/composer', function () {
   return '{{bin/php}} ~/bin/composer.phar';
 });
 
+set('cachetool_url', 'https://github.com/gordalina/cachetool/releases/download/7.1.0/cachetool.phar');
+
 // Hosts
 host('steelers.de')
   ->setLabels(['stage' => 'prod'])
