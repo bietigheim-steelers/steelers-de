@@ -29,12 +29,11 @@ task('deploy:update_code', function () {
       'files/css',
       'templates',
       'src',
-      '.env',
       'composer.json',
       'composer.lock',
     ] as $src
   ) {
-    upload($src, '{{release_path}}/', ['options' => ['--recursive', '--relative']]);
+    upload($src, '{{release_path}}/', ['progress_bar' => false, 'options' => ['--recursive', '--relative']]);
   }
 });
 
