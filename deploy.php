@@ -23,7 +23,7 @@ desc('Upload project files');
 task('deploy:update_code', function () {
   foreach (
     [
-      'cachetool.phar'
+      'cachetool.phar',
       'config',
       'files/steelers',
       'files/js',
