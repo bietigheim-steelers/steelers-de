@@ -41,7 +41,8 @@ host('steelers.de')
   ->setLabels(['stage' => 'prod'])
   ->set('hostname', 'web01.steelers.de')
   ->set('remote_user', 'scsteelers_deployer_website')
-  ->set('deploy_path', '~/web/2022-steelers-de');
+  ->set('deploy_path', '~/web/2022-steelers-de')
+  ->set('cachetool_args', '--web=SymfonyHttpClient --web-path=./{{public_path}} --web-url=https://steelers.de');
 
 host('dev.steelers.de')
   ->setLabels(['stage' => 'dev'])
@@ -51,5 +52,5 @@ host('dev.steelers.de')
 
 // Hooks
 after('deploy:failed', 'deploy:unlock');
-after('deploy:publish', 'deploy:cleanup');
 after('deploy:update_code', 'build');
+after('deploy:success', 'cachetool:clear:opcache');
