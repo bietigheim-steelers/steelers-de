@@ -23,6 +23,7 @@ desc('Upload project files');
 task('deploy:update_code', function () {
   foreach (
     [
+      'cachetool.phar'
       'config',
       'files/steelers',
       'files/js',
@@ -46,7 +47,7 @@ set('bin/composer', function () {
   return '{{bin/php}} ~/bin/composer.phar';
 });
 
-set('cachetool_url', 'https://github.com/gordalina/cachetool/releases/download/7.1.0/cachetool.phar');
+set('bin/cachetool', '~/bin/cachetool.phar');
 
 // Hosts
 host('steelers.de')
