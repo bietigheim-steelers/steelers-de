@@ -1,0 +1,40 @@
+on:
+  workflow_dispatch:
+    inputs:
+      sync_database:
+        description: 'Sync database from prod to dev'
+        type: boolean
+        default: true
+name: 🗄️ Sync Database from Prod to Dev
+jobs:
+  sync-database:
+    name: 🗄️ Sync Database from Prod to Dev
+    runs-on: ubuntu-latest
+    if: inputs.sync_database == true
+    steps:
+      - name: 🔐 Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H steelers.de >> ~/.ssh/known_hosts
+
+      - name: 🗄️ Dump and Import Database
+        run: |
+          ssh scsteelers_deployer_website@steelers.de << 'EOF'
+            # Load database credentials from file
+            source ~/db-credentials.env
+            
+            # Create dump from production database with DROP TABLE statements
+            mysqldump -h localhost -u $PROD_DB_USER -p$PROD_DB_PASSWORD --add-drop-table $PROD_DB_NAME > /tmp/prod_dump_$(date +%Y%m%d_%H%M%S).sql
+            
+            # Import into dev database (will drop and recreate tables)
+            mysql -h localhost -u $DEV_DB_USER -p$DEV_DB_PASSWORD $DEV_DB_NAME < /tmp/prod_dump_*.sql
+            
+            cd ~/web/dev-steelers-de/current && /usr/bin/php8.4 bin/console contao:migrate --no-interaction
+
+            # Cleanup
+            rm /tmp/prod_dump_*.sql
+            
+            echo "✅ Database sync completed"
+          EOF
