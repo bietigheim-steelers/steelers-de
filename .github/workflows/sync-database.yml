@@ -1,7 +1,4 @@
 on:
-  push:
-    branches:
-      - "contao-5-6"
   workflow_dispatch:
     inputs:
       sync_database:
