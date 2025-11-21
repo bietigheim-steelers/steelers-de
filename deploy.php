@@ -3,6 +3,7 @@
 namespace Deployer;
 
 require 'recipe/contao.php';
+require 'contrib/cachetool.php';
 
 // Config
 set('repository', 'git@github.com:bietigheim-steelers/steelers-de.git');
