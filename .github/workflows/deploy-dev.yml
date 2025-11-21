@@ -3,10 +3,10 @@ on:
     branches:
       - "**"
       - "!main"
-name: 🇸🇱 Deploy steelers.de (Dev) 🇸🇱
+name: 🛠️ Deploy steelers.de (Dev)
 jobs:
   web-deploy:
-    name: 🇸🇱 Deploy to Dev
+    name: 🛠️ Deploy to Dev
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Get latest code

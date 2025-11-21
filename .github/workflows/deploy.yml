@@ -2,7 +2,7 @@ on:
   push:
     branches:
       - main
-name: 🇸🇱 Deploy steelers.de (Production) 🇸🇱
+name: 🇸🇱 Deploy steelers.de (Production)
 jobs:
   web-deploy:
     name: 🇸🇱 Deploy to Production
