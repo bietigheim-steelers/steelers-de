@@ -6,8 +6,6 @@ require 'recipe/contao.php';
 require 'contrib/cachetool.php';
 
 // Config
-set('repository', 'git@github.com:bietigheim-steelers/steelers-de.git');
-set('git_tty', true);
 
 set('shared_dirs', [
   'assets/images',
@@ -60,7 +58,8 @@ host('dev.steelers.de')
   ->setLabels(['stage' => 'dev'])
   ->set('hostname', 'web01.steelers.de')
   ->set('remote_user', 'scsteelers_deployer_dev')
-  ->set('deploy_path', '~/web/dev-steelers-de');
+  ->set('deploy_path', '~/web/dev-steelers-de')
+  ->set('cachetool_args', '--web=SymfonyHttpClient --web-path=./{{public_path}} --web-url=https://dev.steelers.de');
 
 // Hooks
 after('deploy:failed', 'deploy:unlock');
