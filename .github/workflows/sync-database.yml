@@ -15,7 +15,7 @@ jobs:
 
       - name: 🗄️ Dump and Import Database
         run: |
-          ssh scsteelers_deployer_website@steelers.de << 'EOF'
+          ssh scsteelers_deployer_dev@steelers.de << 'EOF'
             # Load database credentials from file
             source ~/db-credentials.env
             
@@ -25,7 +25,7 @@ jobs:
             # Import into dev database (will drop and recreate tables)
             mysql -h localhost -u $DEV_DB_USER -p$DEV_DB_PASSWORD $DEV_DB_NAME < /tmp/prod_dump_*.sql
             
-            cd ~/web/dev-steelers-de/current && /usr/bin/php8.4 bin/console contao:migrate --no-interaction
+            cd ~/web/dev-steelers-de/current && /usr/bin/php8.4 vendor/bin/contao-console contao:migrate --no-interaction
 
             # Cleanup
             rm /tmp/prod_dump_*.sql
