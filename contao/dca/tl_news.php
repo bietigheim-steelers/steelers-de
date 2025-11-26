@@ -21,13 +21,13 @@ $GLOBALS['TL_DCA']['tl_news']['palettes']['default'] = str_replace(
 
 $GLOBALS['TL_DCA']['tl_news']['config']['onsubmit_callback'][] = array('tl_games_for_news', 'updateVideoportal');
 
-class tl_games_for_news extends Backend
+class tl_games_for_news extends Contao\Backend
 {
   public function getGamesForSelect()
   {
     $options = array(0 => '');
 
-    $games = Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate, round FROM tl_tilastot_client_games WHERE gamedate < ? ORDER BY gamedate DESC LIMIT 5")
+    $games = Contao\Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate, round FROM tl_tilastot_client_games WHERE gamedate < ? ORDER BY gamedate DESC LIMIT 5")
       ->execute(time());
 
     while ($games->next()) {
@@ -38,7 +38,7 @@ class tl_games_for_news extends Backend
 
     array_push($options, '-----');
 
-    $games = Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate, round FROM tl_tilastot_client_games WHERE gamedate > ? ORDER BY gamedate ASC LIMIT 5")
+    $games = Contao\Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate, round FROM tl_tilastot_client_games WHERE gamedate > ? ORDER BY gamedate ASC LIMIT 5")
       ->execute(time());
 
     while ($games->next()) {
@@ -50,7 +50,7 @@ class tl_games_for_news extends Backend
     return $options;
   }
 
-  public function updateVideoportal(DataContainer $dc) {
+  public function updateVideoportal(Contao\DataContainer $dc) {
     // Return if there is no active record (override all)
     if (!$dc->activeRecord) {
       return;
@@ -79,8 +79,8 @@ class tl_games_for_news extends Backend
 
     $game = \App\Model\Games::findByPk($dc->activeRecord->game_id);
     if($game && $category) {
-      $homeTeam = \App\Model\Standings::findByIdAndRound($game->hometeam, $game->round);
-      $awayTeam = \App\Model\Standings::findByIdAndRound($game->awayteam, $game->round);
+      $homeTeam = Standings::findByIdAndRound($game->hometeam, $game->round);
+      $awayTeam = Standings::findByIdAndRound($game->awayteam, $game->round);
 
       $headline = Contao\Date::parse('d.m.Y', $game->gamedate) . " - " . $category . " - " . $homeTeam['name'] . " vs. " . $awayTeam['name'];
   
