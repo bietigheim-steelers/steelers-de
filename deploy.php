@@ -22,6 +22,7 @@ task('deploy:update_code', function () {
   foreach (
     [
       'config',
+      'contao',
       'files/steelers',
       'files/js',
       'files/css',
