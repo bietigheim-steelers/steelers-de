@@ -26,8 +26,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_camps'] = array(
     // List
     'list' => array(
         'sorting' => array(
-            'mode'                    => DataContainer::MODE_SORTED,
-            'flag'                    => DataContainer::SORT_YEAR_DESC,
+            'mode'                    => Contao\DataContainer::MODE_SORTED,
+            'flag'                    => Contao\DataContainer::SORT_YEAR_DESC,
             'fields'                  => array('startdate'),
             'panelLayout'             => 'filter;search,limit'
         ),

@@ -27,7 +27,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_bus_tours'] = array(
     'list' => array(
         'sorting' => array(
             'mode'                    => 11,
-            'flag'                    => DataContainer::SORT_MONTH_DESC,
+            'flag'                    => Contao\DataContainer::SORT_MONTH_DESC,
             'fields'                  => array('tourdate'),
             'panelLayout'             => 'filter;search,limit'
         ),
@@ -157,7 +157,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_bus_tours'] = array(
             'exclude'                 => true,
             'toggle'                  => true,
             'filter'                  => true,
-            'flag'                    => DataContainer::SORT_INITIAL_LETTER_ASC,
+            'flag'                    => Contao\DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType'               => 'checkbox',
             'eval'                    => array('doNotCopy' => true),
             'sql'                     => "char(1) NOT NULL default ''"
@@ -165,7 +165,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_bus_tours'] = array(
     )
 );
 
-class tl_tilastot_bus_tours extends Backend
+class tl_tilastot_bus_tours extends Contao\Backend
 {
 	public function loadDate($value)
 	{
@@ -182,7 +182,7 @@ class tl_tilastot_bus_tours extends Backend
     {
         $options = array(0 => '');
 
-        $games = Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate, round FROM tl_tilastot_client_games WHERE gamedate > ? AND awayteam = ? ORDER BY gamedate ASC")
+        $games = Contao\Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate, round FROM tl_tilastot_client_games WHERE gamedate > ? AND awayteam = ? ORDER BY gamedate ASC")
         ->execute(time(), 54744);
 
         while ($games->next()) {

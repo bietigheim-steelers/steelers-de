@@ -260,9 +260,9 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
     )
 );
 
-class tl_tilastot_client_games extends Backend
+class tl_tilastot_client_games extends Contao\Backend
 {
-    function saveCallback(DataContainer $dc)
+    function saveCallback(Contao\DataContainer $dc)
     {
         // Return if there is no ID
         if (!$dc->id) {

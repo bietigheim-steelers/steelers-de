@@ -24,8 +24,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_partners'] = array(
     // List
     'list' => array(
         'sorting' => array(
-            'mode'                    => DataContainer::MODE_SORTED,
-            'flag'                    => DataContainer::SORT_INITIAL_LETTER_ASC,
+            'mode'                    => Contao\DataContainer::MODE_SORTED,
+            'flag'                    => Contao\DataContainer::SORT_INITIAL_LETTER_ASC,
             'fields'                  => array('name'),
             'panelLayout'             => 'filter;search,limit'
         ),

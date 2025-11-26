@@ -118,7 +118,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_players'] = array(
             'exclude'                 => true,
             'toggle'                  => true,
             'filter'                  => true,
-            'flag'                    => DataContainer::SORT_INITIAL_LETTER_ASC,
+            'flag'                    => Contao\DataContainer::SORT_INITIAL_LETTER_ASC,
             'inputType'               => 'checkbox',
             'eval'                    => array('doNotCopy' => true),
             'sql'                     => "char(1) NOT NULL default ''"

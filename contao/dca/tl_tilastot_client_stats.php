@@ -27,8 +27,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_stats'] = array
             ),
             'onload_callback' => [
                 function () {
-                    $db = Database::getInstance();
-                    $pid = Input::get('pid');
+                    $db = Contao\Database::getInstance();
+                    $pid = Contao\Input::get('pid');
                     if (empty($pid)) {
                         return;
                     }
@@ -44,7 +44,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_stats'] = array
     (
         'sorting' => array
         (
-            'mode'                    => DataContainer::MODE_PARENT,
+            'mode'                    => Contao\DataContainer::MODE_PARENT,
             'fields' => ['round'],
             'headerFields' => ['firstname','lastname'],
             'panelLayout'             => 'filter;search,limit',
