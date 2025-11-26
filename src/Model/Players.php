@@ -14,6 +14,30 @@ namespace App\Model;
 use Contao\Database;
 use Contao\Model;
 
+/**
+ * @property int $id
+ * @property int $tstamp
+ * @property int $tilastotid
+ * @property int $eliteprospectsid
+ * @property string $alias
+ * @property int $jersey
+ * @property string $published
+ * @property string $firstname
+ * @property string $lastname
+ * @property string $position
+ * @property string $nationality
+ * @property string $shoots
+ * @property string $birthplace
+ * @property string $warmuppartner
+ * @property int $birthday
+ * @property int $height
+ * @property int $weight
+ * @property string $steelersince
+ * @property string $about
+ * @property string $epstats
+ * @property string $orderPictures
+ * @property string $pictures
+ */
 class Players extends Model
 {
 

@@ -1,14 +1,4 @@
 <?php
-
-/*
- * This file is part of the TilastotBundle.
- *
- * (c) Dominik Sander <http://dominix-design.de>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
 use App\Model\Rounds;
 use App\Model\Games;
 use App\Model\Standings;
