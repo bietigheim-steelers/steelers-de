@@ -110,9 +110,9 @@
 <drawer-menu>
 	<a href="<?= $this->request ?>#<?= $this->skipId ?>" class="hidden"><?= $this->skipNavigation ?></a>
 	<a href="/"><img class="header-nav-logo" src="files/steelers/layout/logo-nav.svg" alt="Bietigheim Steelers Logo"></a>
-	<?= $this->replaceInsertTags('{{insert_article::before-nav-article}}'); ?>
+	{{insert_article::before-nav-article}}
 	<?= $this->items ?>
-	<?= $this->replaceInsertTags('{{insert_article::after-nav-article}}'); ?>
+	{{insert_article::after-nav-article}}
 </drawer-menu>
 <a id=" <?= $this->skipId ?>" class="hidden">&nbsp;</a>
 <!-- indexer::continue -->

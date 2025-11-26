@@ -23,7 +23,7 @@
   "extra": {
     "public-dir": "public",
     "contao-component-dir": "assets",
-    "contao-manager-plugin": "App\\Tilastot\\ContaoManager\\ContaoManagerPlugin"
+    "contao-manager-plugin": "App\\ContaoManager\\ContaoManagerPlugin"
   },
   "autoload": {
     "psr-4": {
