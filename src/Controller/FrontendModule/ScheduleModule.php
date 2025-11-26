@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module;
+namespace App\Controller\FrontendModule;
 
 use Contao\Module;
 use App\Model\Rounds;

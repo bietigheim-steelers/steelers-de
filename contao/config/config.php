@@ -21,7 +21,7 @@ use App\Model\BusTours;
 
 /* Backend Module */
 
-$GLOBALS['BE_MOD']['del'] = array(
+$GLOBALS['BE_MOD']['saison'] = array(
 	'tilastot_rounds' => array(
 		'tables' => array('tl_tilastot_client_rounds')
 	),

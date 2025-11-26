@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ContentElement;
+namespace App\Controller\ContentElement;
 
 use Contao\ContentModel;
 use Contao\CoreBundle\Controller\ContentElement\AbstractContentElementController;
