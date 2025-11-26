@@ -1,20 +1,37 @@
+<?php
+use Contao\CoreBundle\File\Metadata;
+?>
 <div class="defaultcontainer gridwrapper !px-2 md:px-0 block">
   <div class="inside grid ce_wrapperStart home-partner">
     <?php foreach ($this->partners as $partner) : ?>
-    <?php
+      <?php
       if (!$partner['logo']) {
         continue;
       }
-      $image = $this->getImage($this->urlEncode($partner['logo']->path), 144, 144, 'proportional');
       ?>
-    <div class="ce_hyperlink block">
+      <div class="ce_hyperlink block">
+        <?php
+        echo $this->figure(
+          $this->urlEncode($partner['logo']->path),
+          [144, 144, 'proportional'],
+          [
+            'metadata' => new Metadata([
+              Metadata::VALUE_ALT => $partner['name'],
+              Metadata::VALUE_CAPTION => $partner['name']
+            ]),
+            'linkHref' => $partner['url'],
+            'options' => ['attr' => ['class' => 'hidden lg:block absolute bottom-0', 'loading' => 'lazy']]
+            ]
+        ); ?>
+        <!--
       <figure class="image_container">
         <a href="<?= $partner['url'] ?>" title="<?= $partner['name']; ?>" class="hyperlink_img" target="_blank"
           rel="noreferrer noopener">
-          <img src="<?= $image ?>" width="144" height="144" alt="<?= $partner['name']; ?>">
+          <img src="$image" width="144" height="144" alt="<?= $partner['name']; ?>">
         </a>
       </figure>
-    </div>
+    //-->
+      </div>
     <?php endforeach ?>
   </div>
 </div>

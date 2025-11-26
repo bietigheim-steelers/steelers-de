@@ -26,73 +26,73 @@ services:
     arguments:
       - "%mixpanel_project_token%"
 
-  App\Module\ScheduleModule:
+  App\Controller\FrontendModule\ScheduleModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_schedule
         type: schedule
-  App\Module\NextGameModule:
+  App\Controller\FrontendModule\NextGameModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_nextgame
         type: nextgame
-  App\Module\StandingsModule:
+  App\Controller\FrontendModule\StandingsModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_standings
         type: standings
-  App\Module\RosterModule:
+  App\Controller\FrontendModule\RosterModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_roster
         type: roster
-  App\Module\ScorerModule:
+  App\Controller\FrontendModule\ScorerModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_scorer
         type: scorer
-  App\Module\PlayerModule:
+  App\Controller\FrontendModule\PlayerModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_player
         type: player
-  App\Module\PartnersModule:
+  App\Controller\FrontendModule\PartnersModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_partners
         type: partners
-  App\Module\CampsModule:
+  App\Controller\FrontendModule\CampsModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_camps
         type: camps
-  App\Module\BusToursModule:
+  App\Controller\FrontendModule\BusToursModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_bustours
         type: bustours
-  App\Module\AuctionModule:
+  App\Controller\FrontendModule\AuctionModule:
     tags:
       - name: contao.frontend_module
         category: tilastot
         template: mod_auction
         type: auction
-  App\ContentElement\WrapperBlockStart:
+  App\Controller\ContentElement\WrapperBlockStart:
     tags:
       - name: contao.content_element
         category: grid
         template: wrapper_block_start
         type: rowStart
-  App\ContentElement\WrapperBlockEnd:
+  App\Controller\ContentElement\WrapperBlockEnd:
     tags:
       - name: contao.content_element
         category: grid

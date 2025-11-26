@@ -1,11 +1,12 @@
 <!-- indexer::stop -->
-<?php
-$newsletter_image = $this->getImage($this->urlEncode('files/steelers/layout/player_newsletter.png'), 700, 700, 'proportional');
-
-?>
 <div class="<?= $this->class ?> defaultcontainer form-home bg-black relative !mt-32 xl:!mt-64" <?= $this->cssID ?><?php if ($this->style) : ?> style="<?= $this->style ?>" <?php endif; ?>>
 
-  <img src="<?= $newsletter_image ?>" class="hidden lg:block absolute bottom-0" alt="STEELERS Newsletter" loading="lazy" />
+  <?php
+  echo $this->figure(
+    'steelers/layout/player_newsletter.png',
+    [700, 700, 'proportional'],
+    ['options' => ['attr' => ['class' => 'hidden lg:block absolute bottom-0', 'loading' => 'lazy']]]
+  ); ?>
 
   <div class="grid lg:grid-cols-2">
     <div class="formbody text-steelwhite offset lg:col-start-2 p-10">

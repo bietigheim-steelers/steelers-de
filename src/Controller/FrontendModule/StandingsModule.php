@@ -42,7 +42,7 @@ class StandingsModule extends AbstractFrontendModuleController
 
     $template->my_team = $model->tilastot_my_team;
     $template->standings = $standings;
-    $template->columns = deserialize($model->tilastot_standings_columns);
+    $template->columns = unserialize($model->tilastot_standings_columns);
     $template->headline = $model->headline;
     $template->headlineUnit = $model->hl;
     $template->cssId = $model->cssID[0];

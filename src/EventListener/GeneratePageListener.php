@@ -41,7 +41,7 @@ class GeneratePageListener
     }
 
     $mp->track($requestUri, [
-      "referer" => $_SERVER['HTTP_REFERER'],
+      "referer" => $_SERVER['HTTP_REFERER'] ?? '',
       "agent" => $userAgent,
       "facebook_referer" => $isFacebookReferer,
     ]);

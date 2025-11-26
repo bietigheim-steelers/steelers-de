@@ -49,7 +49,7 @@ class Rounds extends Model
 
 	public static function findByPkFiltered($id, $justName = false)
 	{
-		if (self::$localCache['r' . $id]) {
+		if (array_key_exists('r' . $id, self::$localCache)) {
 			$season = self::$localCache['r' . $id];
 		} else {
 			$data = self::findByPk($id);

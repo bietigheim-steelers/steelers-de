@@ -12,8 +12,11 @@
       <?= $this->text ?>
     <?php endif; ?>
 
-    <?php if ($this->addImage) : ?>
-      <?php $this->insert('image', $this->arrData); ?>
+    <?php if ($this->addImage && is_array($this->arrData)) : ?>
+      <?php
+      // TODO: doesn't work?!?
+      // $this->insert('image', $this->arrData); 
+      ?>
     <?php endif; ?>
 
     <?php if ($this->addBefore) : ?>

@@ -32,7 +32,7 @@
   <meta name="twitter:description" content="<?php echo $this->description; ?>">
   <meta name="twitter:card" content="summary_large_image">
   <?php
-  if ($GLOBALS['og:image']) {
+  if (array_key_exists('og:image', $GLOBALS)) {
     echo '<meta name="twitter:image" content="' . $GLOBALS['og:image'] . '">';
     echo '<meta name="twitter:card" content="summary_large_image">';
     echo '<meta property="og:image" content="' . $GLOBALS['og:image'] . '" />';

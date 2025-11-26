@@ -21,7 +21,7 @@ class NextGameModule extends AbstractFrontendModuleController
 				'order'   => ' gamedate ASC',
 				'limit'   => ' LIMIT 1',
 				'column'  => array('gamedate >= ? AND hometeam = ?'),
-				'value'   => array(time(), $model->tilastot_my_team, $model->tilastot_my_team)
+				'value'   => array(time(), $model->tilastot_my_team)
 			));
 		} else {
 			$games = Games::findAll(array(

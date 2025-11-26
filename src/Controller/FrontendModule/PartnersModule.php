@@ -17,7 +17,7 @@ class PartnersModule extends AbstractFrontendModuleController
 {
 	protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
 	{
-		$categories = deserialize($model->tilastot_partners_category);
+		$categories = unserialize($model->tilastot_partners_category);
 		$category_list = implode('"|"', $categories);
 		$partners = Partners::findAll(array(
 			'column'  => array(

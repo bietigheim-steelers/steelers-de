@@ -1,4 +1,6 @@
 <?php
+use Contao\CoreBundle\File\Metadata;
+
 if (!function_exists('tokenTruncate')) {
   function tokenTruncate($string, $your_desired_width)
   {
@@ -17,21 +19,21 @@ if (!function_exists('tokenTruncate')) {
     return trim(implode(array_slice($parts, 0, $last_part)));
   }
 }
-try {
-  $container = \Contao\System::getContainer();
-  $rootDir = $container->getParameter('kernel.project_dir');
-
-  $image = $container->get('contao.image.picture_factory')->create($rootDir . '/'  . $this->arrData['singleSRC'], 11);
-  $sources = $image->getSources();
-  $imageObj = $sources[0]['src'];
-  $imageUrl = $imageObj->getUrl($rootDir);
-} catch (Exception $e) {
-  $imageUrl = $this->getImage($this->urlEncode($this->arrData['singleSRC']), 511, 637, 'crop');
-}
 ?>
 <div class="swiper-slide bg-white h-full">
-  <a href="<?= $this->link ?>" data-bigimage="<?= $this->arrData['singleSRC'] ?>">
-    <img src="<?= $imageUrl ?>" class="aspect-news w-full" alt="<?= $this->newsHeadline ?>" loading="lazy" /></a>
+  <?php
+  echo $this->figure(
+    $this->arrData['singleSRC'],
+    [200, 200, 'proportional'],
+    [
+      'metadata' => new Metadata([
+        Metadata::VALUE_ALT => $this->newsHeadline
+      ]),
+      'linkHref' => $this->link,
+      'options' => ['attr' => ['class' => 'aspect-news w-full', 'loading' => 'lazy']],
+    ]
+  );
+  ?>
   <div class="p-5 grow flex flex-col">
     <div class="text-gray-400 italic uppercase">
       <?php if (count($this->categoriesList) > 0) : ?>
