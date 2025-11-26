@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./templates/**/*.html5",
-    "./assets/**/*.js",
-    "./assets/**/*.vue",
-    "./assets/vueform.config.js",
+    "../templates/**/*.html5",
+    "./js/**/*.js",
+    "./js/**/*.vue",
+    "./vueform.config.js",
     "./node_modules/@vueform/vueform/themes/tailwind/**/*.vue",
     "./node_modules/@vueform/vueform/themes/tailwind/**/*.js",
   ],
