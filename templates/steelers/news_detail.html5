@@ -27,11 +27,11 @@ $GLOBALS['og:image'] = $this->Environment->base . $ogimage;
   </div>
     <?php
     if (in_array('Spielbericht', $this->categoriesList) && isset($this->arrData['game_id'])) :
-      $game = \App\Tilastot\Model\Games::findByPk($this->arrData['game_id']);
+      $game = \App\Model\Games::findByPk($this->arrData['game_id']);
       if ($game) :
-        $homeTeam = \App\Tilastot\Model\Standings::findByIdAndRound($game->hometeam, $game->round);
+        $homeTeam = \App\Model\Standings::findByIdAndRound($game->hometeam, $game->round);
         $homeLogo = $this->getImage($this->urlEncode($homeTeam['logo']), 100, 100, 'proportional');
-        $awayTeam = \App\Tilastot\Model\Standings::findByIdAndRound($game->awayteam, $game->round);
+        $awayTeam = \App\Model\Standings::findByIdAndRound($game->awayteam, $game->round);
         $awayLogo = $this->getImage($this->urlEncode($awayTeam['logo']), 100, 100, 'proportional');
     ?>
         <div class="Gamestrip relative overflow-hidden nhl Gamestrip--xl Gamestrip--post bb py-3">

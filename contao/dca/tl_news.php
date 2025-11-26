@@ -1,6 +1,6 @@
 <?php
 
-use App\Tilastot\Model\Standings;
+use App\Model\Standings;
 use Contao\NewsArchiveModel;
 use Contao\System;
 
@@ -77,10 +77,10 @@ class tl_games_for_news extends Backend
       $category = 'Razorsharp';
     }
 
-    $game = \App\Tilastot\Model\Games::findByPk($dc->activeRecord->game_id);
+    $game = \App\Model\Games::findByPk($dc->activeRecord->game_id);
     if($game && $category) {
-      $homeTeam = \App\Tilastot\Model\Standings::findByIdAndRound($game->hometeam, $game->round);
-      $awayTeam = \App\Tilastot\Model\Standings::findByIdAndRound($game->awayteam, $game->round);
+      $homeTeam = \App\Model\Standings::findByIdAndRound($game->hometeam, $game->round);
+      $awayTeam = \App\Model\Standings::findByIdAndRound($game->awayteam, $game->round);
 
       $headline = Contao\Date::parse('d.m.Y', $game->gamedate) . " - " . $category . " - " . $homeTeam['name'] . " vs. " . $awayTeam['name'];
   

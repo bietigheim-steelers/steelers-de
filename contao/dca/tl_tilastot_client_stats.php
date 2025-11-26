@@ -123,7 +123,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_stats'] = array
             'exclude'                 => true,
             'filter'                  => true,
             'inputType'               => 'text',
-            'options_callback'		  => array('App\\Tilastot\\Model\\Rounds', 'findForSelect'),
+            'options_callback'		  => array('App\\Model\\Rounds', 'findForSelect'),
             'eval'                    => array('mandatory' => true, 'rgxp'=>'numeric', 'tl_class' => 'w50'),
             'sql'                     => "int(10) unsigned NOT NULL default '0'"
         ),

@@ -38,7 +38,7 @@
 </select>
 <script>
     <?php
-    $games = \App\Tilastot\Model\Games::findAll(array(
+    $games = \App\Model\Games::findAll(array(
         'order'   => ' gamedate ASC',
         'column'  => array('gamedate >= ? AND hometeam = ? AND optional != ?'),
         'value'   => array(time() + (10 * 60 * 60), 36, true)
@@ -46,7 +46,7 @@
     $gameArray = $games->fetchAll();
 
     $filteredGames = array_map(function ($game) {
-        $away = \App\Tilastot\Model\Standings::findByIdAndRound($game['awayteam'], $game['round'], true);
+        $away = \App\Model\Standings::findByIdAndRound($game['awayteam'], $game['round'], true);
         $date = \Contao\Date::parse('D d.m.Y', $game['gamedate']);
         $text = $date . ' - '  . $away['name'];
         return [

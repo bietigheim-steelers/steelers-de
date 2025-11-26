@@ -34,7 +34,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
         'label' => array(
             'fields'                  => array('gamedate', 'hometeam', 'awayteam', 'round'),
             'showColumns'             => true,
-            'label_callback'                    => array('App\\Tilastot\\Model\\Standings', 'findTeamsForDisplay')
+            'label_callback'                    => array('App\\Model\\Standings', 'findTeamsForDisplay')
         ),
         'global_operations' => array(
             'all' => array(
@@ -85,7 +85,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
             'exclude'                 => true,
             'filter'                  => true,
             'inputType'               => 'select',
-            'options_callback'        => array('App\\Tilastot\\Model\\Rounds', 'findForSelect'),
+            'options_callback'        => array('App\\Model\\Rounds', 'findForSelect'),
             'eval'                    => array('mandatory' => true, 'tl_class' => 'clr w50', 'onchange' => 'Backend.autoSubmit(\'tl_tilastot_client_games\')'),
             'sql'                     => "int(10) unsigned NOT NULL default '0'"
         ),
@@ -94,7 +94,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
             'exclude'                 => true,
             'search'                  => true,
             'inputType'               => 'select',
-            'options_callback'        => array('App\\Tilastot\\Model\\Standings', 'findTeamsForSelect'),
+            'options_callback'        => array('App\\Model\\Standings', 'findTeamsForSelect'),
             'eval'                    => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'clr w50'),
             'sql'                     => "int(10) NULL"
         ),
@@ -103,7 +103,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
             'exclude'                 => true,
             'search'                  => true,
             'inputType'               => 'select',
-            'options_callback'              => array('App\\Tilastot\\Model\\Standings', 'findTeamsForSelect'),
+            'options_callback'              => array('App\\Model\\Standings', 'findTeamsForSelect'),
             'eval'                    => array('mandatory' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql'                     => "int(10) NULL"
         ),

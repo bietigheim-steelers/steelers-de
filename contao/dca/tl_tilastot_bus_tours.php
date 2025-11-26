@@ -1,6 +1,6 @@
 <?php
 
-use App\Tilastot\Model\Standings;
+use App\Model\Standings;
 
 /*
  * This file is part of the DelClientBundle.

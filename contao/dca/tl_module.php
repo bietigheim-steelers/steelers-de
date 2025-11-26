@@ -5,7 +5,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['tilastot_round'] = array(
 	'exclude'                 => true,
 	'search'                  => true,
 	'inputType'               => 'select',
-	'options_callback'        => array('App\\Tilastot\\Model\\Rounds', 'findForSelect'),
+	'options_callback'        => array('App\\Model\\Rounds', 'findForSelect'),
 	'eval'										 => array('onchange' => 'Backend.autoSubmit(\'tl_module\')'),
 	'sql'                     => "varchar(64) NOT NULL default ''"
 );
@@ -20,7 +20,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['tilastot_my_team'] = array(
 	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['tilastot_my_team'],
 	'exclude'                 => true,
 	'inputType'               => 'select',
-	'options_callback'        => array('App\\Tilastot\\Model\\Standings', 'findTeamsForSelect'),
+	'options_callback'        => array('App\\Model\\Standings', 'findTeamsForSelect'),
 	'eval'                    => array('tl_class' => 'w50'),
 	'sql'                     => "int(5) NULL"
 );
@@ -28,7 +28,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['tilastot_my_team'] = array(
 $GLOBALS['TL_DCA']['tl_module']['fields']['tilastot_standings_columns'] = array(
 	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['tilastot_standings_columns'],
 	'inputType'               => 'checkboxWizard',
-	'options_callback'        => array('App\\Tilastot\\Model\\Standings', 'findColumnsForSelect'),
+	'options_callback'        => array('App\\Model\\Standings', 'findColumnsForSelect'),
 	'reference'               => &$GLOBALS['TL_LANG']['tilastot_standings_columns'],
 	'eval'                    => array('multiple' => true, 'tl_class' => 'clr'),
 	'sql'                     => "blob NULL"

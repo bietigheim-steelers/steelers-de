@@ -59,10 +59,10 @@ if($video_file!=="") {
       <div class="text-gray-400 italic uppercase text-sm">
         <?php
         if (isset($this->arrData['game_id'])) {
-          $game = \App\Tilastot\Model\Games::findByPk($this->arrData['game_id']);
+          $game = \App\Model\Games::findByPk($this->arrData['game_id']);
           if ($game) {
-            $homeTeam = \App\Tilastot\Model\Standings::getTeamData($game->hometeam, $game->round, 'name');
-            $awayTeam = \App\Tilastot\Model\Standings::getTeamData($game->awayteam, $game->round, 'name');
+            $homeTeam = \App\Model\Standings::getTeamData($game->hometeam, $game->round, 'name');
+            $awayTeam = \App\Model\Standings::getTeamData($game->awayteam, $game->round, 'name');
             echo $homeTeam . ' - ' . $awayTeam;
           } else {
             echo implode(', ', $this->categoriesList);
