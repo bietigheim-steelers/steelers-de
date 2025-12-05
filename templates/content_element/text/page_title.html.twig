@@ -1,0 +1,39 @@
+{% use "@Contao/component/_picture.html.twig" %}
+
+{% set image = figure(
+  data.singleSRC,
+  [768, 768, 'crop'],
+  { metadata: { alt: headline.text}, options: { attr: { class: 'aspect-square' } } })
+%}
+
+{% add "my_meta" to head %}
+    <meta property="og:image" content="image.src" />
+{% endadd %}
+
+<div>
+  <div class="max-w-screen-2xl mx-auto relative pt-4 md:py-4 sm:my-16 md:my-24 xl:my-36 z-40">
+    <h2 class="block-headline">test</h2>
+  </div>
+</div>
+
+<div class="relative mb-20 md:-mt-[29rem] lg:-mt-[26rem] xl:-mt-[32rem]">
+  <div class="grid items-end grid-cols-1 md:grid-cols-2 defaultcontainer max-lg:!mt-0">
+    <div class="xl:mb-20 py-5 lg:pr-16">
+
+      <h3 class="text-3xl lg:text-4xl xl:text-5xl !mt-4 lg:!mt-8 pt-4 uppercase font-bold font-sans text-black leading-none max-w-full text-ellipsis overflow-hidden">
+        {{ headline.text }}</h3>
+      <p class="mt-2 text-lg font-bold leading-[1.4rem]">
+        
+      </p>
+    </div>
+    <div class="overflow-hidden xl:mx-2">
+      {% if image %}
+        {% with {figure: image} %}{{ block('picture_component') }}{% endwith %}
+      {% else %}
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" width="768" height="768" class="hidden md:block aspect-square">
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+
