@@ -88,14 +88,6 @@ $GLOBALS['og:image'] = $this->Environment->base . $ogimage;
     <?php endif; ?>
   <div class="ce_text defaultcontainer mb-8">
     <div class="!my-8 md:!my-32 px-8 py-8 max-w-5xl mx-auto bg-steelwhite/60 relative z-20 backdrop-blur-lg prose">
-      <?php
-      if ($this->pid == 6 && array_intersect(array_keys($this->categories), [7, 8, 9, 10, 11, 12, 13, 19, 27])):
-      ?>
-        <p>Neuigkeiten des Steelers-Nachwuchses werden präsentiert von <a href="http://carat.art"
-            target="_blank">carat.art</a>.</p>
-      <?php
-      endif;
-      ?>
       <?= $this->teaser; ?>
       <hr class="border-black border-t mt-8">
     </div>
