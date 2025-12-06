@@ -4,8 +4,8 @@ contao:
   image:
     sizes:
       topnews:
-        width: 1920
-        height: 1080
+        width: 375
+        height: 300
         resize_mode: crop
         densities: 2x, 3x
         css_class: max-w-full h-auto w-full block
@@ -14,12 +14,16 @@ contao:
           webp: [webp, jpg]
           png: [webp, png]
         items:
-            -
-              media: '(max-width: 768px)'
-              width: 800
-              height: 600
-              resize_mode: crop
-              densities: 2x, 3x
+          - media: "(min-width: 768px)"
+            width: 800
+            height: 600
+            resize_mode: crop
+            densities: 2x, 3x
+          - media: "(min-width: 1200px)"
+            width: 1920
+            height: 1080
+            resize_mode: crop
+            densities: 2x, 3x
       news_image:
         width: 511
         height: 637
