@@ -23,7 +23,7 @@
       <h3 class="text-3xl lg:text-4xl xl:text-5xl !mt-4 lg:!mt-8 pt-4 uppercase font-bold font-sans text-black leading-none max-w-full text-ellipsis overflow-hidden">
         {{ headline.text }}</h3>
       <p class="mt-2 text-lg font-bold leading-[1.4rem]">
-        
+        {{ text|striptags }}
       </p>
     </div>
     <div class="overflow-hidden xl:mx-2">
