@@ -109,9 +109,9 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['standings'] = '{title_legend},name,
 $GLOBALS['TL_DCA']['tl_module']['palettes']['standings'] .= '{tilastot_legend},tilastot_round,tilastot_table_rows,tilastot_my_team,tilastot_standings_columns;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['standings'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['partners'] = '{title_legend},name,headline,type;';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['partners'] .= '{tilastot_legend},tilastot_partners_category;';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['partners'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['partners_module'] = '{title_legend},name,headline,type;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['partners_module'] .= '{tilastot_legend},tilastot_partners_category;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['partners_module'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['camps'] = '{title_legend},name,headline,type;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['camps'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';

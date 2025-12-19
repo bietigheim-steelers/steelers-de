@@ -5,17 +5,18 @@ namespace App\Controller\FrontendModule;
 use App\Model\Partners;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\ModuleModel;
-use Contao\Template;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\StringUtil;
-use Contao\ArrayUtil;
 use Contao\FilesModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+#[AsFrontendModule(category: 'miscellaneous')]
 class PartnersModule extends AbstractFrontendModuleController
 {
-	protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
+	protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
 	{
 		$categories = unserialize($model->tilastot_partners_category);
 		$category_list = implode('"|"', $categories);
