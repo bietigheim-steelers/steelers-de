@@ -1,0 +1,13 @@
+<div class="defaultcontainer gridwrapper !px-2 md:px-0 block">
+  <h3 title="{{ headline }}">
+    {{ headline }}
+  </h3>
+  <div class="inside grid ce_wrapperStart grid-111 no-card">
+    <div class="ce_list ce_hyperlink nohover block">
+      <ul>
+        {% for partner in partners %}
+        <li>{{ partner.name }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
