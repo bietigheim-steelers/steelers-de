@@ -29,6 +29,6 @@ $GLOBALS['TL_LANG']['tl_tilastot_season_ticket'] = [
   'data_privacy' => ['Datenschutz akzeptiert', 'Datenschutzbestimmungen akzeptiert'],
   'price' => ['Preis', 'Preis der Dauerkarte'],
   'order_number' => ['Bestellnummer', 'Nummer der Bestellung'],
-  'payed' => ['Bezahlt', 'Wurde die Dauerkarte bezahlt?'],
+  'paid' => ['Bezahlt', 'Wurde die Dauerkarte bezahlt?'],
   'pay_date' => ['Zahlungsdatum', 'Datum der Zahlung'],
 ];

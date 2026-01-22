@@ -28,13 +28,12 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         'sorting' => array(
             'mode'                    => 11,
             'flag'                    => DataContainer::SORT_MONTH_DESC,
-            'fields'                  => array('tourdate'),
+            'fields'                  => array('customer_name'),
             'panelLayout'             => 'filter;search,limit'
         ),
         'label' => array(
-            'fields'                  => array('hometeam', 'tourdate'),
-            'label_callback'          => array('tl_tilastot_season_ticket', 'showTour'),
-            'format' => '<span style="color:#999">nach</span> %s <span style="color:#999;padding-left:3px">[%s]</span>'
+            'fields'                  => array('customer_name', 'customer_firstname', 'customer_email'),
+            'format' => '%s, %s <span style="color:#999;padding-left:3px">[%s]</span>'
         ),
         'global_operations' => array(
             'all' => array(
@@ -88,42 +87,48 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         ),
         'ticket_type' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['ticket_type'],
-            'inputType' => 'text',
+            'inputType' => 'select',
+            'options' => array('basic', 'plus'),
             'sql' => "varchar(32) NOT NULL default ''"
         ),
         'ticket_area' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['ticket_area'],
-            'inputType' => 'text',
+            'inputType' => 'select',
+            'options' => array('sitzplatz', 'stehplatz', 'rollstuhl'),
             'sql' => "varchar(32) NOT NULL default ''"
         ),
         'ticket_category' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['ticket_category'],
-            'inputType' => 'text',
+            'inputType' => 'select',
+            'options' => array('vollzahler', 'rentner', 'student', 'azubi', 'schueler', 'mitglied', 'jugendlich', 'kind', 'behinderung', 'familie1', 'familie2', 'familie3'),
             'sql' => "varchar(32) NOT NULL default ''"
         ),
         'seat_block' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['seat_block'],
-            'inputType' => 'text',
+            'inputType' => 'select',
+            'options' => array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'),
             'sql' => "varchar(8) NOT NULL default ''"
         ),
         'seat_row' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['seat_row'],
-            'inputType' => 'text',
+            'inputType' => 'number',
             'sql' => "varchar(8) NOT NULL default ''"
         ),
         'seat_seat' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['seat_seat'],
-            'inputType' => 'text',
+            'inputType' => 'number',
             'sql' => "varchar(8) NOT NULL default ''"
         ),
         'ticket_form' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['ticket_form'],
-            'inputType' => 'text',
+            'inputType' => 'select',
+            'options' => array('mobile_plastik', 'mobile', 'plastik'),
             'sql' => "varchar(32) NOT NULL default ''"
         ),
         'ticket_payment' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['ticket_payment'],
-            'inputType' => 'text',
+            'inputType' => 'select',
+            'options' => array('ueberweisung', 'gs'),
             'sql' => "varchar(32) NOT NULL default ''"
         ),
         'customer_firstname' => array(
@@ -211,8 +216,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
             'inputType' => 'text',
             'sql' => "int(11) NOT NULL default '0'"
         ),
-        'payed' => array(
-            'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['payed'],
+        'paid' => array(
+            'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['paid'],
             'inputType' => 'checkbox',
             'sql' => "char(1) NOT NULL default '0'"
         ),
@@ -235,21 +240,5 @@ class tl_tilastot_season_ticket extends Backend
     {
         $args[1] = date('d.m.Y', $args[1]);
         return $args;
-    }
-
-    public function getGamesForSelect()
-    {
-        $options = array(0 => '');
-
-        $games = Database::getInstance()->prepare("SELECT id, hometeam, awayteam, gamedate, round FROM tl_tilastot_client_games WHERE gamedate > ? AND awayteam = ? ORDER BY gamedate ASC")
-            ->execute(time(), 54744);
-
-        while ($games->next()) {
-            $homeTeam = Standings::getTeamData($games->hometeam, $games->round);
-            $awayTeam = Standings::getTeamData($games->awayteam, $games->round);
-            $options[$games->id] = sprintf('%s - %s vs. %s', date('d.m.Y', $games->gamedate), $homeTeam, $awayTeam);
-        }
-
-        return $options;
     }
 }
