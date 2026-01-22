@@ -123,7 +123,7 @@ class SeasonTicketController
           "familie2" => 1133,
           "familie3" => 1296,
         ],
-        J => [
+        "J" => [
           "vollzahler" => 418,
           "ermaessigt" => 370,
           "jugendlich" => 263,
@@ -159,7 +159,7 @@ class SeasonTicketController
           "familie2" => 998,
           "familie3" => 1144,
         ],
-        J => [
+        "J" => [
           "vollzahler" => 364,
           "ermaessigt" => 322,
           "jugendlich" => 129.74,
