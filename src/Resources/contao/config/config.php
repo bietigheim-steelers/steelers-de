@@ -18,6 +18,7 @@ use \App\Tilastot\Module\RefreshModule;
 use App\Tilastot\Model\Partners;
 use App\Tilastot\Model\Camps;
 use App\Tilastot\Model\BusTours;
+use App\Tilastot\Model\SeasonTicket;
 
 /* Backend Module */
 
@@ -42,6 +43,7 @@ $GLOBALS['BE_MOD']['del'] = array(
 $GLOBALS['BE_MOD']['content']['tilastot_partners'] = array('tables' => array('tl_tilastot_partners'));
 $GLOBALS['BE_MOD']['content']['tilastot_camps'] = array('tables' => array('tl_tilastot_camps'));
 $GLOBALS['BE_MOD']['content']['tilastot_bus_tours'] = array('tables' => array('tl_tilastot_bus_tours'));
+$GLOBALS['BE_MOD']['content']['tilastot_season_ticket'] = array('tables' => array('tl_tilastot_season_ticket'));
 
 /* Model Classes */
 $GLOBALS['TL_MODELS']['tl_tilastot_client_rounds'] = Rounds::class;
@@ -52,6 +54,7 @@ $GLOBALS['TL_MODELS']['tl_tilastot_client_standings'] = Standings::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_partners'] = Partners::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_camps'] = Camps::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_bus_tours'] = BusTours::class;
+$GLOBALS['TL_MODELS']['tl_tilastot_season_ticket'] = SeasonTicket::class;
 
 /* Hooks */
 array_unshift($GLOBALS['TL_HOOKS']['newsListFetchItems'], ['App\\Tilastot\\EventListener\\NewsListFetchItemsListener', '__invoke']);

@@ -37,7 +37,7 @@ class SeasonTicketController
     $email2->from('webseite@steelers.de');
     $email2->replyTo($data['customer_email']);
 
-    $email2->to('ticketing@steelers.de');
+    $email2->to('dominik.sander@steelers.de');
     $email2->htmlTemplate('@Contao_App/email_season_ticket_order.html.twig');
     $eventimCategory = $this->getEventimCategory(
       $data['ticket_area'],

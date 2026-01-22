@@ -20,6 +20,7 @@ $GLOBALS['TL_LANG']['MOD']['tilastot_players'] = array('Spieler / Scorer', 'Spie
 $GLOBALS['TL_LANG']['MOD']['tilastot_partners'] = array('Partner', 'Partner verwalten.');
 $GLOBALS['TL_LANG']['MOD']['tilastot_camps'] = array('Porsche Camps', 'Porsche Camps verwalten.');
 $GLOBALS['TL_LANG']['MOD']['tilastot_bus_tours'] = array('Bustouren', 'Auswärtsfahrten verwalten.');
+$GLOBALS['TL_LANG']['MOD']['tilastot_season_ticket'] = array('Dauerkarten Bestellungen', 'Dauerkarten Bestellungen verwalten.');
 
 $GLOBALS['TL_LANG']['FMD']['schedule'] = array('Spielplan', 'Tilastot Spielplan');
 $GLOBALS['TL_LANG']['FMD']['standings'] = array('Tabelle', 'Tilastot Tabelle');
