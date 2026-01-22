@@ -28,6 +28,7 @@ class SeasonTicketController
     foreach ($data as $key => $value) {
       $seasonTicket->$key = $value;
     }
+    $seasonTicket->tstamp = time();
     $seasonTicket->save();
 
     $email = new TemplatedEmail();

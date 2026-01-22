@@ -26,8 +26,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
     // List
     'list' => array(
         'sorting' => array(
-            'mode'                    => 11,
-            'flag'                    => DataContainer::SORT_MONTH_DESC,
+            'mode'                    => DataContainer::MODE_SORTED,
+            'flag'                    => DataContainer::SORT_INITIAL_LETTER_ASC,
             'fields'                  => array('customer_name'),
             'panelLayout'             => 'filter;search,limit'
         ),
