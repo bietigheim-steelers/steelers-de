@@ -26,9 +26,7 @@ class SeasonTicketController
     // Save to database using SeasonTicket model
     $seasonTicket = new SeasonTicket();
     foreach ($data as $key => $value) {
-      if ($seasonTicket->hasOwnProperty($key)) {
-        $seasonTicket->$key = $value;
-      }
+      $seasonTicket->$key = $value;
     }
     $seasonTicket->save();
 

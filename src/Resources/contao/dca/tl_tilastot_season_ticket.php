@@ -219,12 +219,14 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         'paid' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['paid'],
             'inputType' => 'checkbox',
+            'eval' => array('tl_class' => 'w50'),
             'sql' => "char(1) NOT NULL default '0'"
         ),
         'pay_date' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['pay_date'],
             'inputType' => 'text',
-            'sql' => "date NULL"
+            'eval' => array('datepicker' => true, 'rgxp' => 'date', 'maxlength' => 255, 'tl_class' => 'w50'),
+            'sql' => "int(25) NOT NULL default '0'"
         ),
     )
 );
