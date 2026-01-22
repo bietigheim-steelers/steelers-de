@@ -7,18 +7,30 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+
 use Symfony\Component\Mime\Address;
 use Contao\Email;
+use App\Tilastot\Model\SeasonTicket;
 
 class SeasonTicketController
 {
   public function order(Request $request, MailerInterface $mailer, ContaoFramework $framework): Response
   {
 
+
     $framework->initialize();
     $data = $request->request->all();
 
     $data['price'] = self::getTicketPrice($data['ticket_area'], $data['ticket_category'], substr($data['seat_block'], -1), $data['ticket_type']);
+
+    // Save to database using SeasonTicket model
+    $seasonTicket = new SeasonTicket();
+    foreach ($data as $key => $value) {
+      if ($seasonTicket->hasOwnProperty($key)) {
+        $seasonTicket->$key = $value;
+      }
+    }
+    $seasonTicket->save();
 
     $email = new TemplatedEmail();
     $email->subject('Steelers Dauerkarte - Bestellung');

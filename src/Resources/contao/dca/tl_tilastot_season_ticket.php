@@ -75,7 +75,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
     ),
     // Palettes
     'palettes' => array(
-        'default' => '{ticket_legend},ticket_type,ticket_area,ticket_category,seat_block,seat_row,seat_seat,ticket_form,ticket_payment,customer_firstname,customer_name,customer_street,customer_plz,customer_city,customer_phone,customer_email,customer_birthday,customer_last_season,eventim,eventim_email,eventim_account,bemerkung,terms,data_privacy,price,order_number,payed,pay_date'
+        'default' => '{ticket_legend},ticket_type,ticket_area,ticket_category,seat_block,seat_row,seat_seat,ticket_form,ticket_payment;{customer_legend},customer_firstname,customer_name,customer_street,customer_plz,customer_city,customer_phone,customer_email,customer_birthday,customer_last_season;{eventim_legend},eventim,eventim_email,eventim_account;bemerkung,terms,data_privacy,price,order_number,payed,pay_date'
     ),
     // Fields
     'fields'   => array(
@@ -111,12 +111,12 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         ),
         'seat_row' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['seat_row'],
-            'inputType' => 'number',
+            'inputType' => 'text',
             'sql' => "varchar(8) NOT NULL default ''"
         ),
         'seat_seat' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['seat_seat'],
-            'inputType' => 'number',
+            'inputType' => 'text',
             'sql' => "varchar(8) NOT NULL default ''"
         ),
         'ticket_form' => array(
