@@ -70,12 +70,21 @@ class SeasonTicketDownloadController {
         $sheet->setCellValue('G' . $row, $categoryMap[$ticket->ticket_category] ?? $ticket->ticket_category);
         $sheet->setCellValue('H' . $row, $ticket->customer_email);
         $sheet->setCellValue('J' . $row, $ticket->ticket_form);
-        $sheet->setCellValue('K' . $row, ''); // Mitglied - to be determined
+        $sheet->setCellValue('K' . $row, $ticket->customer_member ? 'Ja' : 'Nein');
         $sheet->setCellValue('L' . $row, $ticket->ticket_payment);
         $sheet->setCellValue('N' . $row, $ticket->price);
+        $sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode( 
+          \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_EUR_SIMPLE
+        );
         $sheet->setCellValue('O' . $row, ''); // Family&Friends - to be determined
         $sheet->setCellValue('P' . $row, $ticket->customer_last_season ? 'Ja' : 'Nein');
-        $sheet->setCellValue('Q' . $row, $ticket->tstamp ? date('j/n/y', $ticket->tstamp) : '');
+
+        $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($ticket->tstamp);
+        $sheet->setCellValue('Q' . $row, $excelDateValue);
+        $sheet->getStyle('Q' . $row)->getNumberFormat()->setFormatCode(
+          \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME
+        );
+
         $row++;
       }
     }
