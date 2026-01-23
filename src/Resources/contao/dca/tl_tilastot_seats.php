@@ -30,7 +30,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_seats'] = array(
         ),
         'label' => array(
             'fields'                  => array('seat_block', 'seat_row', 'seat_seat'),
-            'format' => '<b>Block %s</b>, Reihe %s, Platz %s'
+            'format' => '<b>Block %s</b>, Reihe %s, Platz %s',
+            'label_callback' => array('tl_tilastot_seats', 'seatLabel')
         ),
         'global_operations' => array(
             'all' => array(
@@ -80,23 +81,65 @@ $GLOBALS['TL_DCA']['tl_tilastot_seats'] = array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_seats']['seat_block'],
             'inputType' => 'select',
             'options' => array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'),
-            'sql' => "varchar(4) NOT NULL default ''"
+            'sql' => "varchar(4) NOT NULL default ''",
+            'search' => true,
+            'filter' => true,
+            'sorting' => true
+
         ),
         'seat_row' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_seats']['seat_row'],
             'inputType' => 'text',
-            'sql' => "varchar(8) NOT NULL default ''"
+            'sql' => "varchar(8) NOT NULL default ''",
+            'search' => true,
+            'filter' => true,
+            'sorting' => true
         ),
         'seat_seat' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_seats']['seat_seat'],
             'inputType' => 'text',
-            'sql' => "varchar(8) NOT NULL default ''"
+            'sql' => "varchar(8) NOT NULL default ''",
+            'search' => true,
+            'filter' => true,
+            'sorting' => true
         ),
         'seat_status' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_seats']['seat_status'],
             'inputType' => 'select',
             'options' => array('available', 'reserved', 'booked', 'non-existent'),
-            'sql' => "varchar(32) NOT NULL default 'available'"
+            'sql' => "varchar(32) NOT NULL default 'available'",
+            'search' => true,
+            'filter' => true,
+            'sorting' => true
         )
     )
 );
+
+class tl_tilastot_seats extends \Contao\Backend
+{
+    function seatLabel($row) {
+        $ticket = sprintf('<b>Block %s</b>, Reihe %s, Platz %s - ',
+            $row['seat_block'],
+            $row['seat_row'],
+            $row['seat_seat']
+        );
+
+        $status = '';
+        switch ($row['seat_status']) {
+            case 'available':
+                $status = '<span style="color:green;">verfügbar</span>';
+                break;
+            case 'reserved':
+                $status = '<span style="color:orange;">reserviert</span>';
+                break;
+            case 'booked':
+                $status = '<span style="color:red;">verkauft</span>';
+                break;
+            case 'non-existent':
+                $status = '<span style="color:gray;">nicht existent</span>';
+                break;
+        }
+
+        return $ticket . $status;
+    }
+}
