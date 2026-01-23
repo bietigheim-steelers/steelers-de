@@ -10,6 +10,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 use Symfony\Component\Mime\Address;
 use App\Tilastot\Model\SeasonTicket;
+use App\Tilastot\Model\Seats;
 
 class SeasonTicketController
 {
@@ -22,6 +23,47 @@ class SeasonTicketController
 
     $data['price'] = self::getTicketPrice($data['ticket_area'], $data['ticket_category'], substr($data['seat_block'], -1), $data['ticket_type']);
 
+    // Book the selected seat(s) in the database
+    $baseSeat = (int)$data['seat_seat'];
+    $block = $data['seat_block'];
+    $row = $data['seat_row'];
+    $seatsToBlock = 1;
+
+    if (in_array($data['ticket_category'], ['familie1', 'familie2'])) {
+      $seatsToBlock = 3;
+    } elseif ($data['ticket_category'] === 'familie3') {
+      $seatsToBlock = 4;
+    }
+
+    for ($i = 0; $i < $seatsToBlock; $i++) {
+      $seatNum = $baseSeat + $i;
+
+      // Check if seat exists in database
+      $seat = Seats::findOneBy(['seat_block=?', 'seat_row=?', 'seat_seat=?'], [$block, $row, $seatNum]);
+
+      if ($seat) {
+        // Seat exists - check status
+        if ($seat->seat_status === 'booked') {
+          return new Response('seat_already_booked', 400);
+        } elseif ($seat->seat_status === 'non-existent') {
+          return new Response('seat_non_existent', 400);
+        } else {
+          // Seat is available or reserved - mark as booked
+          $seat->seat_status = 'booked';
+          $seat->tstamp = time();
+          $seat->save();
+        }
+      } else {
+        // Seat doesn't exist in database - create it as booked
+        $newSeat = new Seats();
+        $newSeat->seat_block = $block;
+        $newSeat->seat_row = $row;
+        $newSeat->seat_seat = $seatNum;
+        $newSeat->seat_status = 'booked';
+        $newSeat->tstamp = time();
+        $newSeat->save();
+      }
+    }
     // Save to database using SeasonTicket model
     $seasonTicket = new SeasonTicket();
     foreach ($data as $key => $value) {
@@ -62,33 +104,6 @@ class SeasonTicketController
     ]));
 
     $mailer->send($email2);
-
-    // Add the selected ticket to the booked seats file
-    $filePath = '/usr/www/users/steelg/2022/files/steelers/tools/seatingPlan/booked_seats.json';
-
-    if (file_exists($filePath)) {
-      $bookedSeats = json_decode(file_get_contents($filePath), true);
-      $baseSeat = (int)$data['seat_seat'];
-      $block = $data['seat_block'];
-      $row = $data['seat_row'];
-      $seatsToBlock = 1;
-
-      if (in_array($data['ticket_category'], ['familie1', 'familie2'])) {
-        $seatsToBlock = 3;
-      } elseif ($data['ticket_category'] === 'familie3') {
-        $seatsToBlock = 4;
-      }
-
-      for ($i = 0; $i < $seatsToBlock; $i++) {
-        $seatNum = $baseSeat + $i;
-        $newSeat = $block . '_' . $row . '_' . $seatNum;
-        if (!in_array($newSeat, $bookedSeats['booked'])) {
-          $bookedSeats['booked'][] = $newSeat;
-        }
-      }
-      file_put_contents($filePath, json_encode($bookedSeats, JSON_PRETTY_PRINT));
-    }
-
 
     return new Response('order successful');
   }

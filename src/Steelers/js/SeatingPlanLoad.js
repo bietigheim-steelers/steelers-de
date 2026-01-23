@@ -8,17 +8,16 @@ export const loadSeats = async () => {
       loadPromise = (async () => {
         try {
           const response = await fetch(
-            "/files/steelers/tools/seatingPlan/booked_seats.json?t=" +
-              Date.now()
+            "/seasontickets/api/seats?t=" + Date.now()
           );
           if (!response.ok) {
             console.error("Error loading booked seats");
-            return [];
+            return { booked: [], reserved: [] };
           }
           data = await response.json();
           isLoaded = true;
         } catch (error) {
-          console.error("Error loading JSON:", error);
+          console.error("Error loading seats from API:", error);
           throw error;
         } finally {
           loadPromise = null;

@@ -9,6 +9,10 @@ app.tilastot.controller:
   path: /seasonticket/order
   methods: POST
   schemes: [https]
+app.tilastot.seats_api:
+  controller: App\Tilastot\Controller\SeatsApiController::getSeats
+  path: /seasontickets/api/seats
+  methods: GET
 app.tilastot.postsController:
   controller: App\Tilastot\Controller\SocialMediaToolsUpload::upload
   path: /social-media-tools/posts/upload
