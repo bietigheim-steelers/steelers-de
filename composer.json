@@ -22,7 +22,7 @@
     "menatwork/contao-multicolumnwizard-bundle": "^3.5",
     "mixpanel/mixpanel-php": "^2.6",
     "oveleon/contao-cookiebar": " 1.16.6",
-    "phpoffice/phpspreadsheet": "^1.30",
+    "phpoffice/phpspreadsheet": "1.30.2",
     "terminal42/contao-conditionalformfields": "^3.0",
     "terminal42/contao-mp_forms": "^4.4",
     "terminal42/notification_center": "1.6.18"
