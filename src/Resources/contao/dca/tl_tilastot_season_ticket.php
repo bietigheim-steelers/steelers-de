@@ -1,7 +1,4 @@
 <?php
-
-use App\Tilastot\Controller\SeasonTicketDownloadController;
-
 /*
  * This file is part of the DelClientBundle.
  *
@@ -45,7 +42,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
             'download_excel' => [ 
                 'label'               => 'Download Excel Liste', 
                 'class'               => 'header_theme_import',
-                'route'                => SeasonTicketDownloadController::class
+                'route'                => 'backend_season_ticket_download'
             ]
         ),
         'operations' => array(
