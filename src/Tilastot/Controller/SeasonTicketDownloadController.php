@@ -4,10 +4,16 @@ namespace App\Tilastot\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route(path: '/%contao.backend.route_prefix%/season_ticket_download_excel', name: self::class, defaults: ['_scope' => 'backend'])]
+/**
+ * @Route(defaults={"_scope" = "backend"})
+ * @internal
+ */
 class SeasonTicketDownloadController {
- 
-  public function __invoke(): Response {
+
+  /**
+   * @Route("/contao/seasontickets/download", name="backend_season_ticket_download")
+   */
+  public function triggerDownload(): Response {
     return new Response('Hello World!');
   }
 }
