@@ -9,7 +9,6 @@ use Contao\CoreBundle\Framework\ContaoFramework;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 use Symfony\Component\Mime\Address;
-use Contao\Email;
 use App\Tilastot\Model\SeasonTicket;
 
 class SeasonTicketController
@@ -200,6 +199,25 @@ class SeasonTicketController
     $mappedBlock = $blockMap[$block] ?? null;
 
     return $mappedBlock ? $this->getPrices($type, $mappedBlock, $category) : 0;
+  }
+
+  public static function getCategoryMap(): array
+  {
+    return [
+      'vollzahler' => 'Vollzahler',
+      'familie1' => 'Familienkarte 1',
+      'familie2' => 'Familienkarte 2',
+      'familie3' => 'Familienkarte 3',
+      'rentner' => 'Rentner',
+      'student' => 'Student',
+      'azubi' => 'Auszubildender',
+      'schueler' => 'Schüler über 18 Jahre',
+      'mitglied' => 'SC Mitglied',
+      'jugendlich' => 'Jugendlicher (13-17 Jahre)',
+      'kind' => 'Kind (8-12 Jahre)',
+      'behinderung' => 'Fan mit Behinderung ab 50%',
+      'rollstuhl' => 'Rollstuhlfahrer inkl. Begleitperson',
+    ];
   }
 
   private function getEventimCategory($area, $category, $block, $ff_new_dk): string
