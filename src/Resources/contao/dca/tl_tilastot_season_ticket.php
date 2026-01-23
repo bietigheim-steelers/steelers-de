@@ -1,6 +1,6 @@
 <?php
 
-use App\Tilastot\Model\Standings;
+use App\Tilastot\Controller\SeasonTicketDownloadController;
 
 /*
  * This file is part of the DelClientBundle.
@@ -41,7 +41,12 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
                 'href'                => 'act=select',
                 'class'               => 'header_edit_all',
                 'attributes'          => 'onclick="Backend.getScrollOffset()" accesskey="e"'
-            )
+            ),
+            'download_excel' => [ 
+                'label'               => 'Download Excel Liste', 
+                'class'               => 'header_theme_import',
+                'route'                => SeasonTicketDownloadController::class
+            ]
         ),
         'operations' => array(
             'edit' => array(
@@ -59,12 +64,6 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
                 'href'                => 'act=delete',
                 'icon'                => 'delete.gif',
                 'attributes'          => 'onclick="if(!confirm(\'' . $GLOBALS['TL_LANG']['MSC']['deleteConfirm'] . '\'))return false;Backend.getScrollOffset()"'
-            ),
-            'toggle' => array(
-                'label'               => &$GLOBALS['TL_LANG']['tilastot_season_ticket']['toggle'],
-                'href'                => 'act=toggle&amp;field=published',
-                'icon'                => 'visible.svg',
-                'showInHeader'        => true
             ),
             'show' => array(
                 'label'               => &$GLOBALS['TL_LANG']['tilastot_season_ticket']['show'],
