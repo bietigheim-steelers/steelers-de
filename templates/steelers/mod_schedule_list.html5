@@ -1,6 +1,7 @@
 <?php $this->block('content'); ?>
 <div class="defaultcontainer mod_schedule !mt-8 md:!mt-20">
   <?php
+  $isNextGame = '';
   $lastMonth = 0;
   $nextGameDone = true;
   foreach ($this->games as $game) :

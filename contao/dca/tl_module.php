@@ -90,9 +90,9 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['tilastot_partners_category'] = array(
 	'sql'                     => "text NULL"
 );
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['schedule'] = '{title_legend},name,headline,type;';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['schedule'] .= '{tilastot_legend},tilastot_my_team,tilastot_from_date,tilastot_to_date,tilastot_schedule_type;';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['schedule'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['schedule_module'] = '{title_legend},name,headline,type;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['schedule_module'] .= '{tilastot_legend},tilastot_my_team,tilastot_from_date,tilastot_to_date,tilastot_schedule_type;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['schedule_module'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['roster'] = '{title_legend},name,headline,type;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['roster'] .= '{holema_legend},tilastot_round,tilastot_my_team,tilastot_config_json;';

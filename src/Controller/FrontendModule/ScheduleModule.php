@@ -2,7 +2,6 @@
 
 namespace App\Controller\FrontendModule;
 
-use Contao\Module;
 use App\Model\Rounds;
 use App\Model\Games;
 use App\Model\Standings;
@@ -11,17 +10,16 @@ use Contao\Date;
 
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
-use Contao\CoreBundle\Exception\RedirectResponseException;
-use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\ModuleModel;
-use Contao\PageModel;
-use Contao\Template;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+#[AsFrontendModule(category: 'steelers_modules')]
 class ScheduleModule extends AbstractFrontendModuleController
 {
-	protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
+	protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
 	{
 		$column = array('gamedate >= ? AND gamedate <= ?');
 		$array = array($model->tilastot_from_date, $model->tilastot_to_date);

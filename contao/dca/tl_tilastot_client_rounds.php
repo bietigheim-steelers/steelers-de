@@ -9,6 +9,8 @@
  * file that was distributed with this source code.
  */
 
+use Contao\DC_Table;
+
 /**
  * Table tl_tilastot_client_rounds
  */
@@ -17,7 +19,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_rounds'] = array
     // Config
     'config'   => array
     (
-        'dataContainer' => 'Table',
+        'dataContainer' => DC_Table::class,
         'enableVersioning' => true,
         'sql' => array
         (

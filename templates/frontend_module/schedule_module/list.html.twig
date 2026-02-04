@@ -1,0 +1,107 @@
+{% block content %}
+<div class="defaultcontainer mod_schedule !mt-8 md:!mt-20">
+  {% set isNextGame = '' %}
+  {% set lastMonth = 0 %}
+  {% set nextGameDone = true %}
+  {% for game in games %}
+    {% if "now"|date('U') < game.gamedate and not game.ended and not nextGameDone %}
+      {% set isNextGame = 'next-game' %}
+    {% endif %}
+    {% set gameMonth = game.gamedate|date('m') %}
+    {% if gameMonth != lastMonth %}
+      {% if lastMonth != 0 %}
+        <div class="bottomborder"></div>
+      {% endif %}
+      {% set lastMonth = gameMonth %}
+      <div class="titlerow">
+        {{ game.gamedate|format_datetime(pattern: "F", locale: 'de') }}
+      </div>
+    {% endif %}
+    <div class="topborder"></div>
+    <div class="row {{ isNextGame }}{{ game.optional ? ' opacity-50' : '' }}">
+      <div class="datetime">
+        <div>
+          <div class="day" id="{{ isNextGame }}">{{ game.gamedate|format_datetime(pattern: "l", locale: 'de') }}</div>
+          <div class="date">{{ game.gamedate|date('d.m.Y') }}</div>
+          <div class="time">{{ game.gametime ? game.gametime ~ " Uhr" : "" }}</div>
+        </div>
+      </div>
+      <div class="round">
+        <div>
+          <div><strong>{{ game.season.name }}</strong></div>
+          <div><strong>{{ game.season.season }}</strong></div>
+          <div>
+            {% set gamedayParts = game.gameday|split('-') %}
+            {% if gamedayParts[0] == '1/8' %}
+              Achtelfinale - Spiel {{ gamedayParts[1] }}
+            {% elseif gamedayParts[0] == '1/4' %}
+              Viertelfinale - Spiel {{ gamedayParts[1] }}
+            {% elseif gamedayParts[0] == '1/2' %}
+              Halbfinale - Spiel {{ gamedayParts[1] }}
+            {% elseif gamedayParts[0] == '1/1' %}
+              Finale - Spiel {{ gamedayParts[1] }}
+            {% else %}
+              Spieltag {{ game.gameday }}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="game">
+        <div class="team">
+          <div class="logo">
+
+          </div>
+          <div class="name">{{ game.home.name }}</div>
+        </div>
+        <div class="versus {% if not game.ended %}not-ended{% endif %}">
+          {% if game.ended %}
+            {{ game.homescore }}:{{ game.awayscore }}
+            {% if game.resulttype == 'OT' %}
+              <small>n.V.</small>
+            {% elseif game.resulttype == 'SO' %}
+              <small>n.P.</small>
+            {% endif %}
+          {% else %}
+            vs
+          {% endif %}
+        </div>
+        <div class="team">
+          <div class="logo">
+            
+          </div>
+          <div class="name">{{ game.away.name }}</div>
+        </div>
+      </div>
+      <div class="actions">
+        <div class="flex flex-wrap gap-4">
+          {% if game.optional %}
+            <span>Findet nur statt, sofern noch keine Entschiedung in der Serie gefallen ist.</span>
+          {% elseif game.home.shortname == 'SCB' and not game.ended and "now"|date('U') < game.gamedate %}
+            <a href="{{ game.eventimurl }}" class="btn-default">Tickets kaufen</a>
+          {% endif %}
+          {% if game.eventUrl and game.eventTitle and not game.ended and "now"|date('U') < game.gamedate %}
+            <a href="{{ game.eventUrl }}" class="btn-default btn-blue">{{ game.eventTitle }}</a>
+          {% elseif game.eventTitle and not game.ended and "now"|date('U') < game.gamedate %}
+            <span class="btn-default btn-blue {{ game.cssClass }}">{{ game.eventTitle }}</span>
+          {% endif %}
+          {% if game.ended and game.videos %}
+            {% for video in game.videos %}
+              <a href="/video/{{ video }}" class="btn-default">
+                {% if 'highlights' in video %}
+                  Highlights
+                {% elseif 'razorsharp' in video %}
+                  Razorsharp
+                {% elseif 'pressekonferenz' in video %}
+                  Pressekonferenz
+                {% elseif 'impressionen' in video %}
+                  Impressionen
+                {% endif %}
+              </a>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

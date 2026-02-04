@@ -26,12 +26,6 @@ services:
     arguments:
       - "%mixpanel_project_token%"
 
-  App\Controller\FrontendModule\ScheduleModule:
-    tags:
-      - name: contao.frontend_module
-        category: tilastot
-        template: mod_schedule
-        type: schedule
   App\Controller\FrontendModule\NextGameModule:
     tags:
       - name: contao.frontend_module

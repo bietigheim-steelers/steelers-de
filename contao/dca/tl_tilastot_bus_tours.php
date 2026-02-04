@@ -1,5 +1,6 @@
 <?php
 
+use Contao\DC_Table;
 use App\Model\Standings;
 
 /*
@@ -14,7 +15,7 @@ use App\Model\Standings;
 $GLOBALS['TL_DCA']['tl_tilastot_bus_tours'] = array(
     // Config
     'config'   => array(
-        'dataContainer' => 'Table',
+        'dataContainer' => DC_Table::class,
         'enableVersioning' => true,
         'sql' => array(
             'keys' => array(

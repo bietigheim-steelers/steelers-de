@@ -30,7 +30,7 @@ class Standings extends Model
 	{
 		$ret = array();
 		$ret[-1] = "";
-		if ($dc->activeRecord->round && Standings::findByRound($dc->activeRecord->round)) {
+		if (isset($dc->activeRecord->round) && $dc->activeRecord->round && Standings::findByRound($dc->activeRecord->round)) {
 			foreach (Standings::findByRound($dc->activeRecord->round) as $team) {
 				$ret[$team->tilastotid] = $team->name;
 			}

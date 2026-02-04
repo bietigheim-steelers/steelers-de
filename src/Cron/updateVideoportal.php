@@ -123,7 +123,7 @@ class updateVideoportal
         $alias = System::getContainer()->get('contao.slug')->generate($data['headline'], NewsArchiveModel::findByPk($this->pid)->jumpTo, $aliasExists);
 
         // Check if an entry with the same video URL already exists
-        $existingEntry = \Database::getInstance()->prepare("SELECT * FROM tl_news WHERE playerUrl = ?")
+        $existingEntry = Database::getInstance()->prepare("SELECT * FROM tl_news WHERE playerUrl = ?")
             ->execute($data['link']);
 
         if ($existingEntry->numRows > 0) {

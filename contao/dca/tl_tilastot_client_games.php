@@ -9,10 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use Contao\DC_Table;
+
 $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
     // Config
     'config'   => array(
-        'dataContainer' => 'Table',
+        'dataContainer' => DC_Table::class,
         'enableVersioning' => true,
         'onsubmit_callback' => array(array('tl_tilastot_client_games', 'saveCallback')),
         'sql' => array(
