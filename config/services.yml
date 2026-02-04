@@ -86,3 +86,6 @@ services:
         category: grid
         template: wrapper_block_end
         type: rowEnd
+twig:
+  globals:
+    project_dir: '%kernel.project_dir%'

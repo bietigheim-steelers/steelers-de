@@ -1,3 +1,11 @@
+{% use "@Contao/component/_figure.html.twig" %}
+{% set team_logo_size = picture_config({
+    width: 100,
+    height: 100,
+    resizeMode: 'proportional'
+}) %}
+
+
 {% block content %}
 <div class="defaultcontainer mod_schedule !mt-8 md:!mt-20">
   {% set isNextGame = '' %}
@@ -14,14 +22,14 @@
       {% endif %}
       {% set lastMonth = gameMonth %}
       <div class="titlerow">
-        {{ game.gamedate|format_datetime(pattern: "F", locale: 'de') }}
+        {{ game.gamedate|format_datetime(pattern: "MMMM", locale: 'de') }}
       </div>
     {% endif %}
     <div class="topborder"></div>
     <div class="row {{ isNextGame }}{{ game.optional ? ' opacity-50' : '' }}">
       <div class="datetime">
         <div>
-          <div class="day" id="{{ isNextGame }}">{{ game.gamedate|format_datetime(pattern: "l", locale: 'de') }}</div>
+          <div class="day" id="{{ isNextGame }}">{{ game.gamedate|format_datetime(pattern: "EEEE", locale: 'de') }}</div>
           <div class="date">{{ game.gamedate|date('d.m.Y') }}</div>
           <div class="time">{{ game.gametime ? game.gametime ~ " Uhr" : "" }}</div>
         </div>
@@ -49,7 +57,7 @@
       <div class="game">
         <div class="team">
           <div class="logo">
-
+            {{ contao_figure(project_dir ~ game.home.logo, team_logo_size, {metadata: { alt: game.home.name }}) }}
           </div>
           <div class="name">{{ game.home.name }}</div>
         </div>
@@ -67,7 +75,7 @@
         </div>
         <div class="team">
           <div class="logo">
-            
+            {{ contao_figure(project_dir ~ game.away.logo, team_logo_size, {metadata: { alt: game.away.name }}) }}
           </div>
           <div class="name">{{ game.away.name }}</div>
         </div>
