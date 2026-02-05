@@ -4,9 +4,7 @@
     <?php
     $logoUrl = '';
     if ($this->game['home']['logo']) {
-      // $logoUrl = $this->replaceInsertTags('{{figure::' . $this->game['home']['logo'] . '?size=9&template=image_url}}');
-    } else {
-      // $logoUrl = 'https://www.penny-del.org/assets/img/teams/dark/team_' . $this->game['home']['shortname'] . '.png';
+      $logoUrl = $this->replaceInsertTags('{{figure::' . $this->game['home']['logo'] . '?size=9&template=image_url}}');
     }
     ?>
     <div title="<?= $this->game['home']['name'] ?>" class="h-12 w-12 bg-contain bg-no-repeat bg-center hidden md:block" style="<?= 'background-image: url(' . $logoUrl . ')' ?>">
@@ -14,9 +12,7 @@
     <div class="font-bold text-lg md:text-xl px-2 lg:px-4 hidden md:block">vs</div>
     <?php
     if ($this->game['away']['logo']) {
-      // $logoUrl = $this->replaceInsertTags('{{figure::' . $this->game['away']['logo'] . '?size=9&template=image_url}}');
-    } else {
-      // $logoUrl = 'https://www.penny-del.org/assets/img/teams/dark/team_' . $this->game['away']['shortname'] . '.png';
+      $logoUrl = $this->replaceInsertTags('{{figure::' . $this->game['away']['logo'] . '?size=9&template=image_url}}');
     }
     ?>
     <div title="<?= $this->game['away']['name'] ?>" class="h-12 w-12 bg-contain bg-no-repeat bg-center block" style="<?= 'background-image: url(' . $logoUrl . ')' ?>">

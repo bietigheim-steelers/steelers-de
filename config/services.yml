@@ -26,12 +26,6 @@ services:
     arguments:
       - "%mixpanel_project_token%"
 
-  App\Controller\FrontendModule\NextGameModule:
-    tags:
-      - name: contao.frontend_module
-        category: tilastot
-        template: mod_nextgame
-        type: nextgame
   App\Controller\FrontendModule\RosterModule:
     tags:
       - name: contao.frontend_module
