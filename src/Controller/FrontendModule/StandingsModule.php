@@ -3,17 +3,18 @@
 namespace App\Controller\FrontendModule;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use App\Model\Standings;
-use Contao\CoreBundle\ServiceAnnotation\FrontendModule;
 use Contao\ModuleModel;
-use Contao\PageModel;
-use Contao\Template;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+
+#[AsFrontendModule(category: 'steelers_modules')]
 class StandingsModule extends AbstractFrontendModuleController
 {
-  protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
+  protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
   {
     $standings = Standings::findByRound($model->tilastot_round, array('order' => 'points DESC, goalsfor-goalsagainst DESC, goalsfor DESC, goalsagainst ASC'));
     if (!$standings) {

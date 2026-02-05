@@ -32,12 +32,6 @@ services:
         category: tilastot
         template: mod_nextgame
         type: nextgame
-  App\Controller\FrontendModule\StandingsModule:
-    tags:
-      - name: contao.frontend_module
-        category: tilastot
-        template: mod_standings
-        type: standings
   App\Controller\FrontendModule\RosterModule:
     tags:
       - name: contao.frontend_module
