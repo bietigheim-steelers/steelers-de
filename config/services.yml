@@ -26,12 +26,6 @@ services:
     arguments:
       - "%mixpanel_project_token%"
 
-  App\Controller\FrontendModule\RosterModule:
-    tags:
-      - name: contao.frontend_module
-        category: tilastot
-        template: mod_roster
-        type: roster
   App\Controller\FrontendModule\ScorerModule:
     tags:
       - name: contao.frontend_module
@@ -62,18 +56,7 @@ services:
         category: tilastot
         template: mod_auction
         type: auction
-  App\Controller\ContentElement\WrapperBlockStart:
-    tags:
-      - name: contao.content_element
-        category: grid
-        template: wrapper_block_start
-        type: rowStart
-  App\Controller\ContentElement\WrapperBlockEnd:
-    tags:
-      - name: contao.content_element
-        category: grid
-        template: wrapper_block_end
-        type: rowEnd
+
 twig:
   globals:
     project_dir: '%kernel.project_dir%'

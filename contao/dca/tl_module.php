@@ -98,9 +98,9 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['schedule_playoffs_module'] = '{titl
 $GLOBALS['TL_DCA']['tl_module']['palettes']['schedule_playoffs_module'] .= '{tilastot_legend},tilastot_my_team,tilastot_from_date,tilastot_to_date,tilastot_schedule_type;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['schedule_playoffs_module'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['roster'] = '{title_legend},name,headline,type;';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['roster'] .= '{holema_legend},tilastot_round,tilastot_my_team,tilastot_config_json;';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['roster'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['roster_module'] = '{title_legend},name,headline,type;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['roster_module'] .= '{holema_legend},tilastot_round,tilastot_my_team,tilastot_config_json;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['roster_module'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['player'] = '{title_legend},name,type;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['player'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';

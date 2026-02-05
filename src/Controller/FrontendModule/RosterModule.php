@@ -5,17 +5,19 @@ namespace App\Controller\FrontendModule;
 use App\Model\Players;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\ModuleModel;
-use Contao\Template;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\StringUtil;
 use Contao\ArrayUtil;
 use Contao\FilesModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+#[AsFrontendModule(category: 'steelers_modules')]
 class RosterModule extends AbstractFrontendModuleController
 {
-	protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
+	protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
 	{
 		$players = Players::findAll(array(
 			'column'  => array('published=1'),

@@ -47,8 +47,8 @@ $GLOBALS['TL_MODELS']['tl_tilastot_bus_tours'] = BusTours::class;
 $GLOBALS['TL_CRON']['hourly'][] = array('App\\Utils\\TilastotApi', 'refreshAll');
 
 /* Wrapper */
-$GLOBALS['TL_WRAPPERS']['start'][] = 'rowStart';
-$GLOBALS['TL_WRAPPERS']['stop'][] = 'rowEnd';
+$GLOBALS['TL_WRAPPERS']['start'][] = 'wrapper_block_start_element';
+$GLOBALS['TL_WRAPPERS']['stop'][] = 'wrapper_block_end_element';
 
 // Add permissions
 $GLOBALS['TL_PERMISSIONS'][] = 'tilastot_camps';

@@ -1,0 +1,8 @@
+<div class="{{ css is defined ? css : '' }} mt-32 xl:mt-52">
+  <div class="max-w-screen-2xl mx-auto relative mt-24 lg:mt-defaultbig">
+    {% if headline is defined and headline.unit is defined and headline.value is defined %}
+      <{{ headline.unit }} class="block-headline headline--small z-40 -mb-16 md:mb-0">
+        {{ headline.value }}
+      </{{ headline.unit }}>
+    {% endif %}
+    <div class="flex flex-row flex-wrap lg:flex-nowrap gap-8">
