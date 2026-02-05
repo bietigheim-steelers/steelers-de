@@ -92,7 +92,7 @@
           {% elseif game.eventTitle and not game.ended and "now"|date('U') < game.gamedate %}
             <span class="btn-default btn-blue {{ game.cssClass }}">{{ game.eventTitle }}</span>
           {% endif %}
-          {% if game.ended and game.videos %}
+          {% if game.ended and game.videos is defined %}
             {% for video in game.videos %}
               <a href="/video/{{ video }}" class="btn-default">
                 {% if 'highlights' in video %}

@@ -1,0 +1,8 @@
+{% block content %}
+<div class="basis-full lg:basis-1/2">
+  <script>
+  window.tilastot_gamedata = {{ games|json_encode(constant('JSON_PRETTY_PRINT'))|raw }};
+  </script>
+  <div id="homeschedule" class="h-full"></div>
+</div>
+{% endblock %}
