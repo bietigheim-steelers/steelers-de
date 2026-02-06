@@ -1,0 +1,15 @@
+<!-- indexer::stop -->
+<nav class="{{ class }} microsite-nav device bg-steelblue"{% if cssID %} {{ cssID|raw }}{% endif %}{% if style %} style="{{ style }}"{% endif %}>
+	<div class="flex flex-wrap items-center gap-6 relative mx-12 py-5">
+		{% if contao.page.layout == 6 %}
+			{# Layout alwa-cup #}
+      {{ insert_tag('insert_article::alwa-cup-titel')|raw }}
+    {% elseif contao.page.layout == 7 %}
+			{# Layout Porsche Camp #}
+      {{ insert_tag('insert_article::porsche-camp-title')|raw }}
+		{% endif %}
+		{{ items|raw }}
+	</div>
+</nav>
+<a id="{{ skipId }}" class="hidden">&nbsp;</a>
+<!-- indexer::continue -->

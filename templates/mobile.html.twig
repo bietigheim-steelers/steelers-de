@@ -1,0 +1,24 @@
+<!-- indexer::stop -->
+<div class="{{ class }} top-sticky-nav device bg-steelgreen block lg:hidden"{% if cssID %} {{ cssID|raw }}{% endif %}{% if style %} style="{{ style }}"{% endif %}>
+	<a href="{{ request }}#{{ skipId }}" class="hidden">{{ skipNavigation }}</a>
+	<div class="grid grid-nav items-center place-items-center py-2 relative max-w-screen-2xl mx-auto" style="height: 60px;">
+		<a class="block" href="/">
+			{% include 'logo.html.twig' %}
+		</a>
+		<button id="burger" class="open-main-nav z-50">
+			<span class="burger"></span>
+			<span class="burger-text">Menü</span>
+		</button>
+	</div>
+</div> 
+<nav class="main-nav" id="main-nav">
+	<a class="z-50 relative" href="/">
+		{% include 'logo.html.twig' %}
+	</a>
+	<button id="burger-close" class="open-main-nav z-50">
+		<span class="burger"></span>
+	</button>
+	{{ items|raw }}
+</nav>
+<a id="{{ skipId }}" class="hidden">&nbsp;</a>
+<!-- indexer::continue -->
