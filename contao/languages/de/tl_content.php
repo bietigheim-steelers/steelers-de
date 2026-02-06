@@ -1,4 +1,4 @@
 <?php
 
-$GLOBALS['TL_LANG']['CTE']['rowStart'] = array('Block Start', 'Beginn eines neuen Blocks.');
-$GLOBALS['TL_LANG']['CTE']['rowEnd'] = array('Block Ende', 'Abschluss eines Blocks.');
+$GLOBALS['TL_LANG']['CTE']['wrapper_block_start_element'] = array('Block Start', 'Beginn eines neuen Blocks.');
+$GLOBALS['TL_LANG']['CTE']['wrapper_block_end_element'] = array('Block Ende', 'Abschluss eines Blocks.');
