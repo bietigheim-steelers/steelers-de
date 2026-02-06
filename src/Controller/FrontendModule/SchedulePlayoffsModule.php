@@ -12,7 +12,7 @@ use Contao\CoreBundle\Twig\FragmentTemplate;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[AsFrontendModule(category: 'steelers_modules')]
+#[AsFrontendModule(category: 'steelers_season_modules')]
 class SchedulePlayoffsModule extends AbstractFrontendModuleController
 {
 	protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response

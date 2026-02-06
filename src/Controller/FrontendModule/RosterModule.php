@@ -14,7 +14,7 @@ use Contao\FilesModel;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-#[AsFrontendModule(category: 'steelers_modules')]
+#[AsFrontendModule(category: 'steelers_season_modules')]
 class RosterModule extends AbstractFrontendModuleController
 {
 	protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
