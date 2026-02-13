@@ -1,0 +1,180 @@
+{% use "@Contao/component/_figure.html.twig" %}
+
+{% set profile_image_size = picture_config({
+    width: 1000,
+    height: 1000,
+    resizeMode: 'crop',
+    sizes: '(max-width: 640px) 600px, (max-width: 768px) 800px, 1000px',
+    densities: '1x, 2x'
+}) %}
+
+{% set about_image_size = picture_config({
+    width: 600,
+    height: 400,
+    resizeMode: 'crop',
+    sizes: '(max-width: 640px) 640px, 600px',
+    densities: '1x, 2x'
+}) %}
+
+{% block content %}
+<div class="{{ cssClass }} mt-24">
+  <div class="max-w-screen-2xl mx-auto relative py-4 md:py-4 sm:my-16 md:my-24 xl:my-32 z-40">
+    <h2 class="block-headline w-full invisible lg:visible md:w-auto text-right md:text-left">
+      #{{ player.jersey is defined ? player.jersey : '' }}</h2>
+  </div>
+</div>
+
+<div class="{{ cssClass }} defaultcontainer max-w-screen-2xl mx-auto relative my-20">
+  <div class="grid md:grid-cols-2 items-end -mt-[24rem] md:-mt-[30rem]">
+    <div class="mb-0 !pb-0 xl:p-5">
+      <h3 class="text-5xl font-sans inline-block md:block uppercase font-bold text-black">
+        <span class="block lg:hidden font-headlineItalic player-number mt-20">#{{ player.jersey is defined ? player.jersey : '' }}</span>
+        {{ player.firstname is defined ? player.firstname : '' }} {{ player.lastname is defined ? player.lastname : '' }}<br>
+        <span class="player-subheadline">
+          {% if player.position is defined %}
+            {% if player.position in ['GK', 'G'] %}
+              Goalie
+            {% elseif player.position in ['DE', 'D'] %}
+              Verteidiger
+            {% elseif player.position in ['FO', 'F', 'C', 'LW', 'CE', 'RW'] %}
+              Stürmer
+            {% else %}
+              {{ player.position }}
+            {% endif %}
+          {% endif %}
+        </span>
+      </h3>
+      <div class="flex flex-col justify-end h-full pt-2 w-3/4">
+        <div class="text-sm uppercase">Geboren</div>
+        <div class="text-lg font-bold -mt-1">
+          {% if player.birthday is defined %}
+            {{ player.birthday|format_datetime(locale='de', dateFormat='long') }}
+          {% endif %}
+        </div>
+        <div class="text-lg font-bold -mt-1">{{ player.birthplace is defined ? player.birthplace : '' }}</div>
+        <div class="border-t-2 border-black my-2"></div>
+        <div class="text-sm uppercase">Facts</div>
+        <div class="text-lg font-bold -mt-1">{{ player.weight is defined ? player.weight : '' }} kg</div>
+        <div class="text-lg font-bold -mt-1">{{ player.height is defined ? player.height : '' }} cm</div>
+        <div class="text-lg font-bold -mt-1">
+          {% if player.position is defined and player.shoots is defined %}
+            {% if player.position == 'GK' %}
+              {% if player.shoots in ['left', 'L'] %}
+                fängt links
+              {% elseif player.shoots in ['right', 'R'] %}
+                fängt rechts
+              {% endif %}
+            {% else %}
+              {% if player.shoots in ['left', 'L'] %}
+                schießt links
+              {% elseif player.shoots in ['right', 'R'] %}
+                schießt rechts
+              {% endif %}
+            {% endif %}
+          {% endif %}
+        </div>
+        <div class="border-t-2 border-black my-2"></div>
+        <div class="text-sm uppercase">Nationalität</div>
+        <div class="text-lg font-bold -mt-1">{{ player.nationality is defined ? player.nationality : '' }}</div>
+        <div class="border-t-2 border-black my-2"></div>
+        <div class="text-sm uppercase">Ein Steeler seit</div>
+        <div class="text-lg font-bold -mt-1">{{ player.steelersince is defined ? player.steelersince : '' }}</div>
+      </div>
+    </div>
+    <div class="aspect-w-4 aspect-h-5 xl:aspect-h-4 bg-gray-400 overflow-hidden max-[600px]:mt-8">
+      {% if player.pictures is defined and player.pictures is iterable %}
+        {% set profilePicture = player.pictures[1] is defined ? player.pictures[1] : (player.pictures[0] is defined ? player.pictures[0] : null) %}
+        {% if profilePicture and profilePicture.uuid is defined %}
+          {% set image = figure(profilePicture.uuid, profile_image_size, {metadata: { alt: (player.firstname is defined ? player.firstname : '') ~ ' ' ~ (player.lastname is defined ? player.lastname : '') }}) %}
+          {% with {figure: image} %}
+            {{ block('figure_component') }}
+          {% endwith %}
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  {% if player.warmuppartner is defined and player.warmuppartner %}
+    <div class="sm:w-4/5 mx-auto relative mb-10 mt-8 lg:mt-20 text-center">
+      <div class="text-sm uppercase">Warm-Up Partner von {{ player.firstname is defined ? player.firstname : '' }}
+        {{ player.lastname is defined ? player.lastname : '' }}</div>
+      <div class="text-lg font-bold -mt-1">{{ player.warmuppartner }}</div>
+    </div>
+  {% endif %}
+
+  {% if player.about is defined and player.about %}
+    <div class="sm:w-4/5 mx-auto relative my-20">
+      <div class="grid md:p-0 md:grid-cols-2 items-start gap-8">
+        <div class="overflow-hidden border-t-4 border-gray-800 pt-10">
+          {% if player.pictures is defined and player.pictures[2] is defined and player.pictures[2].uuid is defined %}
+            {% set aboutImage = figure(player.pictures[2].uuid, about_image_size, {metadata: { alt: (player.firstname is defined ? player.firstname : '') ~ ' ' ~ (player.lastname is defined ? player.lastname : '') }, lightboxSize: '_big'}) %}
+            {% with {figure: aboutImage} %}
+              {{ block('figure_component') }}
+            {% endwith %}
+          {% endif %}
+        </div>
+        <div class="md:pt-10 flex flex-col items-start">
+          <h4 class="text-2xl text-black font-sans uppercase font-bold !mt-0">Über {{ player.firstname is defined ? player.firstname : '' }}
+            {{ player.lastname is defined ? player.lastname : '' }}</h4>
+          <div class="mt-2 leading-relaxed prose">
+            {{ player.about|raw }}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  <div class="mt-28">
+    <h3 class="text-steelgreen font-bold text-5xl uppercase font-headline">Aktuelle Saison</h3>
+    <div class="sm:w-4/5 mx-auto relative my-8 player-stats">
+      <div>
+        <div class="number">{{ stats.games is defined ? stats.games : 0 }}</div>
+        <div class="title">{% if stats.games is defined and stats.games == 1 %}Spiel{% else %}Spiele{% endif %}</div>
+      </div>
+      <div>
+        <div class="number">{{ stats.goals is defined ? stats.goals : 0 }}</div>
+        <div class="title">{% if stats.goals is defined and stats.goals == 1 %}Tor{% else %}Tore{% endif %}</div>
+      </div>
+      <div>
+        <div class="number">{{ stats.assists is defined ? stats.assists : 0 }}</div>
+        <div class="title">{% if stats.assists is defined and stats.assists == 1 %}Vorlage{% else %}Vorlagen{% endif %}</div>
+      </div>
+      <div>
+        <div class="number">{{ stats.points is defined ? stats.points : 0 }}</div>
+        <div class="title">{% if stats.points is defined and stats.points == 1 %}Punkt{% else %}Punkte{% endif %}</div>
+      </div>
+      <div>
+        <div class="number">{{ stats.penalties is defined ? stats.penalties : 0 }}</div>
+        <div class="title hidden lg:block">Strafminuten</div>
+        <div class="title block lg:hidden">Strafen</div>
+      </div>
+      <div>
+        <div class="number">{{ stats.shots is defined ? stats.shots : 0 }}</div>
+        <div class="title">{% if stats.shots is defined and stats.shots == 1 %}Schuss{% else %}Schüsse{% endif %}</div>
+      </div>
+      <div>
+        <div class="number">{{ stats.plusminus is defined ? stats.plusminus : 0 }}</div>
+        <div class="title">+/-</div>
+      </div>
+      <div>
+        <div class="number">
+          {% if stats.games is defined and stats.points is defined and stats.games > 0 %}
+            {{ (stats.points / stats.games)|number_format(2, ',', '.') }}
+          {% else %}
+            0,00
+          {% endif %}
+        </div>
+        <div class="title hidden lg:block">Punkte pro Spiel</div>
+        <div class="title block lg:hidden">Pkt/Sp</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="my-28 career-stats">
+    <h3 class="text-steelgreen font-bold text-5xl uppercase font-headline">Karriere</h3>
+    <div class="sm:w-4/5 mx-auto relative my-8 max-w-full overflow-auto">
+      {{ player.epstats is defined ? player.epstats|raw : '' }}
+    </div>
+  </div>
+</div>
+{% endblock %}

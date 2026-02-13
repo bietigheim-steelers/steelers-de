@@ -27,6 +27,7 @@ $GLOBALS['TL_LANG']['FMD']['schedule_playoffs_module'] = array('Spielplan Playof
 $GLOBALS['TL_LANG']['FMD']['standings_module'] = array('Tabelle', 'Tabelle');
 $GLOBALS['TL_LANG']['FMD']['next_game_module'] = array('Nächstes Spiel', 'Nächstes Spiel');
 $GLOBALS['TL_LANG']['FMD']['roster_module'] = array('Kader', 'Kader');
+$GLOBALS['TL_LANG']['FMD']['player_module'] = array('Spieler Detailansicht', 'Spieler Detailansicht');
 
 $GLOBALS['TL_LANG']['FMD']['steelers_content_modules'] = array('🇸🇱 Steelers Inhaltsmodule 🇸🇱', 'Steelers Inhaltsmodule');
 $GLOBALS['TL_LANG']['FMD']['camps_module'] = array('Porsche Camps', 'Porsche Camps');

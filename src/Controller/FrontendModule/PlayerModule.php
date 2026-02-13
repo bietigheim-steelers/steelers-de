@@ -6,8 +6,9 @@ use App\Model\Players;
 use App\Model\PlayerStats;
 
 use Contao\CoreBundle\Controller\FrontendModule\AbstractFrontendModuleController;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\ModuleModel;
-use Contao\Template;
+use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\StringUtil;
 use Contao\ArrayUtil;
 use Contao\FilesModel;
@@ -17,11 +18,10 @@ use Contao\CoreBundle\Exception\PageNotFoundException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+#[AsFrontendModule(category: 'steelers_season_modules')]
 class PlayerModule extends AbstractFrontendModuleController
 {
-
-  protected $strTemplate = 'mod_player';
-  protected function getResponse(Template $template, ModuleModel $model, Request $request): Response
+  protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
   {
     $player = Players::findOneBy(array('alias = ? AND published = 1'), array(Input::get('auto_item')));
     if (!$player) {
@@ -49,24 +49,9 @@ class PlayerModule extends AbstractFrontendModuleController
     if ($stats) {
       $template->stats = $stats->fetchAll()[0];
     }
-    $template->headlineUnit = $this->hl;
-    $template->cssId = $this->cssID[0];
-    $template->cssClass = $this->cssID[1];
-    return $template->getResponse();
+    $template->cssId = $model->cssID[0];
+    $template->cssClass = $model->cssID[1];
+    return $template->getResponse(); 
   }
 
-  public function generate()
-  {
-    if (TL_MODE == 'BE') {
-      /** @var \BackendTemplate|object $objTemplate */
-      $objTemplate = new \BackendTemplate('be_wildcard');
-      $objTemplate->wildcard = '### HOLEMA SPIELERDETAILS ###';
-      $objTemplate->title = $this->headline;
-      $objTemplate->id = $this->id;
-      $objTemplate->link = $this->name;
-      $objTemplate->href = 'contao/main.php?do=themes&amp;table=tl_module&amp;act=edit&amp;id=' . $this->id;
-      return $objTemplate->parse();
-    }
-    Input::get('auto_item');
-  }
 }

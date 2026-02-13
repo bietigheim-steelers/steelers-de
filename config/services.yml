@@ -32,12 +32,6 @@ services:
         category: tilastot
         template: mod_scorer
         type: scorer
-  App\Controller\FrontendModule\PlayerModule:
-    tags:
-      - name: contao.frontend_module
-        category: tilastot
-        template: mod_player
-        type: player
   App\Controller\FrontendModule\CampsModule:
     tags:
       - name: contao.frontend_module

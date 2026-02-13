@@ -102,8 +102,8 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['roster_module'] = '{title_legend},n
 $GLOBALS['TL_DCA']['tl_module']['palettes']['roster_module'] .= '{holema_legend},tilastot_round,tilastot_my_team,tilastot_config_json;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['roster_module'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
 
-$GLOBALS['TL_DCA']['tl_module']['palettes']['player'] = '{title_legend},name,type;';
-$GLOBALS['TL_DCA']['tl_module']['palettes']['player'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['player_module'] = '{title_legend},name,type;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['player_module'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['next_game_module'] = '{title_legend},name,type;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['next_game_module'] .= '{tilastot_legend},tilastot_my_team;';

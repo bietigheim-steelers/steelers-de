@@ -8,7 +8,7 @@ use Contao\PageModel;
 use Contao\PageRegular;
 use Contao\Input;
 use Contao\Environment;
-use Contao\System;
+use Contao\StringUtil;
 use Symfony\Component\HttpFoundation\Response;
 
 use App\Model\Players;
@@ -29,7 +29,7 @@ class PlayerPageController
       throw new PageNotFoundException('Page not found: ' . Environment::get('uri'));
     }
 
-    $pageModel->pageTitle  = strip_tags(\StringUtil::stripInsertTags($player->firstname) . ' ' . \StringUtil::stripInsertTags($player->lastname));
+    $pageModel->pageTitle  = strip_tags(StringUtil::stripInsertTags($player->firstname) . ' ' . StringUtil::stripInsertTags($player->lastname));
 
     // Render the page using the PageRegular handler from the legacy framework
     return (new PageRegular())->getResponse($pageModel, true);
