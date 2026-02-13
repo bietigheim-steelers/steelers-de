@@ -2,6 +2,7 @@
 module.exports = {
   content: [
     "../templates/**/*.html5",
+    "../templates/**/*.twig",
     "./js/**/*.js",
     "./js/**/*.vue",
     "./vueform.config.js",
