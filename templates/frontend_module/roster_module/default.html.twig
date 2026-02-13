@@ -76,17 +76,8 @@
                   </div>
                 </div>
                 
-                {{ dump(player.profilePic) }}
-                {% if player.profilePic and false %}
-                  {% set image = figure(project_dir ~ player.profilePic.path, player_image_size, {metadata: { alt: player.firstname ~ ' ' ~ player.lastname }}) %}
-                  {% with {figure: image} %}
-                    <div class="w-full h-full object-top object-cover">
-                      {{ block('figure_component') }}
-                    </div>
-                  {% endwith %}
-                {% endif %}
-                {% if player.profilePic and false %}
-                  {% set image = figure(project_dir ~ player.profilePic.path, player_image_size, {metadata: { alt: player.firstname ~ ' ' ~ player.lastname }}) %}
+                {% if player.profilePic %}
+                  {% set image = figure(player.profilePic.uuid, player_image_size, {metadata: { alt: player.firstname ~ ' ' ~ player.lastname }}) %}
                   {% with {figure: image} %}
                     <div class="w-full h-full object-top object-cover">
                       {{ block('figure_component') }}
