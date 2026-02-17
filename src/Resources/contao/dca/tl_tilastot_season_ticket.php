@@ -29,8 +29,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
             'panelLayout'             => 'filter;search,limit'
         ),
         'label' => array(
-            'fields'                  => array('customer_name', 'customer_firstname', 'customer_email'),
-            'format' => '%s, %s <span style="color:#999;padding-left:3px">[%s]</span>'
+            'fields'                  => array('customer_name', 'customer_firstname', 'customer_email', 'customer_email'),
+            'format' => '%s, %s <span style="color:#999;padding-left:3px">[%s]</span> - %s'
         ),
         'global_operations' => array(
             'all' => array(
@@ -79,7 +79,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
             'sql' => "int(10) unsigned NOT NULL AUTO_INCREMENT"
         ),
         'tstamp' => array(
-            'sql' => "int(10) unsigned NOT NULL default '0'"
+            'sql' => "int(10) unsigned NOT NULL default '0'",
+            'sorting' => true,
         ),
         'ticket_type' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['ticket_type'],
@@ -135,6 +136,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         'customer_name' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['customer_name'],
             'inputType' => 'text',
+            'sorting' => true,
             'sql' => "varchar(64) NOT NULL default ''"
         ),
         'customer_street' => array(
@@ -210,6 +212,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         'order_number' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['order_number'],
             'inputType' => 'text',
+            'sorting' => true,
             'sql' => "int(11) NOT NULL default '0'"
         ),
         'paid' => array(

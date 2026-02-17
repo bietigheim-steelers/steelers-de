@@ -8,6 +8,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
+use Contao\Database;
 use Symfony\Component\Mime\Address;
 use App\Tilastot\Model\SeasonTicket;
 use App\Tilastot\Model\Seats;
@@ -69,6 +70,17 @@ class SeasonTicketController
     foreach ($data as $key => $value) {
       $seasonTicket->$key = $value;
     }
+
+    // Generate unique random order number (e.g., 100000-999999)
+    do {
+      $randomNumber = random_int(100000, 999999);
+
+      $objResult = Database::getInstance()
+        ->prepare("SELECT id FROM tl_tilastot_season_ticket WHERE order_number = ?")
+        ->execute($randomNumber);
+    } while ($objResult->numRows > 0); // Keep generating until unique
+
+    $seasonTicket->order_number = $randomNumber;
     $seasonTicket->tstamp = time();
     $seasonTicket->save();
 
