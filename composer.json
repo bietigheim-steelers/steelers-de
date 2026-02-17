@@ -28,7 +28,8 @@
     "terminal42/contao-conditionalformfields": "^3.0",
     "terminal42/contao-mp_forms": "^4.4",
     "terminal42/notification_center": "1.6.18",
-    "maennchen/zipstream-php": "2.2.6"
+    "maennchen/zipstream-php": "2.2.6",
+    "terminal42/contao-leads": "*"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.0"

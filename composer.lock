@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "daffaeb6fb293fdb2e28cf2a23bb27a9",
+    "content-hash": "e4d46d0afd3a7059813f8ec20cf84d9c",
     "packages": [
         {
             "name": "ausi/slug-generator",
@@ -14993,6 +14993,80 @@
             "time": "2025-01-15T20:32:06+00:00"
         },
         {
+            "name": "terminal42/contao-leads",
+            "version": "1.4.33",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/terminal42/contao-leads.git",
+                "reference": "8392070cd40128a2138a9f520f132ee42b1c7d48"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/terminal42/contao-leads/zipball/8392070cd40128a2138a9f520f132ee42b1c7d48",
+                "reference": "8392070cd40128a2138a9f520f132ee42b1c7d48",
+                "shasum": ""
+            },
+            "require": {
+                "codefog/contao-haste": "^4.10.0",
+                "contao-community-alliance/composer-plugin": "^2.4.0 || 3.*",
+                "contao/core-bundle": "^3.5.1 || ^4.1",
+                "menatwork/contao-multicolumnwizard": "~3.2",
+                "php": "^7.0 || ^8.0"
+            },
+            "require-dev": {
+                "phpoffice/phpspreadsheet": "^1.8"
+            },
+            "suggest": {
+                "phpoffice/phpspreadsheet": "To enable Excel export of lead data."
+            },
+            "type": "contao-module",
+            "extra": {
+                "contao": {
+                    "sources": {
+                        "": "system/modules/leads"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Leads\\": "library/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "terminal42 gmbh",
+                    "homepage": "https://www.terminal42.ch"
+                }
+            ],
+            "description": "Leads extension for Contao Open Source CMS; Store and manage form data with ease!",
+            "keywords": [
+                "contao",
+                "data",
+                "export",
+                "form",
+                "store"
+            ],
+            "support": {
+                "issues": "https://github.com/terminal42/contao-leads/issues",
+                "source": "https://github.com/terminal42/contao-leads"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/terminal42",
+                    "type": "github"
+                },
+                {
+                    "url": "https://ko-fi.com/terminal42",
+                    "type": "other"
+                }
+            ],
+            "time": "2022-08-23T07:57:01+00:00"
+        },
+        {
             "name": "terminal42/contao-mp_forms",
             "version": "4.4.0",
             "source": {
@@ -16347,5 +16421,5 @@
         "php": "^7.4"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
