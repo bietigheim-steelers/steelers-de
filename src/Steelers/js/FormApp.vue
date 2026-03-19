@@ -344,7 +344,8 @@
             <template #label>
               <div class="text-lg leading-tight mt-8">
                 Ich habe bereits ein Kundenkonto bei EVENTIM worüber ich die
-                Möglichkeit hätte, Tickets im Onlineshop zu erwerben:
+                Möglichkeit hätte, Tickets im Onlineshop zu erwerben:<br>
+                <b>(Diese Angabe ist für die mobile Dauerkarte zwingend erforderlich)</b>
               </div>
             </template>
           </RadiogroupElement>
@@ -352,15 +353,16 @@
           <TextElement
             name="eventim_email"
             autocomplete="email"
-            :conditions="[['customer_eventim.eventim', '==', 'ja']]"
+            :conditions="[[['customer_eventim.eventim', '==', 'ja'], ['ticket_form', ['mobile', 'mobile_plastik']]]]"
             label="Hinterlegte E-Mailadresse meines EVENTIM-Kontos"
             rules="required"
             placeholder="EVENTIM"
           />
           <TextElement
             name="eventim_account"
-            :conditions="[['customer_eventim.eventim', '==', 'ja']]"
+            :conditions="[[['customer_eventim.eventim', '==', 'ja'], ['ticket_form', ['mobile', 'mobile_plastik']]]]"
             label="Meine 6-stellige EVENTIM Kundennummer:"
+            rules="required"
             placeholder="EVENTIM Kundennummer:"
           >
             <template #info>

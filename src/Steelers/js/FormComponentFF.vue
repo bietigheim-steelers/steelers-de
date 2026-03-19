@@ -46,6 +46,7 @@
 
   <RadiogroupElement
     name="ticket_form"
+    @change="onTicketFormChange"
     :conditions="[['ticket_category', '!=', null]]"
     rules="required"
     :items="ticketFormItems"
@@ -67,6 +68,13 @@ export default {
     const onFFChange = () => {
       form$.value.el$("ff.ff_new_dk").reset();
       form$.value.el$("ff.ff_old_dk").reset();
+    };
+
+    const onTicketFormChange = (newValue) => {
+      if (['mobile', 'mobile_plastik'].includes(newValue)) {
+        form$.value.el$('customer_eventim.eventim').update('ja');
+        form$.value.el$('customer_eventim.eventim').disable('nein');
+      }
     };
 
     const ticket_type = computed(() => {
@@ -102,6 +110,7 @@ export default {
     return {
       ticket_type,
       onFFChange,
+      onTicketFormChange,
       ticketFormItems,
     };
   },
