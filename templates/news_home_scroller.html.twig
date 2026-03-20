@@ -1,0 +1,40 @@
+{% use "@Contao/component/_figure.html.twig" %}
+
+    {% set news_image_size = picture_config({
+  width: 511,
+  height: 637,
+  resizeMode: 'crop',
+  densities: '1x, 2x'
+}) %}
+
+    <div class="swiper-slide bg-white h-full">
+      {% set image = figure(singleSRC, news_image_size, {
+  metadata: { alt: newsHeadline },
+  linkHref: link,
+  options: { attr: { loading: 'lazy', class: 'aspect-news w-full' } },
+}) %}
+
+      {% with {figure: image} %}
+      {{ block('figure_component') }}
+      {% endwith %}
+      <div class="p-5 grow flex flex-col">
+<div class="text-gray-400 italic uppercase">
+      {% if categoriesList|length >0 %}
+        {{ categoriesList|join(', ') }}
+      {% endif %}
+        &nbsp;
+      </div>
+
+        <a href="{{ link }}" class="block mt-1 text-lg md:text-xl line-clamp-3 text-steelgreen uppercase font-bold leading-5 md:leading-6 whitespace-pre-wrap" style="overflow: hidden;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            height: calc(3*1.5rem);">{{ newsHeadline }}</a>
+        <p class="mt-3 md:mt-5 text-sm text-black whitespace-pre-wrap" style="height: calc(4*1.25rem);">{{ teaser|truncate_text(120)|striptags }}&#8230;</p>
+      <div class="mt-2 md:mt-5 flex-1 flex flex-col justify-start">
+        <time class="text-sm text-steelgreen" datetime="{{ datetime }}">
+          {{ time|date('d.m.Y') }}
+        </time>
+      </div>
+    </div>
+  </div>
