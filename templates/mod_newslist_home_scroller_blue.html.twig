@@ -1,12 +1,12 @@
     <div class=" relative z-10 mt-32 xl:mt-52">
       <div class="max-w-screen-2xl mx-auto relative mt-24 lg:mt-defaultbig -mb-16 md:mb-0">
-        <h2 class="block-headline headline--small z-40">News</h2>
+        <h2 class="block-headline headline--small z-40">Clubnews</h2>
       </div>
-      <div class="absolute overflow-hidden -z-10 w-screen h-1/3 md:h-1/2 top-0 bg-black" style="max-width: 100%;">
+      <div class="absolute overflow-hidden -z-10 w-screen h-1/3 md:h-1/2 top-0 bg-steelgreen" style="max-width: 100%;">
       </div>
       <div class="swiper swiper-news mx-2 md:mx-12">
         <div class="swiper-wrapper">
-          <?= implode('', $this->articles) ?>
+          {{ articles|join|raw }}
         </div>
         <div class="mt-5 flex flex-col md:flex-row md:justify-between">
           <div class="flex gap-14">

@@ -1,6 +1,6 @@
 <script>
 window.steelers_home_news = [
-  <?= implode(',', $this->articles) ?>
+  {{ articles|join(',')|raw }}
 ];
 </script>
 <div id="homenews"></div>

@@ -14,7 +14,6 @@ class ContentElementMigration extends AbstractMigration
     'ce_text_default' => 'content_element/text/default',
     'ce_template_player' => 'content_element/template/player',
 
-    //'ce_gallery_magazine' => 'content_element/',
     //'ce_gallery_scroller' => 'content_element/',
     //'ce_headline_page_title' => 'content_element/',
     //'ce_hyperlink_button' => 'content_element/',
@@ -63,7 +62,6 @@ class ContentElementMigration extends AbstractMigration
     //'mod_newsarchive_list_videoportal' => 'frontend_module/',
     //'mod_newslist_home_scroller' => 'frontend_module/',
     //'mod_newslist_home_scroller_blue' => 'frontend_module/',
-    //'mod_newslist_home_topnews' => 'frontend_module/',
     //'mod_newslist_videoportal' => 'frontend_module/',
     //'mod_newsreader_detail' => 'frontend_module/',
     //'mod_schedule_social_media_tool' => 'frontend_module/',
