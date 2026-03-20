@@ -21,6 +21,7 @@ class AppExtension extends AbstractExtension
     return [
       // Register a new filter named "page_title" and tell Twig which method to execute
       new TwigFilter('page_title', [$this, 'pageTitle']),
+      new TwigFilter('truncate_text', [$this, 'truncateText']),
     ];
   }
 
@@ -39,6 +40,26 @@ class AppExtension extends AbstractExtension
       }
     }
 
+    return $value;
+  }
+
+  public function truncateText(string $value, int $targetLength): string
+  {
+    if (strlen($value) > $targetLength) {
+      $parts = preg_split('/([\s\n\r]+)/', $value, -1, PREG_SPLIT_DELIM_CAPTURE);
+      $parts_count = count($parts);
+
+      $length = 0;
+      $last_part = 0;
+      for (; $last_part < $parts_count; ++$last_part) {
+        $length += strlen($parts[$last_part]);
+        if ($length > $targetLength) {
+          break; 
+        }
+      }
+
+      return trim(implode(array_slice($parts, 0, $last_part)));
+    }
     return $value;
   }
 }
