@@ -28,7 +28,7 @@ class NewsListFetchItemsListener
 
       $displayedNews = NewsModel::findBy('alias', Input::get('items'), ['limit' => 1]);
 
-      if ($displayedNews->game_id == '0') {
+      if (!$displayedNews || ($displayedNews && $displayedNews->game_id == '0')) {
         // return empty collection if no game is set
         return NewsModel::findBy(array("$t.pid='nuller'"), null);
       }
