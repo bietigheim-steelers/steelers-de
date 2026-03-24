@@ -155,7 +155,7 @@ class updateVideoportal
         $this->log("insert news: " . print_r($sqlData, true));
 
         // Insert the new record
-        $result = \Database::getInstance()->prepare("INSERT INTO tl_news %s")
+        $result = Database::getInstance()->prepare("INSERT INTO tl_news %s")
             ->set($sqlData)
             ->execute();
 
@@ -164,7 +164,7 @@ class updateVideoportal
         // categories after ceating the news entry
         // Insert categories after creating the news entry
         foreach ($data['categories'] as $category) {
-            \Database::getInstance()->prepare("INSERT INTO tl_news_categories (news_id, category_id) VALUES (?, ?)")
+            Database::getInstance()->prepare("INSERT INTO tl_news_categories (news_id, category_id) VALUES (?, ?)")
                 ->execute($insertId, $category);
         }
 
