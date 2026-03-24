@@ -37,13 +37,11 @@
             <meta name="msapplication-TileColor" content="#046a38">
             <meta name="msapplication-config" content="/files/steelers/icons/browserconfig.xml">
             <meta name="theme-color" content="#ffffff">
-
-            <meta property="og:title" content="{{ pageTitle }} - {{ mainTitle }}" />
-            <meta property="og:description" content="{{ description }}" />
-            <meta property="og:image" content="/files/steelers/teams/SCB.png" />            
-
             {% for metaTag in metaTags|default %}
-                <meta{{ attrs(metaTag) }}>
+                <meta{{metaTag}}>
+            {% endfor %}
+            {% for linkTag in linkTags|default %}
+                <link{{linkTag}}>
             {% endfor %}
         {% endblock %}
 
@@ -59,7 +57,7 @@
     {% endblock %}
 
 </head>
-<body{{ bodyAttributes }} id="top" class="overflow-y-scroll">
+<body{{ bodyAttributes }} class="overflow-y-scroll">
 
 {% block body %}
     {{ contao_sections('top') }}
