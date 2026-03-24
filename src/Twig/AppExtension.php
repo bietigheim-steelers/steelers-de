@@ -22,6 +22,8 @@ class AppExtension extends AbstractExtension
       // Register a new filter named "page_title" and tell Twig which method to execute
       new TwigFilter('page_title', [$this, 'pageTitle']),
       new TwigFilter('truncate_text', [$this, 'truncateText']),
+      new TwigFilter('get_game_details', [$this, 'getGameDetails']),
+      new TwigFilter('add_domain', [$this, 'addDomain']),
     ];
   }
 
@@ -54,12 +56,42 @@ class AppExtension extends AbstractExtension
       for (; $last_part < $parts_count; ++$last_part) {
         $length += strlen($parts[$last_part]);
         if ($length > $targetLength) {
-          break; 
+          break;
         }
       }
 
       return trim(implode(array_slice($parts, 0, $last_part)));
     }
     return $value;
+  }
+
+  public function getGameDetails(int $gameId): Object|null
+  {
+    $game = \App\Model\Games::findByPk($gameId);
+
+    if ($game) {
+      $game->homeTeamDetails = \App\Model\Standings::findByIdAndRound($game->hometeam, $game->round);
+      $game->awayTeamDetails = \App\Model\Standings::findByIdAndRound($game->awayteam, $game->round);
+      if ($game->homeTeamDetails && isset($game->homeTeamDetails['logo']) && strpos($game->homeTeamDetails['logo'], '/') === 0) {
+        $game->homeTeamLogo = __DIR__ . '/../..' . $game->homeTeamDetails['logo'];
+      }
+      if ($game->awayTeamDetails && isset($game->awayTeamDetails['logo']) && strpos($game->awayTeamDetails['logo'], '/') === 0) {
+        $game->awayTeamLogo = __DIR__ . '/../..' . $game->awayTeamDetails['logo'];
+      }
+
+      return $game;
+    }
+
+    return null;
+  }
+
+  public function addDomain(string $url): string
+  {
+    $request = $this->requestStack->getCurrentRequest();
+    if ($request) {
+      $schemeAndHost = $request->getSchemeAndHttpHost();
+      return $schemeAndHost . $url;
+    }
+    return $url;
   }
 }
