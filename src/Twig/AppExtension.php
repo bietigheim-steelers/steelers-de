@@ -24,6 +24,7 @@ class AppExtension extends AbstractExtension
       new TwigFilter('truncate_text', [$this, 'truncateText']),
       new TwigFilter('get_game_details', [$this, 'getGameDetails']),
       new TwigFilter('add_domain', [$this, 'addDomain']),
+      new TwigFilter('add_root', [$this, 'addRoot']),
     ];
   }
 
@@ -93,5 +94,10 @@ class AppExtension extends AbstractExtension
       return $schemeAndHost . $url;
     }
     return $url;
+  }
+
+  public function addRoot(string $path): string
+  {
+    return __DIR__ . '/../..' . $path;
   }
 }
