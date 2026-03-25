@@ -16,6 +16,7 @@ class ContentElementMigration extends AbstractMigration
     'wrapperStart' => 'content_element/wrapper_block_start_element',
     'wrapperStop' => 'content_element/wrapper_block_end_element',
     'ce_template_people' => 'content_element/template/people',
+    'ce_wrapperStart_grid' => 'content_element/wrapper_block_start_grid',
 
     //'ce_headline_page_title' => 'content_element/',
     //'ce_hyperlink_button' => 'content_element/',
@@ -39,7 +40,6 @@ class ContentElementMigration extends AbstractMigration
     //'ce_text_one_column' => 'content_element/',
     //'ce_text_popup' => 'content_element/',
     //'ce_text_tickets_progress2' => 'content_element/',
-    //'ce_wrapperStart_grid' => 'content_element/',
   ];
   private const MODULE_MAPPING = [
     'mod_partners' => 'frontend_module/partners_module/card',    
