@@ -17,6 +17,7 @@ class ContentElementMigration extends AbstractMigration
     'wrapperStop' => 'content_element/wrapper_block_end_element',
     'ce_template_people' => 'content_element/template/people',
     'ce_wrapperStart_grid' => 'content_element/wrapper_block_start_grid',
+    'ce_gallery_scroller' => 'content_element/gallery/scroller',
 
     //'ce_headline_page_title' => 'content_element/',
     //'ce_hyperlink_button' => 'content_element/',
