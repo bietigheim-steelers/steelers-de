@@ -97,24 +97,7 @@ class ContentElementMigration extends AbstractMigration
       return false;
     }
 
-    $columns = $schemaManager->listTableColumns('tl_content');
-
-    if (!isset($columns['customtpl'])) {
-      return false;
-    }
-
-    foreach (array_keys(self::CONTENT_MAPPING) as $legacyTemplate) {
-      $match = $this->connection->fetchOne(
-        'SELECT id FROM tl_content WHERE customTpl = ? LIMIT 1',
-        [$legacyTemplate]
-      );
-
-      if (false !== $match) {
-        return true;
-      }
-    }
-
-    return false;
+    return true;
   }
 
   public function run(): MigrationResult
