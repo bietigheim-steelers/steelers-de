@@ -80,6 +80,12 @@ class ContentElementMigration extends AbstractMigration
     //'form_wrapper_season_tickets' => '',
     //'form_wrapper_vip' => '',
   ];
+  private const CONTENT_ELEMENT_MAPPING = [  
+    'wrapperStart' => 'wrapper_block_start_element',
+    'wrapperStop' => 'wrapper_block_end_element',
+    //'form_wrapper_season_tickets' => '',
+    //'form_wrapper_vip' => '',
+  ];
 
   public function __construct(private readonly Connection $connection) {}
 
@@ -121,6 +127,13 @@ class ContentElementMigration extends AbstractMigration
         'tl_content',
         ['customTpl' => $newTemplate],
         ['customTpl' => $legacyTemplate]
+      );
+    }
+    foreach (self::CONTENT_ELEMENT_MAPPING as $legacyType => $newType) {
+      $updatedRows += $this->connection->update(
+        'tl_content',
+        ['type' => $newType],
+        ['type' => $legacyType]
       );
     }
     foreach (self::MODULE_MAPPING as $legacyTemplate => $newTemplate) {
