@@ -89,15 +89,42 @@ class ContentElementMigration extends AbstractMigration
 
   public function __construct(private readonly Connection $connection) {}
 
+
   public function shouldRun(): bool
   {
     $schemaManager = $this->connection->createSchemaManager();
 
-    if (!$schemaManager->tablesExist(['tl_content'])) {
+    if (!$schemaManager->tablesExist(['tl_content', 'tl_module', 'tl_form', 'tl_form_field'])) {
       return false;
     }
 
-    return true;
+    $columns = $schemaManager->listTableColumns('tl_content');
+
+    if (!isset($columns['customtpl'])) {
+      return false;
+    }
+
+    return $this->hasLegacyData('tl_content', 'customTpl', self::CONTENT_MAPPING)
+      || $this->hasLegacyData('tl_content', 'type', self::CONTENT_ELEMENT_MAPPING)
+      || $this->hasLegacyData('tl_module', 'customTpl', self::MODULE_MAPPING)
+      || $this->hasLegacyData('tl_form', 'customTpl', self::FORM_MAPPING)
+      || $this->hasLegacyData('tl_form_field', 'customTpl', self::FORM_FIELD_MAPPING);
+  }
+
+  private function hasLegacyData(string $table, string $column, array $mapping): bool
+  {
+    foreach (array_keys($mapping) as $legacyValue) {
+      $match = $this->connection->fetchOne(
+        "SELECT id FROM $table WHERE $column = ? LIMIT 1",
+        [$legacyValue]
+      );
+
+      if (false !== $match) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public function run(): MigrationResult
