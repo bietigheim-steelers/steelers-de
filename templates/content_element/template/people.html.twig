@@ -1,0 +1,49 @@
+{% extends '@Contao/block_searchable.html.twig' %}
+
+{% use "@Contao/component/_figure.html.twig" %}
+
+{% set people_image_size = picture_config({
+    width: 160,
+    height: 160,
+    resizeMode: 'crop',
+    densities: '1x, 2x'
+}) %}
+
+
+{% block content %}
+<div class="border-t-4 border-gray-800 pt-6 mt-6 flex gap-3">
+  {% if addImage is defined and addImage and singleSRC is defined and singleSRC %}
+    {% set image = figure(singleSRC, people_image_size, {
+      metadata: { alt: (keys.name is defined ? keys.name : '') }
+      options: { attr: { class: 'object-cover object-center w-40 aspect-square' } }
+    }) %}
+    {% with {figure: image} %}
+      {{ block('figure_component') }}
+    {% endwith %}
+  {% endif %}
+  <div>
+    <h5 class="uppercase text-2xl font-bold leading-tight">
+      {{ keys.name }}
+      {% if keys.lizenz is defined and keys.lizenz %}
+        <small class="text-gray-500 font-thin text-sm">({{ keys.lizenz }})</small>
+      {% endif %}
+    </h5>
+    <p class="uppercase text-lg font-light leading-tight">
+      {{ keys.role }}
+    </p>
+    <ul class="mt-6">
+      <li>
+        <a href="tel:{{ keys.phone }}">
+          {{ keys.phone }}
+        </a>
+      </li>
+      <li>
+        <a href="mailto:{{ keys.mail }}">
+          {{ keys.mail }}
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+{% endblock %}
+
