@@ -18,7 +18,13 @@
       <h4 class="text-2xl text-black font-sans uppercase font-bold !mt-0">{{ headline.text }}</h4>
       <div class="mt-2 leading-relaxed prose">
         {% with {text, attributes: text_attributes|default} %}{{ block('rich_text_component') }}{% endwith %}
+        {% if data.url and data.linkTitle %}
+          <p class="not-prose">
+          <a href="{{ data.url }}" class="btn-default" {{ data.target == '1' ? 'target="_blank"' : '' }}>{{ data.linkTitle }}</a>
+          </p>
+        {% endif %}
       </div>
     </div>
   </div>
 </div>
+
