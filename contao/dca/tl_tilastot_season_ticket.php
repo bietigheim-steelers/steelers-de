@@ -23,8 +23,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
     // List
     'list' => array(
         'sorting' => array(
-            'mode'                    => DataContainer::MODE_SORTED,
-            'flag'                    => DataContainer::SORT_INITIAL_LETTER_ASC,
+            'mode'                    => Contao\DataContainer::MODE_SORTED,
+            'flag'                    => Contao\DataContainer::SORT_INITIAL_LETTER_ASC,
             'fields'                  => array('customer_name'),
             'panelLayout'             => 'filter;search,limit'
         ),
@@ -39,8 +39,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
                 'class'               => 'header_edit_all',
                 'attributes'          => 'onclick="Backend.getScrollOffset()" accesskey="e"'
             ),
-            'download_excel' => [ 
-                'label'               => 'Download Excel Liste', 
+            'download_excel' => [
+                'label'               => 'Download Excel Liste',
                 'class'               => 'header_theme_import',
                 'route'                => 'backend_season_ticket_download'
             ]
@@ -230,7 +230,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
     )
 );
 
-class tl_tilastot_season_ticket extends Backend
+class tl_tilastot_season_ticket extends Contao\Backend
 {
     public function loadDate($value)
     {
