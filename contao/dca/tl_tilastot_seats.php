@@ -23,8 +23,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_seats'] = array(
     // List
     'list' => array(
         'sorting' => array(
-            'mode'                    => DataContainer::MODE_SORTED,
-            'flag'                    => DataContainer::SORT_INITIAL_LETTER_ASC,
+            'mode'                    => Contao\DataContainer::MODE_SORTED,
+            'flag'                    => Contao\DataContainer::SORT_INITIAL_LETTER_ASC,
             'fields'                  => array('seat_block', 'seat_row', 'seat_seat'),
             'panelLayout'             => 'filter;search,limit'
         ),
@@ -115,10 +115,12 @@ $GLOBALS['TL_DCA']['tl_tilastot_seats'] = array(
     )
 );
 
-class tl_tilastot_seats extends \Contao\Backend
+class tl_tilastot_seats extends Contao\Backend
 {
-    function seatLabel($row) {
-        $ticket = sprintf('<b>Block %s</b>, Reihe %s, Platz %s - ',
+    function seatLabel($row)
+    {
+        $ticket = sprintf(
+            '<b>Block %s</b>, Reihe %s, Platz %s - ',
             $row['seat_block'],
             $row['seat_row'],
             $row['seat_seat']
