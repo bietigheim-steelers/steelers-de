@@ -94,9 +94,6 @@ class updateVideoportal
                 $category = 30;
             }
 
-            var_dump($video['title'], $display_category, $category);
-
-
             if ($category == 0) {
                 continue;
             }

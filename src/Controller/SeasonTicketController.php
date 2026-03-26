@@ -7,18 +7,82 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+
+use Contao\Database;
 use Symfony\Component\Mime\Address;
-use Contao\Email;
+use App\Model\SeasonTicket;
+use App\Model\Seats;
 
 class SeasonTicketController
 {
   public function order(Request $request, MailerInterface $mailer, ContaoFramework $framework): Response
   {
 
+
     $framework->initialize();
     $data = $request->request->all();
 
     $data['price'] = self::getTicketPrice($data['ticket_area'], $data['ticket_category'], substr($data['seat_block'], -1), $data['ticket_type']);
+
+    // Book the selected seat(s) in the database
+    $baseSeat = (int)$data['seat_seat'];
+    $block = $data['seat_block'];
+    $row = $data['seat_row'];
+    $seatsToBlock = 1;
+
+    if (in_array($data['ticket_category'], ['familie1', 'familie2'])) {
+      $seatsToBlock = 3;
+    } elseif ($data['ticket_category'] === 'familie3') {
+      $seatsToBlock = 4;
+    }
+
+    for ($i = 0; $i < $seatsToBlock; $i++) {
+      $seatNum = $baseSeat + $i;
+
+      // Check if seat exists in database
+      $seat = Seats::findOneBy(['seat_block=?', 'seat_row=?', 'seat_seat=?'], [$block, $row, $seatNum]);
+
+      if ($seat) {
+        // Seat exists - check status
+        if ($seat->seat_status === 'booked') {
+          return new Response('seat_already_booked', 400);
+        } elseif ($seat->seat_status === 'non-existent') {
+          return new Response('seat_non_existent', 400);
+        } else {
+          // Seat is available or reserved - mark as booked
+          $seat->seat_status = 'booked';
+          $seat->tstamp = time();
+          $seat->save();
+        }
+      } else {
+        // Seat doesn't exist in database - create it as booked
+        $newSeat = new Seats();
+        $newSeat->seat_block = $block;
+        $newSeat->seat_row = $row;
+        $newSeat->seat_seat = $seatNum;
+        $newSeat->seat_status = 'booked';
+        $newSeat->tstamp = time();
+        $newSeat->save();
+      }
+    }
+    // Save to database using SeasonTicket model
+    $seasonTicket = new SeasonTicket();
+    foreach ($data as $key => $value) {
+      $seasonTicket->$key = $value;
+    }
+
+    // Generate unique random order number (e.g., 100000-999999)
+    do {
+      $randomNumber = random_int(100000, 999999);
+
+      $objResult = Database::getInstance()
+        ->prepare("SELECT id FROM tl_tilastot_season_ticket WHERE order_number = ?")
+        ->execute($randomNumber);
+    } while ($objResult->numRows > 0); // Keep generating until unique
+
+    $seasonTicket->order_number = $randomNumber;
+    $seasonTicket->tstamp = time();
+    $seasonTicket->save();
 
     $email = new TemplatedEmail();
     $email->subject('Steelers Dauerkarte - Bestellung');
@@ -37,7 +101,7 @@ class SeasonTicketController
     $email2->from('webseite@steelers.de');
     $email2->replyTo($data['customer_email']);
 
-    $email2->to('ticketing@steelers.de');
+    $email2->to('dominik.sander@steelers.de');
     $email2->htmlTemplate('@Contao_App/email_season_ticket_order.html.twig');
     $eventimCategory = $this->getEventimCategory(
       $data['ticket_area'],
@@ -52,33 +116,6 @@ class SeasonTicketController
     ]));
 
     $mailer->send($email2);
-
-    // Add the selected ticket to the booked seats file
-    $filePath = '/usr/www/users/steelg/2022/files/steelers/tools/seatingPlan/booked_seats.json';
-
-    if (file_exists($filePath)) {
-      $bookedSeats = json_decode(file_get_contents($filePath), true);
-      $baseSeat = (int)$data['seat_seat'];
-      $block = $data['seat_block'];
-      $row = $data['seat_row'];
-      $seatsToBlock = 1;
-
-      if (in_array($data['ticket_category'], ['familie1', 'familie2'])) {
-        $seatsToBlock = 3;
-      } elseif ($data['ticket_category'] === 'familie3') {
-        $seatsToBlock = 4;
-      }
-
-      for ($i = 0; $i < $seatsToBlock; $i++) {
-        $seatNum = $baseSeat + $i;
-        $newSeat = $block . '_' . $row . '_' . $seatNum;
-        if (!in_array($newSeat, $bookedSeats['booked'])) {
-          $bookedSeats['booked'][] = $newSeat;
-        }
-      }
-      file_put_contents($filePath, json_encode($bookedSeats, JSON_PRETTY_PRINT));
-    }
-
 
     return new Response('order successful');
   }
@@ -111,7 +148,7 @@ class SeasonTicketController
           "familie2" => 1133,
           "familie3" => 1296,
         ],
-        J => [
+        "J" => [
           "vollzahler" => 418,
           "ermaessigt" => 370,
           "jugendlich" => 263,
@@ -147,7 +184,7 @@ class SeasonTicketController
           "familie2" => 998,
           "familie3" => 1144,
         ],
-        J => [
+        "J" => [
           "vollzahler" => 364,
           "ermaessigt" => 322,
           "jugendlich" => 129.74,
@@ -189,6 +226,25 @@ class SeasonTicketController
     $mappedBlock = $blockMap[$block] ?? null;
 
     return $mappedBlock ? $this->getPrices($type, $mappedBlock, $category) : 0;
+  }
+
+  public static function getCategoryMap(): array
+  {
+    return [
+      'vollzahler' => 'Vollzahler',
+      'familie1' => 'Familienkarte 1',
+      'familie2' => 'Familienkarte 2',
+      'familie3' => 'Familienkarte 3',
+      'rentner' => 'Rentner',
+      'student' => 'Student',
+      'azubi' => 'Auszubildender',
+      'schueler' => 'Schüler über 18 Jahre',
+      'mitglied' => 'SC Mitglied',
+      'jugendlich' => 'Jugendlicher (13-17 Jahre)',
+      'kind' => 'Kind (8-12 Jahre)',
+      'behinderung' => 'Fan mit Behinderung ab 50%',
+      'rollstuhl' => 'Rollstuhlfahrer inkl. Begleitperson',
+    ];
   }
 
   private function getEventimCategory($area, $category, $block, $ff_new_dk): string

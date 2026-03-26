@@ -458,6 +458,19 @@ export default {
         this.$refs.form$.el$("final_overview.terms").reset();
         this.formDone = true;
       } else {
+        if (typeof response?.data === "string" && response.data.includes("seat_already_booked")) {
+          form$.messageBag.append(
+            `Dieser Sitzplatz ist bereits gebucht. Bitte wähle einen anderen Sitzplatz.`
+          );
+          return;
+        }
+        if (typeof response?.data === "string" && response.data.includes("seat_non_existent")) {
+          form$.messageBag.append(
+            `Dieser Sitzplatz existiert nicht. Bitte wähle einen anderen Sitzplatz.`
+          );
+          return;
+        }
+
         form$.messageBag.append(
           `Irgendetwas ist schief gelaufen. Bitte prüfe deine Angaben (ganz besonders deine E-Mail-Adresse!) und versuche es erneut. Sollte es weiterhin zu problemen kommen, wende dich an ticketing@steelers.de`
         );

@@ -20,6 +20,8 @@ $GLOBALS['TL_LANG']['MOD']['tilastot_players'] = array('Spieler / Scorer', 'Spie
 $GLOBALS['TL_LANG']['MOD']['tilastot_partners'] = array('Partner', 'Partner verwalten.');
 $GLOBALS['TL_LANG']['MOD']['tilastot_camps'] = array('Porsche Camps', 'Porsche Camps verwalten.');
 $GLOBALS['TL_LANG']['MOD']['tilastot_bus_tours'] = array('Bustouren', 'Auswärtsfahrten verwalten.');
+$GLOBALS['TL_LANG']['MOD']['tilastot_seats'] = array('Sitzplätze', 'Sitzplätze verwalten.');
+$GLOBALS['TL_LANG']['MOD']['tilastot_season_ticket'] = array('Dauerkarten Bestellungen', 'Dauerkarten Bestellungen verwalten.');
 
 $GLOBALS['TL_LANG']['FMD']['steelers_season_modules'] = array('🇸🇱 Steelers Saison Module 🇸🇱', 'Steelers Saison Module');
 $GLOBALS['TL_LANG']['FMD']['schedule_module'] = array('Spielplan', 'Spielplan');
