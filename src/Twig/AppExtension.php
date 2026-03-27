@@ -6,6 +6,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Contao\ArticleModel;
+use Contao\PageModel;
 
 class AppExtension extends AbstractExtension
 {
@@ -34,12 +35,10 @@ class AppExtension extends AbstractExtension
 
     if ($articleId) {
       $article = ArticleModel::findByPk($articleId);
-      if ($article->alias) {
-        return $article->alias;
-      }
-      $parentArticle = ArticleModel::findByPk($article->pid);
-      if ($parentArticle && $parentArticle->alias) {
-        return $parentArticle->alias;
+      $parentPage = PageModel::findByPk($article->pid);
+      $parentParentPage = PageModel::findByPk($parentPage->pid);
+      if ($parentParentPage && $parentParentPage->alias) {
+        return $parentParentPage->alias;
       }
     }
 
