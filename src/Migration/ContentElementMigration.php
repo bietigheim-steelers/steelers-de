@@ -18,12 +18,11 @@ class ContentElementMigration extends AbstractMigration
     'ce_template_people' => 'content_element/template/people',
     'ce_wrapperStart_grid' => 'content_element/wrapper_block_start_grid',
     'ce_gallery_scroller' => 'content_element/gallery/scroller',
+    'ce_hyperlink_card' => 'content_element/hyperlink/card',
+    'ce_hyperlink_button' => 'content_element/hyperlink/button',
+    'ce_hyperlink_content' => 'content_element/hyperlink/content',
 
     //'ce_headline_page_title' => 'content_element/',
-    //'ce_hyperlink_button' => 'content_element/',
-    //'ce_hyperlink_card' => 'content_element/',
-    //'ce_hyperlink_content' => 'content_element/',
-    //'ce_hyperlink_slider' => 'content_element/',
     //'ce_image_centered' => 'content_element/',
     //'ce_player_home' => 'content_element/',
     //'ce_player_hospitality' => 'content_element/',
@@ -43,7 +42,7 @@ class ContentElementMigration extends AbstractMigration
     //'ce_text_tickets_progress2' => 'content_element/',
   ];
   private const MODULE_MAPPING = [
-    'mod_partners' => 'frontend_module/partners_module/card',    
+    'mod_partners' => 'frontend_module/partners_module/card',
     'mod_partners_blocktext' => 'frontend_module/partners_module/blocktext',
     'mod_standings_home' => 'frontend_module/standings_module/home',
     'mod_standings' => 'frontend_module/standings_module/default',
@@ -71,17 +70,17 @@ class ContentElementMigration extends AbstractMigration
     //'mod_schedule_social_media_tool_posts' => 'frontend_module/',
   ];
 
-  private const FORM_MAPPING = [  
+  private const FORM_MAPPING = [
     //'form_wrapper_newsletter_home' => '',
     //'form_wrapper_season_tickets' => '',
     //'form_wrapper_vip' => '',
   ];
-  private const FORM_FIELD_MAPPING = [  
+  private const FORM_FIELD_MAPPING = [
     //'form_wrapper_newsletter_home' => '',
     //'form_wrapper_season_tickets' => '',
     //'form_wrapper_vip' => '',
   ];
-  private const CONTENT_ELEMENT_MAPPING = [  
+  private const CONTENT_ELEMENT_MAPPING = [
     'wrapperStart' => 'wrapper_block_start_element',
     'wrapperStop' => 'wrapper_block_end_element',
     //'form_wrapper_season_tickets' => '',

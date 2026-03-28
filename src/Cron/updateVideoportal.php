@@ -83,6 +83,11 @@ class updateVideoportal
             }
             $game = $this->determineGame($video);
 
+            if (!$game) {
+                $this->log("No game found for video: " . $video['title']);
+                continue;
+            }
+
             $category = 0;
 
 

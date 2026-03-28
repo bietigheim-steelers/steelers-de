@@ -1,0 +1,18 @@
+{% set image_config = picture_config({
+    width: 160,
+    height: 160,
+    resizeMode: 'crop'
+}) %}
+
+<div class="border-t-4 border-gray-800 pt-6 mt-6 flex flex-wrap md:flex-nowrap gap-3">
+	{% if image %}
+		<img src="{{ figure(image.image.img.src|add_root, image_config).image.img.src }}" class="object-cover object-center w-40 aspect-square" alt="{{ link_title }}" />
+	{% endif %}
+	<div style="max-width: 80vw">
+		<h5 class="uppercase text-2xl font-bold leading-tight"><a href="{{ href|insert_tag }}">{{ link_title }}</a>
+		</h5>
+		<ul class="mt-6">
+			<li class="text-ellipsis overflow-hidden"><a href="{{ href|insert_tag }}">{{ href|insert_tag }}</a></li>
+		</ul>
+	</div>
+</div>
