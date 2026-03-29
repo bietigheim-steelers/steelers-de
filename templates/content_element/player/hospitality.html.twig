@@ -1,0 +1,46 @@
+{% extends '@Contao/content_element/_base.html.twig' %}
+
+
+{% block content %}
+    {% if as_editor_view %}
+        {% block editor_view %}
+            <ul>
+                {% for source_file in source_files %}
+                    <li>
+                        <span>{{ source_file.name }}</span>
+                        <span class="size">({{ source_file.fileSize|format_bytes }})</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endblock %}
+    {% else %}
+      {{ dump(figure.media) }}
+      <figure class="relative my-28 xl:my-36">
+          <div class="absolute top-0 bottom-0 left-0 right-0 bg-black bg-opacity-80 z-10 flex items-center justify-center">
+          </div>
+          <video id="home-video" class="w-full" {{ figure.media.attributes }}>
+            {% for source_attributes in figure.media.sources %}
+                {% do csp_source('media-src', source_attributes.src) %}
+                <source{{ source_attributes }}>
+            {% endfor %}
+          </video>
+      </figure>
+      <script>
+        // define an observer instance
+        var observer = new IntersectionObserver(onIntersection, {
+          root: null, // default is the viewport
+          threshold: .05 // percentage of target's visible area. Triggers "onIntersection"
+        })
+
+        // callback is called on intersection change
+        function onIntersection(entries, opts) {
+          if (entries[0].isIntersecting) {
+            entries[0].target.play()
+          }
+        }
+
+        // Use the observer to observe an element
+        observer.observe(document.querySelector('#home-video'))
+      </script>
+    {% endif %}
+{% endblock %}

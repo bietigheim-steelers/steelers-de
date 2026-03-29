@@ -21,11 +21,11 @@ class ContentElementMigration extends AbstractMigration
     'ce_hyperlink_card' => 'content_element/hyperlink/card',
     'ce_hyperlink_button' => 'content_element/hyperlink/button',
     'ce_hyperlink_content' => 'content_element/hyperlink/content',
+    'ce_player_home' => 'content_element/player/home',
+    'ce_player_hospitality' => 'content_element/player/hospitality',
 
     //'ce_headline_page_title' => 'content_element/',
     //'ce_image_centered' => 'content_element/',
-    //'ce_player_home' => 'content_element/',
-    //'ce_player_hospitality' => 'content_element/',
     //'ce_table_icon_list' => 'content_element/',
     //'ce_table_pricing' => 'content_element/',
     //'ce_table_roster' => 'content_element/',
@@ -64,10 +64,6 @@ class ContentElementMigration extends AbstractMigration
     //'mod_newslist_home_scroller_blue' => 'frontend_module/',
     //'mod_newslist_videoportal' => 'frontend_module/',
     //'mod_newsreader_detail' => 'frontend_module/',
-    //'mod_schedule_social_media_tool' => 'frontend_module/',
-    //'mod_schedule_social_media_tool_away' => 'frontend_module/',
-    //'mod_schedule_social_media_tool_header' => 'frontend_module/',
-    //'mod_schedule_social_media_tool_posts' => 'frontend_module/',
   ];
 
   private const FORM_MAPPING = [
