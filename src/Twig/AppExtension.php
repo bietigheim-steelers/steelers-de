@@ -101,7 +101,7 @@ class AppExtension extends AbstractExtension
     parse_str(parse_url($video_url, PHP_URL_QUERY), $queryParams);
     $video_id = $queryParams['v'];
     $url = 'https://img.youtube.com/vi/' . $video_id . '/hq2.jpg';
-    $tmpDir = $this->addRoot('/system/tmp');
+    $tmpDir = $this->addRoot('/var/tmp');
     $localFile = $tmpDir . DIRECTORY_SEPARATOR . $video_id . '_hq2.jpg';
 
     if (!file_exists($localFile)) {
