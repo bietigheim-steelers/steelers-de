@@ -72,7 +72,7 @@ class updateVideoportal
                     'categories' => [$category]
                 ]);
             } else {
-                $this->log("News entry with headline '$headline' skipped. No game found");
+                $this->log("Video with link " . $video['link'] . " skipped. No game found");
             }
         }
 
@@ -84,7 +84,7 @@ class updateVideoportal
             $game = $this->determineGame($video);
 
             if (!$game) {
-                $this->log("No game found for video: " . $video['title']);
+                $this->log("Video with link " . $video['link'] . " skipped. No game found");
                 continue;
             }
 
