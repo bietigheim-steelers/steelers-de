@@ -1,0 +1,12 @@
+{% set headline = headline|default(_context) %}
+{% set tag_name = headline.tag_name|default('h1') %}
+
+<div class="{{ classes }}">
+  <div class="max-w-screen-2xl mx-auto relative pt-4 md:py-4 sm:my-16 md:my-24 xl:my-36 z-40">
+    <{{tag_name}}{{headline.attributes|default}} {%endblock%} {% block headline_attributes %}>
+        {%- block headline_inner -%}
+        {{ headline.text|insert_tag_raw }}
+      {%- endblock -%}
+    </{{tag_name}}>
+  </div>
+</div>
