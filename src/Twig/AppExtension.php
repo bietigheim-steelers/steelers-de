@@ -27,6 +27,8 @@ class AppExtension extends AbstractExtension
       new TwigFilter('add_domain', [$this, 'addDomain']),
       new TwigFilter('get_youtube_thumbnail', [$this, 'getYoutubeThumbnail']),
       new TwigFilter('add_root', [$this, 'addRoot']),
+      new TwigFilter('get_url_params', [$this, 'getUrlParams']),
+
     ];
   }
 
@@ -118,6 +120,12 @@ class AppExtension extends AbstractExtension
     }
 
     return $localFile;
+  }
+
+  public function getUrlParams(string $url): array
+  {
+    parse_str(parse_url($url, PHP_URL_QUERY), $queryParams);
+    return $queryParams;
   }
 
   public function addRoot(string $path): string
