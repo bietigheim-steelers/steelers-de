@@ -23,9 +23,9 @@ class ContentElementMigration extends AbstractMigration
     'ce_hyperlink_content' => 'content_element/hyperlink/content',
     'ce_player_home' => 'content_element/player/home',
     'ce_player_hospitality' => 'content_element/player/hospitality',
+    'ce_image_centered' => 'content_element/image/centered',
 
     //'ce_headline_page_title' => 'content_element/',
-    //'ce_image_centered' => 'content_element/',
     //'ce_table_icon_list' => 'content_element/',
     //'ce_table_pricing' => 'content_element/',
     //'ce_table_roster' => 'content_element/',
