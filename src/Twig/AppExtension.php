@@ -25,6 +25,7 @@ class AppExtension extends AbstractExtension
       new TwigFilter('truncate_text', [$this, 'truncateText']),
       new TwigFilter('get_game_details', [$this, 'getGameDetails']),
       new TwigFilter('add_domain', [$this, 'addDomain']),
+      new TwigFilter('get_youtube_thumbnail', [$this, 'getYoutubeThumbnail']),
       new TwigFilter('add_root', [$this, 'addRoot']),
     ];
   }
@@ -93,6 +94,30 @@ class AppExtension extends AbstractExtension
       return $schemeAndHost . $url;
     }
     return $url;
+  }
+
+  public function getYoutubeThumbnail(string $video_url): string
+  {
+    parse_str(parse_url($video_url, PHP_URL_QUERY), $queryParams);
+    $video_id = $queryParams['v'];
+    $url = 'https://img.youtube.com/vi/' . $video_id . '/hq2.jpg';
+    $tmpDir = $this->addRoot('/system/tmp');
+    $localFile = $tmpDir . DIRECTORY_SEPARATOR . $video_id . '_hq2.jpg';
+
+    if (!file_exists($localFile)) {
+      $ch = curl_init($url);
+      $fp = fopen($localFile, 'wb');
+
+      curl_setopt($ch, CURLOPT_FILE, $fp);
+      curl_setopt($ch, CURLOPT_HEADER, 0);
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+      curl_exec($ch);
+      curl_close($ch);
+      fclose($fp);
+    }
+
+    return $localFile;
   }
 
   public function addRoot(string $path): string

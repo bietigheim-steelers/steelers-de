@@ -1,0 +1,56 @@
+{% use "@Contao/component/_figure.html.twig" %}
+
+{% set preview_image_size = picture_config({
+  width: 800,
+  height: 450,
+  resizeMode: 'crop',
+  densities: '1x, 2x'
+}) %}
+
+{% set ogimage = figure(playerUrl|get_youtube_thumbnail, preview_image_size, {
+  metadata: { alt: newsHeadline },
+}) %}
+
+{% set game = game_id|get_game_details %}
+
+<div class="group relative bg-white border border-gray-200 mx-2 xl:mx-4 flex flex-col overflow-hidden">
+  <div class="flex flex-col bg-white h-full">
+    <figure class="image_container relative">
+      <a href="{{ link }}" class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 group">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1" stroke="currentColor" style="width: 70px" class="stroke-white transition-transform transform group-hover:scale-125">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.91 11.672a.375.375 0 0 1 0 .656l-5.603 3.113a.375.375 0 0 1-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112Z"/>
+        </svg>
+      </a>
+      {% with {figure: ogimage} %}
+        {{ block('figure_component') }}
+      {% endwith %}
+    </figure>
+    <div class="p-5 grow flex flex-col">
+      <div class="text-gray-400 italic uppercase text-sm">
+      {% if game %}
+        {{ game.homeTeamDetails.name }} - {{ game.awayTeamDetails.name }}
+      {% elseif categoriesList|length >0 %}
+        {{ categoriesList|join(', ') }}
+      {% endif %}
+      </div>
+
+      <a href="{{ link }}" class="mt-1 text-xl text-steelgreen uppercase font-bold leading-6">
+        {% if 'Highlights' in categoriesList %}
+          Highlights
+        {% elseif 'Impressionen' in categoriesList %}
+          Impressionen
+        {% elseif 'Pressekonferenz' in categoriesList %}
+          Pressekonferenz
+        {% elseif 'Razorsharp' in categoriesList %}
+          Razorsharp
+        {% else %}
+          {{ newsHeadline }}
+        {% endif %}
+      </a>
+      <div class="mt-5 flex-1 flex flex-col justify-end">
+        <time class="text-sm text-steelgreen" datetime="{{ datetime }}">{{ date }}</time>
+      </div>
+    </div>
+  </div>
+</div>
