@@ -28,6 +28,9 @@ class ContentElementMigration extends AbstractMigration
     'ce_headline_page_title' => 'content_element/headline/page_title',
     'ce_text_one_column' => 'content_element/text/one_column',
     'ce_text_highlight' => 'content_element/text/highlight',
+    'ce_text_tickets_progress' => 'content_element/template/progress',
+    'ce_text_tickets_progress2' => 'content_element/template/progress',
+    'ce_template_progress_crowdfunding' => 'content_element/template/progress',
 
     //'ce_table_icon_list' => 'content_element/',
     //'ce_table_pricing' => 'content_element/',
@@ -39,7 +42,6 @@ class ContentElementMigration extends AbstractMigration
     //'ce_text_businessschmiede_header' => 'content_element/',
     //'ce_text_businessschmiede_pricing' => 'content_element/',
     //'ce_text_popup' => 'content_element/',
-    //'ce_text_tickets_progress2' => 'content_element/',
   ];
   private const MODULE_MAPPING = [
     'mod_partners' => 'frontend_module/partners_module/card',
