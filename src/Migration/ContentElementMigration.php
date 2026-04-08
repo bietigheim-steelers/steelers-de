@@ -26,6 +26,7 @@ class ContentElementMigration extends AbstractMigration
     'ce_player_hospitality' => 'content_element/player/hospitality',
     'ce_image_centered' => 'content_element/image/centered',
     'ce_headline_page_title' => 'content_element/headline/page_title',
+    'ce_text_one_column' => 'content_element/text/one_column',
 
     //'ce_table_icon_list' => 'content_element/',
     //'ce_table_pricing' => 'content_element/',
@@ -37,7 +38,6 @@ class ContentElementMigration extends AbstractMigration
     //'ce_text_businessschmiede_header' => 'content_element/',
     //'ce_text_businessschmiede_pricing' => 'content_element/',
     //'ce_text_highlight' => 'content_element/',
-    //'ce_text_one_column' => 'content_element/',
     //'ce_text_popup' => 'content_element/',
     //'ce_text_tickets_progress2' => 'content_element/',
   ];
