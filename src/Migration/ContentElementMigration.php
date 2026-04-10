@@ -31,6 +31,7 @@ class ContentElementMigration extends AbstractMigration
     'ce_text_tickets_progress' => 'content_element/template/progress',
     'ce_text_tickets_progress2' => 'content_element/template/progress',
     'ce_template_progress_crowdfunding' => 'content_element/template/progress',
+    'ce_text_businessschmiede_header' => 'content_element/text/businessschmiede_header',
 
     //'ce_table_icon_list' => 'content_element/',
     //'ce_table_pricing' => 'content_element/',
@@ -39,7 +40,6 @@ class ContentElementMigration extends AbstractMigration
     //'ce_template_form_error' => 'content_element/',
     //'ce_template_shop_home' => 'content_element/',
     //'ce_text_businessschmiede' => 'content_element/',
-    //'ce_text_businessschmiede_header' => 'content_element/',
     //'ce_text_businessschmiede_pricing' => 'content_element/',
     //'ce_text_popup' => 'content_element/',
   ];
