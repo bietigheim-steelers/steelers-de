@@ -40,7 +40,6 @@ class ContentElementMigration extends AbstractMigration
     //'ce_table_roster' => 'content_element/',
     //'ce_template_error' => 'content_element/',
     //'ce_template_form_error' => 'content_element/',
-    //'ce_template_shop_home' => 'content_element/',
     //'ce_text_popup' => 'content_element/',
   ];
   private const MODULE_MAPPING = [
