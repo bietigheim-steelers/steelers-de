@@ -50,6 +50,7 @@ set('bin/cachetool', '~/bin/cachetool.phar');
 // Hosts
 host('steelers.de')
   ->setLabels(['stage' => 'prod'])
+  ->set('keep_releases', 5);
   ->set('hostname', 'web01.steelers.de')
   ->set('remote_user', 'scsteelers_deployer_website')
   ->set('deploy_path', '~/web/2022-steelers-de')
@@ -57,6 +58,7 @@ host('steelers.de')
 
 host('dev.steelers.de')
   ->setLabels(['stage' => 'dev'])
+  ->set('keep_releases', 3);
   ->set('hostname', 'web01.steelers.de')
   ->set('remote_user', 'scsteelers_deployer_dev')
   ->set('deploy_path', '~/web/dev-steelers-de')
