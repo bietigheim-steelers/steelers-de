@@ -34,13 +34,12 @@ class ContentElementMigration extends AbstractMigration
     'ce_text_businessschmiede_header' => 'content_element/text/businessschmiede_header',
     'ce_text_businessschmiede' => 'content_element/text/businessschmiede',
     'ce_text_businessschmiede_pricing' => 'content_element/text/businessschmiede_pricing',
+    'ce_table_icon_list' => 'content_element/table/icon_list',
+    'ce_table_pricing' => 'content_element/table/pricing',
+    'ce_table_roster' => 'content_element/table/roster',
 
-    //'ce_table_icon_list' => 'content_element/',
-    //'ce_table_pricing' => 'content_element/',
-    //'ce_table_roster' => 'content_element/',
     //'ce_template_error' => 'content_element/',
     //'ce_template_form_error' => 'content_element/',
-    //'ce_text_popup' => 'content_element/',
   ];
   private const MODULE_MAPPING = [
     'mod_partners' => 'frontend_module/partners_module/card',

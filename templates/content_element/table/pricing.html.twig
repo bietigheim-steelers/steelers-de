@@ -1,0 +1,96 @@
+{% extends "@Contao/content_element/table.html.twig" %}
+
+{% set attributes = attrs().addClass('defaultcontainer').mergeWith(attributes|default) %}
+{% set table_attributes = attrs().addClass('w-full table-fixed border-separate border-spacing-x-8 text-left').mergeWith(table_attributes|default) %}
+
+{% block content %}
+    <div class="mx-auto max-w-full px-6 lg:px-8">
+        <div class="mx-auto mt-12 space-y-4 sm:mt-8 lg:hidden">
+            {% for cell in header %}
+                {% if not (loop.first and use_row_headers) %}
+                    <section class="p-8">
+                        <h3 class="text-2xl font-semibold leading-6 text-steelgreen">
+                            {{- cell|sanitize_html('contao')|insert_tag_raw -}}
+                        </h3>
+                        <ul role="list" class="mt-10 space-y-4 text-sm leading-6 text-gray-900">
+                            {% for row in rows %}
+                                <li class="grid grid-cols-6 gap-x-3 text-sm leading-6 text-gray-900">
+                                    <div class="col-span-4">
+                                        {{- row[0]|default('')|trim|replace({'\n': '<br>\n'})|sanitize_html('contao')|insert_tag_raw -}}:
+                                    </div>
+                                    <div class="col-span-2 font-bold">
+                                        {{- row[loop.parent.index0]|default('')|trim|replace({'\n': '<br>\n'})|sanitize_html('contao')|insert_tag_raw -}}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        <div class="isolate mt-20 hidden lg:block">
+            <div class="relative -mx-8">
+                <div class="absolute inset-x-4 inset-y-0 -z-10 flex">
+                    <div class="flex w-1/5 px-4" style="margin-left: 20%" aria-hidden="true">
+                        <div class="w-full border-x border-t border-[#00519c]/30 bg-[#00519c]/90"></div>
+                    </div>
+                </div>
+                <div class="absolute inset-x-4 inset-y-0 -z-10 flex">
+                    <div class="flex w-1/5 px-4" style="margin-left: 40%" aria-hidden="true">
+                        <div class="w-full border-x border-t border-[#34a8e0]/30 bg-[#34a8e0]/90"></div>
+                    </div>
+                </div>
+                <div class="absolute inset-x-4 inset-y-0 -z-10 flex">
+                    <div class="flex w-1/5 px-4" style="margin-left: 60%" aria-hidden="true">
+                        <div class="w-full border-x border-t border-[#3ac635]/30 bg-[#3ac635]/90"></div>
+                    </div>
+                </div>
+                <div class="absolute inset-x-4 inset-y-0 -z-10 flex">
+                    <div class="flex w-1/5 px-4" style="margin-left: 80%" aria-hidden="true">
+                        <div class="w-full border-x border-t border-[#017900]/30 bg-[#017900]/90"></div>
+                    </div>
+                </div>
+
+                {{ parent() }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block table_header_inner %}
+    <tr>
+        {% for cell in header %}
+            {% if loop.first and use_row_headers %}
+                <td></td>
+            {% else %}
+                <th scope="col" class="px-4 pt-6 xl:px-8 xl:pt-8">
+                    <div class="text-center uppercase text-xl font-headline font-semibold leading-7 text-gray-900">
+                        {{- block('table_cell_content') -}}
+                    </div>
+                </th>
+            {% endif %}
+        {% endfor %}
+    </tr>
+{% endblock %}
+
+{% block table_body_inner %}
+    {% for row in rows %}
+        <tr>
+            {% for cell in row %}
+                {% if loop.first and use_row_headers %}
+                    <th scope="row" class="relative py-4 text-sm font-normal leading-6 text-gray-900">
+                        {{- block('table_cell_content') -}}
+                        <div class="absolute inset-x-8 mt-4 h-px bg-gray-900/5"></div>
+                    </th>
+                {% else %}
+                    <td class="px-6 py-4 xl:px-8">
+                        <div class="text-center text-sm leading-6 text-gray-100">
+                            {{- block('table_cell_content') -}}
+                        </div>
+                    </td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+{% endblock %}

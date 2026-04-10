@@ -1,0 +1,55 @@
+{% extends "@Contao/content_element/table.html.twig" %}
+
+{# Outer wrapper: merge Tailwind layout classes into the content element wrapper div #}
+{% set attributes = attrs().addClass('defaultcontainer mb-8 max-lg:!my-12').mergeWith(attributes|default) %}
+
+{# Headline: add Tailwind typography classes #}
+{% block headline_attributes %}
+	{{- attrs(headline.attributes|default).addClass('text-4xl md:text-5xl') -}}
+{% endblock %}
+
+{# Table element: add Tailwind classes #}
+{% block table_attributes %}
+	{{- attrs(table_attributes).addClass('min-w-full divide-y divide-gray-300') -}}
+{% endblock %}
+
+{# Thead: add background color via context variable (read by _table component) #}
+{% set table_header_attributes = attrs().addClass('bg-steelblue') %}
+
+{# Header cells: add Tailwind styling via context variable #}
+{% set default_header_cell_attributes = attrs().addClass('px-3 py-3.5 text-left text-white font-headline text-2xl uppercase') %}
+
+{# Tbody: add background via context variable #}
+{% set table_body_attributes = attrs().addClass('bg-white/20') %}
+
+{# Wrap the table in a responsive scroll container #}
+{% block content %}
+	<div class="!my-12 max-w-5xl mx-auto">
+		<div class="mt-8 flow-root">
+			<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+				<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+					{{ parent() }}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{# Body rows: add even-row background and per-cell Tailwind classes #}
+{% block table_body_inner %}
+	{% for row in rows %}
+		<tr class="even:bg-gray-50/20">
+			{% for cell in row %}
+				{% if loop.first and use_row_headers %}
+					<th scope="row" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-gray-900 sm:pl-3">
+						{{- block('table_cell_content') -}}
+					</th>
+				{% else %}
+					<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm {{ (header[loop.index0] is defined and header[loop.index0]|striptags == 'Name') ? 'font-bold' : 'font-medium' }} text-gray-900 sm:pl-3">
+						{{- block('table_cell_content') -}}
+					</td>
+				{% endif %}
+			{% endfor %}
+		</tr>
+	{% endfor %}
+{% endblock %}
