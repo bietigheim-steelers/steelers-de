@@ -28,6 +28,7 @@ class AppExtension extends AbstractExtension
       new TwigFilter('get_youtube_thumbnail', [$this, 'getYoutubeThumbnail']),
       new TwigFilter('add_root', [$this, 'addRoot']),
       new TwigFilter('get_url_params', [$this, 'getUrlParams']),
+      new TwigFilter('decode_entities', [$this, 'decodeEntities']),
 
     ];
   }
@@ -131,5 +132,23 @@ class AppExtension extends AbstractExtension
   public function addRoot(string $path): string
   {
     return __DIR__ . '/../..' . $path;
+  }
+
+  public function decodeEntities(string $value): string
+  {
+    // Decode repeatedly to also handle values that are encoded more than once.
+    $decoded = $value;
+
+    for ($i = 0; $i < 3; ++$i) {
+      $next = html_entity_decode($decoded, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML5, 'UTF-8');
+
+      if ($next === $decoded) {
+        break;
+      }
+
+      $decoded = $next;
+    }
+
+    return $decoded;
   }
 }
