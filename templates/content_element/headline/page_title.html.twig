@@ -3,7 +3,9 @@
 
 <div>
   <div class="max-w-screen-2xl mx-auto relative pt-4 md:py-4 sm:my-16 md:my-24 xl:my-36 z-40">
-    <{{tag_name}}{% block headline_attributes %}{{headline.attributes|default}}{%endblock%}>
+    <{{tag_name}}{% block headline_attributes %}
+    {{- attrs(headline.attributes|default).addClass('block-headline') -}}
+    {%endblock%}>
       {%- block headline_inner -%}
       {{ headline.text|insert_tag_raw }}
     {%- endblock -%}
