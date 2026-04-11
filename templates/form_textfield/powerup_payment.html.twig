@@ -1,0 +1,32 @@
+{% extends 'form_textfield.html.twig' %}
+
+{% block field %}
+    {{ parent() }}
+    <script{{ attrs().setIfExists('nonce', csp_nonce('script-src')) }}>
+        document.addEventListener('DOMContentLoaded', function () {
+            var inputField = document.getElementById('ctrl_{{ this.id|e('js') }}');
+            var parentForm = inputField ? inputField.closest('form') : null;
+            var label = parentForm ? parentForm.querySelector('label[for="ctrl_{{ this.id|e('js') }}"]') : null;
+            var targetElement = label ? label.parentElement : null;
+
+            function toggleDisplay() {
+                var paketSelect = parentForm ? parentForm.querySelector('select[name="paket"]') : null;
+                var selectValue = paketSelect ? paketSelect.value : '';
+
+                if (!targetElement) {
+                    return;
+                }
+
+                targetElement.style.display = selectValue === 'firma_level4' ? 'block' : 'none';
+            }
+
+            if (parentForm && targetElement) {
+                var inputs = parentForm.querySelectorAll('input, select');
+                inputs.forEach(function (input) {
+                    input.addEventListener('change', toggleDisplay);
+                });
+                toggleDisplay();
+            }
+        });
+    </script>
+{% endblock %}

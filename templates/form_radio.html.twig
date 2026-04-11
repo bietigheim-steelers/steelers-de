@@ -1,0 +1,43 @@
+{% extends 'form_row.html.twig' %}
+
+{% block field %}
+    <fieldset id="ctrl_{{ this.id }}" class="radio_container{% if this.class|default %} {{ this.class|default }}{% endif %}">
+        {% if this.label %}
+            <legend class="text-sm font-semibold leading-6 text-gray-900">
+                {{ this.label|insert_tag_raw }}{% if this.mandatory|default %} <span class="mandatory">*</span>{% endif %}
+            </legend>
+        {% endif %}
+
+        {% if hasErrors.invoke() %}
+            <p class="error">{{ getErrorAsString.invoke() }}</p>
+        {% endif %}
+
+        <div class="mt-6 space-y-6">
+            {% for option in getOptions.invoke() %}
+                {% if option.type == 'group_start' %}
+                    <fieldset>
+                        <legend>{{ option.label }}</legend>
+                {% endif %}
+
+                {% if option.type == 'option' %}
+                    <div class="flex items-center gap-x-3">
+                        <input{{ attrs()
+                            .set('id', "opt_#{option.id}")
+                            .set('name', option.name)
+                            .set('type', 'radio')
+                            .set('value', option.value)
+                            .addClass('h-4 w-4 border-gray-300 text-steelgreen focus:ring-steelblue')
+                            .mergeWith(option.checked)
+                            .mergeWith(option.attributes)
+                        }}>
+                        <label id="lbl_{{ option.id }}" for="opt_{{ option.id }}" class="block text-sm font-medium leading-6 text-gray-900">{{ option.label|sanitize_html('contao')|insert_tag_raw }}</label>
+                    </div>
+                {% endif %}
+
+                {% if option.type == 'group_end' %}
+                    </fieldset>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </fieldset>
+{% endblock %}

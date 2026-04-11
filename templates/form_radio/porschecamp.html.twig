@@ -1,0 +1,11 @@
+{% extends 'form_radio/dauerkarten.html.twig' %}
+
+{% block option_value %}
+	{% set raw = option.value|default('') %}
+	{% set segments = raw|split('_') %}
+	{% if segments|length >= 3 %}
+		{{ segments[0]|sanitize_html('contao')|insert_tag_raw }}<b>{{ segments[1]|sanitize_html('contao')|insert_tag_raw }}</b>{{ segments|slice(2)|join('_')|sanitize_html('contao')|insert_tag_raw }}
+	{% else %}
+		{{ raw|sanitize_html('contao')|insert_tag_raw }}
+	{% endif %}
+{% endblock %}

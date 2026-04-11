@@ -1,0 +1,39 @@
+{% extends 'form_row.html.twig' %}
+
+{% block field %}
+    {% if this.src|default %}
+        <input{{ attrs()
+            .set('type', 'image')
+            .set('src', this.src)
+            .set('id', "ctrl_#{this.id}")
+            .addClass('submit')
+            .addClass(this.class|default)
+            .set('title', this.slabel)
+            .set('alt', this.slabel)
+            .mergeWith(getAttributes.invoke())
+        }}>
+    {% else %}
+        <button{{ attrs()
+            .set('type', 'submit')
+            .set('id', "ctrl_#{this.id}")
+            .addClass(['submit', 'btn-default', this.class|default])
+            .mergeWith(getAttributes.invoke())
+        }}>{{ this.slabel }}</button>
+        <script{{ attrs().setIfExists('nonce', csp_nonce('script-src')) }}>
+            document.addEventListener('DOMContentLoaded', function () {
+                var submitButton = document.getElementById('ctrl_{{ this.id|e('js') }}');
+                var form = submitButton ? submitButton.closest('form') : null;
+
+                if (!form || !submitButton) {
+                    return;
+                }
+
+                form.addEventListener('submit', function () {
+                    submitButton.disabled = true;
+                    submitButton.style.opacity = '0.5';
+                    submitButton.innerHTML = 'Bitte warten...';
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}
