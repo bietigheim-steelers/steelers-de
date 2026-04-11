@@ -1,0 +1,54 @@
+{% use "@Contao/component/_figure.html.twig" %}
+
+{% set news_image_size = picture_config({
+  width: 750,
+  height: 938,
+  resizeMode: 'crop',
+  densities: '1x, 2x'
+}) %}
+
+{% set ogimage = figure(singleSRC, news_image_size, {
+  metadata: { alt: newsHeadline },
+  options: { attr: { class: 'aspect-[4/5]' } },
+}) %}
+
+{% add to head %}
+  <meta property="og:image" content="{{ ogimage.image.img.src|add_domain }}"/>
+  <meta property="og:image:width" content="{{ ogimage.image.img.width }}"/>
+  <meta property="og:image:height" content="{{ ogimage.image.img.height }}" />
+{% endadd %}
+
+<div class="relative mb-20 md:-mt-[29rem] lg:-mt-[26rem] xl:-mt-[32rem]">
+  <div class="grid items-end grid-cols-1 md:grid-cols-2 defaultcontainer max-lg:!mt-0">
+    <div class="xl:mb-20 py-5 lg:pr-16">
+      <h3
+        class="text-3xl lg:text-4xl xl:text-5xl !mt-4 lg:!mt-8 pt-4 uppercase font-bold font-sans text-black leading-none max-w-full text-ellipsis overflow-hidden">
+        {{ newsHeadline }}</h3>
+      <p class="mt-2">
+        {% if categoriesList|length > 0 %}
+          <span class="text-lg uppercase font-bold">{{ categoriesList|join(' / ') }} /</span>
+        {% endif %}
+        <time class="text-lg font-bold text-steelgreen" datetime="{{ datetime }}">{{ date }}</time>
+      </p>
+    </div>
+    <div class="overflow-hidden xl:mx-2">
+      {% if addImage %}
+        {% with {figure: ogimage} %}
+          {{ block('figure_component') }}
+        {% endwith %}
+      {% endif %}
+    </div>
+  </div>
+  {% if 'Spielbericht' in categoriesList and game_id is defined %}
+    {% include 'custom/game_stripe.html.twig' with { game_id: game_id } %}
+  {% endif %}
+  <div class="ce_text defaultcontainer mb-8">
+    <div class="!my-8 md:!my-32 px-8 py-8 max-w-5xl mx-auto bg-steelwhite/60 relative z-20 backdrop-blur-lg prose">
+      {{ teaser|raw }}
+      <hr class="border-black border-t mt-8">
+    </div>
+  </div>
+  {% if hasText %}
+    {{ text }}
+  {% endif %}
+</div>

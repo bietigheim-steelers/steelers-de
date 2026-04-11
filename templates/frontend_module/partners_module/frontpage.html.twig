@@ -1,0 +1,24 @@
+{% use "@Contao/component/_figure.html.twig" %}
+
+{% set partner_frontpage_size = picture_config({
+    width: 144,
+    height: 144,
+    resizeMode: 'proportional'
+}) %}
+
+<div class="defaultcontainer gridwrapper !px-2 md:px-0 block">
+  <div class="inside grid ce_wrapperStart home-partner">
+    {% for partner in partners %}
+      <div class="ce_hyperlink block">
+        <figure class="image_container">
+          <a{{attrs().addClass('hyperlink_img').set('href',partner.url|insert_tag).setIfExists('title',partner.displayname|default|insert_tag)}}>
+            {% set image = figure(partner.logo, partner_frontpage_size) %}
+            {% with {figure: image} %}
+                {{ block('figure_component') }}
+            {% endwith %}
+          </a>
+        </figure>
+      </div>
+    {% endfor %}
+  </div>
+</div>

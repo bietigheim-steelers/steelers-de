@@ -1,6 +1,0 @@
-<div class="<?= $this->css ?> mt-32 xl:mt-52">
-  <div class="max-w-screen-2xl mx-auto relative mt-24 lg:mt-defaultbig">
-    <<?= $this->headline['unit'] ?> class="block-headline headline--small z-40 -mb-16 md:mb-0">
-      <?= $this->headline['value'] ?>
-    </<?= $this->headline['unit'] ?>>
-    <div class="flex flex-row flex-wrap lg:flex-nowrap gap-8">

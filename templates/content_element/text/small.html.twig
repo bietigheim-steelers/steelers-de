@@ -1,0 +1,13 @@
+{% extends "@Contao/content_element/text.html.twig" %}
+{% set attributes = attrs().addClass('defaultcontainer mb-8 max-lg:!my-12').mergeWith(attributes|default) %}
+
+{% block text %}
+<div class="!my-12 max-w-5xl mx-auto prose">
+  {{ parent() }}
+  {% if data.url and data.linkTitle %}
+    <p class="mt-5 not-prose">
+      <a href="{{ data.url }}" class="btn-default not-prose" {{ data.target == '1' ? 'target="_blank"' : '' }}>{{ data.linkTitle }}</a>
+    </p>
+  {% endif %}
+</div>
+{% endblock %}

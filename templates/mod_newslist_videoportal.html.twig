@@ -1,0 +1,12 @@
+{% if articles %}
+  <div class="gridwrapper max-w-screen-2xl mx-auto relative mt-8 mb-20 md:my-20">
+    <h3>{{ headline }}</h3>
+    <div class="flex flex-wrap justify-center gap-y-4 sm:gap-y-10">
+      {% for article in articles %}
+        <div class="w-full sm:w-1/2 lg:w-1/3 flex justify-center">
+          {{ article|raw }}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}

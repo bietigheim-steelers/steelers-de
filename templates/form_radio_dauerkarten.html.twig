@@ -1,0 +1,77 @@
+{% extends 'form_row.html.twig' %}
+
+{% block field %}
+    <fieldset id="ctrl_{{ this.id }}" class="radio_container{% if this.class|default %} {{ this.class|default }}{% endif %}">
+        {% if this.label %}
+            <legend class="text-sm font-semibold leading-6 text-gray-900">
+                {{ this.label|insert_tag_raw }}{% if this.mandatory|default %} <span class="mandatory">*</span>{% endif %}
+            </legend>
+        {% endif %}
+
+        {% if hasErrors.invoke() %}
+            <p class="error">{{ getErrorAsString.invoke() }}</p>
+        {% endif %}
+
+        <div class="space-y-4" data-card-radio-list>
+            {% for option in getOptions.invoke() %}
+                {% if option.type == 'group_start' %}
+                    <fieldset>
+                        <legend>{{ option.label }}</legend>
+                {% endif %}
+
+                {% if option.type == 'option' %}
+                    <label class="relative block cursor-pointer rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm focus:outline-none sm:flex sm:justify-between" data-card-radio>
+                        <input{{ attrs()
+                            .set('id', "opt_#{option.id}")
+                            .set('name', option.name)
+                            .set('type', 'radio')
+                            .set('value', option.value)
+                            .addClass('sr-only')
+                            .set('aria-labelledby', "lbl_#{option.id}")
+                            .set('aria-describedby', "desc_#{option.id}")
+                            .mergeWith(option.checked)
+                            .mergeWith(option.attributes)
+                        }}>
+                        <span class="flex items-center">
+                            <span class="flex flex-col text-sm">
+                                <span id="lbl_{{ option.id }}" class="font-medium text-gray-900">{% block option_value %}{{ option.value|sanitize_html('contao')|insert_tag_raw }}{% endblock %}</span>
+                            </span>
+                        </span>
+                        <span id="desc_{{ option.id }}" class="mt-2 flex text-sm sm:ml-4 sm:mt-0 sm:flex-col sm:text-right">
+                            <span class="font-medium text-gray-900">{{ option.label|sanitize_html('contao')|insert_tag_raw }}</span>
+                        </span>
+                        <span class="pointer-events-none absolute -inset-px rounded-lg border-2" aria-hidden="true"></span>
+                    </label>
+                {% endif %}
+
+                {% if option.type == 'group_end' %}
+                    </fieldset>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </fieldset>
+
+    <script{{ attrs().setIfExists('nonce', csp_nonce('script-src')) }}>
+        (function () {
+            const root = document.getElementById('ctrl_{{ this.id|e('js') }}');
+            if (!root) {
+                return;
+            }
+
+            function paint() {
+                root.querySelectorAll('[data-card-radio]').forEach(function (card) {
+                    const input = card.querySelector('input[type="radio"]');
+                    const selected = input && input.checked;
+
+                    card.classList.toggle('border-steelgreen', !!selected);
+                    card.classList.toggle('ring-2', !!selected);
+                    card.classList.toggle('ring-steelgreen', !!selected);
+                    card.classList.toggle('border-gray-300', !selected);
+                });
+            }
+
+            root.addEventListener('change', paint);
+            paint();
+        })();
+    </script>
+{% endblock %}

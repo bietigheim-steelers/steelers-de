@@ -1,0 +1,82 @@
+{% use "@Contao/component/_figure.html.twig" %}
+
+{% set player_image_size = picture_config({
+    width: 800,
+    height: 800,
+    resizeMode: 'proportional',
+    sizes: '(max-width: 640px) 640px, (max-width: 768px) 768px, (max-width: 1024px) 1024px, (max-width: 1280px) 1280px, 1536px',
+    densities: '1x, 2x'
+}) %}
+
+<div class="bg-white shadow group">
+  <a class="col-span-1 flex flex-col">
+    <div class="aspect-w-4 aspect-h-5 bg-white overflow-hidden relative">
+      {% if keys.position is defined and keys.position == 'Staff' %}
+        <div class="absolute z-30 font-headline group-hover:text-white text-steelgreen text-4xl left-4 top-2 right-auto bottom-auto w-auto h-auto">
+          {{ keys.about is defined ? keys.about : '' }}
+        </div>
+      {% else %}
+        <div class="absolute z-30 font-headline group-hover:text-white text-steelgreen text-6xl left-4 top-2 right-auto bottom-auto w-auto h-auto">
+          {{ keys.jersey is defined ? keys.jersey : '' }}
+        </div>
+      {% endif %}
+
+      <div class="hidden group-hover:block absolute z-20 text-white bg-steelgreen bg-opacity-80">
+        <div class="flex flex-col justify-end h-full p-5">
+          {% if keys.birthday is defined and keys.birthday %}
+            <div class="text-sm uppercase">Geboren</div>
+            <div class="text-lg font-bold -mt-1">{{ keys.birthday }}</div>
+            {% if keys.birthplace is defined %}
+              <div class="text-lg font-bold -mt-1">{{ keys.birthplace }}</div>
+            {% endif %}
+            <div class="border-t-4 border-white my-3"></div>
+          {% endif %}
+          {% if keys.position is defined and keys.position != 'Staff' and ((keys.weight is defined and keys.weight > 0) or (keys.height is defined and keys.height > 0) or keys.shoots is defined) %}
+            <div class="text-sm uppercase">Facts</div>
+            {% if keys.weight is defined and keys.weight > 0 %}
+              <div class="text-lg font-bold -mt-1">{{ keys.weight }} kg</div>
+            {% endif %}
+            {% if keys.height is defined and keys.height > 0 %}
+              <div class="text-lg font-bold -mt-1">{{ keys.height }} cm</div>
+            {% endif %}
+            {% if keys.shoots is defined %}
+              <div class="text-lg font-bold -mt-1">
+                {% if keys.position is defined and keys.position == 'Goalie' %}
+                  {% if keys.shoots == 'left' %}
+                    fängt links
+                  {% elseif keys.shoots == 'right' %}
+                    fängt rechts
+                  {% endif %}
+                {% else %}
+                  {% if keys.shoots == 'left' %}
+                    schießt links
+                  {% elseif keys.shoots == 'right' %}
+                    schießt rechts
+                  {% endif %}
+                {% endif %}
+              </div>
+            {% endif %}
+            <div class="border-t-4 border-white my-3"></div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if addImage is defined and addImage and singleSRC is defined and singleSRC %}
+        {% set image = figure(singleSRC, player_image_size, {metadata: { alt: (keys.firstname is defined ? keys.firstname : '') ~ ' ' ~ (keys.lastname is defined ? keys.lastname : '') }}) %}
+        {% with {figure: image} %}
+          <div class="w-full h-full object-center object-cover">
+            {{ block('figure_component') }}
+          </div>
+        {% endwith %}
+      {% endif %}
+    </div>
+    <div>
+      <div class="p-5 uppercase">
+        <div class="text-2xl">{{ keys.firstname is defined ? keys.firstname : '' }}</div>
+        <div class="-mt-2 text-steelgreen text-3xl md:text-4xl font-bold overflow-ellipsis overflow-hidden">
+          {{ keys.lastname is defined ? keys.lastname : '' }}
+        </div>
+      </div>
+    </div>
+  </a>
+</div>

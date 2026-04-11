@@ -1,0 +1,29 @@
+{% use "@Contao/component/_figure.html.twig" %}
+{% set team_logo_size = picture_config({
+    width: 48,
+    height: 48,
+    resizeMode: 'proportional'
+}) %}
+
+{% block content %}
+<div class="grow justify-end flex">
+  <div class="next-game-at-home flex flex-row items-center lg:pr-4 2xl:pr-5 {{ cssClass }}"{% if cssId %} id="{{ cssId }}"{% endif %}>
+    {% set homeLogo = figure(project_dir ~ game.home.logo, team_logo_size).image.img.src %}
+    <div title="{{ game.home.name }}" class="h-12 w-12 bg-contain bg-no-repeat bg-center hidden md:block" style="background-image: url({{ homeLogo }})">
+    </div>
+    <div class="font-bold text-lg md:text-xl px-2 lg:px-4 hidden md:block">vs</div>
+    {% set awayLogo = figure(project_dir ~ game.away.logo, team_logo_size).image.img.src %}
+    <div title="{{ game.away.name }}" class="h-12 w-12 bg-contain bg-no-repeat bg-center block" style="background-image: url({{ awayLogo }})">
+    </div>
+    <div class="font-bold leading-5 text-xs md:text-base lg:text-lg lg:pl-8">
+      <span class="relative inline-block {{ addClasses }}">{{ title }}</span>
+      <br>{{ game.gamedate|format_datetime(locale='de', pattern='E dd.MM.YY') }}, {{ game.gametime }}h
+    </div>
+    <div class="pl-2 lg:pl-4">
+      <a href="{{ ticketUrl }}">
+        <img src="/files/steelers/layout/ticket-icon.svg" alt="STEELERS Tickets" height="50" width="62" />
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

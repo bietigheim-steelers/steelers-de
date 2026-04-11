@@ -1,0 +1,53 @@
+{% extends 'form_select.html.twig' %}
+
+{% block field %}
+    {{ parent() }}
+    {% set groupGames = games|default([]) %}
+    <script{{ attrs().setIfExists('nonce', csp_nonce('script-src')) }}>
+        const games = {{ groupGames|json_encode|raw }};
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const spieltagSelect = document.querySelector('select[name="Spieltag"]');
+            if (spieltagSelect) {
+                spieltagSelect.addEventListener('change', updatePackages);
+            }
+            updatePackages();
+        });
+
+        function updatePackages() {
+            const spieltag = document.querySelector('select[name="Spieltag"]');
+            const packagesSelect = document.getElementById('ctrl_{{ this.id|e('js') }}');
+
+            if (!spieltag || !packagesSelect) {
+                return;
+            }
+
+            const selectedGameKey = spieltag.value;
+            packagesSelect.value = '';
+
+            const selectedGame = games.find(game => game.key === selectedGameKey);
+            const options = packagesSelect.querySelectorAll('option');
+
+            if (selectedGame && selectedGame.gameconfig) {
+                options.forEach(function (option) {
+                    const isInGameConfig = selectedGame.gameconfig.some(config => config == option.value);
+
+                    if (isInGameConfig) {
+                        option.disabled = true;
+                        if (!option.textContent.includes(' (ausverkauft)')) {
+                            option.textContent += ' (ausverkauft)';
+                        }
+                    } else {
+                        option.disabled = false;
+                        option.textContent = option.textContent.replace(' (ausverkauft)', '');
+                    }
+                });
+            } else {
+                options.forEach(function (option) {
+                    option.disabled = false;
+                    option.textContent = option.textContent.replace(' (ausverkauft)', '');
+                });
+            }
+        }
+    </script>
+{% endblock %}

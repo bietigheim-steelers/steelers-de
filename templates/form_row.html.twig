@@ -1,0 +1,12 @@
+{% set wrapperAttributes = attrs()
+    .addClass(['pb-4 mt-8 border-b border-black/10 sm:max-w-md', this.prefix, this.class|default])
+    .mergeWith(wrapperAttributes|default)
+%}
+
+<div{{ wrapperAttributes }}>
+    {% block label %}
+    {% endblock %}
+
+    {% block field %}
+    {% endblock %}
+</div>

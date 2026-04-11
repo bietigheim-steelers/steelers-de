@@ -1,0 +1,20 @@
+{% set video_params = playerUrl|get_url_params %}
+
+<div class="relative mb-20">
+  <div class="grid items-end grid-cols-1 max-w-screen-2xl px-2 lg:px-3 max-lg:!mt-0">
+    <div class="py-5 lg:pr-16">
+      <h3 class="text-xl lg:text-2xl xl:text-3xl !mt-4 lg:!mt-8 pt-4 uppercase font-bold font-sans text-black leading-none max-w-full text-ellipsis overflow-hidden">
+        {{ newsHeadline }}
+      </h3>
+    </div>
+    <div class="overflow-hidden xl:mx-2">
+    </div>
+  </div>
+  {% if game_id is defined %}
+    {% include 'custom/game_stripe.html.twig' with { game_id: game_id } %}
+  {% endif %}
+  <div class="ce_text px-2 lg:px-3 mb-8 bg-black w-full flex justify-center items-center">
+<iframe class="w-full aspect-video max-w-screen-2xl" style="max-height: calc(100vh - 150px);" src="https://www.youtube-nocookie.com/embed/{{ video_params.v }}" title="{{ newsHeadline }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+  </div>
+</div>

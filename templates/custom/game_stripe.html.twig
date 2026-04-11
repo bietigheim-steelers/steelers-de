@@ -1,0 +1,104 @@
+{% if game_id is defined %}
+
+{% use "@Contao/component/_figure.html.twig" %}
+
+{% set logo_size = picture_config({
+  width: 100,
+  height: 100,
+  resizeMode: 'proportional'
+}) %}
+
+  {% set game = game_id|get_game_details %}
+  {% if game %}
+    {% set homeLogo = figure(game.homeTeamLogo, logo_size, {
+    metadata: { alt: game.homeTeamDetails.name },
+    options: { attr: { class: 'Image Logo Gamestrip__Logo Gamestrip__Logo--xl Logo__xl' } },
+  }) %}
+    {% set awayLogo = figure(game.awayTeamLogo, logo_size, {
+    metadata: { alt: game.awayTeamDetails.name },
+    options: { attr: { class: 'Image Logo Gamestrip__Logo Gamestrip__Logo--xl Logo__xl' } },
+  }) %}
+    <div class="Gamestrip relative overflow-hidden nhl Gamestrip--xl Gamestrip--post bb py-3">
+      <div class="Gamestrip__Competitors relative flex Gamestrip__Competitors--border">
+        <div class="Gamestrip__Team relative flex w-full items-center Gamestrip__Team--left">
+          <div class="Gamestrip__TeamContent flex tc w-full Gamestrip__TeamContent--left Gamestrip__TeamContent--post">
+            <div class="Gamestrip__TeamContainer flex items-center">
+              <div class="Gamestrip__InfoLogo Gamestrip__InfoLogo--Left">
+                {% with {figure: homeLogo} %}
+                {{ block('figure_component') }}
+                {% endwith %}
+              </div>
+              <div class="Gamestrip__Info Gamestrip__Info--post hidden lg:block">
+                <div class="Gamestrip__InfoWrapper items-center flex">
+                  <div class="ScoreCell__Truncate Gamestrip__Truncate h4 clr-gray-01">
+                    <p class="ScoreCell__TeamName ScoreCell__TeamName--displayName text-2xl font-bold">
+                      {{ game.homeTeamDetails.name }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="Gamestrip__ScoreContainer flex flex-col items-center justify-center relative">
+              <div class="Gamestrip__Score font-headline text-steelgreen relative tc w-full text-8xl text-right">
+                {{ game.homescore }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="Gamestrip__Overview__Wrapper">
+          <div class="Gamestrip__Overview max-w-[50px] md:max-w-[140px] relative items-center clr-gray-04 flex justify-center flex-col n8 Gamestrip__Overview">
+            <div class="Gamestrip__Time--wrapper">
+              <div class="ScoreCell__Time hidden md:block Gamestrip__Time ScoreCell__Time--post text-center font-thin text-gray-500">
+                {{ game.gamedate|date('d.m.Y') }}
+                <br>
+                {{ game.gametime }}
+                {% if game.resulttype is defined and game.resulttype is not empty %}
+                  {% if game.resulttype == 'OT' %}
+                    <br>
+                    <span class="text-steelgreen font-headline text-xl uppercase">
+                      Overtime
+                    </span>
+                  {% endif %}
+                  {% if game.resulttype == 'SO' %}
+                    <br>
+                    <span class="text-steelgreen font-headline text-xl uppercase">
+                      Shootout
+                    </span>
+                  {% endif %}
+                {% endif %}
+              </div>
+              <div class="ScoreCell__Time md:hidden Gamestrip__Time ScoreCell__Time--post text-center font-thin text-gray-500">
+                vs.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="Gamestrip__Team relative flex w-full items-center Gamestrip__Team--right Gamestrip__Team--winner">
+          <div class="Gamestrip__TeamContent flex tc w-full Gamestrip__TeamContent--right Gamestrip__TeamContent--post">
+            <div class="Gamestrip__TeamContainer flex items-center">
+              <div class="Gamestrip__InfoLogo Gamestrip__InfoLogo--Right">
+                {% with {figure: awayLogo} %}
+                {{ block('figure_component') }}
+                {% endwith %}
+              </div>
+              <div class="Gamestrip__Info Gamestrip__Info--post hidden lg:block">
+                <div class="Gamestrip__InfoWrapper items-center flex">
+                  <div class="ScoreCell__Truncate Gamestrip__Truncate h4 clr-gray-01">
+                    <p class="ScoreCell__TeamName ScoreCell__TeamName--displayName text-2xl font-bold">
+                      {{ game.awayTeamDetails.name }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="Gamestrip__ScoreContainer flex flex-col items-center justify-center relative">
+              <div class="Gamestrip__Score font-headline text-steelgreen relative tc w-full text-8xl">
+                {{ game.awayscore }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endif %}

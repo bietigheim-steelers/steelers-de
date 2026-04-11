@@ -1,0 +1,43 @@
+{% use "@Contao/component/_figure.html.twig" %}
+{% set team_logo_size = picture_config({
+    width: 65,
+    height: 65,
+    resizeMode: 'box'
+}) %}
+
+{% block content %}
+<div class="defaultcontainer !mt-8 md:!mt-20 {{ cssClass }}"{% if cssId %} id="{{ cssId }}"{% endif %}>
+  <div class="standings-table default-table">
+    <div class="table-header">
+      <div class="sm:hidden">Pl.</div>
+      <div class="hidden sm:block">Platz</div>
+      <div class="!text-left col-span-5">Team</div>
+      <div class="col-span-2">Spiele<br><small>(S3 | S2 | N1 | N0)</small></div>
+      <div class="hidden sm:block sm:col-span-2">Tore<br><small>Differenz</small></div>
+      <div class="col-span-2">Punkte<br><small>PPG</small></div>
+    </div>
+    {% for key, team in standings %}
+      {% set class = team.tilastotid == my_team ? 'highlight-team' : '' %}
+      <div class="table-row {{ class }} {{ my_team == team.id ? 'highlight-team' : '' }}">
+        <div class="font-bold font-headline text-steelgreen sm:text-4xl lg:text-5xl">{{ team.rank }}</div>
+        <div class="!text-left font-bold col-span-5 flex items-center text-ellipsis overflow-hidden">
+          <div class="logo" style="width: 65px; height: 65px; text-align: center;">
+            {% if team.logo %}
+              {{ contao_figure(project_dir ~ team.logo, team_logo_size, {metadata: { alt: team.name }}) }}
+            {% endif %}
+          </div>{{ team.name }}
+        </div>
+        <div class="col-span-2"><strong>{{ team.games }}</strong><br><small>{{ team.rw }} |
+            {{ team.ow + team.pw }} |
+            {{ team.ol + team.pl }} | {{ team.rl }}</small></div>
+        <div class="hidden sm:block sm:col-span-2">
+          <strong>{{ team.goalsfor ~ ':' ~ team.goalsagainst }}</strong><br><small>{{ team.goalsfor - team.goalsagainst }}</small>
+        </div>
+        <div class="col-span-2">
+          <strong>{{ team.points }}</strong><br><small>{{ team.games > 0 ? (team.points / team.games)|number_format(2, ',', '.') : '0,00' }}</small>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

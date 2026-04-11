@@ -7,6 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 env 
+var
 
 node_modules
 dist
@@ -28,5 +29,7 @@ files/steelers/js
 
 .env
 vendor
-assets
+assets/*/
+!assets/css/
+!assets/js/
 booked_seats.json

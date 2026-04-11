@@ -1,0 +1,23 @@
+{% use "@Contao/component/_picture.html.twig" %}
+{% use "@Contao/component/_rich_text.html.twig" %}
+
+{% set image = figure(
+  data.singleSRC,
+  [800, 800, 'crop'],
+  { metadata: { alt: headline.text}, options: { attr: { class: 'absolute w-full h-full object-cover' } } })
+%}
+
+<figure class="relative my-28 xl:my-36 aspect-w-2 aspect-h-1 overflow-hidden">
+  {% if image %}
+    <div class="absolute top-0 bottom-0 left-0 right-0 bg-black bg-opacity-80 z-10 flex items-center justify-center">
+      <div>
+        <h6 class="font-headline text-steelgreen text-8xl md:text-[12rem] xl:leading-[10rem] uppercase text-center green-outline">
+          {{ headline.text }}</h6>
+        <p class="font-headline text-center text-steelgreen uppercase text-2xl md:text-4xl mt-3">
+          {{ text|striptags }}
+        </p>
+      </div>
+    </div>
+    {% with {figure: image} %}{{ block('picture_component') }}{% endwith %}
+  {% endif %}
+</figure>

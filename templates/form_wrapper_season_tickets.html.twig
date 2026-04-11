@@ -1,0 +1,15 @@
+{% set wrapperAttributes = attrs(cssID|default)
+    .addClass(['defaultcontainer', class, 'block'])
+    .addStyle(style|default)
+%}
+
+<!-- indexer::stop -->
+<div{{ wrapperAttributes }}>
+    {% if headline|default %}
+        <{{ hl }}>{{ headline|insert_tag_raw }}</{{ hl }}>
+    {% endif %}
+
+    <div id="formApp"></div>
+    <script type="module" src="files/js/form.js?2024070200"></script>
+</div>
+<!-- indexer::continue -->

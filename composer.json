@@ -1,35 +1,23 @@
 {
   "type": "project",
   "require": {
-    "php": "^7.4",
-    "automattic/woocommerce": "^3.1",
-    "christianbarkowsky/contao-tiny-compress-images": "^2.1",
-    "codefog/contao-news_categories": "^3.4",
-    "con4gis/pwa": "^2.5",
-    "contao/calendar-bundle": "4.13.*",
-    "contao/comments-bundle": "4.13.*",
+    "codefog/contao-news_categories": "^4.0",
+    "contao/calendar-bundle": "5.7.*",
+    "contao/comments-bundle": "5.7.*",
     "contao/conflicts": "*@dev",
-    "contao/faq-bundle": "4.13.*",
-    "contao/listing-bundle": "4.13.*",
-    "contao/manager-bundle": "4.13.*",
-    "contao/news-bundle": "4.13.*",
-    "contao/newsletter-bundle": "4.13.*",
-    "dieschittigs/contao-wrapper-bundle": "^0.1.0",
-    "heimrichhannot/contao-multifileupload-bundle": "^1.9",
-    "heimrichhannot/contao-news_media": "^1.2",
-    "heimrichhannot/contao-utils-bundle": "2.239.2",
-    "inspiredminds/contao-mailer-command": "^1.0",
-    "markocupic/gallery-creator-bundle": "^1.2",
+    "contao/faq-bundle": "5.7.*",
+    "contao/listing-bundle": "5.7.*",
+    "contao/manager-bundle": "5.7.*",
+    "contao/news-bundle": "5.7.*",
     "menatwork/contao-multicolumnwizard-bundle": "^3.5",
     "mixpanel/mixpanel-php": "^2.6",
-    "oveleon/contao-cookiebar": " 1.16.6",
-    "phpoffice/phpspreadsheet": "1.30.2",
-    "psr/simple-cache": "1.0.0",
-    "terminal42/contao-conditionalformfields": "^3.0",
-    "terminal42/contao-mp_forms": "^4.4",
-    "terminal42/notification_center": "1.6.18",
-    "maennchen/zipstream-php": "2.2.6",
-    "terminal42/contao-leads": "*"
+    "oveleon/contao-cookiebar": "^2.3",
+    "terminal42/contao-conditionalformfields": "^3.1",
+    "terminal42/notification_center": "^2.5",
+    "twig/intl-extra": "3.23",
+    "phpoffice/phpspreadsheet": "5.5.0",
+    "maennchen/zipstream-php": "^3.2",
+    "terminal42/contao-leads": "^3.2"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.0"
@@ -37,7 +25,7 @@
   "extra": {
     "public-dir": "public",
     "contao-component-dir": "assets",
-    "contao-manager-plugin": "App\\Tilastot\\ContaoManager\\ContaoManagerPlugin"
+    "contao-manager-plugin": "App\\ContaoManager\\ContaoManagerPlugin"
   },
   "autoload": {
     "psr-4": {

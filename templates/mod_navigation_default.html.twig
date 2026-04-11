@@ -1,0 +1,25 @@
+<!-- indexer::stop -->
+<nav class="{{ class }} top-sticky-nav device bg-steelnav"{% if cssID %} {{ cssID|raw }}{% endif %}{% if style %} style="{{ style }}"{% endif %}>
+	<div class="grid grid-nav items-center place-items-center py-2 relative mx-2 md:mx-12" style="height: 60px;">
+		<div data-drawer-open class="justify-self-start cursor-pointer">
+			<button class="stroke-white white mt-5">
+				<span class="burger"></span>
+				<span class="burger-text">Menü</span>
+			</button>
+		</div>
+		<a class="block" href="/">
+			{% include 'logo.html.twig' %}
+		</a> 
+	</div>
+</nav>
+<drawer-menu>
+	<a href="{{ request }}#{{ skipId }}" class="hidden">{{ skipNavigation }}</a>
+	<a href="/">
+		{% include 'logo.html.twig' with {css_classes: 'header-nav-logo'} %}
+	</a>
+	{{ insert_tag('insert_article::before-nav-article')|raw }}
+	{{ items|raw }}
+	{{ insert_tag('insert_article::after-nav-article')|raw }}
+</drawer-menu>
+<a id="{{ skipId }}" class="hidden">&nbsp;</a>
+<!-- indexer::continue -->

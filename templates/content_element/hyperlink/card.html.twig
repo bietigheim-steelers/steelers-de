@@ -1,0 +1,28 @@
+{% set image_config = picture_config({
+    width: 500,
+    height: 500,
+    resizeMode: 'crop'
+}) %}
+
+{% if image %}
+    {% set ogimage = 'background-image: url(\'' ~ figure(image.image.img.src|add_root, image_config).image.img.src ~ '\');' %}
+{% endif %}
+
+<a{{ attrs()
+    .set('href', href|insert_tag)
+    .addClass('group px-8 py-12 mt-6 flex flex-col justify-between items-end hyperlink-card duration-300 bg-black/60 hover:bg-steelgreen bg-cover bg-no-repeat bg-blend-overlay transition-all bg-center')
+    .addClass(element_css_classes|default)
+    .setIfExists('style', image|default ? ogimage : null)
+    .mergeWith(attribute|default)
+    .mergeWith(target|default)
+    .mergeWith(rel|default)
+}}>
+  <h5
+    class="uppercase text-3xl xl:text-4xl w-full text-center font-headline font-bold tracking-widest leading-tight transition-all !text-white">
+    {{ headline.text }}</h5>
+  <div class="mx-auto mt-8 text-center">
+    <div class="bg-white">
+      <span class="btn-default my-4 mx-5">{{ link_text|insert_tag }}</span>
+    </div>
+  </div>
+</a>
