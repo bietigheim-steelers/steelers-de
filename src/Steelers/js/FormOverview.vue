@@ -6,7 +6,7 @@
         <span
           class="flex-grow-0 font-bold whitespace-nowrap flex-shrink-0 text-steelgreen"
           >Meine Dauerkarte
-          <b class="uppercase">{{ form_data.ticket_type }}</b> 2025/2026</span
+          <b class="uppercase">{{ form_data.ticket_type }}</b> 2026/2027</span
         >
       </div>
       <div class="text-sm text-steelblue">
@@ -115,7 +115,7 @@
   />
   <CheckboxElement name="terms" rules="required">
     Ich akzeptiere die Allgemeinen Geschäftsbedinungen der Steelers GmbH sowie
-    die Konditionen und Bedingungen zur Dauerkarte 2025/2026. Die AGB sind
+    die Konditionen und Bedingungen zur Dauerkarte 2026/2027. Die AGB sind
     jederzeit im Internet unter
     <a href="https://www.steelers.de/agb" target="_blank"
       >https://www.steelers.de/agb</a
@@ -175,7 +175,7 @@ export default {
         form$.value.data.ticket_type,
         form$.value.data.ticket_category,
         form$.value.data.ticket_area,
-        form$.value.data.seat_block
+        form$.value.data.seat_block,
       );
     });
 

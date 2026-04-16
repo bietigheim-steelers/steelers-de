@@ -22,19 +22,23 @@ class SeasonTicketController
     $framework->initialize();
     $data = $request->request->all();
 
-    $data['price'] = self::getTicketPrice($data['ticket_area'], $data['ticket_category'], substr($data['seat_block'], -1), $data['ticket_type']);
+    $seatBookingData = $this->resolveSeatBookingData($data);
 
-    // Book the selected seat(s) in the database
-    $baseSeat = (int)$data['seat_seat'];
-    $block = $data['seat_block'];
-    $row = $data['seat_row'];
-    $seatsToBlock = 1;
-
-    if (in_array($data['ticket_category'], ['familie1', 'familie2'])) {
-      $seatsToBlock = 3;
-    } elseif ($data['ticket_category'] === 'familie3') {
-      $seatsToBlock = 4;
+    if ($seatBookingData === null) {
+      return new Response('seat_non_existent', 400);
     }
+
+    $baseSeat = $seatBookingData['baseSeat'];
+    $block = $seatBookingData['block'];
+    $row = $seatBookingData['row'];
+    $seatsToBlock = $seatBookingData['seatsToBlock'];
+
+    $data['price'] = self::getTicketPrice(
+      $data['ticket_area'],
+      $data['ticket_category'],
+      substr($block, -1),
+      $data['ticket_type']
+    );
 
     for ($i = 0; $i < $seatsToBlock; $i++) {
       $seatNum = $baseSeat + $i;
@@ -106,7 +110,7 @@ class SeasonTicketController
     $eventimCategory = $this->getEventimCategory(
       $data['ticket_area'],
       $data['ticket_category'],
-      substr($data['seat_block'], -1),
+      substr($block, -1),
       $data['ff_new_dk']
     );
 
@@ -118,6 +122,76 @@ class SeasonTicketController
     $mailer->send($email2);
 
     return new Response('order successful');
+  }
+
+  private function resolveSeatBookingData(array $data): ?array
+  {
+    if (($data['ticket_area'] ?? null) === 'rollstuhl') {
+      $rollstuhlBlock = $this->normalizeBlock($data['seat_rollstuhl_block'] ?? null);
+
+      if (!in_array($rollstuhlBlock, ['R1', 'R4'], true)) {
+        return null;
+      }
+
+      $maxSeats = ($rollstuhlBlock === 'R1') ? 2 : 3;
+      $nextSeat = $this->findNextAvailableSeat($rollstuhlBlock, 1, $maxSeats);
+
+      if ($nextSeat === null) {
+        return null; // No seats available
+      }
+
+      return [
+        'baseSeat' => $nextSeat,
+        'block' => $rollstuhlBlock,
+        'row' => 1,
+        'seatsToBlock' => 1,
+      ];
+    }
+
+    if (!isset($data['seat_block'], $data['seat_row'], $data['seat_seat'])) {
+      return null;
+    }
+
+    $seatsToBlock = 1;
+
+    if (in_array($data['ticket_category'], ['familie1', 'familie2'], true)) {
+      $seatsToBlock = 3;
+    } elseif (($data['ticket_category'] ?? null) === 'familie3') {
+      $seatsToBlock = 4;
+    }
+
+    return [
+      'baseSeat' => (int) $data['seat_seat'],
+      'block' => (string) $data['seat_block'],
+      'row' => $data['seat_row'],
+      'seatsToBlock' => $seatsToBlock,
+    ];
+  }
+
+  private function findNextAvailableSeat(string $block, int $row, int $maxSeats): ?int
+  {
+    for ($seat = 1; $seat <= $maxSeats; $seat++) {
+      $existingSeat = Seats::findOneBy(
+        ['seat_block=?', 'seat_row=?', 'seat_seat=?'],
+        [$block, $row, $seat]
+      );
+
+      // If seat doesn't exist OR exists but not booked, it's available
+      if (!$existingSeat || $existingSeat->seat_status !== 'booked') {
+        return $seat;
+      }
+    }
+
+    return null; // All seats booked
+  }
+
+  private function normalizeBlock(?string $block): ?string
+  {
+    if ($block === null) {
+      return null;
+    }
+
+    return preg_replace('/^Block\s+/', '', trim($block));
   }
 
   private function getPrices($type, $block, $category): int
