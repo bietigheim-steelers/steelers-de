@@ -114,7 +114,7 @@
         >
           <template #label>
             <div class="text-lg leading-tight mt-2">
-              Ich möchte folgende Dauerkarte 2025/2026 rechtsverbindlich
+              Ich möchte folgende Dauerkarte 2026/2027 rechtsverbindlich
               bestellen:
             </div>
           </template>
@@ -165,7 +165,7 @@
             rules="required"
             placeholder="Block"
             :native="false"
-            :items="['Block R1', 'Block R4']"
+            :items="rollstuhlBlockItems"
             :columns="{
               container: 4,
               label: 12,
@@ -202,7 +202,6 @@
           </template>
           <template #after>
             <div class="mt-2">
-              
               <br /><br />
               Die Ausgabe der Dauerkarte (schätzungsweise ab Mitte August)
               erfolgt nur bei vorheriger Bezahlung
@@ -326,7 +325,7 @@
         >
           <template #label>
             <div class="text-lg leading-tight mt-8">
-              Ich hatte in der Saison 2024/2025 bereits eine Dauerkarte:
+              Ich hatte in der Saison 2025/2026 bereits eine Dauerkarte:
             </div>
           </template>
         </RadiogroupElement>
@@ -344,7 +343,11 @@
             <template #label>
               <div class="text-lg leading-tight mt-8">
                 Ich habe bereits ein Kundenkonto bei EVENTIM worüber ich die
-                Möglichkeit hätte, Tickets im Onlineshop zu erwerben:
+                Möglichkeit hätte, Tickets im Onlineshop zu erwerben:<br />
+                <b
+                  >(Diese Angabe ist für die mobile Dauerkarte zwingend
+                  erforderlich)</b
+                >
               </div>
             </template>
           </RadiogroupElement>
@@ -352,15 +355,26 @@
           <TextElement
             name="eventim_email"
             autocomplete="email"
-            :conditions="[['customer_eventim.eventim', '==', 'ja']]"
+            :conditions="[
+              [
+                ['customer_eventim.eventim', '==', 'ja'],
+                ['ticket_form', ['mobile', 'mobile_plastik']],
+              ],
+            ]"
             label="Hinterlegte E-Mailadresse meines EVENTIM-Kontos"
             rules="required"
             placeholder="EVENTIM"
           />
           <TextElement
             name="eventim_account"
-            :conditions="[['customer_eventim.eventim', '==', 'ja']]"
+            :conditions="[
+              [
+                ['customer_eventim.eventim', '==', 'ja'],
+                ['ticket_form', ['mobile', 'mobile_plastik']],
+              ],
+            ]"
             label="Meine 6-stellige EVENTIM Kundennummer:"
+            rules="required"
             placeholder="EVENTIM Kundennummer:"
           >
             <template #info>
@@ -387,12 +401,13 @@ import FormComponentCategory from "./FormComponentCategory.vue";
 import FormComponentFF from "./FormComponentFF.vue";
 import FormOverview from "./FormOverview.vue";
 import { getLowestPrice } from "./TicketPriceCalculator.js";
-import { resetSeats } from "./SeatingPlanLoad.js";
+import { loadSeats, resetSeats } from "./SeatingPlanLoad.js";
 
 export default {
   mixins: [Vueform],
   setup: useVueform,
   mounted() {
+    this.loadRollstuhlAvailability();
     this.isMounted = true; //needed for the ref in the computed property to work
   },
   computed: {
@@ -428,8 +443,49 @@ export default {
         },
       ];
     },
+    rollstuhlBlockItems() {
+      const rollstuhlBlocks = ["R1", "R4"];
+
+      return rollstuhlBlocks.map((block) => {
+        const totalSeats = block === "R1" ? 2 : 3;
+        const availableSeats = this.getRollstuhlAvailableSeats(block);
+        const isSoldOut = availableSeats === 0;
+
+        return {
+          value: `Block ${block}`,
+          label: isSoldOut
+            ? `Block ${block} (ausverkauft)`
+            : `Block ${block} (${availableSeats} von ${totalSeats} verfügbar)`,
+          disabled: isSoldOut,
+        };
+      });
+    },
   },
   methods: {
+    async loadRollstuhlAvailability() {
+      try {
+        const seatsData = await loadSeats();
+        this.bookedSeatIds = Array.isArray(seatsData?.booked)
+          ? seatsData.booked
+          : [];
+      } catch (error) {
+        console.error("Error loading rollstuhl seat availability:", error);
+        this.bookedSeatIds = [];
+      }
+    },
+    getRollstuhlAvailableSeats(block) {
+      const totalSeats = block === "R1" ? 2 : 3;
+      let bookedCount = 0;
+
+      for (let seat = 1; seat <= totalSeats; seat++) {
+        const seatId = `${block}_1_${seat}`;
+        if (this.bookedSeatIds.includes(seatId)) {
+          bookedCount++;
+        }
+      }
+
+      return Math.max(totalSeats - bookedCount, 0);
+    },
     onAreaChange() {
       this.$refs.form$.el$("ticket_category").reset();
     },
@@ -438,6 +494,7 @@ export default {
     },
     onRestartClick() {
       resetSeats();
+      this.loadRollstuhlAvailability();
       this.formDone = false;
     },
     onNextStep() {
@@ -458,21 +515,27 @@ export default {
         this.$refs.form$.el$("final_overview.terms").reset();
         this.formDone = true;
       } else {
-        if (typeof response?.data === "string" && response.data.includes("seat_already_booked")) {
+        if (
+          typeof response?.data === "string" &&
+          response.data.includes("seat_already_booked")
+        ) {
           form$.messageBag.append(
-            `Dieser Sitzplatz ist bereits gebucht. Bitte wähle einen anderen Sitzplatz.`
+            `Dieser Sitzplatz ist bereits gebucht. Bitte wähle einen anderen Sitzplatz.`,
           );
           return;
         }
-        if (typeof response?.data === "string" && response.data.includes("seat_non_existent")) {
+        if (
+          typeof response?.data === "string" &&
+          response.data.includes("seat_non_existent")
+        ) {
           form$.messageBag.append(
-            `Dieser Sitzplatz existiert nicht. Bitte wähle einen anderen Sitzplatz.`
+            `Dieser Sitzplatz existiert nicht. Bitte wähle einen anderen Sitzplatz.`,
           );
           return;
         }
 
         form$.messageBag.append(
-          `Irgendetwas ist schief gelaufen. Bitte prüfe deine Angaben (ganz besonders deine E-Mail-Adresse!) und versuche es erneut. Sollte es weiterhin zu problemen kommen, wende dich an ticketing@steelers.de`
+          `Irgendetwas ist schief gelaufen. Bitte prüfe deine Angaben (ganz besonders deine E-Mail-Adresse!) und versuche es erneut. Sollte es weiterhin zu Problemen kommen, wende dich an ticketing@steelers.de`,
         );
       }
     },
@@ -482,6 +545,7 @@ export default {
       formDone: false,
       isMounted: false,
       selected_type: null,
+      bookedSeatIds: [],
     };
   },
   components: {
