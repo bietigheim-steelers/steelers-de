@@ -80,7 +80,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_seats'] = array(
         'seat_block' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_seats']['seat_block'],
             'inputType' => 'select',
-            'options' => array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'),
+            'options' => array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'R1', 'R4'),
             'sql' => "varchar(4) NOT NULL default ''",
             'search' => true,
             'filter' => true,
@@ -117,8 +117,10 @@ $GLOBALS['TL_DCA']['tl_tilastot_seats'] = array(
 
 class tl_tilastot_seats extends \Contao\Backend
 {
-    function seatLabel($row) {
-        $ticket = sprintf('<b>Block %s</b>, Reihe %s, Platz %s - ',
+    function seatLabel($row)
+    {
+        $ticket = sprintf(
+            '<b>Block %s</b>, Reihe %s, Platz %s - ',
             $row['seat_block'],
             $row['seat_row'],
             $row['seat_seat']
