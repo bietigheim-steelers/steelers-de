@@ -1,4 +1,3 @@
-{% use "@Contao/component/_figure.html.twig" %}
 {% set game = game_id|get_game_details %}
 
 <div class="swiper-slide bg-white h-full">
@@ -16,7 +15,7 @@
     <div class="d-flex align-items-center read-more-wrap text-left"><a class="btn-default mt-4"
         title="{{ newsHeadline }}" href="{{ link }}">weiterlesen</a></div>
   </div>
-  {% with {figure: singleSRC} %}
-    {{ block('figure_component') }}
-  {% endwith %}
+  {% if addImage %}
+      {{ include('@Contao/image.html.twig') }}
+  {% endif %}
 </div>
