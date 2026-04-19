@@ -1,2 +1,0 @@
-<?php
-echo $this->picture['img']['src'];
