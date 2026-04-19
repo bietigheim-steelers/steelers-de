@@ -21,7 +21,7 @@
     <div class="p-5 grow flex flex-col">
       <div class="text-gray-400 italic uppercase text-sm">
       {% if game %}
-        {{ game.homeTeamDetails.shortname }} - {{ game.awayTeamDetails.shortname }} {{ game.homescore }}:{{ game.awayscore }} {{ game.resulttype }} 
+        {{ game.homeTeamDetails.shortname }} - {{ game.awayTeamDetails.shortname }} {{ game.homescore }}:{{ game.awayscore }}{% if game.resulttype is defined %} {{ game.resulttype }}{% endif %}
       {% elseif categoriesList|length >0 %}
         {{ categoriesList|join(', ') }}
       {% endif %}
