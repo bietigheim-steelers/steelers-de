@@ -103,7 +103,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         'seat_block' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['seat_block'],
             'inputType' => 'select',
-            'options' => array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'),
+            'options' => array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'R1', 'R4'),
             'sql' => "varchar(8) NOT NULL default ''"
         ),
         'seat_row' => array(
