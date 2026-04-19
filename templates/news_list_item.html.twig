@@ -1,0 +1,39 @@
+{% use "@Contao/component/_figure.html.twig" %}
+
+{% set news_image_size = picture_config({
+  width: 511,
+  height: 637,
+  resizeMode: 'crop',
+  densities: '1x, 2x'
+}) %}
+
+{% set ogimage = figure(singleSRC, news_image_size, {
+  metadata: { alt: newsHeadline },
+}) %}
+
+{% set game = game_id|get_game_details %}
+
+<div class="group relative bg-white border border-gray-200 mx-2 xl:mx-4 flex flex-col overflow-hidden">
+  <div class="flex flex-col bg-white h-full">
+    <a href="{{ link }}" data-bigimage="{{ singleSRC }}">
+      <img src="{{ ogimage.image.img.src }}" width="296" height="370" alt="{{ newsHeadline }}" class="aspect-news w-full">
+    </a>
+    <div class="p-5 grow flex flex-col">
+      <div class="text-gray-400 italic uppercase text-sm">
+      {% if game %}
+        {{ game.homeTeamDetails.shortname }} - {{ game.awayTeamDetails.shortname }} {{ game.homescore }}:{{ game.awayscore }} {{ game.resulttype }} 
+      {% elseif categoriesList|length >0 %}
+        {{ categoriesList|join(', ') }}
+      {% endif %}
+      </div>
+
+      <a href="{{ link }}" class="mt-1 text-xl text-steelgreen uppercase font-bold leading-6">
+        {{ newsHeadline }}
+      </a>
+      <p class="mt-5 text-sm text-black">{{ teaser|truncate_text(120)|striptags > 120 ? teaser|truncate_text(120)|striptags ~ '…' : teaser|striptags }}</p>
+      <div class="mt-5 flex-1 flex flex-col justify-end">
+        <time class="text-sm text-steelgreen" datetime="{{ datetime }}">{{ date }}</time>
+      </div>
+    </div>
+  </div>
+</div>
