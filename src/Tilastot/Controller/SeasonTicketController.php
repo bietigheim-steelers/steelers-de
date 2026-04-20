@@ -17,8 +17,6 @@ class SeasonTicketController
 {
   public function order(Request $request, MailerInterface $mailer, ContaoFramework $framework): Response
   {
-
-
     $framework->initialize();
     $data = $request->request->all();
 
@@ -92,7 +90,7 @@ class SeasonTicketController
     $seasonTicket->save();
 
     $email = new TemplatedEmail();
-    $email->subject('Steelers Dauerkarte - Bestellung');
+    $email->subject('Steelers Dauerkarte - Bestellung ' . $randomNumber);
     $email->from(new Address('webseite@steelers.de', 'Bietigheim Steelers'));
     $email->replyTo('ticketing@steelers.de');
 
