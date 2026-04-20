@@ -39,8 +39,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
                 'class'               => 'header_edit_all',
                 'attributes'          => 'onclick="Backend.getScrollOffset()" accesskey="e"'
             ),
-            'download_excel' => [ 
-                'label'               => 'Download Excel Liste', 
+            'download_excel' => [
+                'label'               => 'Download Excel Liste',
                 'class'               => 'header_theme_import',
                 'route'                => 'backend_season_ticket_download'
             ]
@@ -177,7 +177,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         'eventim' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['eventim'],
             'inputType' => 'checkbox',
-            'sql' => "char(2) NOT NULL default ''"
+            'sql' => "char(4) NOT NULL default ''"
         ),
         'eventim_email' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['eventim_email'],

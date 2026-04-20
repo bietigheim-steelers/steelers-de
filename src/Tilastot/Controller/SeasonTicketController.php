@@ -70,6 +70,9 @@ class SeasonTicketController
 
     // Save to database using SeasonTicket model
     $seasonTicket = new SeasonTicket();
+    if ($data['customer_birthday'] === '' || $data['customer_birthday'] === null) {
+      unset($data['customer_birthday']);
+    }
     foreach ($data as $key => $value) {
       $seasonTicket->$key = $value;
     }
