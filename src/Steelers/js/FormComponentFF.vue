@@ -1,7 +1,7 @@
 <template>
   <GroupElement
     name="ff"
-    v-if="Date.now() < Date.parse('22 May 2026 23:59:59 GMT')"
+    v-if="Date.now() < Date.parse('22 May 2025 23:59:59 GMT')"
     :conditions="[
       ['ticket_category', '!=', null],
       ['ticket_category', '!=', 'jugendlich'],
@@ -74,6 +74,8 @@ export default {
       if (["mobile", "mobile_plastik"].includes(newValue)) {
         form$.value.el$("customer_eventim.eventim").update("ja");
         form$.value.el$("customer_eventim.eventim").disable("nein");
+      } else {
+        form$.value.el$("customer_eventim.eventim").enable("nein");
       }
     };
 

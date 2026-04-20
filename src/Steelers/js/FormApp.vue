@@ -444,7 +444,7 @@ export default {
       ];
     },
     rollstuhlBlockItems() {
-      const rollstuhlBlocks = ["R1", "R4"];
+      const rollstuhlBlocks = ["R1", "R3", "R4"];
 
       return rollstuhlBlocks.map((block) => {
         const totalSeats = block === "R1" ? 2 : 3;

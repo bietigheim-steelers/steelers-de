@@ -22,53 +22,52 @@ class SeasonTicketController
     $framework->initialize();
     $data = $request->request->all();
 
-    $seatBookingData = $this->resolveSeatBookingData($data);
+    if (in_array($data['ticket_area'], ['sitzplatz', 'rollstuhl'])) {
+      $seatBookingData = $this->resolveSeatBookingData($data);
 
-    if ($seatBookingData === null) {
-      return new Response('seat_non_existent', 400);
+      $baseSeat = $seatBookingData['baseSeat'];
+      $block = $seatBookingData['block'];
+      $row = $seatBookingData['row'];
+      $seatsToBlock = $seatBookingData['seatsToBlock'];
+
+      for ($i = 0; $i < $seatsToBlock; $i++) {
+        $seatNum = $baseSeat + $i;
+
+        // Check if seat exists in database
+        $seat = Seats::findOneBy(['seat_block=?', 'seat_row=?', 'seat_seat=?'], [$block, $row, $seatNum]);
+
+        if ($seat) {
+          // Seat exists - check status
+          if ($seat->seat_status === 'booked') {
+            return new Response('seat_already_booked', 400);
+          } elseif ($seat->seat_status === 'non-existent') {
+            return new Response('seat_non_existent', 400);
+          } else {
+            // Seat is available or reserved - mark as booked
+            $seat->seat_status = 'booked';
+            $seat->tstamp = time();
+            $seat->save();
+          }
+        } else {
+          // Seat doesn't exist in database - create it as booked
+          $newSeat = new Seats();
+          $newSeat->seat_block = $block;
+          $newSeat->seat_row = $row;
+          $newSeat->seat_seat = $seatNum;
+          $newSeat->seat_status = 'booked';
+          $newSeat->tstamp = time();
+          $newSeat->save();
+        }
+      }
     }
-
-    $baseSeat = $seatBookingData['baseSeat'];
-    $block = $seatBookingData['block'];
-    $row = $seatBookingData['row'];
-    $seatsToBlock = $seatBookingData['seatsToBlock'];
 
     $data['price'] = self::getTicketPrice(
       $data['ticket_area'],
       $data['ticket_category'],
-      substr($block, -1),
+      $data['seat_block'],
       $data['ticket_type']
     );
 
-    for ($i = 0; $i < $seatsToBlock; $i++) {
-      $seatNum = $baseSeat + $i;
-
-      // Check if seat exists in database
-      $seat = Seats::findOneBy(['seat_block=?', 'seat_row=?', 'seat_seat=?'], [$block, $row, $seatNum]);
-
-      if ($seat) {
-        // Seat exists - check status
-        if ($seat->seat_status === 'booked') {
-          return new Response('seat_already_booked', 400);
-        } elseif ($seat->seat_status === 'non-existent') {
-          return new Response('seat_non_existent', 400);
-        } else {
-          // Seat is available or reserved - mark as booked
-          $seat->seat_status = 'booked';
-          $seat->tstamp = time();
-          $seat->save();
-        }
-      } else {
-        // Seat doesn't exist in database - create it as booked
-        $newSeat = new Seats();
-        $newSeat->seat_block = $block;
-        $newSeat->seat_row = $row;
-        $newSeat->seat_seat = $seatNum;
-        $newSeat->seat_status = 'booked';
-        $newSeat->tstamp = time();
-        $newSeat->save();
-      }
-    }
     // Save to database using SeasonTicket model
     $seasonTicket = new SeasonTicket();
     foreach ($data as $key => $value) {
@@ -84,6 +83,7 @@ class SeasonTicketController
         ->execute($randomNumber);
     } while ($objResult->numRows > 0); // Keep generating until unique
 
+    $data['order_number'] = $randomNumber;
     $seasonTicket->order_number = $randomNumber;
     $seasonTicket->tstamp = time();
     $seasonTicket->save();
@@ -105,12 +105,12 @@ class SeasonTicketController
     $email2->from('webseite@steelers.de');
     $email2->replyTo($data['customer_email']);
 
-    $email2->to('dominik.sander@steelers.de');
+    $email2->to('ticketing@steelers.de');
     $email2->htmlTemplate('@Contao_App/email_season_ticket_order.html.twig');
     $eventimCategory = $this->getEventimCategory(
       $data['ticket_area'],
       $data['ticket_category'],
-      substr($block, -1),
+      $data['ticket_block'],
       $data['ff_new_dk']
     );
 
@@ -129,7 +129,7 @@ class SeasonTicketController
     if (($data['ticket_area'] ?? null) === 'rollstuhl') {
       $rollstuhlBlock = $this->normalizeBlock($data['seat_rollstuhl_block'] ?? null);
 
-      if (!in_array($rollstuhlBlock, ['R1', 'R4'], true)) {
+      if (!in_array($rollstuhlBlock, ['R1', 'R3', 'R4'], true)) {
         return null;
       }
 
