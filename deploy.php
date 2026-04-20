@@ -39,7 +39,7 @@ task('deploy:update_code', function () {
 
 desc('Reload Apache gracefully');
 task('apache:reload', function () {
-  run('sudo /bin/systemctl reload apache2');
+  run('sudo /usr/sbin/service apache2 reload');
 });
 
 add('shared_files', ['config/config.yml']);
