@@ -149,6 +149,10 @@ export default {
         return;
       }
 
+      if(reserved.value && !confirm("Dieser Platz ist derzeit für den bisherigen Dauerkarteninhaber reserviert. Möchten Sie ihn trotzdem auswählen?")) {
+        return;
+      }
+
       if (!row.skip) {
         row.skip = [];
       }
