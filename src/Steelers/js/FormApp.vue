@@ -202,6 +202,17 @@
           </template>
           <template #after>
             <div class="mt-2">
+             Der Dauerkartenverkauf ist unterteilt in zwei Verkaufsphasen:<br />
+              <ul>
+                <li>
+                  1. Phase: 22.04.2026 bis 22.05.2026 (Zahlungseingang muss bis
+                  spätestens 22.05.2026 erfolgen)
+                </li>
+                <li>
+                  2. Phase: 23.05.2026 bis 31.08.2026 (Zahlungseingang muss bis
+                  spätestens 31.08.2026 erfolgen)
+                </li>
+              </ul>
               <br /><br />
               Die Ausgabe der Dauerkarte (schätzungsweise ab Mitte August)
               erfolgt nur bei vorheriger Bezahlung
