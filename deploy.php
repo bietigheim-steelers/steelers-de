@@ -36,6 +36,11 @@ task('deploy:update_code', function () {
   }
 });
 
+desc('Reload Apache gracefully');
+task('apache:reload', function () {
+  run('sudo -n /usr/sbin/service apache2 force-reload');
+});
+
 add('shared_files', ['config/config.yml']);
 
 set('bin/php', function () {
@@ -67,3 +72,4 @@ host('dev.steelers.de')
 // Hooks
 after('deploy:failed', 'deploy:unlock');
 after('deploy:success', 'cachetool:clear:opcache');
+after('deploy:success', 'apache:reload');

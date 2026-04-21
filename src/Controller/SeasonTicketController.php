@@ -17,56 +17,60 @@ class SeasonTicketController
 {
   public function order(Request $request, MailerInterface $mailer, ContaoFramework $framework): Response
   {
-
-
     $framework->initialize();
     $data = $request->request->all();
 
-    $data['price'] = self::getTicketPrice($data['ticket_area'], $data['ticket_category'], substr($data['seat_block'], -1), $data['ticket_type']);
+    if (in_array($data['ticket_area'], ['sitzplatz', 'rollstuhl'])) {
+      $seatBookingData = $this->resolveSeatBookingData($data);
 
-    // Book the selected seat(s) in the database
-    $baseSeat = (int)$data['seat_seat'];
-    $block = $data['seat_block'];
-    $row = $data['seat_row'];
-    $seatsToBlock = 1;
+      $baseSeat = $seatBookingData['baseSeat'];
+      $block = $seatBookingData['block'];
+      $row = $seatBookingData['row'];
+      $seatsToBlock = $seatBookingData['seatsToBlock'];
 
-    if (in_array($data['ticket_category'], ['familie1', 'familie2'])) {
-      $seatsToBlock = 3;
-    } elseif ($data['ticket_category'] === 'familie3') {
-      $seatsToBlock = 4;
-    }
+      for ($i = 0; $i < $seatsToBlock; $i++) {
+        $seatNum = $baseSeat + $i;
 
-    for ($i = 0; $i < $seatsToBlock; $i++) {
-      $seatNum = $baseSeat + $i;
+        // Check if seat exists in database
+        $seat = Seats::findOneBy(['seat_block=?', 'seat_row=?', 'seat_seat=?'], [$block, $row, $seatNum]);
 
-      // Check if seat exists in database
-      $seat = Seats::findOneBy(['seat_block=?', 'seat_row=?', 'seat_seat=?'], [$block, $row, $seatNum]);
-
-      if ($seat) {
-        // Seat exists - check status
-        if ($seat->seat_status === 'booked') {
-          return new Response('seat_already_booked', 400);
-        } elseif ($seat->seat_status === 'non-existent') {
-          return new Response('seat_non_existent', 400);
+        if ($seat) {
+          // Seat exists - check status
+          if ($seat->seat_status === 'booked') {
+            return new Response('seat_already_booked', 400);
+          } elseif ($seat->seat_status === 'non-existent') {
+            return new Response('seat_non_existent', 400);
+          } else {
+            // Seat is available or reserved - mark as booked
+            $seat->seat_status = 'booked';
+            $seat->tstamp = time();
+            $seat->save();
+          }
         } else {
-          // Seat is available or reserved - mark as booked
-          $seat->seat_status = 'booked';
-          $seat->tstamp = time();
-          $seat->save();
+          // Seat doesn't exist in database - create it as booked
+          $newSeat = new Seats();
+          $newSeat->seat_block = $block;
+          $newSeat->seat_row = $row;
+          $newSeat->seat_seat = $seatNum;
+          $newSeat->seat_status = 'booked';
+          $newSeat->tstamp = time();
+          $newSeat->save();
         }
-      } else {
-        // Seat doesn't exist in database - create it as booked
-        $newSeat = new Seats();
-        $newSeat->seat_block = $block;
-        $newSeat->seat_row = $row;
-        $newSeat->seat_seat = $seatNum;
-        $newSeat->seat_status = 'booked';
-        $newSeat->tstamp = time();
-        $newSeat->save();
       }
     }
+
+    $data['price'] = self::getTicketPrice(
+      $data['ticket_area'],
+      $data['ticket_category'],
+      $data['seat_block'],
+      $data['ticket_type']
+    );
+
     // Save to database using SeasonTicket model
     $seasonTicket = new SeasonTicket();
+    if ($data['customer_birthday'] === '' || $data['customer_birthday'] === null) {
+      unset($data['customer_birthday']);
+    }
     foreach ($data as $key => $value) {
       $seasonTicket->$key = $value;
     }
@@ -80,12 +84,13 @@ class SeasonTicketController
         ->execute($randomNumber);
     } while ($objResult->numRows > 0); // Keep generating until unique
 
+    $data['order_number'] = $randomNumber;
     $seasonTicket->order_number = $randomNumber;
     $seasonTicket->tstamp = time();
     $seasonTicket->save();
 
     $email = new TemplatedEmail();
-    $email->subject('Steelers Dauerkarte - Bestellung');
+    $email->subject('Steelers Dauerkarte - Bestellung ' . $randomNumber);
     $email->from(new Address('webseite@steelers.de', 'Bietigheim Steelers'));
     $email->replyTo('ticketing@steelers.de');
 
@@ -101,12 +106,12 @@ class SeasonTicketController
     $email2->from('webseite@steelers.de');
     $email2->replyTo($data['customer_email']);
 
-    $email2->to('dominik.sander@steelers.de');
+    $email2->to('ticketing@steelers.de');
     $email2->htmlTemplate('@Contao_App/email_season_ticket_order.html.twig');
     $eventimCategory = $this->getEventimCategory(
       $data['ticket_area'],
       $data['ticket_category'],
-      substr($data['seat_block'], -1),
+      $data['ticket_block'],
       $data['ff_new_dk']
     );
 
@@ -120,79 +125,149 @@ class SeasonTicketController
     return new Response('order successful');
   }
 
+  private function resolveSeatBookingData(array $data): ?array
+  {
+    if (($data['ticket_area'] ?? null) === 'rollstuhl') {
+      $rollstuhlBlock = $this->normalizeBlock($data['seat_rollstuhl_block'] ?? null);
+
+      if (!in_array($rollstuhlBlock, ['R1', 'R3', 'R4'], true)) {
+        return null;
+      }
+
+      $maxSeats = ($rollstuhlBlock === 'R1') ? 2 : 3;
+      $nextSeat = $this->findNextAvailableSeat($rollstuhlBlock, 1, $maxSeats);
+
+      if ($nextSeat === null) {
+        return null; // No seats available
+      }
+
+      return [
+        'baseSeat' => $nextSeat,
+        'block' => $rollstuhlBlock,
+        'row' => 1,
+        'seatsToBlock' => 1,
+      ];
+    }
+
+    if (!isset($data['seat_block'], $data['seat_row'], $data['seat_seat'])) {
+      return null;
+    }
+
+    $seatsToBlock = 1;
+
+    if (in_array($data['ticket_category'], ['familie1', 'familie2'], true)) {
+      $seatsToBlock = 3;
+    } elseif (($data['ticket_category'] ?? null) === 'familie3') {
+      $seatsToBlock = 4;
+    }
+
+    return [
+      'baseSeat' => (int) $data['seat_seat'],
+      'block' => (string) $data['seat_block'],
+      'row' => $data['seat_row'],
+      'seatsToBlock' => $seatsToBlock,
+    ];
+  }
+
+  private function findNextAvailableSeat(string $block, int $row, int $maxSeats): ?int
+  {
+    for ($seat = 1; $seat <= $maxSeats; $seat++) {
+      $existingSeat = Seats::findOneBy(
+        ['seat_block=?', 'seat_row=?', 'seat_seat=?'],
+        [$block, $row, $seat]
+      );
+
+      // If seat doesn't exist OR exists but not booked, it's available
+      if (!$existingSeat || $existingSeat->seat_status !== 'booked') {
+        return $seat;
+      }
+    }
+
+    return null; // All seats booked
+  }
+
+  private function normalizeBlock(?string $block): ?string
+  {
+    if ($block === null) {
+      return null;
+    }
+
+    return preg_replace('/^Block\s+/', '', trim($block));
+  }
+
   private function getPrices($type, $block, $category): int
   {
     $prices = [
       "plus" => [
         "A,G" => [
-          "vollzahler" => 785,
-          "ermaessigt" => 677,
-          "jugendlich" => 465,
-          "kind" => 392,
-          "behinderung" => 392,
+          "vollzahler" => 855,
+          "ermaessigt" => 735,
+          "jugendlich" => 510,
+          "kind" => 426,
+          "behinderung" => 426,
         ],
         "B,F,H,L" => [
-          "vollzahler" => 680,
-          "ermaessigt" => 572,
-          "jugendlich" => 418,
-          "kind" => 334,
-          "behinderung" => 334,
+          "vollzahler" => 737,
+          "ermaessigt" => 618,
+          "jugendlich" => 453,
+          "kind" => 369,
+          "behinderung" => 369,
         ],
         "C,I,K" => [
-          "vollzahler" => 575,
-          "ermaessigt" => 502,
-          "jugendlich" => 337,
-          "kind" => 287,
-          "behinderung" => 287,
-          "familie1" => 855,
-          "familie2" => 1133,
-          "familie3" => 1296,
+          "vollzahler" => 621,
+          "ermaessigt" => 537,
+          "jugendlich" => 360,
+          "kind" => 310,
+          "behinderung" => 310,
+          "familie1" => 948,
+          "familie2" => 1249,
+          "familie3" => 1435,
         ],
         "J" => [
-          "vollzahler" => 418,
-          "ermaessigt" => 370,
-          "jugendlich" => 263,
-          "kind" => 203,
-          "behinderung" => 203,
+          "vollzahler" => 430,
+          "ermaessigt" => 381,
+          "jugendlich" => 275,
+          "kind" => 215,
+          "behinderung" => 215,
         ],
         "R1,R3,R4" => [
-          "rollstuhl" => 360,
+          "rollstuhl" => 383,
         ],
       ],
       "basic" => [
         "A,G" => [
-          "vollzahler" => 686,
-          "ermaessigt" => 592,
-          "jugendlich" => 405,
-          "kind" => 343,
-          "behinderung" => 343,
+          "vollzahler" => 749,
+          "ermaessigt" => 645,
+          "jugendlich" => 447,
+          "kind" => 375,
+          "behinderung" => 375,
         ],
         "B,F,H,L" => [
-          "vollzahler" => 592,
-          "ermaessigt" => 499,
-          "jugendlich" => 364,
-          "kind" => 291,
-          "behinderung" => 291,
+          "vollzahler" => 645,
+          "ermaessigt" => 540,
+          "jugendlich" => 395,
+          "kind" => 322,
+          "behinderung" => 322,
         ],
         "C,I,K" => [
-          "vollzahler" => 499,
-          "ermaessigt" => 436,
-          "jugendlich" => 291,
-          "kind" => 249,
-          "behinderung" => 249,
-          "familie1" => 748,
-          "familie2" => 998,
-          "familie3" => 1144,
+          "vollzahler" => 540,
+          "ermaessigt" => 468,
+          "jugendlich" => 312,
+          "kind" => 270,
+          "behinderung" => 270,
+          "familie1" => 832,
+          "familie2" => 1102,
+          "familie3" => 1268,
         ],
         "J" => [
-          "vollzahler" => 364,
-          "ermaessigt" => 322,
+          "vollzahler" => 374,
+          "ermaessigt" => 333,
           "jugendlich" => 129.74,
           "kind" => 129.74,
-          "behinderung" => 176,
+          "behinderung" => 187,
         ],
         "R1,R3,R4" => [
-          "rollstuhl" => 312,
+          "rollstuhl" => 333,
         ],
       ],
     ];
