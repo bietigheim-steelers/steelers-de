@@ -172,7 +172,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         'customer_last_season' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['customer_last_season'],
             'inputType' => 'checkbox',
-            'sql' => "char(2) NOT NULL default ''"
+            'sql' => "char(4) NOT NULL default ''"
         ),
         'eventim' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['eventim'],
