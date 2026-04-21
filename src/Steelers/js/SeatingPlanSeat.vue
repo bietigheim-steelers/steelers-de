@@ -153,6 +153,11 @@ export default {
         return;
       }
 
+      if(form$.value.data.ticket_category.includes("familie") && !["C", "I", "K"].includes(section.id)) {
+        alert("Familienkarten können nur in den Blöcken C, I und K ausgewählt werden.");
+        return;
+      }
+
       if (!row.skip) {
         row.skip = [];
       }
