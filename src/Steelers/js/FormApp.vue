@@ -358,7 +358,12 @@
                 <b
                   >(Diese Angabe ist für die mobile Dauerkarte zwingend
                   erforderlich)</b
-                >
+                ><br/>
+                <br/>
+                <a href="https://www.ticket-onlineshop.com/ols/steelers/de/heimspiele/channel/shop/createaccount/user" target="_blank" class="text-blue-600 underline">
+                  Hier kannst du ein EVENTIM-Konto erstellen, falls du noch
+                  keines hast.
+                </a>
               </div>
             </template>
           </RadiogroupElement>
