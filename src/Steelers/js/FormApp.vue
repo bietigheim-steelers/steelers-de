@@ -373,8 +373,7 @@
             autocomplete="email"
             :conditions="[
               [
-                ['customer_eventim.eventim', '==', 'ja'],
-                ['ticket_form', ['mobile', 'mobile_plastik']],
+                ['customer_eventim.eventim', '==', 'ja']
               ],
             ]"
             label="Hinterlegte E-Mailadresse meines EVENTIM-Kontos"
@@ -385,8 +384,7 @@
             name="eventim_account"
             :conditions="[
               [
-                ['customer_eventim.eventim', '==', 'ja'],
-                ['ticket_form', ['mobile', 'mobile_plastik']],
+                ['customer_eventim.eventim', '==', 'ja']
               ],
             ]"
             label="Meine 6-stellige EVENTIM Kundennummer:"
