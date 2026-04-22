@@ -394,8 +394,8 @@
             placeholder="EVENTIM Kundennummer:"
           >
             <template #info>
-              *Die Kundennummer ist auf gekauften Online-Tickets (bzw.
-              Rechnungen) abgebildet
+              *<b>Die Kundennummer findest du auch auf der Rückseite deiner Dauerkarte 2025/2026.</b><br>
+              Sonst ist die Kundennummer auf gekauften Online-Tickets (bzw. Rechnungen) abgebildet. 
             </template>
           </TextElement>
         </GroupElement>
