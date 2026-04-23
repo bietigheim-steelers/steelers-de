@@ -59,38 +59,48 @@ class SeasonTicketDownloadController {
     // Get category map
     $categoryMap = SeasonTicketController::getCategoryMap();
     
+    $familySeatCount = [
+      'familie1' => 3,
+      'familie2' => 3,
+      'familie3' => 4,
+    ];
+
     // Add data rows
     $row = 2;
     if ($seasonTickets !== null) {
       foreach ($seasonTickets as $ticket) {
-        $sheet->setCellValue('A' . $row, strtoupper($ticket->ticket_type));
-        $sheet->setCellValue('B' . $row, $ticket->seat_block ?: '');
-        $sheet->setCellValue('C' . $row, $ticket->seat_row ?: '0');
-        $sheet->setCellValue('D' . $row, $ticket->seat_seat ?: '0');
-        $sheet->setCellValue('E' . $row, $ticket->customer_firstname);
-        $sheet->setCellValue('F' . $row, $ticket->customer_name);
-        $sheet->setCellValue('G' . $row, $categoryMap[$ticket->ticket_category] ?? $ticket->ticket_category);
-        $sheet->setCellValue('H' . $row, $ticket->customer_email);
-        $sheet->setCellValue('I' . $row, $ticket->ticket_form);
-        $sheet->setCellValue('J' . $row, $ticket->customer_member ? 'Ja' : 'Nein');
-        $sheet->setCellValue('K' . $row, $ticket->ticket_payment);
-        $sheet->setCellValue('L' . $row, $ticket->price);
-        $sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode( 
-          \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_EUR_SIMPLE
-        );
-        $sheet->setCellValue('M' . $row, $ticket->customer_last_season ? 'Ja' : 'Nein');
+        $seatCount = $familySeatCount[$ticket->ticket_category] ?? 1;
 
-        $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($ticket->tstamp);
-        $sheet->setCellValue('N' . $row, $excelDateValue);
-        $sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode(
-          \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME
-        );
+        for ($seatOffset = 0; $seatOffset < $seatCount; $seatOffset++) {
+          $sheet->setCellValue('A' . $row, strtoupper($ticket->ticket_type));
+          $sheet->setCellValue('B' . $row, $ticket->seat_block ?: '');
+          $sheet->setCellValue('C' . $row, $ticket->seat_row ?: '0');
+          $sheet->setCellValue('D' . $row, $seatOffset === 0 ? ($ticket->seat_seat ?: '0') : ((int) $ticket->seat_seat + $seatOffset));
+          $sheet->setCellValue('E' . $row, $ticket->customer_firstname);
+          $sheet->setCellValue('F' . $row, $ticket->customer_name);
+          $sheet->setCellValue('G' . $row, $categoryMap[$ticket->ticket_category] ?? $ticket->ticket_category);
+          $sheet->setCellValue('H' . $row, $ticket->customer_email);
+          $sheet->setCellValue('I' . $row, $ticket->ticket_form);
+          $sheet->setCellValue('J' . $row, $ticket->customer_member ? 'Ja' : 'Nein');
+          $sheet->setCellValue('K' . $row, $ticket->ticket_payment);
+          $sheet->setCellValue('L' . $row, $seatOffset === 0 ? $ticket->price : 0);
+          $sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode(
+            \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_EUR_SIMPLE
+          );
+          $sheet->setCellValue('M' . $row, $ticket->customer_last_season ? 'Ja' : 'Nein');
 
-        $sheet->setCellValue('O' . $row, $ticket->order_number);
-        $sheet->setCellValue('P' . $row, $ticket->eventim_email);
-        $sheet->setCellValue('Q' . $row, $ticket->eventim_account);
+          $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($ticket->tstamp);
+          $sheet->setCellValue('N' . $row, $excelDateValue);
+          $sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode(
+            \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME
+          );
 
-        $row++;
+          $sheet->setCellValue('O' . $row, $ticket->order_number);
+          $sheet->setCellValue('P' . $row, $ticket->eventim_email);
+          $sheet->setCellValue('Q' . $row, $ticket->eventim_account);
+
+          $row++;
+        }
       }
     }
     
