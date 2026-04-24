@@ -15,7 +15,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_seats'] = array(
         'enableVersioning' => true,
         'sql' => array(
             'keys' => array(
-                'id' => 'primary'
+                'id' => 'primary',
+                'seat_block,seat_row,seat_seat' => 'unique'
             )
         )
 

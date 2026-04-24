@@ -71,7 +71,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
     ),
     // Palettes
     'palettes' => array(
-        'default' => '{ticket_legend},ticket_type,ticket_area,ticket_category,seat_block,seat_row,seat_seat,ticket_form,ticket_payment;{customer_legend},customer_firstname,customer_name,customer_street,customer_plz,customer_city,customer_phone,customer_email,customer_birthday,customer_last_season;{eventim_legend},eventim,eventim_email,eventim_account;bemerkung,terms,data_privacy,price,order_number,payed,pay_date'
+        'default' => '{ticket_legend},ticket_type,ticket_area,ticket_category,seat_block,seat_row,seat_seat,ticket_form,ticket_payment;{customer_legend},customer_firstname,customer_name,customer_street,customer_plz,customer_city,customer_phone,customer_email,customer_birthday,customer_last_season;{eventim_legend},eventim,eventim_email,eventim_account;bemerkung,terms,data_privacy,price,order_number,paid,pay_date'
     ),
     // Fields
     'fields'   => array(
@@ -103,8 +103,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         'seat_block' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['seat_block'],
             'inputType' => 'select',
-            'options' => array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'R1', 'R3', 'R4'),
-            'sql' => "varchar(8) NOT NULL default ''"
+            'options' => array('EgeTrans', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'R1', 'R3', 'R4'),
+            'sql' => "varchar(8) NOT NULL default 'EgeTrans'"
         ),
         'seat_row' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['seat_row'],
@@ -172,7 +172,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         'customer_last_season' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['customer_last_season'],
             'inputType' => 'checkbox',
-            'sql' => "char(2) NOT NULL default ''"
+            'sql' => "char(4) NOT NULL default ''"
         ),
         'eventim' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['eventim'],
@@ -225,7 +225,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['pay_date'],
             'inputType' => 'text',
             'eval' => array('datepicker' => true, 'rgxp' => 'date', 'maxlength' => 255, 'tl_class' => 'w50'),
-            'sql' => "int(25) NOT NULL default '0'"
+            'sql' => "int(25) NULL default '0'"
         ),
     )
 );

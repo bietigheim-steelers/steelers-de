@@ -202,6 +202,17 @@
           </template>
           <template #after>
             <div class="mt-2">
+             Der Dauerkartenverkauf ist unterteilt in zwei Verkaufsphasen:<br />
+              <ul>
+                <li>
+                  1. Phase: 22.04.2026 bis 22.05.2026 (Zahlungseingang muss bis
+                  spätestens 22.05.2026 erfolgen)
+                </li>
+                <li>
+                  2. Phase: 23.05.2026 bis 31.08.2026 (Zahlungseingang muss bis
+                  spätestens 31.08.2026 erfolgen)
+                </li>
+              </ul>
               <br /><br />
               Die Ausgabe der Dauerkarte (schätzungsweise ab Mitte August)
               erfolgt nur bei vorheriger Bezahlung
@@ -347,7 +358,12 @@
                 <b
                   >(Diese Angabe ist für die mobile Dauerkarte zwingend
                   erforderlich)</b
-                >
+                ><br/>
+                <br/>
+                <a href="https://www.ticket-onlineshop.com/ols/steelers/de/heimspiele/channel/shop/createaccount/user" target="_blank" class="text-blue-600 underline">
+                  Hier kannst du ein EVENTIM-Konto erstellen, falls du noch
+                  keines hast.
+                </a>
               </div>
             </template>
           </RadiogroupElement>
@@ -357,8 +373,7 @@
             autocomplete="email"
             :conditions="[
               [
-                ['customer_eventim.eventim', '==', 'ja'],
-                ['ticket_form', ['mobile', 'mobile_plastik']],
+                ['customer_eventim.eventim', '==', 'ja']
               ],
             ]"
             label="Hinterlegte E-Mailadresse meines EVENTIM-Kontos"
@@ -369,8 +384,7 @@
             name="eventim_account"
             :conditions="[
               [
-                ['customer_eventim.eventim', '==', 'ja'],
-                ['ticket_form', ['mobile', 'mobile_plastik']],
+                ['customer_eventim.eventim', '==', 'ja']
               ],
             ]"
             label="Meine 6-stellige EVENTIM Kundennummer:"
@@ -378,8 +392,8 @@
             placeholder="EVENTIM Kundennummer:"
           >
             <template #info>
-              *Die Kundennummer ist auf gekauften Online-Tickets (bzw.
-              Rechnungen) abgebildet
+              *<b>Die Kundennummer findest du auch auf der Rückseite deiner Dauerkarte 2025/2026.</b><br>
+              Sonst ist die Kundennummer auf gekauften Online-Tickets (bzw. Rechnungen) abgebildet. 
             </template>
           </TextElement>
         </GroupElement>

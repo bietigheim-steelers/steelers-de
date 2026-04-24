@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
@@ -87,7 +88,6 @@ class SeasonTicketController
     $data['order_number'] = $randomNumber;
     $seasonTicket->order_number = $randomNumber;
     $seasonTicket->tstamp = time();
-    $seasonTicket->save();
 
     $email = new TemplatedEmail();
     $email->subject('Steelers Dauerkarte - Bestellung ' . $randomNumber);
@@ -98,7 +98,7 @@ class SeasonTicketController
     $email->htmlTemplate('@Contao_App/email_season_ticket_confirmation.html.twig');
     $email->context($data);
 
-    $mailer->send($email);
+    $this->sendWithRetry($mailer, $email);
 
 
     $email2 = new TemplatedEmail();
@@ -120,7 +120,10 @@ class SeasonTicketController
       'eventim_category' => $eventimCategory
     ]));
 
-    $mailer->send($email2);
+    $this->sendWithRetry($mailer, $email2);
+
+    //first try to sent emails. Sometimes the fucking microsoft mail server is not reachable!!!
+    $seasonTicket->save();
 
     return new Response('order successful');
   }
@@ -193,6 +196,26 @@ class SeasonTicketController
     }
 
     return preg_replace('/^Block\s+/', '', trim($block));
+  }
+
+  private function sendWithRetry(MailerInterface $mailer, TemplatedEmail $email): void
+  {
+    $maxAttempts = 3;
+    $delaysInMicroseconds = [200000, 500000];
+
+    for ($attempt = 1; $attempt <= $maxAttempts; $attempt++) {
+      try {
+        $mailer->send($email);
+
+        return;
+      } catch (TransportExceptionInterface $exception) {
+        if ($attempt === $maxAttempts) {
+          throw $exception;
+        }
+
+        usleep($delaysInMicroseconds[$attempt - 1] ?? 500000);
+      }
+    }
   }
 
   private function getPrices($type, $block, $category): int

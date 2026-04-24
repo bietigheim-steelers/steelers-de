@@ -149,6 +149,15 @@ export default {
         return;
       }
 
+      if(!selected.value && reserved.value && !confirm("Dieser Platz ist derzeit für den bisherigen Dauerkarteninhaber reserviert. Möchten Sie ihn trotzdem auswählen?")) {
+        return;
+      }
+
+      if(form$.value.data.ticket_category.includes("familie") && !["C", "I", "K"].includes(section.id)) {
+        alert("Familienkarten können nur in den Blöcken C, I und K ausgewählt werden.");
+        return;
+      }
+
       if (!row.skip) {
         row.skip = [];
       }

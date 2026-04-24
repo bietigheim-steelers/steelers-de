@@ -73,9 +73,6 @@ export default {
     const onTicketFormChange = (newValue) => {
       if (["mobile", "mobile_plastik"].includes(newValue)) {
         form$.value.el$("customer_eventim.eventim").update("ja");
-        form$.value.el$("customer_eventim.eventim").disable("nein");
-      } else {
-        form$.value.el$("customer_eventim.eventim").enable("nein");
       }
     };
 
