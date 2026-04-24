@@ -39,7 +39,7 @@ task('deploy:update_code', function () {
 desc('Reload Apache gracefully');
 task('apache:reload', function () {
   run('sudo -n /usr/sbin/service apache2 force-reload');
-});
+})->select('stage=prod');
 
 add('shared_files', ['config/config.yml']);
 
