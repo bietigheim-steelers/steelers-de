@@ -37,6 +37,7 @@ class ContentElementMigration extends AbstractMigration
     'ce_table_icon_list' => 'content_element/table/icon_list',
     'ce_table_pricing' => 'content_element/table/pricing',
     'ce_table_roster' => 'content_element/table/roster',
+    'ce_downloads' => 'content_element/downloads',
 
     //'ce_template_error' => 'content_element/',
     //'ce_template_form_error' => 'content_element/',

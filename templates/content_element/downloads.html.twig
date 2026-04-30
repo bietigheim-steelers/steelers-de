@@ -1,0 +1,5 @@
+{% extends "@Contao/content_element/downloads.html.twig" %}
+
+{% block list_item_attributes %}
+	{{- attrs(list.item_attributes|default).addClass(['bg-white', 'flex', 'items-center', 'p-5', 'transition-all', 'duration-500', 'hover:scale-110', 'hover:shadow-lg', 'download-element', "ext-#{item.file.extension(true)}"]) -}}
+{% endblock %}
