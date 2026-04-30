@@ -1,0 +1,79 @@
+{% set allSubs = [] %}
+
+{% if level == 'level_1' %}
+<script>
+var openSubItem = null;
+
+function clickOnParent(el, openSub) {
+  var mobileNav = document.getElementById('mobile-nav-ul');
+  for (let child of mobileNav.children) {
+    child.children[0].classList.remove('activeSub');
+  }
+  var allSubs = document.getElementsByClassName('level_2');
+  if (openSub === openSubItem) {
+    mobileNav.classList.remove('subItemIsOpen');
+    allSubs[openSubItem].classList.remove('openSubItem')
+    openSubItem = null;
+  } else if (openSubItem === null) {
+    mobileNav.classList.add('subItemIsOpen');
+    el.classList.add('activeSub');
+    allSubs[openSub].classList.add('openSubItem')
+    openSubItem = openSub;
+  } else {
+    mobileNav.classList.add('subItemIsOpen');
+    el.classList.add('activeSub');
+    allSubs[openSubItem].classList.remove('openSubItem')
+    allSubs[openSub].classList.add('openSubItem')
+    openSubItem = openSub;
+  }
+}
+</script>
+<ul id="mobile-nav-ul" class="{{ level }} text-white w-full font-bold flex h-full items-stretch lg:!hidden">
+    {% for item in items %}
+        {% if item.subitems|default %}
+            <li class="{{ item.class }} {{ item.isActive ? 'active' : '' }} cursor-pointer">
+                <a aria-haspopup="true" onClick="clickOnParent(this, {{ allSubs|length }})">{{ item.link }}</a>
+                {% set allSubs = allSubs|merge([item.subitems]) %}
+            </li>
+        {% elseif item.isActive %}
+            <li class="active {{ item.class }}"><a{{ attrs().set('aria-haspopup', 'true', item.subitems|default) }}>{{ item.link }}</a></li>
+        {% else %}
+            <li{{ attrs().addClass(item.class|default) }}>
+                <a{{ attrs()
+                    .set('href', item.href ?: './')
+                    .set('title', item.pageTitle ?: item.title)
+                    .setIfExists('accesskey', item.accesskey|default)
+                    .set('tabindex', item.tabindex, item.tabindex|default)
+                    .mergeWith(item.target|default)
+                    .mergeWith(item.rel|default)
+                    .set('aria-haspopup', 'true', item.subitems|default)
+                }}>{{ item.link }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% else %}
+<ul class="{{ level }} text-white w-full font-bold flex absolute gap-2 top-0 mt-24 content-start lg:!hidden">
+    {% for item in items %}
+        {% if item.isActive %}
+            <li class="isSubElement active"><a>{{ item.link }}</a></li>
+        {% else %}
+            <li class="isSubElement {{ item.class }}">
+                <a{{ attrs()
+                    .set('href', item.href ?: './')
+                    .set('title', item.pageTitle ?: item.title)
+                    .setIfExists('accesskey', item.accesskey|default)
+                    .set('tabindex', item.tabindex, item.tabindex|default)
+                    .mergeWith(item.target|default)
+                    .mergeWith(item.rel|default)
+                    .set('aria-haspopup', 'true', item.subitems|default)
+                }}>{{ item.link }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% for sub in allSubs %}
+    {{- sub|raw -}}
+{% endfor %}

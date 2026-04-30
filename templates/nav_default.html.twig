@@ -1,0 +1,47 @@
+<ul class="{{ level }} text-white justify-around">
+	{% for item in items %}
+		{% if item.subitems|default %}
+			<li{{ attrs()
+				.addClass([item.class|default, 'group', 'relative', item.isActive ? 'active' : null])
+				.set('aria-haspopup', 'true')
+			}}>
+				<input{{ attrs()
+					.set('id', 'group-' ~ item.id)
+					.set('type', 'checkbox')
+					.set('hidden', 'hidden')
+					.set('checked', 'checked', 'trail' in (item.class|default('')))
+				}}>
+				<label{{ attrs().set('for', 'group-' ~ item.id) }}>
+					<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<path d="M10 8L14 12L10 16" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+					</svg>
+					{{ item.link }}
+				</label>
+				{{- item.subitems|raw -}}
+			</li>
+		{% else %}
+			{% if item.isActive %}
+				<li class="active"><label>{{ item.link }}</label></li>
+			{% else %}
+				<li{{ attrs().addClass(item.class|default) }}>
+					<a{{ attrs()
+						.set('href', item.href ?: './')
+						.set('title', item.pageTitle ?: item.title)
+						.setIfExists('accesskey', item.accesskey|default)
+						.set('tabindex', item.tabindex, item.tabindex|default)
+						.mergeWith(item.target|default)
+						.mergeWith(item.rel|default)
+						.set('aria-haspopup', 'true', item.subitems|default)
+					}}>
+						{{ item.link }}
+						{% if item.type == 'redirect' and 'http' in (item.href|default('')) %}
+							<svg class="inline-block relative -top-[3px]" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+								<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6m-7 1l9-9m-5 0h5v5" />
+							</svg>
+						{% endif %}
+					</a>
+				</li>
+			{% endif %}
+		{% endif %}
+	{% endfor %}
+</ul>

@@ -1,0 +1,49 @@
+{% if level == 'level_1' %}
+<ul class="{{ level }} text-white w-full font-bold gap-2 xl:gap-0 flex-col xl:flex-row flex justify-items-center justify-between mt-8 font-headline text-2xl uppercase">
+    {% for item in items %}
+        {% if item.subitems|default %}
+            <li{{ attrs().addClass([item.class|default, 'relative', item.isActive ? 'active' : null]).set('aria-haspopup', 'true') }}>
+                <strong>{{ item.link }}</strong>
+                {{- item.subitems|raw -}}
+            </li>
+        {% else %}
+            {% if item.isActive %}
+                <li class="active"><strong>{{ item.link }}</strong></li>
+            {% else %}
+                <li{{ attrs().addClass(item.class|default) }}>
+                    <a{{ attrs()
+                        .set('href', item.href ?: './')
+                        .set('title', item.pageTitle ?: item.title)
+                        .setIfExists('accesskey', item.accesskey|default)
+                        .set('tabindex', item.tabindex, item.tabindex|default)
+                        .mergeWith(item.target|default)
+                        .mergeWith(item.rel|default)
+                        .set('aria-haspopup', 'true', item.subitems|default)
+                    }}>{{ item.link }}</a>
+                </li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</ul>
+{% else %}
+<ul class="{{ level }} font-sans text-base ml-3 md:ml-0">
+    {% for item in items %}
+        {% if item.isActive %}
+            <li class="active"><strong>{{ item.link }}</strong></li>
+        {% else %}
+            <li class="{{ item.class }} hover:bg-steelblue">
+                <a{{ attrs()
+                    .set('href', item.href ?: './')
+                    .addClass('py-1 whitespace-nowrap block')
+                    .set('title', item.pageTitle ?: item.title)
+                    .setIfExists('accesskey', item.accesskey|default)
+                    .set('tabindex', item.tabindex, item.tabindex|default)
+                    .mergeWith(item.target|default)
+                    .mergeWith(item.rel|default)
+                    .set('aria-haspopup', 'true', item.subitems|default)
+                }}>{{ item.link }}</a>
+            </li>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
