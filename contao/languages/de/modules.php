@@ -19,7 +19,6 @@ $GLOBALS['TL_LANG']['MOD']['tilastot_standings'] = array('Teams / Tabelle', 'Hie
 $GLOBALS['TL_LANG']['MOD']['tilastot_players'] = array('Spieler / Scorer', 'Spieler und Spielerstatistik verwalten.');
 $GLOBALS['TL_LANG']['MOD']['tilastot_partners'] = array('Partner', 'Partner verwalten.');
 $GLOBALS['TL_LANG']['MOD']['tilastot_camps'] = array('Porsche Camps', 'Porsche Camps verwalten.');
-$GLOBALS['TL_LANG']['MOD']['tilastot_bus_tours'] = array('Bustouren', 'Auswärtsfahrten verwalten.');
 $GLOBALS['TL_LANG']['MOD']['tilastot_seats'] = array('Sitzplätze', 'Sitzplätze verwalten.');
 $GLOBALS['TL_LANG']['MOD']['tilastot_season_ticket'] = array('Dauerkarten Bestellungen', 'Dauerkarten Bestellungen verwalten.');
 

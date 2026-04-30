@@ -118,29 +118,6 @@ class LoadFormFieldListener
                     return array('value' => $camp['name'], 'label' => $text);
                 }, $campsArray);
             }
-        } else if (is_array($widget->options) && $widget->options[0]['value'] == 'bustours') {
-            $bustours = BusTours::findAll(array(
-                'order'   => ' tourdate ASC',
-                'column'  => array('published=?', 'tourdate>?'),
-                'value'   => array(1, time())
-            ));
-            if (!$bustours) {
-                $widget->options = array('value' => 'no-tour-found', 'label' => "Keine Bus Touren geplant.");
-            } else {
-                $bustoursArray = $bustours->fetchAll();
-                $widget->options = array_map(function ($tour) {
-                    $timezone = new \DateTimeZone('Europe/Berlin');
-                    $timestamp = $tour['tourdate'];
-                    $date = new \DateTime("@$timestamp");
-                    $date->setTimezone($timezone);
-                    $formattedDate = $date->format('d.m.Y');
-                    $text = $formattedDate . ' - ' . $tour['hometeam'] . ' - ' . $tour['price'] . '€';
-                    if ($tour['full']) {
-                        $text .= ' - ausgebucht (Warteliste)';
-                    }
-                    return array('value' => $tour[$tour['tourdate'] . ' - ' . $tour['hometeam']], 'label' => $text);
-                }, $bustoursArray);
-            }
         }
         return $widget;
     }

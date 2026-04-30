@@ -38,12 +38,6 @@ services:
         category: tilastot
         template: mod_camps
         type: camps
-  App\Controller\FrontendModule\BusToursModule:
-    tags:
-      - name: contao.frontend_module
-        category: tilastot
-        template: mod_bustours
-        type: bustours
   App\Controller\FrontendModule\AuctionModule:
     tags:
       - name: contao.frontend_module
