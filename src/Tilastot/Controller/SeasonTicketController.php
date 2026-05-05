@@ -88,6 +88,7 @@ class SeasonTicketController
     $data['order_number'] = $randomNumber;
     $seasonTicket->order_number = $randomNumber;
     $seasonTicket->tstamp = time();
+    $seasonTicket->order_date = time();
 
     $email = new TemplatedEmail();
     $email->subject('Steelers Dauerkarte - Bestellung ' . $randomNumber);

@@ -80,7 +80,6 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         ),
         'tstamp' => array(
             'sql' => "int(10) unsigned NOT NULL default '0'",
-            'sorting' => true,
         ),
         'ticket_type' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['ticket_type'],
@@ -137,6 +136,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['customer_name'],
             'inputType' => 'text',
             'sorting' => true,
+            'search' => true,
+            'filter' => true,
             'sql' => "varchar(64) NOT NULL default ''"
         ),
         'customer_street' => array(
@@ -162,6 +163,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
         'customer_email' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['customer_email'],
             'inputType' => 'text',
+            'search' => true,
+            'filter' => true,
             'sql' => "varchar(128) NOT NULL default ''"
         ),
         'customer_birthday' => array(
@@ -215,15 +218,21 @@ $GLOBALS['TL_DCA']['tl_tilastot_season_ticket'] = array(
             'sorting' => true,
             'sql' => "int(11) NOT NULL default '0'"
         ),
+        'order_date' => array(
+            'sql' => "int(10) unsigned NOT NULL default '0'",
+            'sorting' => true,
+        ),
         'paid' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['paid'],
             'inputType' => 'checkbox',
+            'filter' => true,
             'eval' => array('tl_class' => 'w50'),
             'sql' => "char(1) NOT NULL default '0'"
         ),
         'pay_date' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_season_ticket']['pay_date'],
             'inputType' => 'text',
+            'default' => time(),
             'eval' => array('datepicker' => true, 'rgxp' => 'date', 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql' => "int(25) NULL default '0'"
         ),

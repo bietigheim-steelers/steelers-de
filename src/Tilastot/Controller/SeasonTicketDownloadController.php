@@ -91,7 +91,7 @@ class SeasonTicketDownloadController {
           );
           $sheet->setCellValue('M' . $row, $ticket->customer_last_season);
 
-          $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($ticket->tstamp);
+          $excelDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($ticket->order_date);
           $sheet->setCellValue('N' . $row, $excelDateValue);
           $sheet->getStyle('N' . $row)->getNumberFormat()->setFormatCode(
             \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME
