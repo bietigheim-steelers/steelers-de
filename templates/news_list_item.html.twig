@@ -30,7 +30,7 @@
       <a href="{{ link }}" class="mt-1 text-xl text-steelgreen uppercase font-bold leading-6">
         {{ newsHeadline }}
       </a>
-      <p class="mt-5 text-sm text-black">{{ teaser|truncate_text(120)|striptags }}</p>
+      <p class="mt-5 text-sm text-black">{{ teaser|truncate_text(120) }}</p>
       <div class="mt-5 flex-1 flex flex-col justify-end">
         <time class="text-sm text-steelgreen" datetime="{{ datetime }}">{{ date }}</time>
       </div>

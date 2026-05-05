@@ -51,8 +51,10 @@ class AppExtension extends AbstractExtension
 
   public function truncateText(string $value, int $targetLength): string
   {
-    if (strlen($value) > $targetLength) {
-      $parts = preg_split('/([\s\n\r]+)/', $value, -1, PREG_SPLIT_DELIM_CAPTURE);
+    $strippedValue = strip_tags($value);
+
+    if (strlen($strippedValue) > $targetLength) {
+      $parts = preg_split('/([\s\n\r]+)/', $strippedValue, -1, PREG_SPLIT_DELIM_CAPTURE);
       $parts_count = count($parts);
 
       $length = 0;
@@ -66,7 +68,7 @@ class AppExtension extends AbstractExtension
 
       return trim(implode(array_slice($parts, 0, $last_part))) . "…";
     }
-    return $value;
+    return $strippedValue;
   }
 
   public function getGameDetails(int $gameId): Object|null
