@@ -40,10 +40,9 @@ class ContentElementMigration extends AbstractMigration
     'ce_downloads' => 'content_element/downloads',
     'ce_list_business' => 'content_element/list/business',
     'ce_list_cards' => 'content_element/list/cards',
-
-
-    //'ce_template_error' => 'content_element/',
-    //'ce_template_form_error' => 'content_element/',
+    'ce_template_error' => 'content_element/template/error',
+    'ce_template_form_error' => 'content_element/template/form_error',
+    'ce_template_camp' => 'content_element/template/camp',
   ];
   private const MODULE_MAPPING = [
     'mod_partners' => 'frontend_module/partners_module/card',
