@@ -38,10 +38,36 @@ final class AppExtensionTest extends TestCase
     {
         $extension = new AppExtension(new RequestStack());
 
-        $value = "First line <strong>Steelers & Co.</strong>\nSecond line with \"quotes\" and 100% effort\nThird line";
+        $value = <<<'HTML'
+Die neue DEL2-Saison 2025/2026 steht in den Startl🔥chern und sie wird hoffentlich etwas ganz Besonderes werden. Insgesamt 26 Hauptrundenspiele warten auf Euch und bei 7 Heimspielen setzen wir ein echtes Highlight: Unsere Mottospieltage!
+&nbsp;
+
+
+Warum? Weil wir zeigen wollen, dass die Steelers weit mehr sind als „nur“ 60 Minuten der schnellsten Mannschaftssportart der Welt. Und genau deshalb gibt es wieder exklusive Aktionen und starke Ticketing-Deals, perfekt für Gruppen, Vereine und alle die Lust haben unsere Steelers-Familie kennenzulernen.
+&nbsp;
+
+
+Freut euch auf traditionelle Klassiker wie den Tag der Firmen und den Tag der Vereine oder auf den PORSCHE KIDS-DAY, bei dem die Kinderaugen heller strahlen als das Flutlicht in der EgeTrans Arena.
+&nbsp;
+
+
+Und wir setzen noch einen drauf:
+- Blaulicht-Tag: Ein Dankeschön an alle Heldinnen und Helden, die täglich für uns da sind.
+- Student-Day: Weil Eishockey die coolste Pause vom Lernen ist.
+- Ladies-Night: Unser beliebtes Highlight zum Saisonende: Glamour, Action und Gänsehaut garantiert!
+&nbsp;
+
+
+Das ist Eure Chance, die Steelers live zu erleben. Bringt Eure Freunde, Familie oder Kollegen mit und begeistert sie von Eurer Leidenschaft.
+&nbsp;
+
+
+Einen Überblick über unsere besonderen Spieltage findet ihr hier: https://steelers.de/tickets/mottospieltage
+
+HTML;
         $result = $extension->truncateText($value, 65);
 
-        self::assertSame("First line Steelers & Co.\nSecond line with \"quotes\" and 100%…", $result);
+        self::assertSame("Die neue DEL2-Saison 2025/2026 steht in den Startl🔥chern und sie…", $result);
     }
 
     public function testTruncateTextWithExactProvidedHtmlSnippet(): void
