@@ -1,0 +1,32 @@
+{% extends '@Contao/content_element/list.html.twig' %}
+
+{% block attributes %}
+    {{- attrs(attributes|default)
+        .addClass(['defaultcontainer', 'gridwrapper', '!px-2', 'md:px-0', 'block'])
+        .setIfExists('style', data.style|default(null))
+    -}}
+{% endblock %}
+
+{% block inner %}
+    {% if headline.text %}
+        <h3 title="{{ headline.text }}">{{ headline.text }}</h3>
+    {% endif %}
+
+    {{ block('content') }}
+{% endblock %}
+
+{% block content %}
+    {% set list = list|default(_context) %}
+    {% set number_of_items = list.items|length %}
+
+    <div class="inside grid grid-cols-12 justify-center gap-8 md:gap-16">
+        {% for item in list.items %}
+            {% set item_classes = loop.last and number_of_items is odd ? 'col-span-12 md:col-span-6 md:col-start-4 ' : 'col-span-12 md:col-span-6' %}
+            <div class="mt-6 flex flex-col place-content-center border-double border-steelgreen {{ item_classes }}" style="border-width: 30px;">
+                <h5 class="uppercase flex-grow text-3xl xl:text-4xl w-full m-0 block text-center font-headline font-bold leading-tight bg-steelgreen p-5 text-white">
+                    {{ item|sanitize_html('contao')|insert_tag_raw }}
+                </h5>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

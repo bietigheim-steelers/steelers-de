@@ -1,0 +1,9 @@
+{% extends '@Contao/content_element/list.html.twig' %}
+
+{% block list %}
+    <{{ tag_name }}>
+        {% for item in list.items %}
+            {{ item|sanitize_html('contao')|insert_tag_raw }},
+        {% endfor %}
+    </{{ tag_name }}>
+{% endblock %}
