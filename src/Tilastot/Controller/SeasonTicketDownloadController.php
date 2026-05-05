@@ -102,7 +102,7 @@ class SeasonTicketDownloadController {
           $sheet->setCellValue('Q' . $row, $ticket->eventim_account);
           $sheet->setCellValue('R' . $row, $ticket->paid ? 'Ja' : 'Nein');
           if ($ticket->paid) {
-            $paidDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($ticket->paid_date);
+            $paidDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($ticket->pay_date);
             $sheet->setCellValue('S' . $row, $paidDateValue);
             $sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode(
               \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME
