@@ -64,7 +64,7 @@ class AppExtension extends AbstractExtension
         }
       }
 
-      return trim(implode(array_slice($parts, 0, $last_part)));
+      return trim(implode(array_slice($parts, 0, $last_part))) . "…";
     }
     return $value;
   }
