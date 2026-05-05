@@ -102,11 +102,10 @@ class SeasonTicketDownloadController {
           $sheet->setCellValue('Q' . $row, $ticket->eventim_account);
           $sheet->setCellValue('R' . $row, $ticket->paid ? 'Ja' : 'Nein');
           if ($ticket->paid) {
-            $paidDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($ticket->pay_date);
+            $localDate = date('Y-m-d', $ticket->pay_date); // "2026-05-05" in lokaler Zeitzone
+            $paidDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel(strtotime($localDate . ' UTC'));
             $sheet->setCellValue('S' . $row, $paidDateValue);
-            $sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode(
-              \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME
-            );
+            $sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode('DD.MM.YYYY');
           } else {
             $sheet->setCellValue('S' . $row, '');
           }
