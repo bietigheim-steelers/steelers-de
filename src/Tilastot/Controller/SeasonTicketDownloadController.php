@@ -49,9 +49,11 @@ class SeasonTicketDownloadController {
     $sheet->setCellValue('O1', 'Bestellnummer');
     $sheet->setCellValue('P1', 'Eventim Email');
     $sheet->setCellValue('Q1', 'Eventim Kundennummer');
+    $sheet->setCellValue('R1', 'Bezahlt');
+    $sheet->setCellValue('S1', 'Bezahlt am');
     
     // Style header row
-    $sheet->getStyle('A1:Q1')->getFont()->setBold(true);
+    $sheet->getStyle('A1:S1')->getFont()->setBold(true);
     
     // Fetch all season tickets from database
     $seasonTickets = SeasonTicket::findAll();
@@ -98,6 +100,16 @@ class SeasonTicketDownloadController {
           $sheet->setCellValue('O' . $row, $ticket->order_number);
           $sheet->setCellValue('P' . $row, $ticket->eventim_email);
           $sheet->setCellValue('Q' . $row, $ticket->eventim_account);
+          $sheet->setCellValue('R' . $row, $ticket->paid ? 'Ja' : 'Nein');
+          if ($ticket->paid) {
+            $paidDateValue = \PhpOffice\PhpSpreadsheet\Shared\Date::PHPToExcel($ticket->paid_date);
+            $sheet->setCellValue('S' . $row, $paidDateValue);
+            $sheet->getStyle('S' . $row)->getNumberFormat()->setFormatCode(
+              \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_DATE_DATETIME
+            );
+          } else {
+            $sheet->setCellValue('S' . $row, '');
+          }
 
           $row++;
         }
@@ -105,7 +117,7 @@ class SeasonTicketDownloadController {
     }
     
     // Auto-size columns
-    foreach (range('A', 'Q') as $column) {
+    foreach (range('A', 'S') as $column) {
       $sheet->getColumnDimension($column)->setAutoSize(true);
     }
     
