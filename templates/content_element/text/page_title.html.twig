@@ -7,11 +7,12 @@
 %}
 
 {% add to head %}
-  <meta property="og:image" content="{{ image.image.img.src|add_domain }}"/>
-  <meta property="og:image:width" content="{{ image.image.img.width }}"/>
-  <meta property="og:image:height" content="{{ image.image.img.height }}"/>
+  {% if data.addImage and image %}
+    <meta property="og:image" content="{{ image.image.img.src|add_domain }}"/>
+    <meta property="og:image:width" content="{{ image.image.img.width }}"/>
+    <meta property="og:image:height" content="{{ image.image.img.height }}"/>
+  {% endif %}
 {% endadd %}
-
 
 <div>
   <div class="max-w-screen-2xl mx-auto relative pt-4 md:py-4 sm:my-16 md:my-24 xl:my-36 z-40">
@@ -30,7 +31,7 @@
       </p>
     </div>
     <div class="overflow-hidden xl:mx-2">
-      {% if image %}
+      {% if data.addImage and image %}
         {% with {figure: image} %}{{ block('picture_component') }}{% endwith %}
       {% else %}
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" width="768" height="768" class="hidden md:block aspect-square">
