@@ -118,7 +118,6 @@ class AppExtension extends AbstractExtension
       curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
       curl_exec($ch);
-      curl_close($ch);
       fclose($fp);
     }
 

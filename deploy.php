@@ -15,6 +15,7 @@ set('shared_dirs', [
   'system/config',
   'var/backups',
   'var/logs',
+  'var/tmp',
 ]);
 
 desc('Upload project files');
