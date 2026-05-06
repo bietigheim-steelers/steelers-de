@@ -51,7 +51,7 @@ html {
 }
 
 .btn-default {
-  @apply bg-steelgreen text-white py-2 px-4 relative transition-all scale-100 inline-block uppercase shadow-none;
+  @apply bg-steelgreen text-white py-2 px-4 relative transition-all scale-100 inline-block uppercase shadow-none nowrap;
   letter-spacing: 0.1rem;
 }
 
