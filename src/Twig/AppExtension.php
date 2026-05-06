@@ -36,17 +36,21 @@ class AppExtension extends AbstractExtension
   // The first argument ($value) is the string, the filter is applied on
   public function pageTitle(string $value, int $articleId): string
   {
+    $article = ArticleModel::findByPk($articleId);
+    $parentPage = PageModel::findByPk($article->pid);
+    $title = $parentPage->alias;
 
-    if ($articleId) {
-      $article = ArticleModel::findByPk($articleId);
-      $parentPage = PageModel::findByPk($article->pid);
+    if (!$title) {
       $parentParentPage = PageModel::findByPk($parentPage->pid);
       if ($parentParentPage && $parentParentPage->alias) {
-        return $parentParentPage->alias;
+        $title = $parentParentPage->alias;
       }
     }
+    if(!$title) {
+      $title = $value;
+    }
 
-    return $value;
+    return $title;
   }
 
   public function truncateText(string $value, int $targetLength): string
