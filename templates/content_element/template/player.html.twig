@@ -61,8 +61,8 @@
         </div>
       </div>
 
-      {% if addImage is defined and addImage and singleSRC is defined and singleSRC %}
-        {% set image = figure(singleSRC, player_image_size, {metadata: { alt: (keys.firstname is defined ? keys.firstname : '') ~ ' ' ~ (keys.lastname is defined ? keys.lastname : '') }}) %}
+      {% if data.addImage is defined and data.addImage and data.singleSRC is defined and data.singleSRC %}
+        {% set image = figure(data.singleSRC, player_image_size, {metadata: { alt: (keys.firstname is defined ? keys.firstname : '') ~ ' ' ~ (keys.lastname is defined ? keys.lastname : '') }}) %}
         {% with {figure: image} %}
           <div class="w-full h-full object-center object-cover">
             {{ block('figure_component') }}

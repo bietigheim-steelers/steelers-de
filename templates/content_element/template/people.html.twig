@@ -7,10 +7,9 @@
     densities: '1x, 2x'
 }) %}
 
-
 <div class="border-t-4 border-gray-800 pt-6 mt-6 flex gap-3">
-  {% if addImage is defined and addImage and singleSRC is defined and singleSRC %}
-    {% set image = figure(singleSRC, people_image_size, {
+  {% if data.addImage is defined and data.addImage and data.singleSRC is defined and data.singleSRC %}
+    {% set image = figure(data.singleSRC, people_image_size, {
       metadata: { alt: (keys.name is defined ? keys.name : '') },
       options: { attr: { class: 'object-cover object-center w-40 aspect-square' } }
     }) %}
