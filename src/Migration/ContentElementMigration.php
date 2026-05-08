@@ -55,18 +55,14 @@ class ContentElementMigration extends AbstractMigration
     'mod_roster_partner' => 'frontend_module/roster_module/partner',
     'mod_schedule_home' => 'frontend_module/schedule_module/home',
     'mod_partners_frontpage' => 'frontend_module/partners_module/frontpage',
+  ];
 
-    //'mod_customnav_preheader' => 'frontend_module/',
-    //'mod_login_training' => 'frontend_module/',
-    //'mod_navigation_default' => 'frontend_module/',
-    //'mod_navigation_microsite' => 'frontend_module/',
-    //'mod_navigation_mobile' => 'frontend_module/',
-    //'mod_newsarchive_list' => 'frontend_module/',
-    //'mod_newsarchive_list_videoportal' => 'frontend_module/',
-    //'mod_newslist_home_scroller' => 'frontend_module/',
-    //'mod_newslist_home_scroller_blue' => 'frontend_module/',
-    //'mod_newslist_videoportal' => 'frontend_module/',
-    //'mod_newsreader_detail' => 'frontend_module/',
+  private const MODULE_TYPE_MAPPING = [
+    'nextgame' => 'next_game_module',
+    'partners' => 'partners_module',
+    'roster' => 'roster_module',
+    'schedule' => 'schedule_module',
+    'standings' => 'standings_module',
   ];
 
   private const FORM_MAPPING = [
@@ -106,6 +102,7 @@ class ContentElementMigration extends AbstractMigration
     return $this->hasLegacyData('tl_content', 'customTpl', self::CONTENT_MAPPING)
       || $this->hasLegacyData('tl_content', 'type', self::CONTENT_ELEMENT_MAPPING)
       || $this->hasLegacyData('tl_module', 'customTpl', self::MODULE_MAPPING)
+      || $this->hasLegacyData('tl_module', 'type', self::MODULE_TYPE_MAPPING)
       || $this->hasLegacyData('tl_form', 'customTpl', self::FORM_MAPPING)
       || $this->hasLegacyData('tl_form_field', 'customTpl', self::FORM_FIELD_MAPPING);
   }
@@ -150,6 +147,13 @@ class ContentElementMigration extends AbstractMigration
         'tl_module',
         ['customTpl' => $newTemplate],
         ['customTpl' => $legacyTemplate]
+      );
+    }
+    foreach (self::MODULE_TYPE_MAPPING as $legacyType => $newType) {
+      $updatedRows += $this->connection->update(
+        'tl_module',
+        ['type' => $newType],
+        ['type' => $legacyType]
       );
     }
     foreach (self::FORM_MAPPING as $legacyTemplate => $newTemplate) {
