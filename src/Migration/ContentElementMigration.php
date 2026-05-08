@@ -45,7 +45,7 @@ class ContentElementMigration extends AbstractMigration
     'ce_template_camp' => 'content_element/template/camp',
   ];
   private const MODULE_MAPPING = [
-    'mod_partners' => 'frontend_module/partners_module/card',
+    'mod_partners' => 'frontend_module/partners_module',
     'mod_partners_blocktext' => 'frontend_module/partners_module/blocktext',
     'mod_standings_home' => 'frontend_module/standings_module/home',
     'mod_standings' => 'frontend_module/standings_module/default',
