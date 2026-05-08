@@ -19,7 +19,7 @@ class LoadFormFieldListener
 {
     public function __invoke(Widget $widget, string $formId, array $formData, Form $form): Widget
     {
-        if (is_array($widget->options) && $widget->options[0]['value'] == 'gamedays_group') {
+        if (get_class($widget) === 'Contao\FormSelect' && $widget->options[0]['value'] == 'gamedays_group') {
 
             $column = array('gamedate >= ? AND hometeam = ? AND id != ? AND optional != ?');
             $displayTeam = 'awayteam';
@@ -31,7 +31,7 @@ class LoadFormFieldListener
             ));
 
             if (!$games) {
-                $widget->options = array('value' => 'no-game-found', 'label' => "Kein Spiel gefunden.");
+                $widget->options = array(array('value' => 'no-game-found', 'label' => "Kein Spiel gefunden."));
             } else {
                 $gameArray = $games->fetchAll();
                 $options = array_map(function ($game) use ($displayTeam, $widget) {
@@ -51,8 +51,7 @@ class LoadFormFieldListener
                 array_unshift($options, array('value' => '', 'label' => 'Bitte Spiel wählen...'));
                 $widget->options = $options;
             }
-        } else if (is_array($widget->options) && ($widget->options[0]['value'] == 'gamedays' || $widget->options[0]['value'] == 'gamedays_away')) {
-
+        } else if (get_class($widget) === 'Contao\FormSelect' && ($widget->options[0]['value'] == 'gamedays' || $widget->options[0]['value'] == 'gamedays_away')) {
             $column = array('gamedate >= ? AND hometeam = ? AND id != ? AND optional != ?');
             $displayTeam = 'awayteam';
 
@@ -66,7 +65,7 @@ class LoadFormFieldListener
                 'value'   => array(time() + (10 * 60 * 60), 36, 2668692721, true)
             ));
             if (!$games) {
-                $widget->options = array('value' => 'no-game-found', 'label' => "Kein Spiel gefunden.");
+                $widget->options = array(array('value' => 'no-game-found', 'label' => "Kein Spiel gefunden."));
             } else {
                 $gameArray = $games->fetchAll();
                 $widget->options = array_map(function ($game) use ($displayTeam) {
@@ -76,21 +75,21 @@ class LoadFormFieldListener
                     return array('value' => $text, 'label' => $text);
                 }, $gameArray);
             }
-        } else if (is_array($widget->options) && $widget->options[0]['value'] == 'spielerliste') {
+        } else if (get_class($widget) === 'Contao\FormSelect' && $widget->options[0]['value'] == 'spielerliste') {
             $spieler = Players::findAll(array(
                 'order'   => ' jersey ASC',
                 'column'  => array('published=? AND position != ?'),
                 'value'   => array(1, 'Staff')
             ));
             if (!$spieler) {
-                $widget->options = array('value' => 'no-player-found', 'label' => "Keine Spieler gefunden.");
+                $widget->options = array(array('value' => 'no-player-found', 'label' => "Keine Spieler gefunden."));
             } else {
                 $spielerArray = $spieler->fetchAll();
                 $widget->options = array_map(function ($s) {
                     return array('value' => $s['alias'], 'label' => '#' . $s['jersey'] . ' - ' . $s['lastname'] . ', ' . $s['firstname']);
                 }, $spielerArray);
             }
-        } else if (is_array($widget->options) && $widget->options[0]['value'] == 'porschecamps') {
+        } else if (get_class($widget) === 'Contao\FormSelect' && $widget->options[0]['value'] == 'porschecamps') {
             $column = array('gamedate >= ? AND hometeam = ?');
             $camps = Camps::findAll(array(
                 'order'   => ' startdate ASC',
@@ -98,7 +97,7 @@ class LoadFormFieldListener
                 'value'   => array(1, time())
             ));
             if (!$camps) {
-                $widget->options = array('value' => 'no-camp-found', 'label' => "Kein Camps geplant.");
+                $widget->options = array(array('value' => 'no-camp-found', 'label' => "Kein Camps geplant."));
             } else {
                 $campsArray = $camps->fetchAll();
                 $widget->options = array_map(function ($camp) {
