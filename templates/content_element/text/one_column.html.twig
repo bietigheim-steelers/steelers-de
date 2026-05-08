@@ -1,16 +1,18 @@
 {% use "@Contao/component/_picture.html.twig" %}
 {% use "@Contao/component/_rich_text.html.twig" %}
 
-{% set image = figure(
-  data.singleSRC,
-  [800, 800, 'crop'],
-  { metadata: { alt: headline.text}, enableLightbox: true, linkHref: data.singleSRC })
-%}
+{% if data.addImage %}
+  {% set image = figure(
+    data.singleSRC,
+    [800, 800, 'crop'],
+    { metadata: { alt: headline.text}, enableLightbox: true, linkHref: data.singleSRC })
+  %}
+{% endif %}
 
-<div class="{{ classes }} defaultcontainer !px-0 !my-6">
+<div class="defaultcontainer !px-0 !my-6 {{ class|default }}">
   <div class="grid md:p-0 items-start gap-8">
     <div class="overflow-hidden border-t-4 border-gray-800">
-      {% if image %}
+      {% if data.addImage %}
         {% with {figure: image} %}
           {{ block('picture_component') }}
         {% endwith %}
