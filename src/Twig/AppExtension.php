@@ -34,19 +34,42 @@ class AppExtension extends AbstractExtension
   }
 
   // The first argument ($value) is the string, the filter is applied on
+  // Replicates the legacy insert-tag logic of ce_text_page_title.html5:
+  //   {{article_title::{{page::alias}}}}        -> article whose alias matches the current page alias
+  //   {{article_title::{{page::parentAlias}}}}  -> article whose alias matches the parent page alias
+  //   fallback                                  -> $value (titleText)
   public function pageTitle(string $value, int $articleId): string
   {
     $article = ArticleModel::findByPk($articleId);
-    $parentPage = PageModel::findByPk($article->pid);
-    $title = $parentPage->alias;
 
-    if (!$title) {
-      $parentParentPage = PageModel::findByPk($parentPage->pid);
-      if ($parentParentPage && $parentParentPage->alias) {
-        $title = $parentParentPage->alias;
+    if (!$article) {
+      return $value;
+    }
+
+    $page = PageModel::findByPk($article->pid);
+    $title = '';
+
+    // 1. Article whose alias matches the current page's alias
+    if ($page && $page->alias) {
+      $aliasArticle = ArticleModel::findByIdOrAlias($page->alias);
+      if ($aliasArticle) {
+        $title = $aliasArticle->title;
       }
     }
-    if(!$title) {
+
+    // 2. Fallback: article whose alias matches the parent page's alias
+    if (!$title && $page) {
+      $parentPage = PageModel::findByPk($page->pid);
+      if ($parentPage && $parentPage->alias) {
+        $aliasArticle = ArticleModel::findByIdOrAlias($parentPage->alias);
+        if ($aliasArticle) {
+          $title = $aliasArticle->title;
+        }
+      }
+    }
+
+    // 3. Final fallback: the content element's titleText
+    if (!$title) {
       $title = $value;
     }
 
