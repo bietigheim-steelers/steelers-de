@@ -1,5 +1,10 @@
 {% extends "@Contao/content_element/text.html.twig" %}
+
 {% set attributes = attrs().addClass('defaultcontainer mb-8 max-lg:!my-12').mergeWith(attributes|default) %}
+
+{% block headline_attributes %}
+    {{- attrs(headline.attributes|default).addClass('text-4xl md:text-5xl') -}}
+{% endblock %}
 
 {% block text %}
 <div class="!my-12 max-w-5xl mx-auto prose">
