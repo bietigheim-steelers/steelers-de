@@ -29,6 +29,7 @@ class AppExtension extends AbstractExtension
       new TwigFilter('add_root', [$this, 'addRoot']),
       new TwigFilter('get_url_params', [$this, 'getUrlParams']),
       new TwigFilter('decode_entities', [$this, 'decodeEntities']),
+      new TwigFilter('parse_int', [$this, 'parseInt']),
 
     ];
   }
@@ -178,5 +179,9 @@ class AppExtension extends AbstractExtension
     }
 
     return $decoded;
+  }
+  public function parseInt(string $value): int
+  {
+    return (int)$value;
   }
 }
