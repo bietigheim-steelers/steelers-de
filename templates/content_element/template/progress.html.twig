@@ -1,5 +1,5 @@
-{% set headlineNumber = keys.aktuell|format_number %}
-{% set targetNumber = keys.zielwert|format_number %}
+{% set headlineNumber = keys.aktuell|format_number({max_fraction_digit:0}, locale: 'en') %}
+{% set targetNumber = keys.zielwert|format_number({max_fraction_digit:0}, locale: 'en') %}
 <div class="defaultcontainer">
   <h3 class="mb-10">{{ headline.text }}</h3>
   <div id="zamboni">
