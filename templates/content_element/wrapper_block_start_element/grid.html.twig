@@ -1,4 +1,8 @@
-<div class="defaultcontainer gridwrapper !px-2 md:px-0 block">
+<div{{attrs()
+  .addClass('defaultcontainer gridwrapper !px-2 md:px-0 block')
+  .setIfExists('id',cssID|default)
+}}>
+
   <div>
     {% if headline is defined and headline.unit is defined and headline.value is defined %}
       <h3 title="{{ headline.value }}">
