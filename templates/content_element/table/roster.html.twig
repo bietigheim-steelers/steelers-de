@@ -40,13 +40,14 @@
 	{% for row in rows %}
 		<tr class="even:bg-gray-50/20">
 			{% for cell in row %}
+				{% set cell_content %}{{- block('table_cell_content') -}}{% endset %}
 				{% if loop.first and use_row_headers %}
 					<th scope="row" class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-gray-900 sm:pl-3">
-						{{- block('table_cell_content') -}}
+						{{- cell_content|striptags|trim == '' ? '&nbsp;'|raw : cell_content -}}
 					</th>
 				{% else %}
 					<td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm {{ (header[loop.index0] is defined and header[loop.index0]|striptags == 'Name') ? 'font-bold' : 'font-medium' }} text-gray-900 sm:pl-3">
-						{{- block('table_cell_content') -}}
+						{{- cell_content|striptags|trim == '' ? '&nbsp;'|raw : cell_content -}}
 					</td>
 				{% endif %}
 			{% endfor %}
