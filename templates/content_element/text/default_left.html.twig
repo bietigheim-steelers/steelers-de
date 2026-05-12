@@ -3,7 +3,7 @@
 
 {% set image = figure(
   data.singleSRC,
-  [800, 800, 'crop'],
+  [800, 800, 'box'],
   { metadata: { alt: headline.text}, enableLightbox: true, linkHref: data.singleSRC })
 %}
 
