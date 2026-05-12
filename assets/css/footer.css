@@ -22,7 +22,7 @@
   @apply block my-4;
 }
 
-#footer .top .content_image figure {
+#footer .top .content-image figure {
   @apply w-32;
   margin: 1rem auto;
 }
