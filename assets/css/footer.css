@@ -46,6 +46,6 @@
   }
 }
 
-#footer .ce_hyperlink {
+#footer .content-hyperlink {
   @apply px-2 fill-white invert;
 }

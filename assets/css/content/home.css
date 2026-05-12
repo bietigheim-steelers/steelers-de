@@ -58,13 +58,13 @@
   @apply flex flex-wrap place-content-center gap-8 my-36;
 }
 
-.home-partner .ce_hyperlink {
+.home-partner .content-hyperlink {
   @apply flex items-center justify-center grayscale mix-blend-multiply opacity-75;
 }
-.home-partner .ce_hyperlink img {
+.home-partner .content-hyperlink img {
   @apply w-36;
 }
-.home-partner .ce_hyperlink:hover {
+.home-partner .content-hyperlink:hover {
   @apply grayscale-0 opacity-100;
 }
 

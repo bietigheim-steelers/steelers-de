@@ -4,10 +4,10 @@
 .partner-cards .inside {
   @apply mt-8;
 }
-.partner-cards .ce_hyperlink:not(.nohover) {
+.partner-cards .content-hyperlink:not(.nohover) {
   @apply bg-white flex items-center p-5 transition-all duration-500;
 }
-.partner-cards .ce_hyperlink:not(.nohover):hover {
+.partner-cards .content-hyperlink:not(.nohover):hover {
   @apply scale-110 shadow-lg;
 }
 
