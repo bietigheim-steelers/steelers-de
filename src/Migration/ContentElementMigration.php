@@ -78,6 +78,8 @@ class ContentElementMigration extends AbstractMigration
   private const CONTENT_ELEMENT_MAPPING = [
     'wrapperStart' => 'wrapper_block_start_element',
     'wrapperStop' => 'wrapper_block_end_element',
+    'rowStart' => 'wrapper_block_start_element',
+    'rowEnd' => 'wrapper_block_end_element',
     //'form_wrapper_season_tickets' => '',
     //'form_wrapper_vip' => '',
   ];
