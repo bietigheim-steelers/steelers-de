@@ -5,7 +5,7 @@
   @apply mt-8;
 }
 .partner-cards .ce_hyperlink:not(.nohover) {
-  @apply bg-white flex items-center p-5 transition-all duration-500;
+  @apply bg-white flex items-center p-5 transition-all duration-500 aspect-square;
 }
 .partner-cards .ce_hyperlink:not(.nohover):hover {
   @apply scale-110 shadow-lg;
