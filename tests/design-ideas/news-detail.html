@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="de" data-menu-open="false">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Steelers Design Test - News Detail</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-steelgreen: #046a38;
+      --color-steelpogreen: #00994c;
+      --color-steelblue: #009cde;
+      --color-steelwhite: #eef0eb;
+    }
+
+    @layer base {
+      body {
+        font-family: 'Steelers Body', 'Segoe UI', sans-serif;
+      }
+    }
+
+    @layer components {
+      .split-shell {
+        @apply relative min-h-screen md:grid md:h-screen md:grid-cols-[minmax(320px,42vw)_1fr] md:overflow-hidden;
+      }
+
+      .hero-pane {
+        @apply relative h-72 overflow-hidden sm:h-80 md:h-screen;
+        background-image: url('./assets/20260125_161__SCB9887.jpg');
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: multiply;
+        background-color: #046a38;
+      }
+
+      .content-pane {
+        @apply bg-steelwhite px-6 py-8 sm:px-10 md:h-screen md:overflow-y-auto md:px-14 md:py-12 relative;
+        border-left: none;
+      }
+
+      .content-pane::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 16px;
+        background: repeating-linear-gradient(
+          45deg,
+          #046a38 0px,
+          #046a38 4px,
+          transparent 4px,
+          transparent 8px,
+          #046a38 8px,
+          #046a38 10px,
+          transparent 10px,
+          transparent 16px
+        );
+        background-size: 100% 100%;
+        box-shadow: 0 2px 4px rgba(4, 106, 56, 0.2);
+        z-index: 10;
+      }
+
+      @media (min-width: 768px) {
+        .content-pane::before {
+          position: fixed;
+          left: 42vw;
+          top: 0;
+          width: 16px;
+          height: 100vh;
+          bottom: auto;
+          background: repeating-linear-gradient(
+            45deg,
+            #046a38 0px,
+            #046a38 4px,
+            transparent 4px,
+            transparent 8px,
+            #046a38 8px,
+            #046a38 10px,
+            transparent 10px,
+            transparent 16px
+          );
+          box-shadow: 2px 0 4px rgba(4, 106, 56, 0.2);
+        }
+      }
+
+      .nav-link {
+        @apply inline-block text-2xl font-medium tracking-wide text-white transition hover:text-steelblue;
+      }
+    }
+  </style>
+  <style>
+    @font-face {
+      font-family: 'Steelers Body';
+      src: url('../../files/steelers/fonts/ABCWhyte-Regular.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Steelers Headline';
+      src: url('../../files/steelers/fonts/PPRightGrotesk-CompactBlack.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    .headline-font {
+      font-family: 'Steelers Headline', 'Arial Narrow', sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    .submenu-panel {
+      position: absolute;
+      top: 50%;
+      left: calc(100% + 1rem);
+      min-width: 210px;
+      border-left: 1px solid rgba(255, 255, 255, 0.4);
+      padding-left: 1rem;
+      background: linear-gradient(90deg, rgba(4, 106, 56, 0.08) 0%, rgba(4, 106, 56, 0.22) 100%);
+      transform: translateY(-50%) translateX(-10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .submenu-panel.is-open {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+      pointer-events: auto;
+    }
+
+    .diagonal-sep {
+      display: flex;
+      justify-content: center;
+      margin: 2.5rem 0;
+    }
+
+    .diagonal-sep::before {
+      content: '';
+      display: block;
+      width: 120px;
+      height: 12px;
+      background: repeating-linear-gradient(
+        45deg,
+        #046a38 0px,
+        #046a38 4px,
+        transparent 4px,
+        transparent 8px,
+        #046a38 8px,
+        #046a38 10px,
+        transparent 10px,
+        transparent 16px
+      );
+      box-shadow: 0 2px 4px rgba(4, 106, 56, 0.2);
+    }
+
+    html[data-menu-open='true'] .mobile-menu {
+      display: flex;
+    }
+  </style>
+</head>
+<body class="bg-steelwhite text-zinc-900">
+  <div class="split-shell">
+    <aside class="hero-pane">
+      <img src="../../files/steelers/layout/card-bg.png" alt="Arena" class="absolute inset-0 h-full w-full object-cover hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/45"></div>
+
+      <div class="relative z-10 flex h-full flex-col p-6 sm:p-8 md:p-10 md:items-center">
+        <div class="flex items-start justify-between">
+          <a href="./news-overview.html" class="inline-flex items-center gap-3">
+            <img src="../../files/steelers/layout/logo-nav.svg" alt="Steelers Logo" class="h-14 w-auto sm:h-16 md:h-20">
+          </a>
+          <button type="button" data-menu-toggle class="inline-flex h-11 w-11 items-center justify-center border border-white/60 bg-black/20 text-white md:hidden" aria-label="Navigation oeffnen">
+            <span class="text-2xl leading-none">&#9776;</span>
+          </button>
+        </div>
+
+        <nav class="mt-10 hidden md:flex md:flex-1 md:items-center">
+          <ul class="space-y-5 text-center">
+            <li><a class="nav-link" href="./news-overview.html">News</a></li>
+            <li><a class="nav-link" href="#">Tickets</a></li>
+            <li><a class="nav-link" href="https://steelers-shop.de/" target="_blank">Shop</a></li>
+            <li><a class="nav-link" href="#">Videoportal</a></li>
+            
+            <li class="relative">
+              <button type="button" data-submenu-toggle data-submenu-target="desktop-saison" class="nav-link flex w-full items-center justify-center gap-2" aria-expanded="false" aria-controls="desktop-saison">
+                Saison
+                <span class="text-sm">+</span>
+              </button>
+              <ul id="desktop-saison" class="submenu-panel text-left">
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Spielplan</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Ergebnisse</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Tabelle</a></li>
+              </ul>
+            </li>
+
+            <li class="relative">
+              <button type="button" data-submenu-toggle data-submenu-target="desktop-teams" class="nav-link flex w-full items-center justify-center gap-2" aria-expanded="false" aria-controls="desktop-teams">
+                Teams
+                <span class="text-sm">+</span>
+              </button>
+              <ul id="desktop-teams" class="submenu-panel text-left">
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">1. Mannschaft</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U20</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U17</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U15</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U13</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U11</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U9</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U7</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Amateure</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Damen</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Hobby</a></li>
+              </ul>
+            </li>
+
+            <li><a class="nav-link" href="#">Arena</a></li>
+
+            <li class="relative">
+              <button type="button" data-submenu-toggle data-submenu-target="desktop-fans" class="nav-link flex w-full items-center justify-center gap-2" aria-expanded="false" aria-controls="desktop-fans">
+                Fans
+                <span class="text-sm">+</span>
+              </button>
+              <ul id="desktop-fans" class="submenu-panel text-left">
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Fanbeauftragte</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Fan-Shop</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Community</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="mobile-menu absolute inset-0 z-30 hidden flex-col bg-black/45 p-6 backdrop-blur-sm md:hidden">
+        <div class="mb-6 flex items-center justify-between">
+          <img src="../../files/steelers/layout/logo-nav.svg" alt="Steelers Logo" class="h-14 w-auto">
+          <button type="button" data-menu-close class="inline-flex h-11 w-11 items-center justify-center border border-white/60 text-white" aria-label="Navigation schliessen">
+            <span class="text-3xl leading-none">&times;</span>
+          </button>
+        </div>
+        <ul class="space-y-4 text-white">
+          <li><a href="./news-overview.html" class="text-3xl font-medium">News</a></li>
+          <li><a href="#" class="text-3xl font-medium">Tickets</a></li>
+          <li><a href="https://steelers-shop.de/" target="_blank" class="text-3xl font-medium">Shop</a></li>
+          <li><a href="#" class="text-3xl font-medium">Videoportal</a></li>
+          
+          <li>
+            <details>
+              <summary class="cursor-pointer text-3xl font-medium">Saison</summary>
+              <ul class="mt-2 space-y-2 pl-4 text-xl text-white/90">
+                <li><a href="#">Spielplan</a></li>
+                <li><a href="#">Ergebnisse</a></li>
+                <li><a href="#">Tabelle</a></li>
+              </ul>
+            </details>
+          </li>
+
+          <li>
+            <details>
+              <summary class="cursor-pointer text-3xl font-medium">Teams</summary>
+              <ul class="mt-2 space-y-2 pl-4 text-xl text-white/90">
+                <li><a href="#">1. Mannschaft</a></li>
+                <li><a href="#">U20</a></li>
+                <li><a href="#">U17</a></li>
+                <li><a href="#">U15</a></li>
+                <li><a href="#">U13</a></li>
+                <li><a href="#">U11</a></li>
+                <li><a href="#">U9</a></li>
+                <li><a href="#">U7</a></li>
+                <li><a href="#">Amateure</a></li>
+                <li><a href="#">Damen</a></li>
+                <li><a href="#">Hobby</a></li>
+              </ul>
+            </details>
+          </li>
+
+          <li><a href="#" class="text-3xl font-medium">Arena</a></li>
+
+          <li>
+            <details>
+              <summary class="cursor-pointer text-3xl font-medium">Fans</summary>
+              <ul class="mt-2 space-y-2 pl-4 text-xl text-white/90">
+                <li><a href="#">Fanbeauftragte</a></li>
+                <li><a href="#">Fan-Shop</a></li>
+                <li><a href="#">Community</a></li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="content-pane">
+      <article class="mx-auto max-w-3xl">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-zinc-600">News Detail</p>
+        <h1 class="headline-font mb-4 text-6xl leading-tight text-steelgreen sm:text-7xl font-bold" style="word-break: break-word; overflow-wrap: break-word;">Playoff-Heimspiel ausverkauft</h1>
+        <p class="mb-8 text-lg text-zinc-700">11. Mai 2026 | Kategorie: Spieltag</p>
+
+        <img src="./assets/20260125_161__SCB9887.jpg" alt="News Visual" class="mb-8 h-72 w-full object-cover object-center shadow-md">
+
+        <div class="space-y-5 text-lg leading-relaxed text-zinc-800">
+          <p>Die Nachfrage war enorm: Bereits kurz nach dem Start des Online-Ticketings waren alle verfuegbaren Plaetze vergeben. Das Team bedankt sich fuer den unglaublichen Support der Fans.</p>
+          <p>Zur Entlastung des Systems werden die naechsten Verkaufsphasen in klar getrennten Zeitfenstern geoeffnet. Mitglieder und Dauerkarteninhaber erhalten wie gewohnt ein bevorzugtes Kontingent.</p>
+          <p>Rund um die Arena ist ein erweitertes Rahmenprogramm geplant, darunter DJ-Sets, Street-Food-Staende und eine Fan-Area mit Live-Interviews vor Spielbeginn.</p>
+          <p>Die Mannschaft geht mit hoher Intensitaet in die Woche. Der Fokus liegt auf Special Teams, Umschaltmomenten und stabiler Zonenverteidigung.</p>
+          <p>In der ersten Verkaufsphase gab es vereinzelt Wartezeiten, die Infrastruktur wurde inzwischen skalierter ausgelegt.</p>
+        </div>
+
+        <div class="diagonal-sep"></div>
+        <section class="mt-10 pt-8">
+          <h2 class="mb-4 text-3xl font-bold text-steelgreen" style="word-break: break-word; overflow-wrap: break-word;">Stimmen Zum Spiel</h2>
+          <div class="space-y-4 text-zinc-800">
+            <p><strong>Head Coach:</strong> "Wir wollen von der ersten Minute Druck machen und die Energie aus der Halle direkt auf das Eis bringen."</p>
+            <p><strong>Captain:</strong> "Unsere Fans sind der Unterschied. Das volle Haus gibt uns gerade in engen Phasen den Push."</p>
+            <p><strong>Sportdirektion:</strong> "Die operative Planung fuer die Serie ist abgeschlossen, jetzt geht es um Ausfuehrung und Fokus."</p>
+          </div>
+        </section>
+
+        <div class="diagonal-sep"></div>
+        <section class="mt-10 pt-8">
+          <h2 class="mb-4 text-3xl font-bold text-steelgreen" style="word-break: break-word; overflow-wrap: break-word;">Statistik-Block</h2>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="border-l-4 border-steelgreen bg-white p-4">
+              <p class="text-xs uppercase tracking-[0.2em] text-zinc-500">Powerplay</p>
+              <p class="mt-1 text-3xl font-bold text-steelgreen">28.4%</p>
+            </div>
+            <div class="border-l-4 border-steelpogreen bg-white p-4">
+              <p class="text-xs uppercase tracking-[0.2em] text-zinc-500">Penalty Kill</p>
+              <p class="mt-1 text-3xl font-bold text-steelgreen">86.1%</p>
+            </div>
+            <div class="border-l-4 border-steelblue bg-white p-4">
+              <p class="text-xs uppercase tracking-[0.2em] text-zinc-500">Saves</p>
+              <p class="mt-1 text-3xl font-bold text-steelgreen">.924</p>
+            </div>
+            <div class="border-l-4 border-steelgreen bg-white p-4">
+              <p class="text-xs uppercase tracking-[0.2em] text-zinc-500">Faceoff Quote</p>
+              <p class="mt-1 text-3xl font-bold text-steelgreen">53.2%</p>
+            </div>
+          </div>
+        </section>
+
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a href="./news-overview.html" class="bg-steelgreen px-5 py-2.5 text-sm font-semibold text-white hover:bg-steelpogreen">Zur Uebersicht</a>
+          <a href="./formular.html" class="border border-steelgreen px-5 py-2.5 text-sm font-semibold text-steelgreen hover:bg-steelgreen hover:text-white">Pressekontakt</a>
+        </div>
+      </article>
+    </main>
+  </div>
+
+  <script src="./assets/app.js"></script>
+</body>
+</html>

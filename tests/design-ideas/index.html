@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Steelers Design Test - Start</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-steelgreen: #046a38;
+      --color-steelpogreen: #00994c;
+      --color-steelblue: #009cde;
+      --color-steelwhite: #eef0eb;
+    }
+  </style>
+  <style>
+    @font-face {
+      font-family: 'Steelers Body';
+      src: url('../../files/steelers/fonts/ABCWhyte-Regular.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Steelers Headline';
+      src: url('../../files/steelers/fonts/PPRightGrotesk-CompactBlack.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Steelers Headline';
+      src: url('../../files/steelers/fonts/PPRightGrotesk-CompactBlack.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    body {
+      font-family: 'Steelers Body', 'Segoe UI', sans-serif;
+    }
+
+    .headline-font {
+      font-family: 'Steelers Headline', 'Arial Narrow', sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    .diagonal-sep {
+      display: flex;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+
+    .diagonal-sep::before {
+      content: '';
+      display: block;
+      width: 120px;
+      height: 12px;
+      background: repeating-linear-gradient(
+        45deg,
+        #046a38 0px,
+        #046a38 4px,
+        transparent 4px,
+        transparent 8px,
+        #046a38 8px,
+        #046a38 10px,
+        transparent 10px,
+        transparent 16px
+      );
+      box-shadow: 0 2px 4px rgba(4, 106, 56, 0.2);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-steelwhite px-6 py-10 text-zinc-900 sm:px-10">
+  <div class="mx-auto max-w-4xl border border-zinc-900/10 bg-white p-8 shadow-sm">
+    <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+      <img src="../../files/steelers/layout/logo-nav.svg" alt="Steelers Logo" class="h-16 w-auto">
+      <p class="text-sm font-medium uppercase tracking-[0.2em] text-zinc-600">Tailwind CSS v4 Playground</p>
+    </div>
+
+    <h1 class="headline-font mb-4 text-6xl leading-tight text-steelgreen font-bold" style="word-break: break-word; overflow-wrap: break-word;">Design Ideen Testseiten</h1>
+    <p class="mb-8 max-w-2xl text-lg text-zinc-700">Komplett statische HTML-Dateien im Test-Verzeichnis. Keine Twig- oder Build-Abhaengigkeit, nur Tailwind CSS 4 via CDN.</p>
+
+    <div class="diagonal-sep"></div>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      <a href="./news-overview.html" class="border-l-4 border-steelgreen bg-zinc-50 p-5 transition hover:-translate-y-0.5 hover:border-steelpogreen">
+        <p class="text-xs uppercase tracking-[0.2em] text-zinc-500">Seite 1</p>
+        <p class="mt-2 text-2xl font-bold text-steelgreen" style="word-break: break-word; overflow-wrap: break-word;">News Uebersicht</p>
+      </a>
+      <a href="./news-detail.html" class="border-l-4 border-steelpogreen bg-zinc-50 p-5 transition hover:-translate-y-0.5 hover:border-steelblue">
+        <p class="text-xs uppercase tracking-[0.2em] text-zinc-500">Seite 2</p>
+        <p class="mt-2 text-2xl font-bold text-steelgreen" style="word-break: break-word; overflow-wrap: break-word;">News Detail</p>
+      </a>
+      <a href="./formular.html" class="border-l-4 border-steelblue bg-zinc-50 p-5 transition hover:-translate-y-0.5 hover:border-steelgreen">
+        <p class="text-xs uppercase tracking-[0.2em] text-zinc-500">Seite 3</p>
+        <p class="mt-2 text-2xl font-bold text-steelgreen" style="word-break: break-word; overflow-wrap: break-word;">Formular</p>
+      </a>
+      <a href="./design-schema.html" class="border-l-4 border-steelgreen bg-zinc-50 p-5 transition hover:-translate-y-0.5 hover:border-steelpogreen">
+        <p class="text-xs uppercase tracking-[0.2em] text-zinc-500">Seite 4</p>
+        <p class="mt-2 text-2xl font-bold text-steelgreen" style="word-break: break-word; overflow-wrap: break-word;">Design Schema</p>
+      </a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="de" data-menu-open="false">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Steelers Design Test - Formular</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-steelgreen: #046a38;
+      --color-steelpogreen: #00994c;
+      --color-steelblue: #009cde;
+      --color-steelwhite: #eef0eb;
+    }
+
+    @layer base {
+      body {
+        font-family: 'Steelers Body', 'Segoe UI', sans-serif;
+      }
+    }
+
+    @layer components {
+      .split-shell {
+        @apply relative min-h-screen md:grid md:h-screen md:grid-cols-[minmax(320px,42vw)_1fr] md:overflow-hidden;
+      }
+
+      .hero-pane {
+        @apply relative h-72 overflow-hidden sm:h-80 md:h-screen;
+        background-image: url('./assets/20260412_139__SCB8253.jpg');
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: multiply;
+        background-color: #046a38;
+      }
+
+      .content-pane {
+        @apply bg-steelwhite px-6 py-8 sm:px-10 md:h-screen md:overflow-y-auto md:px-14 md:py-12 relative;
+        border-left: none;
+      }
+
+      .content-pane::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 16px;
+        background: repeating-linear-gradient(
+          45deg,
+          #046a38 0px,
+          #046a38 4px,
+          transparent 4px,
+          transparent 8px,
+          #046a38 8px,
+          #046a38 10px,
+          transparent 10px,
+          transparent 16px
+        );
+        background-size: 100% 100%;
+        box-shadow: 0 2px 4px rgba(4, 106, 56, 0.2);
+        z-index: 10;
+      }
+
+      @media (min-width: 768px) {
+        .content-pane::before {
+          position: fixed;
+          left: 42vw;
+          top: 0;
+          width: 16px;
+          height: 100vh;
+          bottom: auto;
+          background: repeating-linear-gradient(
+            45deg,
+            #046a38 0px,
+            #046a38 4px,
+            transparent 4px,
+            transparent 8px,
+            #046a38 8px,
+            #046a38 10px,
+            transparent 10px,
+            transparent 16px
+          );
+          box-shadow: 2px 0 4px rgba(4, 106, 56, 0.2);
+        }
+      }
+
+      .nav-link {
+        @apply inline-block text-2xl font-medium tracking-wide text-white transition hover:text-steelblue;
+      }
+
+      .form-input {
+        @apply w-full border border-zinc-400/70 bg-white px-4 py-3 text-zinc-900 outline-none transition focus:border-steelgreen focus:ring-2 focus:ring-steelgreen/40;
+      }
+    }
+  </style>
+  <style>
+    @font-face {
+      font-family: 'Steelers Body';
+      src: url('../../files/steelers/fonts/ABCWhyte-Regular.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Steelers Headline';
+      src: url('../../files/steelers/fonts/PPRightGrotesk-CompactBlack.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    .headline-font {
+      font-family: 'Steelers Headline', 'Arial Narrow', sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    .submenu-panel {
+      position: absolute;
+      top: 50%;
+      left: calc(100% + 1rem);
+      min-width: 210px;
+      border-left: 1px solid rgba(255, 255, 255, 0.4);
+      padding-left: 1rem;
+      background: linear-gradient(90deg, rgba(4, 106, 56, 0.08) 0%, rgba(4, 106, 56, 0.22) 100%);
+      transform: translateY(-50%) translateX(-10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .submenu-panel.is-open {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+      pointer-events: auto;
+    }
+
+    .diagonal-sep {
+      display: flex;
+      justify-content: center;
+      margin: 2.5rem 0;
+    }
+
+    .diagonal-sep::before {
+      content: '';
+      display: block;
+      width: 120px;
+      height: 12px;
+      background: repeating-linear-gradient(
+        45deg,
+        #046a38 0px,
+        #046a38 4px,
+        transparent 4px,
+        transparent 8px,
+        #046a38 8px,
+        #046a38 10px,
+        transparent 10px,
+        transparent 16px
+      );
+      box-shadow: 0 2px 4px rgba(4, 106, 56, 0.2);
+    }
+
+    html[data-menu-open='true'] .mobile-menu {
+      display: flex;
+    }
+  </style>
+</head>
+<body class="bg-steelwhite text-zinc-900">
+  <div class="split-shell">
+    <aside class="hero-pane">
+      <img src="../../files/steelers/layout/player_newsletter.png" alt="Arena" class="absolute inset-0 h-full w-full object-cover hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/45"></div>
+
+      <div class="relative z-10 flex h-full flex-col p-6 sm:p-8 md:p-10 md:items-center">
+        <div class="flex items-start justify-between">
+          <a href="./news-overview.html" class="inline-flex items-center gap-3">
+            <img src="../../files/steelers/layout/logo-nav.svg" alt="Steelers Logo" class="h-14 w-auto sm:h-16 md:h-20">
+          </a>
+          <button type="button" data-menu-toggle class="inline-flex h-11 w-11 items-center justify-center border border-white/60 bg-black/20 text-white md:hidden" aria-label="Navigation oeffnen">
+            <span class="text-2xl leading-none">&#9776;</span>
+          </button>
+        </div>
+
+        <nav class="mt-10 hidden md:flex md:flex-1 md:items-center">
+          <ul class="space-y-5 text-center">
+            <li><a class="nav-link" href="./news-overview.html">News</a></li>
+            <li><a class="nav-link" href="#">Tickets</a></li>
+            <li><a class="nav-link" href="https://steelers-shop.de/" target="_blank">Shop</a></li>
+            <li><a class="nav-link" href="#">Videoportal</a></li>
+            
+            <li class="relative">
+              <button type="button" data-submenu-toggle data-submenu-target="desktop-saison" class="nav-link flex w-full items-center justify-center gap-2" aria-expanded="false" aria-controls="desktop-saison">
+                Saison
+                <span class="text-sm">+</span>
+              </button>
+              <ul id="desktop-saison" class="submenu-panel text-left">
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Spielplan</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Ergebnisse</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Tabelle</a></li>
+              </ul>
+            </li>
+
+            <li class="relative">
+              <button type="button" data-submenu-toggle data-submenu-target="desktop-teams" class="nav-link flex w-full items-center justify-center gap-2" aria-expanded="false" aria-controls="desktop-teams">
+                Teams
+                <span class="text-sm">+</span>
+              </button>
+              <ul id="desktop-teams" class="submenu-panel text-left">
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">1. Mannschaft</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U20</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U17</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U15</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U13</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U11</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U9</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U7</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Amateure</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Damen</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Hobby</a></li>
+              </ul>
+            </li>
+
+            <li><a class="nav-link" href="#">Arena</a></li>
+
+            <li class="relative">
+              <button type="button" data-submenu-toggle data-submenu-target="desktop-fans" class="nav-link flex w-full items-center justify-center gap-2" aria-expanded="false" aria-controls="desktop-fans">
+                Fans
+                <span class="text-sm">+</span>
+              </button>
+              <ul id="desktop-fans" class="submenu-panel text-left">
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Fanbeauftragte</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Fan-Shop</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Community</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="mobile-menu absolute inset-0 z-30 hidden flex-col bg-black/45 p-6 backdrop-blur-sm md:hidden">
+        <div class="mb-6 flex items-center justify-between">
+          <img src="../../files/steelers/layout/logo-nav.svg" alt="Steelers Logo" class="h-14 w-auto">
+          <button type="button" data-menu-close class="inline-flex h-11 w-11 items-center justify-center border border-white/60 text-white" aria-label="Navigation schliessen">
+            <span class="text-3xl leading-none">&times;</span>
+          </button>
+        </div>
+        <ul class="space-y-4 text-white">
+          <li><a href="./news-overview.html" class="text-3xl font-medium">News</a></li>
+          <li><a href="#" class="text-3xl font-medium">Tickets</a></li>
+          <li><a href="https://steelers-shop.de/" target="_blank" class="text-3xl font-medium">Shop</a></li>
+          <li><a href="#" class="text-3xl font-medium">Videoportal</a></li>
+          
+          <li>
+            <details>
+              <summary class="cursor-pointer text-3xl font-medium">Saison</summary>
+              <ul class="mt-2 space-y-2 pl-4 text-xl text-white/90">
+                <li><a href="#">Spielplan</a></li>
+                <li><a href="#">Ergebnisse</a></li>
+                <li><a href="#">Tabelle</a></li>
+              </ul>
+            </details>
+          </li>
+
+          <li>
+            <details>
+              <summary class="cursor-pointer text-3xl font-medium">Teams</summary>
+              <ul class="mt-2 space-y-2 pl-4 text-xl text-white/90">
+                <li><a href="#">1. Mannschaft</a></li>
+                <li><a href="#">U20</a></li>
+                <li><a href="#">U17</a></li>
+                <li><a href="#">U15</a></li>
+                <li><a href="#">U13</a></li>
+                <li><a href="#">U11</a></li>
+                <li><a href="#">U9</a></li>
+                <li><a href="#">U7</a></li>
+                <li><a href="#">Amateure</a></li>
+                <li><a href="#">Damen</a></li>
+                <li><a href="#">Hobby</a></li>
+              </ul>
+            </details>
+          </li>
+
+          <li><a href="#" class="text-3xl font-medium">Arena</a></li>
+
+          <li>
+            <details>
+              <summary class="cursor-pointer text-3xl font-medium">Fans</summary>
+              <ul class="mt-2 space-y-2 pl-4 text-xl text-white/90">
+                <li><a href="#">Fanbeauftragte</a></li>
+                <li><a href="#">Fan-Shop</a></li>
+                <li><a href="#">Community</a></li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="content-pane">
+      <div class="mx-auto max-w-2xl">
+        <p class="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-zinc-600">Kontaktformular</p>
+        <h1 class="headline-font mb-8 text-6xl leading-tight text-steelgreen sm:text-7xl font-bold" style="word-break: break-word; overflow-wrap: break-word;">Presseanfrage</h1>
+
+        <form class="space-y-5 border border-zinc-900/10 bg-white/80 p-6 shadow-sm">
+          <div class="grid gap-5 sm:grid-cols-2">
+            <label class="block text-sm font-medium text-zinc-700">Vorname
+              <input type="text" class="form-input mt-1.5" placeholder="Max">
+            </label>
+            <label class="block text-sm font-medium text-zinc-700">Nachname
+              <input type="text" class="form-input mt-1.5" placeholder="Mustermann">
+            </label>
+          </div>
+
+          <label class="block text-sm font-medium text-zinc-700">E-Mail
+            <input type="email" class="form-input mt-1.5" placeholder="name@beispiel.de">
+          </label>
+
+          <label class="block text-sm font-medium text-zinc-700">Thema
+            <select class="form-input mt-1.5">
+              <option>Ticketing</option>
+              <option>Medienanfrage</option>
+              <option>Partnerschaft</option>
+            </select>
+          </label>
+
+          <label class="block text-sm font-medium text-zinc-700">Nachricht
+            <textarea rows="5" class="form-input mt-1.5" placeholder="Wie koennen wir helfen?"></textarea>
+          </label>
+
+          <div class="flex items-center justify-between gap-4">
+            <p class="text-xs text-zinc-600">Testformular ohne Backend-Logik.</p>
+            <button type="button" class="bg-steelgreen px-6 py-2.5 text-sm font-semibold text-white hover:bg-steelpogreen">Absenden</button>
+          </div>
+        </form>
+
+        <div class="diagonal-sep"></div>
+        <section class="mt-8 border-l-4 border-steelgreen/50 bg-white/70 p-6 pl-5">
+          <h2 class="mb-3 text-2xl font-bold text-steelgreen" style="word-break: break-word; overflow-wrap: break-word;">FAQ Vor Der Anfrage</h2>
+          <div class="space-y-3 text-zinc-700">
+            <p><strong style="color: #046a38;">Antwortzeiten:</strong> Medienanfragen werden in der Regel innerhalb von 24 Stunden beantwortet.</p>
+            <p><strong style="color: #046a38;">Bildmaterial:</strong> Bitte Zweck, Kanal und gewuenschte Formate direkt in der Nachricht angeben.</p>
+            <p><strong style="color: #046a38;">Interviewslots:</strong> Fuer Spieltage bitte fruehzeitig anfragen, da Zeitfenster begrenzt sind.</p>
+          </div>
+        </section>
+
+        <div class="diagonal-sep"></div>
+        <section class="mt-8 border-l-4 border-steelgreen/50 bg-white/70 p-6 pl-5">
+          <h2 class="mb-3 text-2xl font-bold text-steelgreen" style="word-break: break-word; overflow-wrap: break-word;">Anstehende Termine</h2>
+          <ul class="space-y-2 text-zinc-700">
+            <li>15.05. | Heimspiel 1 | 19:30 Uhr</li>
+            <li>17.05. | Medienrunde | 11:00 Uhr</li>
+            <li>20.05. | Community Day | 14:00 Uhr</li>
+            <li>24.05. | Auswaertsspiel | 18:00 Uhr</li>
+            <li>27.05. | Sponsorenabend | 19:00 Uhr</li>
+          </ul>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="./assets/app.js"></script>
+</body>
+</html>

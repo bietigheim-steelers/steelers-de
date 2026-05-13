@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="de" data-menu-open="false">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Steelers Design Test - News Uebersicht</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <style type="text/tailwindcss">
+    @theme {
+      --color-steelgreen: #046a38;
+      --color-steelpogreen: #00994c;
+      --color-steelblue: #009cde;
+      --color-steelwhite: #eef0eb;
+    }
+
+    @layer base {
+      body {
+        font-family: 'Steelers Body', 'Segoe UI', sans-serif;
+      }
+    }
+
+    @layer components {
+      .split-shell {
+        @apply relative min-h-screen md:grid md:h-screen md:grid-cols-[minmax(320px,42vw)_1fr] md:overflow-hidden;
+      }
+
+      .hero-pane {
+        @apply relative h-72 overflow-hidden sm:h-80 md:h-screen;
+        background-image: url('./assets/20250429_336__SCB0262.jpg');
+        background-size: cover;
+        background-position: center;
+        background-blend-mode: multiply;
+        background-color: #046a38;
+      }
+
+      .content-pane {
+        @apply bg-steelwhite px-6 py-8 sm:px-10 md:h-screen md:overflow-y-auto md:px-14 md:py-12 relative;
+        border-left: none;
+      }
+
+      .content-pane::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 16px;
+        background: repeating-linear-gradient(
+          45deg,
+          #046a38 0px,
+          #046a38 4px,
+          transparent 4px,
+          transparent 8px,
+          #046a38 8px,
+          #046a38 10px,
+          transparent 10px,
+          transparent 16px
+        );
+        background-size: 100% 100%;
+        box-shadow: 0 2px 4px rgba(4, 106, 56, 0.2);
+        z-index: 10;
+      }
+
+      @media (min-width: 768px) {
+        .content-pane::before {
+          position: fixed;
+          left: 42vw;
+          top: 0;
+          width: 16px;
+          height: 100vh;
+          bottom: auto;
+          background: repeating-linear-gradient(
+            45deg,
+            #046a38 0px,
+            #046a38 4px,
+            transparent 4px,
+            transparent 8px,
+            #046a38 8px,
+            #046a38 10px,
+            transparent 10px,
+            transparent 16px
+          );
+          box-shadow: 2px 0 4px rgba(4, 106, 56, 0.2);
+        }
+      }
+
+      .nav-link {
+        @apply inline-block text-2xl font-medium tracking-wide text-white transition hover:text-steelblue;
+      }
+
+      .card {
+        @apply border-l-8 border-steelgreen bg-white/90 p-5 shadow-sm;
+      }
+
+      .card:nth-child(odd) {
+        @apply mr-6;
+      }
+
+      .card:nth-child(even) {
+        @apply ml-6;
+      }
+
+      .diagonal-sep {
+        @apply my-10 flex justify-center;
+      }
+
+      .diagonal-sep::before {
+        content: '';
+        display: block;
+        width: 120px;
+        height: 12px;
+        background: repeating-linear-gradient(
+          45deg,
+          #046a38 0px,
+          #046a38 4px,
+          transparent 4px,
+          transparent 8px,
+          #046a38 8px,
+          #046a38 10px,
+          transparent 10px,
+          transparent 16px
+        );
+        box-shadow: 0 2px 4px rgba(4, 106, 56, 0.2);
+      }
+    }
+  </style>
+  <style>
+    @font-face {
+      font-family: 'Steelers Body';
+      src: url('../../files/steelers/fonts/ABCWhyte-Regular.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Steelers Headline';
+      src: url('../../files/steelers/fonts/PPRightGrotesk-CompactBlack.woff2') format('woff2');
+      font-display: swap;
+    }
+
+    .headline-font {
+      font-family: 'Steelers Headline', 'Arial Narrow', sans-serif;
+      letter-spacing: 0.04em;
+    }
+
+    .submenu-panel {
+      position: absolute;
+      top: 50%;
+      left: calc(100% + 1rem);
+      min-width: 210px;
+      border-left: 1px solid rgba(255, 255, 255, 0.4);
+      padding-left: 1rem;
+      background: linear-gradient(90deg, rgba(4, 106, 56, 0.08) 0%, rgba(4, 106, 56, 0.22) 100%);
+      transform: translateY(-50%) translateX(-10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 220ms ease, transform 220ms ease;
+    }
+
+    .submenu-panel.is-open {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+      pointer-events: auto;
+    }
+
+    html[data-menu-open='true'] .mobile-menu {
+      display: flex;
+    }
+  </style>
+</head>
+<body class="bg-steelwhite text-zinc-900">
+  <div class="split-shell">
+    <aside class="hero-pane">
+      <img src="../../files/steelers/layout/arena-bg.jpg" alt="Arena" class="absolute inset-0 h-full w-full object-cover hidden">
+      <div class="absolute inset-0 bg-gradient-to-b from-black/20 to-black/45"></div>
+
+      <div class="relative z-10 flex h-full flex-col p-6 sm:p-8 md:p-10 md:items-center">
+        <div class="flex items-start justify-between">
+          <a href="./news-overview.html" class="inline-flex items-center gap-3">
+            <img src="../../files/steelers/layout/logo-nav.svg" alt="Steelers Logo" class="h-14 w-auto sm:h-16 md:h-20">
+          </a>
+          <button type="button" data-menu-toggle class="inline-flex h-11 w-11 items-center justify-center border border-white/60 bg-black/20 text-white md:hidden" aria-label="Navigation oeffnen">
+            <span class="text-2xl leading-none">&#9776;</span>
+          </button>
+        </div>
+
+        <nav class="mt-10 hidden md:flex md:flex-1 md:items-center">
+          <ul class="space-y-5 text-center">
+            <li><a class="nav-link" href="./news-overview.html">News</a></li>
+            <li><a class="nav-link" href="#">Tickets</a></li>
+            <li><a class="nav-link" href="https://steelers-shop.de/" target="_blank">Shop</a></li>
+            <li><a class="nav-link" href="#">Videoportal</a></li>
+            
+            <li class="relative">
+              <button type="button" data-submenu-toggle data-submenu-target="desktop-saison" class="nav-link flex w-full items-center justify-center gap-2" aria-expanded="false" aria-controls="desktop-saison">
+                Saison
+                <span class="text-sm">+</span>
+              </button>
+              <ul id="desktop-saison" class="submenu-panel text-left">
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Spielplan</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Ergebnisse</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Tabelle</a></li>
+              </ul>
+            </li>
+
+            <li class="relative">
+              <button type="button" data-submenu-toggle data-submenu-target="desktop-teams" class="nav-link flex w-full items-center justify-center gap-2" aria-expanded="false" aria-controls="desktop-teams">
+                Teams
+                <span class="text-sm">+</span>
+              </button>
+              <ul id="desktop-teams" class="submenu-panel text-left">
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">1. Mannschaft</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U20</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U17</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U15</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U13</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U11</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U9</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">U7</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Amateure</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Damen</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Hobby</a></li>
+              </ul>
+            </li>
+
+            <li><a class="nav-link" href="#">Arena</a></li>
+
+            <li class="relative">
+              <button type="button" data-submenu-toggle data-submenu-target="desktop-fans" class="nav-link flex w-full items-center justify-center gap-2" aria-expanded="false" aria-controls="desktop-fans">
+                Fans
+                <span class="text-sm">+</span>
+              </button>
+              <ul id="desktop-fans" class="submenu-panel text-left">
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Fanbeauftragte</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Fan-Shop</a></li>
+                <li><a class="block py-1 text-lg text-white/90 hover:text-steelblue" href="#">Community</a></li>
+              </ul>
+            </li>
+          </ul>
+        </nav>
+
+        <p class="mt-auto max-w-xs text-sm leading-relaxed text-white/85">Design-Testbereich mit fixem Visual links und scrollbarem Content rechts.</p>
+      </div>
+
+      <div class="mobile-menu absolute inset-0 z-30 hidden flex-col bg-black/45 p-6 backdrop-blur-sm md:hidden">
+        <div class="mb-6 flex items-center justify-between">
+          <img src="../../files/steelers/layout/logo-nav.svg" alt="Steelers Logo" class="h-14 w-auto">
+          <button type="button" data-menu-close class="inline-flex h-11 w-11 items-center justify-center border border-white/60 text-white" aria-label="Navigation schliessen">
+            <span class="text-3xl leading-none">&times;</span>
+          </button>
+        </div>
+        <ul class="space-y-4 text-white">
+          <li><a href="./news-overview.html" class="text-3xl font-medium">News</a></li>
+          <li><a href="#" class="text-3xl font-medium">Tickets</a></li>
+          <li><a href="https://steelers-shop.de/" target="_blank" class="text-3xl font-medium">Shop</a></li>
+          <li><a href="#" class="text-3xl font-medium">Videoportal</a></li>
+          
+          <li>
+            <details>
+              <summary class="cursor-pointer text-3xl font-medium">Saison</summary>
+              <ul class="mt-2 space-y-2 pl-4 text-xl text-white/90">
+                <li><a href="#">Spielplan</a></li>
+                <li><a href="#">Ergebnisse</a></li>
+                <li><a href="#">Tabelle</a></li>
+              </ul>
+            </details>
+          </li>
+
+          <li>
+            <details>
+              <summary class="cursor-pointer text-3xl font-medium">Teams</summary>
+              <ul class="mt-2 space-y-2 pl-4 text-xl text-white/90">
+                <li><a href="#">1. Mannschaft</a></li>
+                <li><a href="#">U20</a></li>
+                <li><a href="#">U17</a></li>
+                <li><a href="#">U15</a></li>
+                <li><a href="#">U13</a></li>
+                <li><a href="#">U11</a></li>
+                <li><a href="#">U9</a></li>
+                <li><a href="#">U7</a></li>
+                <li><a href="#">Amateure</a></li>
+                <li><a href="#">Damen</a></li>
+                <li><a href="#">Hobby</a></li>
+              </ul>
+            </details>
+          </li>
+
+          <li><a href="#" class="text-3xl font-medium">Arena</a></li>
+
+          <li>
+            <details>
+              <summary class="cursor-pointer text-3xl font-medium">Fans</summary>
+              <ul class="mt-2 space-y-2 pl-4 text-xl text-white/90">
+                <li><a href="#">Fanbeauftragte</a></li>
+                <li><a href="#">Fan-Shop</a></li>
+                <li><a href="#">Community</a></li>
+              </ul>
+            </details>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="content-pane">
+      <header class="mb-8 flex flex-wrap items-end justify-between gap-4 border-b border-zinc-800/15 pb-5">
+        <div>
+          <p class="text-sm font-medium uppercase tracking-[0.25em] text-zinc-600">Newsroom</p>
+          <h1 class="headline-font text-6xl leading-tight text-steelgreen sm:text-7xl font-bold" style="word-break: break-word; overflow-wrap: break-word;">Aktuelle Steelers News</h1>
+        </div>
+        <a href="./design-schema.html" class="border border-steelgreen px-4 py-2 text-sm font-semibold text-steelgreen hover:bg-steelgreen hover:text-white">Design ansehen</a>
+      </header>
+
+      <section class="grid gap-5 lg:grid-cols-2">
+        <article class="card">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">11. Mai 2026</p>
+          <h2 class="mb-2 text-2xl font-semibold text-steelgreen">Playoff-Heimspiel ausverkauft</h2>
+          <p class="mb-4 text-zinc-700">Innerhalb von 18 Minuten waren alle Plaetze verkauft. Der Vorverkauf fuer Spiel 2 startet morgen um 10:00 Uhr.</p>
+          <a href="./news-detail.html" class="text-sm font-semibold text-steelblue">Mehr lesen</a>
+        </article>
+
+        <article class="card">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">09. Mai 2026</p>
+          <h2 class="mb-2 text-2xl font-semibold text-steelgreen">Neues Trikot fuer Saison 26/27</h2>
+          <p class="mb-4 text-zinc-700">Das Heimtrikot kombiniert tiefes Gruen mit hellen Akzenten und einem klaren Typografie-Konzept.</p>
+          <a href="./news-detail.html" class="text-sm font-semibold text-steelblue">Mehr lesen</a>
+        </article>
+
+        <article class="card">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">06. Mai 2026</p>
+          <h2 class="mb-2 text-2xl font-semibold text-steelgreen">Community Day am Samstag</h2>
+          <p class="mb-4 text-zinc-700">Autogrammstunde, Nachwuchs-Clinic und Live-DJ im Vorplatzbereich der Arena.</p>
+          <a href="./news-detail.html" class="text-sm font-semibold text-steelblue">Mehr lesen</a>
+        </article>
+
+        <article class="card">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">03. Mai 2026</p>
+          <h2 class="mb-2 text-2xl font-semibold text-steelgreen">Partnernetzwerk waechst weiter</h2>
+          <p class="mb-4 text-zinc-700">Drei regionale Unternehmen unterstuetzen die Jugendarbeit und den Standort langfristig.</p>
+          <a href="./news-detail.html" class="text-sm font-semibold text-steelblue">Mehr lesen</a>
+        </article>
+
+        <article class="card">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">01. Mai 2026</p>
+          <h2 class="mb-2 text-2xl font-semibold text-steelgreen">U20 startet in die Finalrunde</h2>
+          <p class="mb-4 text-zinc-700">Mit einem 4:1 Auswaertssieg setzt sich das Nachwuchsteam an die Spitze der Serie.</p>
+          <a href="./news-detail.html" class="text-sm font-semibold text-steelblue">Mehr lesen</a>
+        </article>
+
+        <article class="card">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">29. April 2026</p>
+          <h2 class="mb-2 text-2xl font-semibold text-steelgreen">Neuer Fanshop eroefnet</h2>
+          <p class="mb-4 text-zinc-700">Der neue Store bietet Kollektionen, Limited Drops und einen Bereich fuer personalisierte Trikots.</p>
+          <a href="./news-detail.html" class="text-sm font-semibold text-steelblue">Mehr lesen</a>
+        </article>
+
+        <article class="card">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">26. April 2026</p>
+          <h2 class="mb-2 text-2xl font-semibold text-steelgreen">Ticketing-Portal modernisiert</h2>
+          <p class="mb-4 text-zinc-700">Bessere Filter, schnellere Checkout-Schritte und neue Wallet-Optionen sind ab sofort aktiv.</p>
+          <a href="./news-detail.html" class="text-sm font-semibold text-steelblue">Mehr lesen</a>
+        </article>
+
+        <article class="card">
+          <p class="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">23. April 2026</p>
+          <h2 class="mb-2 text-2xl font-semibold text-steelgreen">Offenes Training am Sonntag</h2>
+          <p class="mb-4 text-zinc-700">Fans koennen beim Abschlusstraining zusehen, inklusive Meet-and-Greet nach der Session.</p>
+          <a href="./news-detail.html" class="text-sm font-semibold text-steelblue">Mehr lesen</a>
+        </article>
+      </section>
+
+      <div class="diagonal-sep"></div>
+      <section class="mt-10 pt-8">
+        <h2 class="mb-4 text-3xl font-bold text-steelgreen" style="word-break: break-word; overflow-wrap: break-word;">Archiv Highlights</h2>
+        <div class="space-y-4 text-zinc-700">
+          <p>April Rueckblick: 12 Spiele, 9 Siege, 3 Overtime-Entscheidungen und eine starke Torquote in den letzten Dritteln.</p>
+          <p>Der Ticketing-Bereich verzeichnete im Vergleich zum Vorjahr einen Zuwachs von 28 Prozent bei digitalen Tageskarten.</p>
+          <p>In der Community wurden ueber 800 Kinder in Schulprojekten erreicht. Die naechsten Termine sind bereits in Planung.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./assets/app.js"></script>
+</body>
+</html>

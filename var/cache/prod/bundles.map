@@ -1,0 +1,433 @@
+<?php return array (
+  'Webauthn\\Bundle\\WebauthnBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Webauthn\\Bundle\\WebauthnBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Doctrine\\Bundle\\DoctrineBundle\\DoctrineBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Doctrine\\Bundle\\DoctrineBundle\\DoctrineBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Symfony\\Bundle\\FrameworkBundle\\FrameworkBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Symfony\\Bundle\\FrameworkBundle\\FrameworkBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Symfony\\Bundle\\MonologBundle\\MonologBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Symfony\\Bundle\\MonologBundle\\MonologBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'FOS\\HttpCacheBundle\\FOSHttpCacheBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'FOS\\HttpCacheBundle\\FOSHttpCacheBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Nelmio\\CorsBundle\\NelmioCorsBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Nelmio\\CorsBundle\\NelmioCorsBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Nelmio\\SecurityBundle\\NelmioSecurityBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Nelmio\\SecurityBundle\\NelmioSecurityBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Scheb\\TwoFactorBundle\\SchebTwoFactorBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Scheb\\TwoFactorBundle\\SchebTwoFactorBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Twig\\Extra\\TwigExtraBundle\\TwigExtraBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Twig\\Extra\\TwigExtraBundle\\TwigExtraBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Knp\\Bundle\\MenuBundle\\KnpMenuBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Knp\\Bundle\\MenuBundle\\KnpMenuBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Knp\\Bundle\\TimeBundle\\KnpTimeBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Knp\\Bundle\\TimeBundle\\KnpTimeBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Symfony\\Cmf\\Bundle\\RoutingBundle\\CmfRoutingBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Symfony\\Cmf\\Bundle\\RoutingBundle\\CmfRoutingBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Symfony\\Bundle\\TwigBundle\\TwigBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Symfony\\Bundle\\TwigBundle\\TwigBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Terminal42\\ServiceAnnotationBundle\\Terminal42ServiceAnnotationBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Terminal42\\ServiceAnnotationBundle\\Terminal42ServiceAnnotationBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'CmsIg\\Seal\\Integration\\Symfony\\SealBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'CmsIg\\Seal\\Integration\\Symfony\\SealBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Symfony\\Bundle\\SecurityBundle\\SecurityBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Symfony\\Bundle\\SecurityBundle\\SecurityBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Symfony\\Bundle\\FrameworkBundle\\FrameworkBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Contao\\CoreBundle\\ContaoCoreBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Contao\\CoreBundle\\ContaoCoreBundle',
+     'replace' => 
+    array (
+      0 => 'core',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Doctrine\\Bundle\\DoctrineBundle\\DoctrineBundle',
+      1 => 'Knp\\Bundle\\MenuBundle\\KnpMenuBundle',
+      2 => 'Knp\\Bundle\\TimeBundle\\KnpTimeBundle',
+      3 => 'Nelmio\\CorsBundle\\NelmioCorsBundle',
+      4 => 'Nelmio\\SecurityBundle\\NelmioSecurityBundle',
+      5 => 'Scheb\\TwoFactorBundle\\SchebTwoFactorBundle',
+      6 => 'Symfony\\Bundle\\FrameworkBundle\\FrameworkBundle',
+      7 => 'Symfony\\Bundle\\MonologBundle\\MonologBundle',
+      8 => 'Symfony\\Bundle\\SecurityBundle\\SecurityBundle',
+      9 => 'Symfony\\Bundle\\TwigBundle\\TwigBundle',
+      10 => 'Symfony\\Cmf\\Bundle\\RoutingBundle\\CmfRoutingBundle',
+      11 => 'Webauthn\\Bundle\\WebauthnBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'League\\FlysystemBundle\\FlysystemBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'League\\FlysystemBundle\\FlysystemBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Contao\\ManagerBundle\\ContaoManagerBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Contao\\ManagerBundle\\ContaoManagerBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Terminal42\\ConditionalformfieldsBundle\\Terminal42ConditionalformfieldsBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Terminal42\\ConditionalformfieldsBundle\\Terminal42ConditionalformfieldsBundle',
+     'replace' => 
+    array (
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Oveleon\\ContaoCookiebar\\ContaoCookiebar' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Oveleon\\ContaoCookiebar\\ContaoCookiebar',
+     'replace' => 
+    array (
+      0 => 'cookiebar',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'MenAtWork\\MultiColumnWizardBundle\\MultiColumnWizardBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'MenAtWork\\MultiColumnWizardBundle\\MultiColumnWizardBundle',
+     'replace' => 
+    array (
+      0 => 'multicolumnwizard',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+      1 => 'Contao\\ManagerBundle\\ContaoManagerBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Contao\\FaqBundle\\ContaoFaqBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Contao\\FaqBundle\\ContaoFaqBundle',
+     'replace' => 
+    array (
+      0 => 'faq',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Codefog\\HasteBundle\\CodefogHasteBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Codefog\\HasteBundle\\CodefogHasteBundle',
+     'replace' => 
+    array (
+      0 => 'haste',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Terminal42\\DcawizardBundle\\Terminal42DcawizardBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Terminal42\\DcawizardBundle\\Terminal42DcawizardBundle',
+     'replace' => 
+    array (
+      0 => 'dcawizard',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Contao\\NewsBundle\\ContaoNewsBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Contao\\NewsBundle\\ContaoNewsBundle',
+     'replace' => 
+    array (
+      0 => 'news',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Terminal42\\LeadsBundle\\Terminal42LeadsBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Terminal42\\LeadsBundle\\Terminal42LeadsBundle',
+     'replace' => 
+    array (
+      0 => 'leads',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Contao\\ListingBundle\\ContaoListingBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Contao\\ListingBundle\\ContaoListingBundle',
+     'replace' => 
+    array (
+      0 => 'listing',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Terminal42\\NotificationCenterBundle\\Terminal42NotificationCenterBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Terminal42\\NotificationCenterBundle\\Terminal42NotificationCenterBundle',
+     'replace' => 
+    array (
+      0 => 'notification_center',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Contao\\CalendarBundle\\ContaoCalendarBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Contao\\CalendarBundle\\ContaoCalendarBundle',
+     'replace' => 
+    array (
+      0 => 'calendar',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Codefog\\NewsCategoriesBundle\\CodefogNewsCategoriesBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Codefog\\NewsCategoriesBundle\\CodefogNewsCategoriesBundle',
+     'replace' => 
+    array (
+      0 => 'news_categories',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Codefog\\HasteBundle\\CodefogHasteBundle',
+      1 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+      2 => 'Contao\\NewsBundle\\ContaoNewsBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+  'Contao\\CommentsBundle\\ContaoCommentsBundle' => 
+  \Contao\ManagerPlugin\Bundle\Config\BundleConfig::__set_state(array(
+     'name' => 'Contao\\CommentsBundle\\ContaoCommentsBundle',
+     'replace' => 
+    array (
+      0 => 'comments',
+    ),
+     'loadAfter' => 
+    array (
+      0 => 'Contao\\CalendarBundle\\ContaoCalendarBundle',
+      1 => 'Contao\\CoreBundle\\ContaoCoreBundle',
+      2 => 'Contao\\FaqBundle\\ContaoFaqBundle',
+      3 => 'Contao\\NewsBundle\\ContaoNewsBundle',
+    ),
+     'loadInProduction' => true,
+     'loadInDevelopment' => true,
+  )),
+);
