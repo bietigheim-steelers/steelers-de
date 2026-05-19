@@ -7,3 +7,10 @@ app.tilastot.seats_api:
   controller: App\Controller\SeatsApiController::getSeats
   path: /seasontickets/api/seats
   methods: GET
+
+backend_season_ticket_download:
+  controller: App\Controller\SeasonTicketDownloadController::triggerDownload
+  path: /contao/seasontickets/download
+  methods: GET
+  defaults:
+    _scope: backend
