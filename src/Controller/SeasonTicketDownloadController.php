@@ -4,16 +4,15 @@ namespace App\Controller;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 use App\Model\SeasonTicket;
 use Contao\CoreBundle\Framework\ContaoFramework;
 
 /**
- * @Route(defaults={"_scope" = "backend"})
  * @internal
  */
+#[Route(defaults: ['_scope' => 'backend'])]
 class SeasonTicketDownloadController {
 
   private $framework;
@@ -22,9 +21,7 @@ class SeasonTicketDownloadController {
     $this->framework = $framework;
   }
 
-  /**
-   * @Route("/contao/seasontickets/download", name="backend_season_ticket_download")
-   */
+  #[Route('/contao/seasontickets/download', name: 'backend_season_ticket_download', methods: ['GET'])]
   public function triggerDownload(): StreamedResponse {
     $this->framework->initialize();
     
