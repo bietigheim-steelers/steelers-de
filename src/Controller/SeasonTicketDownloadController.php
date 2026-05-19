@@ -85,7 +85,7 @@ class SeasonTicketDownloadController {
           $sheet->setCellValue('K' . $row, $ticket->ticket_payment);
           $sheet->setCellValue('L' . $row, $seatOffset === 0 ? $ticket->price : 0);
           $sheet->getStyle('L' . $row)->getNumberFormat()->setFormatCode(
-            \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_EUR_SIMPLE
+            \PhpOffice\PhpSpreadsheet\Style\NumberFormat::FORMAT_CURRENCY_EUR
           );
           $sheet->setCellValue('M' . $row, $ticket->customer_last_season);
 
