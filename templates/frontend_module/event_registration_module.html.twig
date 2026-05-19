@@ -1,0 +1,120 @@
+{% block content %}
+<div class="event-registration-module">
+
+  {# ---- Error states ---- #}
+  {% if error is defined and error %}
+    <div class="event-registration-error">
+      {% if error == 'missing_token' %}
+        <p>Ungültiger Anmeldelink. Bitte überprüfen Sie den Link und versuchen Sie es erneut.</p>
+      {% elseif error == 'invalid_token' %}
+        <p>Dieser Anmeldelink ist nicht gültig oder die Veranstaltung ist nicht verfügbar.</p>
+      {% elseif error == 'deadline_passed' %}
+        <p>Die Anmeldefrist für diese Veranstaltung ist leider abgelaufen.</p>
+      {% elseif error == 'max_reached' %}
+        <p>Die maximale Teilnehmerzahl für diese Veranstaltung ist bereits erreicht.</p>
+      {% endif %}
+    </div>
+
+  {# ---- Success state ---- #}
+  {% elseif submitted %}
+    <div class="event-registration-success">
+      <p>Vielen Dank! Ihre Anmeldung für <strong>{{ event.title }}</strong> wurde erfolgreich gespeichert.</p>
+    </div>
+
+  {# ---- Form ---- #}
+  {% else %}
+    <h2 class="event-registration-headline">Anmeldung: {{ event.title }}</h2>
+
+    {% if event.regDeadline %}
+      <p class="event-registration-deadline">
+        Anmeldefrist: {{ event.regDeadline|date('d.m.Y H:i') }} Uhr
+      </p>
+    {% endif %}
+
+    {% if event.regMaxParticipants %}
+      <p class="event-registration-capacity">
+        Maximale Teilnehmerzahl: {{ event.regMaxParticipants }}
+      </p>
+    {% endif %}
+
+    <form class="event-registration-form" method="post" action="{{ formAction }}" novalidate>
+      <input type="hidden" name="event_reg_token" value="{{ token }}">
+
+      {% for field in formFields %}
+        {% set hasError = errors[field.name] is defined %}
+        <div class="form-group{% if hasError %} has-error{% endif %}">
+          <label for="field_{{ field.name }}">
+            {{ field.label }}
+            {% if field.mandatory %}<span class="required" aria-hidden="true"> *</span>{% endif %}
+          </label>
+
+          {% if field.type == 'textarea' %}
+            <textarea
+              id="field_{{ field.name }}"
+              name="{{ field.name }}"
+              rows="5"
+              {% if field.mandatory %}required{% endif %}
+            >{{ postData[field.name] ?? '' }}</textarea>
+
+          {% elseif field.type == 'select' %}
+            <select
+              id="field_{{ field.name }}"
+              name="{{ field.name }}"
+              {% if field.mandatory %}required{% endif %}
+            >
+              <option value="">Bitte wählen …</option>
+              {% for option in field.options %}
+                <option
+                  value="{{ option.value }}"
+                  {% if (postData[field.name] ?? '') == option.value %}selected{% endif %}
+                >{{ option.label }}</option>
+              {% endfor %}
+            </select>
+
+          {% elseif field.type == 'checkbox' %}
+            <label class="checkbox-label">
+              <input
+                type="checkbox"
+                id="field_{{ field.name }}"
+                name="{{ field.name }}"
+                value="1"
+                {% if (postData[field.name] ?? '') == '1' %}checked{% endif %}
+                {% if field.mandatory %}required{% endif %}
+              >
+              {{ field.label }}
+            </label>
+
+          {% else %}
+            <input
+              type="{{ field.type }}"
+              id="field_{{ field.name }}"
+              name="{{ field.name }}"
+              value="{{ postData[field.name] ?? '' }}"
+              {% if field.mandatory %}required{% endif %}
+            >
+          {% endif %}
+
+          {% if hasError %}
+            <span class="error-message" role="alert">
+              {% if errors[field.name] == 'required' %}
+                Dieses Feld ist ein Pflichtfeld.
+              {% elseif errors[field.name] == 'invalid_email' %}
+                Bitte geben Sie eine gültige E-Mail-Adresse ein.
+              {% else %}
+                Ungültige Eingabe.
+              {% endif %}
+            </span>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <p class="required-hint"><span aria-hidden="true">*</span> Pflichtfelder</p>
+
+      <div class="form-submit">
+        <button type="submit">Jetzt anmelden</button>
+      </div>
+    </form>
+  {% endif %}
+
+</div>
+{% endblock %}

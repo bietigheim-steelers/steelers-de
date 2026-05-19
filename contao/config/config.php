@@ -10,6 +10,7 @@ use App\Model\Partners;
 use App\Model\Camps;
 use App\Model\SeasonTicket;
 use App\Model\Seats;
+use App\Model\EventRegistration;
 
 /* Backend Module */
 
@@ -57,3 +58,6 @@ $GLOBALS['TL_WRAPPERS']['stop'][] = 'wrapper_block_end_element';
 // Add permissions
 $GLOBALS['TL_PERMISSIONS'][] = 'tilastot_camps';
 $GLOBALS['TL_PERMISSIONS'][] = 'tilastot_campsp';
+
+/* Event Registration */
+$GLOBALS['TL_MODELS']['tl_event_registration'] = EventRegistration::class;
