@@ -12,14 +12,11 @@ foreach (['default', 'internal', 'article', 'external'] as $palette) {
     }
 }
 
-// Register selectors for sub-palettes
+// Register selector for sub-palette
 $GLOBALS['TL_DCA']['tl_calendar_events']['palettes']['__selector__'][] = 'regEnabled';
-$GLOBALS['TL_DCA']['tl_calendar_events']['palettes']['__selector__'][] = 'regFormType';
 
-// Sub-palettes
-$GLOBALS['TL_DCA']['tl_calendar_events']['subpalettes']['regEnabled'] = 'regFormType,regToken,regDeadline,regMaxParticipants,regNotificationEmail';
-$GLOBALS['TL_DCA']['tl_calendar_events']['subpalettes']['regFormType_existing'] = 'regFormId';
-$GLOBALS['TL_DCA']['tl_calendar_events']['subpalettes']['regFormType_custom'] = 'regCustomFields';
+// Sub-palette: all registration fields in one level (no nested selector to avoid Contao appending to form end)
+$GLOBALS['TL_DCA']['tl_calendar_events']['subpalettes']['regEnabled'] = 'regFormType,regFormId,regCustomFields,regToken,regDeadline,regMaxParticipants,regNotificationEmail';
 
 // Add "Registrations" operation button in the event list
 $GLOBALS['TL_DCA']['tl_calendar_events']['list']['operations']['registrations'] = [
@@ -42,7 +39,7 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['regFormType'] = [
     'inputType' => 'select',
     'options'   => ['custom', 'existing'],
     'reference' => &$GLOBALS['TL_LANG']['tl_calendar_events']['regFormType_options'],
-    'eval'      => ['mandatory' => true, 'submitOnChange' => true, 'tl_class' => 'w50 clr'],
+    'eval'      => ['mandatory' => true, 'tl_class' => 'w50 clr'],
     'sql'       => "varchar(16) NOT NULL default 'custom'",
 ];
 
