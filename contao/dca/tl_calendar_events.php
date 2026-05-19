@@ -5,18 +5,12 @@ use Contao\DataContainer;
 // Register tl_event_registration as child table of tl_calendar_events
 $GLOBALS['TL_DCA']['tl_calendar_events']['config']['ctable'][] = 'tl_event_registration';
 
-// Add reg_legend to all event palettes
+// Add all registration fields directly into reg_legend (no sub-palette/submitOnChange needed)
 foreach (['default', 'internal', 'article', 'external'] as $palette) {
     if (isset($GLOBALS['TL_DCA']['tl_calendar_events']['palettes'][$palette])) {
-        $GLOBALS['TL_DCA']['tl_calendar_events']['palettes'][$palette] .= ';{reg_legend:hide},regEnabled';
+        $GLOBALS['TL_DCA']['tl_calendar_events']['palettes'][$palette] .= ';{reg_legend:hide},regEnabled,regFormType,regFormId,regCustomFields,regToken,regDeadline,regMaxParticipants,regNotificationEmail';
     }
 }
-
-// Register selector for sub-palette
-$GLOBALS['TL_DCA']['tl_calendar_events']['palettes']['__selector__'][] = 'regEnabled';
-
-// Sub-palette: all registration fields in one level (no nested selector to avoid Contao appending to form end)
-$GLOBALS['TL_DCA']['tl_calendar_events']['subpalettes']['regEnabled'] = 'regFormType,regFormId,regCustomFields,regToken,regDeadline,regMaxParticipants,regNotificationEmail';
 
 // Add "Registrations" operation button in the event list
 $GLOBALS['TL_DCA']['tl_calendar_events']['list']['operations']['registrations'] = [
@@ -31,7 +25,7 @@ $GLOBALS['TL_DCA']['tl_calendar_events']['list']['operations']['registrations'] 
 
 $GLOBALS['TL_DCA']['tl_calendar_events']['fields']['regEnabled'] = [
     'inputType' => 'checkbox',
-    'eval'      => ['submitOnChange' => true, 'tl_class' => 'w50 m12'],
+    'eval'      => ['tl_class' => 'w50 m12'],
     'sql'       => ['type' => 'boolean', 'default' => false],
 ];
 
