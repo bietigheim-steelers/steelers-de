@@ -38,3 +38,5 @@ $GLOBALS['TL_LANG']['tl_module']['tilastot_table_rows'] = array('Plätze', 'Wie 
 $GLOBALS['TL_LANG']['tl_module']['tilastot_my_team'] = array('Hervorgehobenes Team', 'An diesem Team wird immer angezeigt, ungeachtet der gewählten Anzahl an Tabellenplätze.');
 
 $GLOBALS['TL_LANG']['tl_module']['tilastot_legend']  = 'Client Einstellungen';
+
+$GLOBALS['TL_LANG']['MOD']['sponsors_events'] = array('Sponsoren Events', 'Hier können Sponsoren Events verwaltet werden.');

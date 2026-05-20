@@ -14,12 +14,6 @@ use App\Model\SponsorsEvent;
 
 /* Backend Module */
 
-$GLOBALS['BE_MOD']['sponsors'] = [
-    'sponsors_events' => [
-        'tables' => ['tl_sponsors_event'],
-    ],
-];
-
 $GLOBALS['BE_MOD']['saison'] = array(
 	'tilastot_rounds' => array(
 		'tables' => array('tl_tilastot_client_rounds')
@@ -42,6 +36,7 @@ $GLOBALS['BE_MOD']['content']['tilastot_partners'] = array('tables' => array('tl
 $GLOBALS['BE_MOD']['content']['tilastot_camps'] = array('tables' => array('tl_tilastot_camps'));
 $GLOBALS['BE_MOD']['content']['tilastot_seats'] = array('tables' => array('tl_tilastot_seats'));
 $GLOBALS['BE_MOD']['content']['tilastot_season_ticket'] = array('tables' => array('tl_tilastot_season_ticket'));
+$GLOBALS['BE_MOD']['content']['sponsors_events'] = array('tables' => array('tl_sponsors_event'));
 
 /* Model Classes */
 $GLOBALS['TL_MODELS']['tl_tilastot_client_rounds'] = Rounds::class;
