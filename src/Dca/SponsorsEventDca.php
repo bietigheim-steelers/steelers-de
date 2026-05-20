@@ -92,7 +92,7 @@ class SponsorsEventDca
         $calEvent->startDate = $startDate;
         $calEvent->endDate   = $startDate;
         $calEvent->startTime = $startTime;
-        $calEvent->teaser    = $row['description'] ?? '';
+        $calEvent->teaser    = $row['teaser'] ?? '';
         $calEvent->published = $row['published'] ? '1' : '';
         $calEvent->save();
 

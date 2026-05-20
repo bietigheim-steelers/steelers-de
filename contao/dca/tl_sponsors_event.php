@@ -78,7 +78,7 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{title_legend},title;{date_legend},startDate,startTime;{description_legend},description;{form_legend},form_id;{notes_legend:hide},notes;{access_legend},access_link;{publish_legend},published',
+        'default' => '{title_legend},title;{date_legend},startDate,startTime;{teaser_legend},teaser;{form_legend},form_id;{notes_legend:hide},notes;{access_legend},access_link;{publish_legend},published',
     ],
 
     // Fields
@@ -109,9 +109,9 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
             'eval'      => ['rgxp' => 'time', 'tl_class' => 'w50'],
             'sql'       => "varchar(5) NOT NULL default ''",
         ],
-        'description' => [
+        'teaser' => [
             'inputType' => 'textarea',
-            'eval'      => ['rte' => false, 'tl_class' => 'clr'],
+            'eval'      => ['rte' => 'tinyMCE', 'basicEntities' => true, 'tl_class' => 'clr'],
             'sql'       => "text NULL",
         ],
         'form_id' => [
