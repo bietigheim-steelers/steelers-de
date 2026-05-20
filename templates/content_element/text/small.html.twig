@@ -6,8 +6,34 @@
     {{- attrs(headline.attributes|default).addClass('text-4xl md:text-5xl') -}}
 {% endblock %}
 
+{% block text_media %}{% endblock %}
+
 {% block text %}
 <div class="!my-12 max-w-5xl mx-auto prose">
+  {% if image %}
+    {% set responsive_image = figure(data.singleSRC, picture_config({
+      width: 1920,
+      height: 1080,
+      resizeMode: 'box',
+      items: [
+        {
+          width: 640,
+          height: 360,
+          resizeMode: 'box',
+          media: '(max-width: 640px)'
+        },
+        {
+          width: 1280,
+          height: 720,
+          resizeMode: 'box',
+          media: '(max-width: 1280px)'
+        }
+      ]
+    })) %}
+    {% with {figure: responsive_image} %}
+      {{ block('figure_component') }}
+    {% endwith %}
+  {% endif %}
   {{ parent() }}
   {% if data.url and data.linkTitle %}
     <p class="mt-5 not-prose">
