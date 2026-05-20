@@ -133,7 +133,6 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
             'inputType'     => 'text',
             'eval'          => ['readonly' => true, 'doNotSave' => true, 'tl_class' => 'w100 clr'],
             'load_callback' => [[SponsorsEventDca::class, 'generateAccessLink']],
-            'sql'           => false,
         ],
         'calendar_event_id' => [
             'sql' => "int(10) unsigned NOT NULL default 0",
