@@ -95,7 +95,7 @@ class SponsorsEventDca
         $calEvent->teaser    = $row['teaser'] ?? '';
         $calEvent->addImage  = (bool) ($row['addImage'] ?? false);
         $calEvent->singleSRC = $row['singleSRC'] ?? null;
-        $calEvent->published = $row['published'] ? '1' : '';
+        $calEvent->published = $row['published'] ? '1' : '0';
         $calEvent->save();
 
         // Referenz speichern falls neu
