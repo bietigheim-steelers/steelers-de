@@ -7,11 +7,8 @@
 
 {% else %}
 
-{% set image = figure(
-  data.singleSRC,
-  [768, 768, 'crop'],
-  { metadata: { alt: headline.text}, options: { attr: { class: 'aspect-square' } } })
-%}
+{{ dump() }}
+
 
 
 <div>
@@ -30,15 +27,15 @@
       </h3>
       <p class="mt-2 text-lg font-bold leading-[1.4rem]">
         Am {{ event.startDate|format_date(locale='de', pattern='dd.MM.yyyy') }}
+        {% if event.startTime %}
+          um {{ event.startTime|format_time(locale='de', pattern='HH:mm') }} Uhr
+        {% endif %}
       </p>
     </div>
     <div class="overflow-hidden xl:mx-2">
-      {% if data.addImage and image %}
-        {% with {figure: image} %}
-        {{ block('picture_component') }}
-        {% endwith %}
-      {% else %}
-        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=" width="768" height="768" class="hidden md:block aspect-square">
+      {% if event.addImage and event.singleSRC %}
+        {% set imgSize = picture_config({ width: 800, height: 600, resizeMode: 'crop' }) %}
+        {% include "@Contao/component/_figure.html.twig" with { figure: figure(event.singleSRC, imgSize) } only %}
       {% endif %}
     </div>
   </div>
@@ -47,7 +44,9 @@
 
 <div class="content-text defaultcontainer mb-8 max-lg:!my-12">
   <div class="!my-12 max-w-5xl mx-auto prose">
-    {{ event.teaser|raw }}
+    {% if event.teaser %}
+      {{ event.teaser|raw }}
+    {% endif %}
   </div>
 </div>
 

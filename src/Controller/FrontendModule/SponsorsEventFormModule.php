@@ -8,6 +8,7 @@ use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\Input;
 use Contao\ModuleModel;
+use Contao\StringUtil;
 use Contao\System;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,6 +71,10 @@ class SponsorsEventFormModule extends AbstractFrontendModuleController
         $template->event    = [
             'title'     => $sponsorEvent->title,
             'startDate' => $sponsorEvent->startDate,
+            'startTime' => $sponsorEvent->startTime,
+            'teaser'    => $sponsorEvent->teaser,
+            'addImage'  => (bool) $sponsorEvent->addImage,
+            'singleSRC' => $sponsorEvent->singleSRC ? StringUtil::binToUuid($sponsorEvent->singleSRC) : null,
         ];
 
         return $template->getResponse();
