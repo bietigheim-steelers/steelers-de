@@ -45,6 +45,9 @@ services:
         template: mod_auction
         type: auction
 
+  App\Dca\SponsorsEventDca:
+    public: true
+
 twig:
   globals:
     project_dir: '%kernel.project_dir%'
