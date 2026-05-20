@@ -10,6 +10,7 @@ use App\Model\Partners;
 use App\Model\Camps;
 use App\Model\SeasonTicket;
 use App\Model\Seats;
+use App\Model\SponsorsEvent;
 
 /* Backend Module */
 
@@ -35,6 +36,7 @@ $GLOBALS['BE_MOD']['content']['tilastot_partners'] = array('tables' => array('tl
 $GLOBALS['BE_MOD']['content']['tilastot_camps'] = array('tables' => array('tl_tilastot_camps'));
 $GLOBALS['BE_MOD']['content']['tilastot_seats'] = array('tables' => array('tl_tilastot_seats'));
 $GLOBALS['BE_MOD']['content']['tilastot_season_ticket'] = array('tables' => array('tl_tilastot_season_ticket'));
+$GLOBALS['BE_MOD']['content']['sponsors_events'] = array('tables' => array('tl_sponsors_event'));
 
 /* Model Classes */
 $GLOBALS['TL_MODELS']['tl_tilastot_client_rounds'] = Rounds::class;
@@ -46,6 +48,7 @@ $GLOBALS['TL_MODELS']['tl_tilastot_partners'] = Partners::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_camps'] = Camps::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_seats'] = Seats::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_season_ticket'] = SeasonTicket::class;
+$GLOBALS['TL_MODELS']['tl_sponsors_event'] = SponsorsEvent::class;
 
 /* Cronjob */
 $GLOBALS['TL_CRON']['hourly'][] = array('App\\Utils\\TilastotApi', 'refreshAll');
