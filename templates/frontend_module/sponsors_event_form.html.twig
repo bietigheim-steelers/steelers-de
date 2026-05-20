@@ -46,4 +46,13 @@
 
 {{ formHtml|raw }}
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var field = document.querySelector('form input[name="sponsor_event_title"]');
+  if (field) {
+    field.value = {{ event.title|json_encode }};
+  }
+});
+</script>
+
 {% endif %}
