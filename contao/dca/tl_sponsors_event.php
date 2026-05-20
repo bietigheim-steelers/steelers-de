@@ -78,7 +78,13 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{title_legend},title;{date_legend},startDate,startTime;{teaser_legend},teaser;{form_legend},form_id;{notes_legend:hide},notes;{access_legend},access_link;{publish_legend},published',
+        '__selector__' => ['addImage'],
+        'default' => '{title_legend},title;{date_legend},startDate,startTime;{teaser_legend},teaser;{image_legend},addImage;{form_legend},form_id;{notes_legend:hide},notes;{access_legend},access_link;{publish_legend},published',
+    ],
+
+    // Sub-palettes
+    'subpalettes' => [
+        'addImage' => 'singleSRC',
     ],
 
     // Fields
@@ -125,6 +131,16 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
             'inputType' => 'textarea',
             'eval'      => ['rte' => false, 'tl_class' => 'clr'],
             'sql'       => "text NULL",
+        ],
+        'addImage' => [
+            'inputType' => 'checkbox',
+            'eval'      => ['submitOnChange' => true],
+            'sql'       => ['type' => 'boolean', 'default' => false],
+        ],
+        'singleSRC' => [
+            'inputType' => 'fileTree',
+            'eval'      => ['filesOnly' => true, 'fieldType' => 'radio', 'extensions' => '%contao.image.valid_extensions%', 'mandatory' => true],
+            'sql'       => "binary(16) NULL",
         ],
         'access_token' => [
             'sql' => "varchar(64) NOT NULL default ''",

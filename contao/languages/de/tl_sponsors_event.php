@@ -17,10 +17,16 @@ $GLOBALS['TL_LANG']['tl_sponsors_event']['access_link'][1] = 'Dieser Link kann a
 $GLOBALS['TL_LANG']['tl_sponsors_event']['published'][0]   = 'Veröffentlicht';
 $GLOBALS['TL_LANG']['tl_sponsors_event']['published'][1]   = 'Event veröffentlichen.';
 
+$GLOBALS['TL_LANG']['tl_sponsors_event']['addImage'][0]  = 'Ein Bild hinzufügen';
+$GLOBALS['TL_LANG']['tl_sponsors_event']['addImage'][1]  = 'Dem Event ein Bild hinzufügen.';
+$GLOBALS['TL_LANG']['tl_sponsors_event']['singleSRC'][0] = 'Quelldatei';
+$GLOBALS['TL_LANG']['tl_sponsors_event']['singleSRC'][1] = 'Bitte wählen Sie eine Datei aus der Dateiübersicht.';
+
 // Legends
 $GLOBALS['TL_LANG']['tl_sponsors_event']['title_legend']       = 'Titel';
 $GLOBALS['TL_LANG']['tl_sponsors_event']['date_legend']        = 'Datum & Uhrzeit';
 $GLOBALS['TL_LANG']['tl_sponsors_event']['teaser_legend'] = 'Teaser';
+$GLOBALS['TL_LANG']['tl_sponsors_event']['image_legend']       = 'Bild';
 $GLOBALS['TL_LANG']['tl_sponsors_event']['form_legend']        = 'Formular';
 $GLOBALS['TL_LANG']['tl_sponsors_event']['notes_legend']  = 'Notizen';
 $GLOBALS['TL_LANG']['tl_sponsors_event']['access_legend'] = 'Zugriffslink';

@@ -93,6 +93,8 @@ class SponsorsEventDca
         $calEvent->endDate   = $startDate;
         $calEvent->startTime = $startTime;
         $calEvent->teaser    = $row['teaser'] ?? '';
+        $calEvent->addImage  = (bool) ($row['addImage'] ?? false);
+        $calEvent->singleSRC = $row['singleSRC'] ?? null;
         $calEvent->published = $row['published'] ? '1' : '';
         $calEvent->save();
 
