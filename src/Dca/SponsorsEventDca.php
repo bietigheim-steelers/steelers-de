@@ -10,7 +10,8 @@ use Contao\DataContainer;
 use Contao\Database;
 use Contao\Date;
 use Contao\PageModel;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Contao\CoreBundle\Routing\ContentUrlGenerator;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * DCA-Callbacks für tl_sponsors_event.
@@ -22,7 +23,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class SponsorsEventDca
 {
-    public function __construct(private readonly RequestStack $requestStack)
+    public function __construct(private readonly ContentUrlGenerator $urlGenerator)
     {
     }
 
@@ -67,19 +68,31 @@ class SponsorsEventDca
 
         $startDate = (int) ($row['startDate'] ?? time());
 
+        // Startzeit (HH:ii) mit Datum kombinieren
+        $startTime = $startDate;
+        if (!empty($row['startTime']) && preg_match('/^(\d{1,2}):(\d{2})$/', $row['startTime'], $m)) {
+            $startTime = mktime((int) $m[1], (int) $m[2], 0,
+                (int) date('m', $startDate),
+                (int) date('d', $startDate),
+                (int) date('Y', $startDate)
+            );
+        }
+
         if ($calEvent === null) {
             $calEvent            = new CalendarEventsModel();
             $calEvent->pid       = $calendar->id;
             $calEvent->tstamp    = time();
             $calEvent->alias     = 'sponsor-event-' . $dc->id . '-' . substr(bin2hex(random_bytes(4)), 0, 6);
             $calEvent->author    = BackendUser::getInstance()->id;
-            $calEvent->startTime = $startDate;
+            $calEvent->startTime = $startTime;
             $calEvent->endTime   = $startDate + 86399;
         }
 
         $calEvent->title     = $row['title'];
         $calEvent->startDate = $startDate;
         $calEvent->endDate   = $startDate;
+        $calEvent->startTime = $startTime;
+        $calEvent->teaser    = $row['description'] ?? '';
         $calEvent->published = $row['published'] ? '1' : '';
         $calEvent->save();
 
@@ -116,7 +129,7 @@ class SponsorsEventDca
     public function generateAccessLink(mixed $value, DataContainer $dc): string
     {
         $db  = Database::getInstance();
-        $row = $db->prepare("SELECT access_token, link_page FROM tl_sponsors_event WHERE id=?")
+        $row = $db->prepare("SELECT access_token FROM tl_sponsors_event WHERE id=?")
             ->execute($dc->id)->fetchAssoc();
 
         if (empty($row['access_token'])) {
@@ -125,22 +138,17 @@ class SponsorsEventDca
 
         $token = $row['access_token'];
 
-        if (!empty($row['link_page'])) {
-            $page = PageModel::findById((int) $row['link_page']);
+        // Zielseite aus dem jumpTo des "Sponsor Events"-Kalenders ermitteln
+        $calendar = CalendarModel::findOneBy('title', 'Sponsor Events');
+        if ($calendar !== null && (int) $calendar->jumpTo > 0) {
+            $page = PageModel::findById((int) $calendar->jumpTo);
             if ($page !== null) {
-                $page->loadDetails();
-                $baseUrl = $page->getAbsoluteUrl();
-                return rtrim($baseUrl, '/') . '?token=' . $token;
+                $url = $this->urlGenerator->generate($page, [], UrlGeneratorInterface::ABSOLUTE_URL);
+                return rtrim($url, '/') . '?token=' . $token;
             }
         }
 
-        // Fallback: aktuellen Host verwenden
-        $request = $this->requestStack->getCurrentRequest();
-        if ($request !== null) {
-            return $request->getSchemeAndHttpHost() . '/sponsor-anmeldung?token=' . $token;
-        }
-
-        return $token;
+        return '— Bitte im Kalender "Sponsor Events" eine Zielseite hinterlegen. Token: ' . $token . ' —';
     }
 
     /**

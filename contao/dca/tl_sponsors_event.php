@@ -78,7 +78,7 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
 
     // Palettes
     'palettes' => [
-        'default' => '{title_legend},title;{date_legend},startDate;{form_legend},form_id,link_page;{notes_legend:hide},notes;{access_legend},access_link;{publish_legend},published',
+        'default' => '{title_legend},title;{date_legend},startDate,startTime;{description_legend},description;{form_legend},form_id;{notes_legend:hide},notes;{access_legend},access_link;{publish_legend},published',
     ],
 
     // Fields
@@ -104,17 +104,22 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
             'eval'      => ['rgxp' => 'date', 'mandatory' => true, 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "int(10) unsigned NULL",
         ],
+        'startTime' => [
+            'inputType' => 'text',
+            'eval'      => ['rgxp' => 'time', 'tl_class' => 'w50'],
+            'sql'       => "varchar(5) NOT NULL default ''",
+        ],
+        'description' => [
+            'inputType' => 'textarea',
+            'eval'      => ['rte' => false, 'tl_class' => 'clr'],
+            'sql'       => "text NULL",
+        ],
         'form_id' => [
             'search'           => true,
             'inputType'        => 'select',
             'options_callback' => [SponsorsEventDca::class, 'getForms'],
             'eval'             => ['mandatory' => true, 'includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
             'sql'              => "int(10) unsigned NOT NULL default 0",
-        ],
-        'link_page' => [
-            'inputType' => 'pageTree',
-            'eval'      => ['fieldType' => 'radio', 'tl_class' => 'w50'],
-            'sql'       => "int(10) unsigned NOT NULL default 0",
         ],
         'notes' => [
             'inputType' => 'textarea',
@@ -128,6 +133,7 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
             'inputType'     => 'text',
             'eval'          => ['readonly' => true, 'doNotSave' => true, 'tl_class' => 'w100 clr'],
             'load_callback' => [[SponsorsEventDca::class, 'generateAccessLink']],
+            'sql'           => false,
         ],
         'calendar_event_id' => [
             'sql' => "int(10) unsigned NOT NULL default 0",
