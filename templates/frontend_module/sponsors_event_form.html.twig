@@ -1,0 +1,21 @@
+{% block content %}
+{% if error %}
+  <div class="sponsors-event-error">
+    <p>{{ errorMsg }}</p>
+  </div>
+{% else %}
+  <div class="sponsors-event-form">
+    {% if event %}
+      <div class="sponsors-event-header">
+        <h2>{{ event.title }}</h2>
+        {% if event.startDate %}
+          <p class="sponsors-event-date">{{ event.startDate|format_date(locale='de', pattern='dd.MM.yyyy') }}</p>
+        {% endif %}
+      </div>
+    {% endif %}
+    <div class="sponsors-event-form-content">
+      {{ formHtml|raw }}
+    </div>
+  </div>
+{% endif %}
+{% endblock %}
