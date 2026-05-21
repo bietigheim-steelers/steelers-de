@@ -70,22 +70,7 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['tilastot_config_json'] = array(
 $GLOBALS['TL_DCA']['tl_module']['fields']['tilastot_partners_category'] = array(
 	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['tilastot_partners_category'],
 	'inputType'               => 'checkbox',
-	'options'               => array(
-		'premium' => 'Premiumpartner',
-		'gold' => 'Businesspartner Gold',
-		'silber' => 'Businesspartner Silber',
-		'bronze' => 'Businesspartner Bronze',
-		'business' => 'Businesspartner',
-		'lounge' => 'Businesslounge',
-		'medien' => 'Medienpartner',
-		'video' => 'Videopartner',
-		'carpool' => 'Carpool Partner',
-		'team' => 'Teampartner',
-		'supporter' => 'Supporter',
-		'nachwuchs_haupt' => 'Nachwuchs - Hauptsponsor',
-		'nachwuchs' => 'Nachwuchssponsor',
-		'nachwuchsspieler' => 'Nachwuchs Spielerpatenschaften',
-	),
+	'options_callback'        => array('App\\Model\\Partners', 'getCategoryOptions'),
 	'eval'                    => array('multiple' => true),
 	'sql'                     => "text NULL"
 );

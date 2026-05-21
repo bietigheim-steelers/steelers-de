@@ -21,4 +21,25 @@ class Partners extends Model
      * @var string
      */
     protected static $strTable = 'tl_tilastot_partners';
+
+    public static function getCategoryOptions($dc = null)
+    {
+        return array(
+            'platin' => 'Platinpartner',
+            'premium' => 'Premiumpartner',
+            'gold' => 'Goldpartner',
+            'silber' => 'Silberpartner',
+            'bronze' => 'Bronzepartner',
+            'business' => 'Businesspartner',
+            'lounge' => 'Businesslounge',
+            'medien' => 'Medienpartner',
+            'video' => 'Videopartner',
+            'carpool' => 'Carpool Partner',
+            'team' => 'Teampartner',
+            'supporter' => 'Supporter',
+            'nachwuchs_haupt' => 'Nachwuchs - Hauptsponsor',
+            'nachwuchs' => 'Nachwuchssponsor',
+            'nachwuchsspieler' => 'Nachwuchs Spielerpatenschaften',
+        );
+    }
 }
