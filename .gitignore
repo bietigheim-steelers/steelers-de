@@ -12,6 +12,7 @@ var
 node_modules
 dist
 dist-ssr
+files/css/steelers.css
 files/steelers/css
 files/steelers/js
 *.local
