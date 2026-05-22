@@ -1,8 +1,8 @@
 {% use "@Contao/component/_figure.html.twig" %}
 
 {% set partner_logo_size = picture_config({
-    width: 213,
-    height: 213,
+    width: cssClass == 'platinpartner' ? 426 : 213,
+    height: cssClass == 'platinpartner' ? 426 : 213,
     resizeMode: 'proportional'
 }) %}
 
