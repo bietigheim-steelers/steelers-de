@@ -3,9 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "scripts": {
-    "css-dev": "npx tailwindcss -i ./css/main.css -o ../files/css/steelers.css --watch --config tailwind.config.cjs",
-    "css-build": "npx tailwindcss -i ./css/main.css -o ../files/css/steelers.css --minify --config tailwind.config.cjs",
-    "css-links-build": "npx tailwindcss -i ./css/links.css -o ../files/css/links.css --minify --config tailwind-links.config.cjs",
+    "css-dev": "npx @tailwindcss/cli -i ./css/main.css -o ../files/css/steelers.css --watch --config tailwind.config.cjs",
+    "css-build": "npx @tailwindcss/cli -i ./css/main.css -o ../files/css/steelers.css --minify --config tailwind.config.cjs",
+    "css-links-build": "npx @tailwindcss/cli -i ./css/links.css -o ../files/css/links.css --minify --config tailwind-links.config.cjs",
     "js-dev": "vite",
     "js-build": "vite build && vite build --config vite-form.config.js && touch ../files/js/.public",
     "build": "npm run css-build && npm run css-links-build && npm run js-build && touch ../files/css/.public"
@@ -15,15 +15,15 @@
     "@tailwindcss/forms": "^0.5.4",
     "@tailwindcss/typography": "^0.5.8",
     "@vitejs/plugin-vue": "^3.0.0",
-    "autoprefixer": "^10.4.14",
     "dotenv": "^16.0.1",
-    "postcss-import": "^14.1.0",
     "tailwindcss": "^4.3.0",
     "vite": "^3.0.0"
   },
   "dependencies": {
     "@glidejs/glide": "^3.6.0",
     "@panzoom/panzoom": "^4.6.0",
+    "@tailwindcss/cli": "^4.3.0",
+    "@tailwindcss/postcss": "^4.3.0",
     "@vueform/vueform": "^1.9.9",
     "blaze-slider": "^1.8.0",
     "cpx": "^1.5.0",

@@ -104,14 +104,13 @@ module.exports = {
     },
   },
   plugins: [
-    require("postcss-import"),
+    require("@tailwindcss/postcss"),
     require("@tailwindcss/typography"),
     require("@tailwindcss/forms")({
       strategy: "base", // only generate global styles
     }),
     require("@tailwindcss/aspect-ratio"),
     require("@vueform/vueform/tailwind"),
-    require("autoprefixer"),
   ],
   vfDarkMode: false,
 };
