@@ -8,20 +8,20 @@ h3 {
 
 
 .grid-221 {
-  @apply inside grid grid-cols-1 gap-4;
+  @apply grid grid-cols-1 gap-4;
 }
 .grid-321 {
-  @apply inside grid grid-cols-1 gap-4;
+  @apply grid grid-cols-1 gap-4;
 }
 .grid-432,
 .platinpartner .grid-543 {
-  @apply inside grid grid-cols-2 gap-4;
+  @apply grid grid-cols-2 gap-4;
 }
 .grid-543 {
-  @apply inside grid grid-cols-3 gap-4;
+  @apply grid grid-cols-3 gap-4;
 }
 .grid-111 {
-  @apply inside grid grid-cols-1 gap-4;
+  @apply grid grid-cols-1 gap-4;
 }
 
 @media (min-width: 768px) {

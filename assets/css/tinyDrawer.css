@@ -92,7 +92,7 @@ drawer-menu ul li a:focus,
 drawer-menu ul li a:hover,
 drawer-menu ul li label:focus,
 drawer-menu ul li label:hover {
-  @apply bg-steelwhite bg-opacity-10;
+  @apply bg-steelwhite/10;
 }
 drawer-menu label {
   cursor: pointer;
@@ -118,7 +118,7 @@ drawer-menu .level_1 {
  */
 drawer-menu .level_2 a,
 drawer-menu .level_2 label {
-  @apply bg-black bg-opacity-10;
+  @apply bg-black/10;
   padding-left: 2rem;
   box-shadow: inset 0 -1px #ffffff60;
 }
@@ -126,14 +126,14 @@ drawer-menu .level_2 a:focus,
 drawer-menu .level_2 a:hover,
 drawer-menu .level_2 label:focus,
 drawer-menu .level_2 label:hover {
-  @apply bg-steelwhite bg-opacity-10;
+  @apply bg-steelwhite/10;
 }
 /**
  * Styling second level list items
  */
 drawer-menu .level_3 a,
 drawer-menu .level_3 label {
-  @apply bg-black bg-opacity-20;
+  @apply bg-black/20;
   padding-left: 2.8rem;
   box-shadow: inset 0 -1px #ffffff60;
 }
@@ -141,14 +141,14 @@ drawer-menu .level_3 a:focus,
 drawer-menu .level_3 a:hover,
 drawer-menu .level_3 label:focus,
 drawer-menu .level_3 label:hover {
-  @apply bg-steelwhite bg-opacity-10;
+  @apply bg-steelwhite/10;
 }
 /**
  * Styling third level list items
  */
 drawer-menu .level_4 a,
 drawer-menu .level_4 label {
-  @apply bg-black bg-opacity-30;
+  @apply bg-black/30;
   padding-left: 6rem;
   box-shadow: inset 0 -1px #ffffff60;
 }
@@ -156,7 +156,7 @@ drawer-menu .level_4 a:focus,
 drawer-menu .level_4 a:hover,
 drawer-menu .level_4 label:focus,
 drawer-menu .level_4 label:hover {
-  @apply bg-steelwhite bg-opacity-10;
+  @apply bg-steelwhite/10;
 }
 /**
  * Hide nested lists

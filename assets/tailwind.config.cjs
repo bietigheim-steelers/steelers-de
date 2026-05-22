@@ -110,7 +110,6 @@ module.exports = {
       strategy: "base", // only generate global styles
     }),
     require("@tailwindcss/aspect-ratio"),
-    require("@vueform/vueform/tailwind"),
   ],
   vfDarkMode: false,
 };
