@@ -10,7 +10,7 @@ h3 {
 .grid-221 {
   @apply inside grid grid-cols-1 gap-4;
 }
-.grid-321 {
+.grid-321, .platinpartner .grid-543 {
   @apply inside grid grid-cols-1 gap-4;
 }
 .grid-432 {
@@ -27,7 +27,8 @@ h3 {
   .grid-221 {
     @apply grid-cols-2 gap-8;
   }
-  .grid-321 {
+  .grid-321,
+  .platinpartner .grid-543 {
     @apply grid-cols-2 gap-8;
   }
   .grid-432 {
@@ -44,7 +45,8 @@ h3 {
   .gridwrapper h3 {
     @apply text-5xl overflow-hidden text-ellipsis;
   }
-  .grid-321 {
+  .grid-321,
+  .platinpartner .grid-543 {
     @apply grid-cols-3 gap-16;
   }
   .grid-321 {
