@@ -5,7 +5,7 @@
   @apply mt-8;
 }
 .partner-cards .content-hyperlink:not(.nohover) {
-  @apply bg-white flex items-center p-5 transition-all duration-500;
+  @apply bg-white flex items-center p-5 transition-all duration-500 place-content-center;
   aspect-ratio: 1 / 1;
 }
 .partner-cards .content-hyperlink:not(.nohover):hover {
