@@ -10,10 +10,11 @@ h3 {
 .grid-221 {
   @apply inside grid grid-cols-1 gap-4;
 }
-.grid-321, .platinpartner .grid-543 {
+.grid-321 {
   @apply inside grid grid-cols-1 gap-4;
 }
-.grid-432 {
+.grid-432,
+.platinpartner .grid-543 {
   @apply inside grid grid-cols-2 gap-4;
 }
 .grid-543 {
