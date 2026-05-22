@@ -28,7 +28,7 @@
     </div>
     <div class="overflow-hidden xl:mx-2">
       {% if event.addImage and event.singleSRC %}
-        {% set imgSize = picture_config({ width: 800, height: 600, resizeMode: 'crop' }) %}
+        {% set imgSize = picture_config({ width: 768, height: 768, resizeMode: 'crop' }) %}
         {% include "@Contao/component/_figure.html.twig" with { figure: figure(event.singleSRC, imgSize) } only %}
       {% endif %}
     </div>
