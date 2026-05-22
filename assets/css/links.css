@@ -1,6 +1,6 @@
-@import "tailwind.css";
-@import "base.css";
-@import "fonts/formula.css";
+@import './tailwind.css';
+@import './base.css';
+@import './fonts/formula.css';
 
 .hyperlink_txt {
   @apply btn-default w-full text-center mb-5;

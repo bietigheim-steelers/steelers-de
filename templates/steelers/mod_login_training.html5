@@ -1,5 +1,5 @@
 <!-- indexer::stop -->
-<div class="<?= $this->class ?> defaultcontainer !px-0 !my-6">
+<div class="<?= $this->class ?> defaultcontainer px-0! my-6!">
   <div class="grid md:p-0 items-start gap-8">
     <div class="overflow-hidden border-t-4 border-gray-800">
     </div>

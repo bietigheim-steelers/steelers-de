@@ -1,22 +1,22 @@
 {% if error %}
-<div class="content-text defaultcontainer mb-8 max-lg:!my-12">
-  <div class="!my-12 max-w-5xl mx-auto prose">
+<div class="content-text defaultcontainer mb-8 max-lg:my-12!">
+  <div class="my-12! max-w-5xl mx-auto prose">
     {{ errorMsg }}
   </div>
 </div>
 {% else %}
 <div>
-  <div class="max-w-screen-2xl mx-auto relative pt-4 md:py-4 sm:my-16 md:my-24 xl:my-36 z-40">
+  <div class="max-w-(--breakpoint-2xl) mx-auto relative pt-4 md:py-4 sm:my-16 md:my-24 xl:my-36 z-40">
     <h2 class="block-headline">
       Event
     </h2>
   </div>
 </div>
 
-<div class="relative mb-20 md:-mt-[29rem] lg:-mt-[26rem] xl:-mt-[32rem]">
-  <div class="grid items-end grid-cols-1 md:grid-cols-2 defaultcontainer max-lg:!mt-0">
+<div class="relative mb-20 md:-mt-116 lg:-mt-104 xl:-mt-128">
+  <div class="grid items-end grid-cols-1 md:grid-cols-2 defaultcontainer max-lg:mt-0!">
     <div class="xl:mb-20 py-5 lg:pr-16">
-      <h3 class="text-3xl lg:text-4xl xl:text-5xl !mt-4 lg:!mt-8 pt-4 uppercase font-bold font-sans text-black leading-none max-w-full text-ellipsis overflow-hidden">
+      <h3 class="text-3xl lg:text-4xl xl:text-5xl mt-4! lg:mt-8! pt-4 uppercase font-bold font-sans text-black leading-none max-w-full text-ellipsis overflow-hidden">
         {{ event.title }}
       </h3>
       <p class="mt-2 text-lg font-bold leading-[1.4rem]">
@@ -36,8 +36,8 @@
 </div>
 
 
-<div class="content-text defaultcontainer mb-8 max-lg:!my-12">
-  <div class="!my-12 max-w-5xl mx-auto prose">
+<div class="content-text defaultcontainer mb-8 max-lg:my-12!">
+  <div class="my-12! max-w-5xl mx-auto prose">
     {% if event.teaser %}
       {{ event.teaser|raw }}
     {% endif %}

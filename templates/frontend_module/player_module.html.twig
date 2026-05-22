@@ -18,15 +18,15 @@
 
 {% block content %}
 <div class="{{ cssClass }} mt-24">
-  <div class="max-w-screen-2xl mx-auto relative py-4 md:py-4 sm:my-16 md:my-24 xl:my-32 z-40">
+  <div class="max-w-(--breakpoint-2xl) mx-auto relative py-4 md:py-4 sm:my-16 md:my-24 xl:my-32 z-40">
     <h2 class="block-headline w-full invisible lg:visible md:w-auto text-right md:text-left">
       #{{ player.jersey is defined ? player.jersey : '' }}</h2>
   </div>
 </div>
 
-<div class="{{ cssClass }} defaultcontainer max-w-screen-2xl mx-auto relative my-20">
-  <div class="grid md:grid-cols-2 items-end -mt-[24rem] md:-mt-[30rem]">
-    <div class="mb-0 !pb-0 xl:p-5">
+<div class="{{ cssClass }} defaultcontainer max-w-(--breakpoint-2xl) mx-auto relative my-20">
+  <div class="grid md:grid-cols-2 items-end -mt-96 md:-mt-120">
+    <div class="mb-0 pb-0! xl:p-5">
       <h3 class="text-5xl font-sans inline-block md:block uppercase font-bold text-black">
         <span class="block lg:hidden font-headlineItalic player-number mt-20">#{{ player.jersey is defined ? player.jersey : '' }}</span>
         {{ player.firstname is defined ? player.firstname : '' }} {{ player.lastname is defined ? player.lastname : '' }}<br>
@@ -114,7 +114,7 @@
           {% endif %}
         </div>
         <div class="md:pt-10 flex flex-col items-start">
-          <h4 class="text-2xl text-black font-sans uppercase font-bold !mt-0">Über {{ player.firstname is defined ? player.firstname : '' }}
+          <h4 class="text-2xl text-black font-sans uppercase font-bold mt-0!">Über {{ player.firstname is defined ? player.firstname : '' }}
             {{ player.lastname is defined ? player.lastname : '' }}</h4>
           <div class="mt-2 leading-relaxed prose">
             {{ player.about|raw }}

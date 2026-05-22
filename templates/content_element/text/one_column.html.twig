@@ -9,7 +9,7 @@
   %}
 {% endif %}
 
-<div class="defaultcontainer !px-0 !my-6 {{ class|default }}">
+<div class="defaultcontainer px-0! my-6! {{ class|default }}">
   <div class="grid md:p-0 items-start gap-8">
     <div class="overflow-hidden border-t-4 border-gray-800">
       {% if data.addImage %}
@@ -19,7 +19,7 @@
       {% endif %}
     </div>
     <div class="flex flex-col items-start">
-      <h4 class="text-2xl text-black font-sans uppercase font-bold !mt-0">
+      <h4 class="text-2xl text-black font-sans uppercase font-bold mt-0!">
         {{ headline.text }}
       </h4>
       <div class="mt-2 leading-relaxed prose">

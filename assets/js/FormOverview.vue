@@ -4,7 +4,7 @@
     <div class="col-span-12 flex justify-between">
       <div class="flex items-start mr-6">
         <span
-          class="flex-grow-0 font-bold whitespace-nowrap flex-shrink-0 text-steelgreen"
+          class="grow-0 font-bold whitespace-nowrap shrink-0 text-steelgreen"
           >Meine Dauerkarte
           <b class="uppercase">{{ form_data.ticket_type }}</b> 2026/2027</span
         >
@@ -93,7 +93,7 @@
     >
       <div class="flex items-start mr-6">
         <span
-          class="flex-grow-0 font-bold whitespace-nowrap flex-shrink-0 text-steelgreen"
+          class="grow-0 font-bold whitespace-nowrap shrink-0 text-steelgreen"
           >Meine Kontaktdaten</span
         >
       </div>

@@ -1,5 +1,5 @@
 <?php $this->block('content'); ?>
-<div class="defaultcontainer gridwrapper !px-2 md:px-0 block <?= $this->cssClass ?>"
+<div class="defaultcontainer gridwrapper px-2! md:px-0 block <?= $this->cssClass ?>"
   <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
   <?php foreach ($this->camps as $category => $elements) : ?>
     <h3 title="<?= $category ?>"><?= $category ?></h3>
@@ -17,7 +17,7 @@
           </div>
         <?php endif; ?>
         <div class="md:pt-10 flex flex-col items-start">
-          <h4 class="text-2xl text-black font-sans uppercase font-bold !mt-0"><?= $camp['title'] ?></h4>
+          <h4 class="text-2xl text-black font-sans uppercase font-bold mt-0!"><?= $camp['title'] ?></h4>
           <div class="mt-2 leading-relaxed prose">
             <?php
             if ($camp['full']):
