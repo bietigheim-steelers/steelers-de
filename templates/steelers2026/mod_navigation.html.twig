@@ -1,26 +1,48 @@
 <!-- indexer::stop -->
 <a href="{{ request }}#{{ skipId }}" class="sr-only">{{ skipNavigation }}</a>
 
-{# Mobile toggle without JavaScript #}
-<input id="main-nav-toggle" type="checkbox" class="peer sr-only lg:hidden">
+{% set mobileToggleId = 'main-nav-toggle-' ~ (skipId|default('nav')) %}
+{% set mobilePanelId = 'main-nav-panel-' ~ (skipId|default('nav')) %}
 
-<label for="main-nav-toggle" class="fixed left-4 top-4 z-[130] inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-steelnav/90 text-white backdrop-blur-sm shadow-lg lg:hidden" aria-controls="main-nav-panel" aria-label="Menü öffnen">
+<style>
+    @media (max-width: 1023.98px) {
+        #{{ mobileToggleId }}:checked ~ #{{ mobilePanelId }} {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #{{ mobileToggleId }}:checked + label .line-1 {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        #{{ mobileToggleId }}:checked + label .line-2 {
+            opacity: 0;
+        }
+
+        #{{ mobileToggleId }}:checked + label .line-3 {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+    }
+</style>
+
+{# Mobile toggle without JavaScript #}
+<input id="{{ mobileToggleId }}" type="checkbox" class="sr-only lg:hidden">
+
+<label for="{{ mobileToggleId }}" class="fixed left-4 top-4 z-[130] inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-steelnav/90 text-white backdrop-blur-sm shadow-lg lg:hidden" aria-controls="{{ mobilePanelId }}" aria-label="Menü öffnen">
     <span class="relative block h-4 w-6">
-        <span class="absolute left-0 top-0 h-0.5 w-6 bg-current transition-transform duration-300 peer-checked:translate-y-[7px] peer-checked:rotate-45"></span>
-        <span class="absolute left-0 top-[7px] h-0.5 w-6 bg-current transition-opacity duration-300 peer-checked:opacity-0"></span>
-        <span class="absolute left-0 top-[14px] h-0.5 w-6 bg-current transition-transform duration-300 peer-checked:-translate-y-[7px] peer-checked:-rotate-45"></span>
+        <span class="line-1 absolute left-0 top-0 h-0.5 w-6 bg-current transition-transform duration-300"></span>
+        <span class="line-2 absolute left-0 top-[7px] h-0.5 w-6 bg-current transition-opacity duration-300"></span>
+        <span class="line-3 absolute left-0 top-[14px] h-0.5 w-6 bg-current transition-transform duration-300"></span>
     </span>
 </label>
 
-<div id="main-nav-panel" class="pointer-events-none fixed inset-0 z-[120] bg-steelnav/95 opacity-0 transition-opacity duration-300 peer-checked:pointer-events-auto peer-checked:opacity-100 lg:static lg:z-auto lg:block lg:h-full lg:bg-transparent lg:opacity-100 lg:pointer-events-auto">
-    <div class="flex min-h-screen flex-col items-center justify-center gap-8 px-6 py-20 text-white lg:min-h-0 lg:h-full lg:justify-center lg:py-10">
-        <a href="/" class="block w-40 max-w-[70%] lg:w-52" aria-label="Zur Startseite">
+<div id="{{ mobilePanelId }}" class="pointer-events-none fixed inset-0 z-[120] bg-steelnav/95 opacity-0 transition-opacity duration-300 lg:static lg:z-auto lg:block lg:h-full lg:bg-transparent lg:opacity-100 lg:pointer-events-auto">
+    <div class="flex min-h-screen flex-col items-center justify-center gap-4 px-4 py-16 text-white lg:min-h-0 lg:h-full lg:justify-center lg:gap-3 lg:py-10">
+        <a href="/" class="block w-32 max-w-[65%] lg:mb-2 lg:w-44" aria-label="Zur Startseite">
             {% include 'logo.html.twig' %}
         </a>
 
-        {{ insert_tag('insert_article::before-nav-article')|raw }}
-
-        <nav class="w-full max-w-[30rem]" aria-label="Hauptnavigation">
+        <nav class="w-full max-w-[30rem] max-h-[70vh] overflow-y-auto" aria-label="Hauptnavigation">
             {{ items|raw }}
         </nav>
 
