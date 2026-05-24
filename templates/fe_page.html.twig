@@ -147,7 +147,7 @@
     <div id="mobile-image-strip" aria-hidden="true">
         <div id="mobile-bg-a" class="panel-bg"></div>
         <div id="mobile-bg-b" class="panel-bg is-hidden"></div>
-        <div class="absolute inset-0" style="background-color: #046a38; opacity: 0.65;"></div>
+        <div class="absolute inset-0 bg-steelgreen/80"></div>
     </div>
 
     {# ── Main page wrapper ────────────────────────────────────────────── #}
@@ -160,11 +160,11 @@
         <div id="split-left-fixed" aria-label="Navigation">
 
             {# Background image layers — A shown, B hidden; JS cross-fades them #}
-            <div id="panel-bg-a" class="panel-bg" style="background-image: url('files/steelers/layout/muster-bg.svg'); background-color: #046a38;"></div>
-            <div id="panel-bg-b" class="panel-bg is-hidden"></div>
+            <div id="panel-bg-a" class="panel-bg bg-steelgreen bg-blend-darken" style="background-image: url('files/steelers/layout/muster-bg.svg');"></div>
+            <div id="panel-bg-b" class="panel-bg bg-steelgreen bg-blend-darken is-hidden"></div>
 
             {# Green overlay above the image #}
-            <div class="absolute inset-0 z-[1]" style="background-color: #046a38; opacity: 0.65;" aria-hidden="true"></div>
+            <div class="absolute inset-0 z-[1] bg-steelgreen/80 bg-blend-darken" aria-hidden="true"></div>
 
             {# Navigation content #}
             <div id="split-nav" class="z-[2] px-8 py-10">
