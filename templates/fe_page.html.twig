@@ -13,7 +13,7 @@
 <!DOCTYPE html>
 <html{{ rootAttributes }}>
 <head>
-{#  
+{#
 // classes to avoid purging
 // mt-10 mt-5 w-p60 h-p40 grid grid-cols-2 border-steelgreen border-gray-300 ring-2 ring-steelgreen max-w-xl max-w-2xl max-w-4xl min-w-xl min-w-2xl min-w-4xl
 #}
@@ -33,10 +33,10 @@
             <meta name="robots" content="{{ robots }}">
             <meta name="description" content="{{ description|u.truncate(320, '…') }}">
             <meta name="generator" content="Contao Open Source CMS">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <meta name="msapplication-TileColor" content="#046a38">
             <meta name="msapplication-config" content="/files/steelers/icons/browserconfig.xml">
-            <meta name="theme-color" content="#ffffff">
+            <meta name="theme-color" content="#046a38">
             {% for metaTag in metaTags|default %}
                 <meta{{metaTag}}>
             {% endfor %}
@@ -54,87 +54,318 @@
         {{ stylesheets|raw }}
         {{ mooScripts|raw }}
         {{ head|raw }}
+
+        <style>
+            /*
+             * Split-layout core styles.
+             * --panel-width uses min() so the left panel never squeezes
+             * the content area below --content-min-width.
+             */
+            :root {
+                --content-min-width: 600px;
+                --panel-width: min(50%, calc(100vw - var(--content-min-width)));
+            }
+
+            /* ── Desktop fixed left panel ─────────────────────────────── */
+            #split-left-spacer {
+                display: none;
+                width: var(--panel-width);
+                flex-shrink: 0;
+            }
+
+            #split-left-fixed {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: var(--panel-width);
+                overflow: hidden;
+                z-index: 40;
+            }
+
+            #split-right {
+                width: 100%;
+                min-height: 100vh;
+            }
+
+            @media (min-width: 1024px) {
+                #split-left-spacer { display: block; }
+                #split-left-fixed  { display: flex; flex-direction: column; }
+                #split-right       { width: auto; flex: 1 1 0%; min-width: var(--content-min-width); }
+
+                /* Hide the mobile image strip on desktop */
+                #mobile-image-strip { display: none; }
+            }
+
+            /* ── Parallax background layers ───────────────────────────── */
+            .panel-bg {
+                position: absolute;
+                inset: 0;
+                background-size: cover;
+                background-position: center center;
+                transition: opacity 0.8s ease;
+            }
+
+            .panel-bg.is-hidden {
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            /* ── Mobile image strip ───────────────────────────────────── */
+            #mobile-image-strip {
+                position: relative;
+                height: 10rem; /* 160 px — adjust in Tailwind h-40 */
+                overflow: hidden;
+            }
+
+            #mobile-image-strip .panel-bg {
+                transition: opacity 0.6s ease;
+            }
+
+            /* ── Navigation inside the left panel ────────────────────── */
+            #split-nav {
+                position: relative;
+                z-index: 10;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+                overflow-y: auto;
+                scrollbar-width: none;
+            }
+            #split-nav::-webkit-scrollbar { display: none; }
+        </style>
     {% endblock %}
 
 </head>
-<body{{ bodyAttributes }} class="overflow-y-scroll">
+<body{{ bodyAttributes }} class="overflow-y-scroll bg-white">
 
 {% block body %}
     {{ contao_sections('top') }}
 
-    <div id="wrapper">
-      <img src="files/steelers/layout/muster-bg.svg" class="fixed pointer-events-none" style="opacity: 0.10; left: -20vw; width: 120vw; max-width: 120vw; min-height: 100vh;"
-        alt="" role="presentation"/>
+    {# ── Mobile image strip (hidden on lg+) ──────────────────────────── #}
+    <div id="mobile-image-strip" aria-hidden="true">
+        <div id="mobile-bg-a" class="panel-bg"></div>
+        <div id="mobile-bg-b" class="panel-bg is-hidden"></div>
+        <div class="absolute inset-0" style="background-color: #046a38; opacity: 0.65;"></div>
+    </div>
 
-        {% block header %}
-            {% if header %}
-                <header id="header">
-                    <div class="inside">
-                      <div class="h-20 max-h-20 overflow-hidden bg-white">
-                        {{contao_section('preheader')}}
-                      </div>
-                        {{ header|raw }}
-                    </div>
-                </header>
-            {% endif %}
-        {% endblock %}
+    {# ── Main page wrapper ────────────────────────────────────────────── #}
+    <div id="wrapper" class="flex min-h-screen">
 
-        {{ contao_sections('before') }}
+        {# Invisible spacer pushes the right column into correct position #}
+        <div id="split-left-spacer" aria-hidden="true"></div>
 
-        {% block container %}
-            <div id="container">
+        {# ── Left fixed panel (desktop only) ─────────────────────────── #}
+        <div id="split-left-fixed" aria-label="Navigation">
 
-                {% block main %}
-                    <main id="main">
-                        <div class="inside">
-                            {{ main|raw }}
+            {# Background image layers — A shown, B hidden; JS cross-fades them #}
+            <div id="panel-bg-a" class="panel-bg" style="background-image: url('files/steelers/layout/muster-bg.svg'); background-color: #046a38;"></div>
+            <div id="panel-bg-b" class="panel-bg is-hidden"></div>
+
+            {# Green overlay above the image #}
+            <div class="absolute inset-0 z-[1]" style="background-color: #046a38; opacity: 0.65;" aria-hidden="true"></div>
+
+            {# Navigation content #}
+            <div id="split-nav" class="z-[2] px-8 py-10">
+
+                {% block panel_header %}
+                    {% if header %}
+                        <div id="header" class="h-full text-white">
+                            {{ header|raw }}
                         </div>
-                        {{ contao_sections('main') }}
-                    </main>
+                    {% endif %}
                 {% endblock %}
 
-                {% block left %}
+                {% block panel_left %}
                     {% if left %}
-                        <aside id="left">
-                            <div class="inside">
-                                {{ left|raw }}
-                            </div>
-                        </aside>
+                        <nav id="left" class="text-white mt-6">
+                            {{ left|raw }}
+                        </nav>
                     {% endif %}
                 {% endblock %}
 
-                {% block right %}
-                    {% if right %}
-                        <aside id="right">
-                            <div class="inside">
-                                {{ right|raw }}
-                            </div>
-                        </aside>
-                    {% endif %}
-                {% endblock %}
+                {{ contao_sections('before') }}
 
             </div>
-        {% endblock %}
+        </div>
 
-        {{ contao_sections('after') }}
+        {# ── Right content area ───────────────────────────────────────── #}
+        <div id="split-right">
 
-        {% block footer %}
-            {% if footer %}
-                <footer id="footer">
-                    <div class="inside">
-                        {{ footer|raw }}
-                    </div>
-                </footer>
-            {% endif %}
-        {% endblock %}
+            {# Mobile header (only visible below lg) #}
+            {% block mobile_header %}
+                {% if header %}
+                    <header id="header-mobile" class="lg:hidden">
+                        <div class="inside">
+                            <div class="h-20 max-h-20 overflow-hidden bg-white">
+                                {{ contao_section('preheader') }}
+                            </div>
+                            {{ header|raw }}
+                        </div>
+                    </header>
+                {% endif %}
+            {% endblock %}
 
-    </div>
+            {% block container %}
+                <div id="container">
+
+                    {% block main %}
+                        <main id="main">
+                            <div class="inside">
+                                {{ main|raw }}
+                            </div>
+                            {{ contao_sections('main') }}
+                        </main>
+                    {% endblock %}
+
+                    {% block right %}
+                        {% if right %}
+                            <aside id="right">
+                                <div class="inside">
+                                    {{ right|raw }}
+                                </div>
+                            </aside>
+                        {% endif %}
+                    {% endblock %}
+
+                </div>
+            {% endblock %}
+
+            {{ contao_sections('after') }}
+
+            {% block footer %}
+                {% if footer %}
+                    <footer id="footer">
+                        <div class="inside">
+                            {{ footer|raw }}
+                        </div>
+                    </footer>
+                {% endif %}
+            {% endblock %}
+
+        </div>{# /split-right #}
+
+    </div>{# /wrapper #}
 
     {{ contao_sections('bottom') }}
 {% endblock %}
 
 {{ mootools|raw }}
 {{ jsonLdScripts|raw }}
+
+<script>
+(function () {
+    'use strict';
+
+    /**
+     * Parallax image switcher
+     * ─────────────────────────────────────────────────────────────────────────
+     * Place  data-parallax-image="url/to/image.jpg"  on any element inside
+     * #split-right to trigger an image change when that element enters the
+     * viewport.  Optionally add  data-parallax-mobile="true"  to also update
+     * the mobile image strip.
+     *
+     * Example:
+     *   <section data-parallax-image="files/steelers/images/stadium.jpg">
+     *     …
+     *   </section>
+     */
+
+    /** Active panel layer index: 0 = A is visible, 1 = B is visible */
+    var activeLayer = 0;
+
+    var panelLayers = [
+        document.getElementById('panel-bg-a'),
+        document.getElementById('panel-bg-b')
+    ];
+
+    var mobileLayers = [
+        document.getElementById('mobile-bg-a'),
+        document.getElementById('mobile-bg-b')
+    ];
+
+    /**
+     * Cross-fade to a new background image on both panel and (optionally)
+     * the mobile strip.
+     *
+     * @param {string}  url          - Image URL to transition to
+     * @param {boolean} updateMobile - Whether to also update the mobile strip
+     */
+    function transitionTo(url, updateMobile) {
+        var next = 1 - activeLayer;
+        var current = activeLayer;
+
+        // Preload before revealing
+        var img = new Image();
+        img.onload = function () {
+            // Desktop panel
+            panelLayers[next].style.backgroundImage = 'url("' + url + '")';
+            panelLayers[next].classList.remove('is-hidden');
+            panelLayers[current].classList.add('is-hidden');
+
+            // Mobile strip
+            if (updateMobile) {
+                mobileLayers[next].style.backgroundImage = 'url("' + url + '")';
+                mobileLayers[next].classList.remove('is-hidden');
+                mobileLayers[current].classList.add('is-hidden');
+            }
+
+            activeLayer = next;
+        };
+        img.src = url;
+    }
+
+    /** Set up IntersectionObserver once DOM is ready */
+    function init() {
+        var triggers = document.querySelectorAll('[data-parallax-image]');
+        if (!triggers.length) return;
+
+        var firstTrigger = triggers[0];
+        var initialUrl = firstTrigger.getAttribute('data-parallax-image');
+        var initialMobile = firstTrigger.getAttribute('data-parallax-mobile') === 'true';
+
+        if (initialUrl) {
+            panelLayers[0].style.backgroundImage = 'url("' + initialUrl + '")';
+
+            if (initialMobile) {
+                mobileLayers[0].style.backgroundImage = 'url("' + initialUrl + '")';
+            }
+        }
+
+        var observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+
+                var el = entry.target;
+                var url = el.getAttribute('data-parallax-image');
+                var mobile = el.getAttribute('data-parallax-mobile') === 'true';
+
+                if (url) {
+                    transitionTo(url, mobile);
+                }
+            });
+        }, {
+            /**
+             * rootMargin: fire when the element is 20% into the viewport from
+             * the top.  Adjust to taste.
+             */
+            rootMargin: '-20% 0px -20% 0px',
+            threshold: 0
+        });
+
+        triggers.forEach(function (el) {
+            observer.observe(el);
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+}());
+</script>
 
 </body>
 </html>
