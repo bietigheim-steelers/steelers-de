@@ -78,6 +78,7 @@ module.exports = {
         wiggle: "wiggle 5s ease-in-out infinite",
       },
       fontFamily: {
+        serif: ["Source Serif 4", "Times New Roman", "serif"],
         sans: [
           "PP Formula",
           "WhyteReg",

@@ -12,15 +12,18 @@
                     .set('style', 'display:none')
                     .addClass('peer')
                 }}>
-                <label{{ attrs().set('for', 'group-' ~ item.id).addClass(isRoot ? 'inline-flex cursor-pointer items-center gap-1 rounded px-3 py-1 text-sm font-headline uppercase tracking-wide hover:bg-white/10' : 'inline-flex cursor-pointer items-center justify-between w-full rounded px-3 py-1 text-xs font-headline uppercase tracking-wide hover:bg-white/10') }}>
+                <label{{ attrs().set('for', 'group-' ~ item.id).addClass(isRoot ? 'relative inline-flex cursor-pointer items-center gap-3 px-3 py-2 font-serif text-[2rem] font-thin lowercase leading-none tracking-[0.03em] after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px after:origin-left after:scale-x-0 after:bg-steelblue after:transition-transform after:duration-300 hover:after:scale-x-100 peer-checked:after:scale-x-100 peer-checked:after:bg-white' : 'inline-flex cursor-pointer items-center justify-between w-full rounded px-3 py-1 text-xs font-headline uppercase tracking-wide hover:bg-white/10') }}>
                     <span>{{ item.link }}</span>
+                    <svg class="h-3 w-3 shrink-0 stroke-current transition-transform duration-300{% if isRoot %} peer-checked:rotate-180{% endif %}" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M3.5 6 8 10.5 12.5 6" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
                 </label>
                 {{- item.subitems|raw -}}
             </li>
         {% else %}
             {% if item.isActive %}
                 <li class="{{ item.class|default }} active">
-                    <label class="inline-flex rounded bg-white/15 px-3 py-1 text-sm font-headline uppercase tracking-wide">{{ item.link }}</label>
+                    <label class="{% if isRoot %}relative inline-flex px-3 py-2 font-serif text-[2rem] font-thin lowercase leading-none tracking-[0.03em] after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px after:bg-white{% else %}inline-flex rounded bg-white/15 px-3 py-1 text-sm font-headline uppercase tracking-wide{% endif %}">{{ item.link }}</label>
                 </li>
             {% else %}
                 <li{{ attrs().addClass(item.class|default) }}>
@@ -32,7 +35,7 @@
                         .mergeWith(item.target|default)
                         .mergeWith(item.rel|default)
                         .set('aria-haspopup', 'true', item.subitems|default)
-                        .addClass(isRoot ? 'inline-flex rounded px-3 py-1 text-sm font-headline uppercase tracking-wide hover:bg-white/10' : 'inline-flex w-full rounded px-3 py-1 text-xs font-headline uppercase tracking-wide hover:bg-white/10')
+                        .addClass(isRoot ? 'relative inline-flex px-3 py-2 font-serif text-[2rem] font-thin lowercase leading-none tracking-[0.03em] after:absolute after:bottom-0 after:left-3 after:right-3 after:h-px after:origin-left after:scale-x-0 after:bg-steelblue after:transition-transform after:duration-300 hover:after:scale-x-100' : 'inline-flex w-full rounded px-3 py-1 text-xs font-headline uppercase tracking-wide hover:bg-white/10')
                     }}>
                         {{ item.link }}
                         {% if item.type == 'redirect' and 'http' in (item.href|default('')) %}
