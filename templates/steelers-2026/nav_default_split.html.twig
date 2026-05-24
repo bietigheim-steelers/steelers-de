@@ -1,0 +1,51 @@
+{% set isRoot = level == 'level_1' %}
+
+<ul class="{{ level }}{% if isRoot %} flex flex-col items-center justify-center gap-4 text-center text-white lg:gap-5{% else %} absolute left-1/2 top-full z-20 mt-3 w-max min-w-[14rem] -translate-x-1/2 rounded-md border border-white/25 bg-steelnav/95 px-3 py-3 text-white opacity-0 invisible transition duration-300 peer-checked:visible peer-checked:opacity-100 group-hover:visible group-hover:opacity-100 lg:left-full lg:top-0 lg:mt-0 lg:ml-3 lg:translate-x-0{% endif %}">
+    {% for item in items %}
+        {% set hasSubItems = item.subitems|default %}
+        {% if hasSubItems %}
+            <li{{ attrs().addClass([item.class|default, 'group relative', item.isActive ? 'active' : null]).set('aria-haspopup', 'true') }}>
+                <input{{ attrs()
+                    .set('id', 'group-' ~ item.id)
+                    .set('type', 'checkbox')
+                    .set('hidden', 'hidden')
+                    .set('checked', 'checked', 'trail' in (item.class|default('')))
+                    .addClass('peer')
+                }}>
+                <label{{ attrs().set('for', 'group-' ~ item.id).addClass(isRoot ? 'inline-flex items-center gap-2 rounded-md px-3 py-2 text-base font-headline uppercase tracking-wide hover:bg-white/10 lg:text-xl' : 'inline-flex items-center justify-between gap-2 w-full rounded-md px-3 py-2 text-sm font-headline uppercase tracking-wide hover:bg-white/10') }}>
+                    <span>{{ item.link }}</span>
+                    <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M10 8L14 12L10 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </label>
+                {{- item.subitems|raw -}}
+            </li>
+        {% else %}
+            {% if item.isActive %}
+                <li class="{{ item.class|default }} active">
+                    <label class="inline-flex rounded-md bg-white/15 px-3 py-2 text-base font-headline uppercase tracking-wide lg:text-xl">{{ item.link }}</label>
+                </li>
+            {% else %}
+                <li{{ attrs().addClass(item.class|default) }}>
+                    <a{{ attrs()
+                        .set('href', item.href ?: './')
+                        .set('title', item.pageTitle ?: item.title)
+                        .setIfExists('accesskey', item.accesskey|default)
+                        .set('tabindex', item.tabindex, item.tabindex|default)
+                        .mergeWith(item.target|default)
+                        .mergeWith(item.rel|default)
+                        .set('aria-haspopup', 'true', item.subitems|default)
+                        .addClass(isRoot ? 'inline-flex rounded-md px-3 py-2 text-base font-headline uppercase tracking-wide hover:bg-white/10 lg:text-xl' : 'inline-flex w-full rounded-md px-3 py-2 text-sm font-headline uppercase tracking-wide hover:bg-white/10')
+                    }}>
+                        {{ item.link }}
+                        {% if item.type == 'redirect' and 'http' in (item.href|default('')) %}
+                            <svg class="relative -top-[1px] ml-1 inline-block" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6m-7 1l9-9m-5 0h5v5" />
+                            </svg>
+                        {% endif %}
+                    </a>
+                </li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</ul>

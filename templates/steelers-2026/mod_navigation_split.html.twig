@@ -1,0 +1,32 @@
+<!-- indexer::stop -->
+<a href="{{ request }}#{{ skipId }}" class="sr-only">{{ skipNavigation }}</a>
+
+{# Mobile toggle without JavaScript #}
+<input id="main-nav-toggle" type="checkbox" class="peer sr-only lg:hidden">
+
+<label for="main-nav-toggle" class="fixed left-4 top-4 z-[130] inline-flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-steelnav/90 text-white backdrop-blur-sm shadow-lg lg:hidden" aria-controls="main-nav-panel" aria-label="Menü öffnen">
+    <span class="relative block h-4 w-6">
+        <span class="absolute left-0 top-0 h-0.5 w-6 bg-current transition-transform duration-300 peer-checked:translate-y-[7px] peer-checked:rotate-45"></span>
+        <span class="absolute left-0 top-[7px] h-0.5 w-6 bg-current transition-opacity duration-300 peer-checked:opacity-0"></span>
+        <span class="absolute left-0 top-[14px] h-0.5 w-6 bg-current transition-transform duration-300 peer-checked:-translate-y-[7px] peer-checked:-rotate-45"></span>
+    </span>
+</label>
+
+<div id="main-nav-panel" class="pointer-events-none fixed inset-0 z-[120] bg-steelnav/95 opacity-0 transition-opacity duration-300 peer-checked:pointer-events-auto peer-checked:opacity-100 lg:static lg:z-auto lg:block lg:h-full lg:bg-transparent lg:opacity-100 lg:pointer-events-auto">
+    <div class="flex min-h-screen flex-col items-center justify-center gap-8 px-6 py-20 text-white lg:min-h-0 lg:h-full lg:justify-center lg:py-10">
+        <a href="/" class="block w-40 max-w-[70%] lg:w-52" aria-label="Zur Startseite">
+            {% include 'logo.html.twig' %}
+        </a>
+
+        {{ insert_tag('insert_article::before-nav-article')|raw }}
+
+        <nav class="w-full max-w-[30rem]" aria-label="Hauptnavigation">
+            {{ items|raw }}
+        </nav>
+
+        {{ insert_tag('insert_article::after-nav-article')|raw }}
+    </div>
+</div>
+
+<a id="{{ skipId }}" class="hidden">&nbsp;</a>
+<!-- indexer::continue -->
