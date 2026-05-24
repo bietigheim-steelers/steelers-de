@@ -37,12 +37,12 @@
 </label>
 
 <div id="{{ mobilePanelId }}" class="pointer-events-none fixed inset-0 z-[120] bg-steelnav/95 opacity-0 transition-opacity duration-300 lg:static lg:z-auto lg:block lg:h-full lg:bg-transparent lg:opacity-100 lg:pointer-events-auto">
-    <div class="flex min-h-screen flex-col items-center justify-center gap-4 px-4 py-16 text-white lg:min-h-0 lg:h-full lg:justify-center lg:gap-3 lg:py-10">
+    <div class="flex min-h-screen flex-col items-center justify-center gap-2 px-4 py-16 text-white lg:min-h-0 lg:h-full lg:justify-center lg:gap-1 lg:overflow-y-auto lg:py-8">
         <a href="/" class="block w-32 max-w-[65%] lg:mb-2 lg:w-44" aria-label="Zur Startseite">
             {% include 'logo.html.twig' %}
         </a>
 
-        <nav class="w-full max-w-[30rem] max-h-[70vh] overflow-y-auto" aria-label="Hauptnavigation">
+        <nav class="w-full" aria-label="Hauptnavigation">
             {{ items|raw }}
         </nav>
 
