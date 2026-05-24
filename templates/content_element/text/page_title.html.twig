@@ -30,7 +30,7 @@
         {{ text|striptags }}
       </p>
     </div>
-    <div class="overflow-hidden xl:mx-2">
+    <div class="overflow-hidden xl:mx-2" data-parallax-image="{{ image.image.img.src }}">
       {% if data.addImage and image %}
         {% with {figure: image} %}{{ block('picture_component') }}{% endwith %}
       {% else %}
