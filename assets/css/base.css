@@ -50,7 +50,7 @@ html {
   @apply bg-steelwhite;
 }
 
-.btn-default {
+@utility btn-default {
   @apply bg-steelgreen text-white py-2 px-4 relative transition-all scale-100 inline-block uppercase shadow-none whitespace-nowrap;
   letter-spacing: 0.1rem;
 }
@@ -139,9 +139,11 @@ span.btn-default::after {
 span.link-text--big {
   @apply no-underline;
 }
-
-h4 {
-  @apply text-steelgreen font-bold text-5xl uppercase font-headline my-3 mt-28;
+@layer components {
+  h4 {
+    @apply text-steelgreen font-bold text-5xl uppercase font-headline my-3 mt-28;
+    font-size: 1.625rem;
+  }
 }
 
 a.email {
@@ -156,7 +158,7 @@ a.email:hover {
 }
 
 .defaultcontainer--small {
-  @apply max-w-screen-lg mx-auto relative my-12 px-2;
+  @apply max-w-5xl mx-auto relative my-12 px-2;
 }
 
 h3.text-5xl {
@@ -168,9 +170,6 @@ h3.text-5xl {
   @apply border-b-4  border-gray-800 p-4 pl-0;
 }
 
-h4 {
-  font-size: 1.625rem;
-}
 .prose p,
 .prose li {
   font-size: 1.125rem;

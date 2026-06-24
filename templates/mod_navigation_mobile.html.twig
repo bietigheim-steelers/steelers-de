@@ -1,7 +1,7 @@
 <!-- indexer::stop -->
 <div class="{{ class }} top-sticky-nav device bg-steelgreen block lg:hidden"{% if cssID %} {{ cssID|raw }}{% endif %}{% if style %} style="{{ style }}"{% endif %}>
 	<a href="{{ request }}#{{ skipId }}" class="hidden">{{ skipNavigation }}</a>
-	<div class="grid grid-nav items-center place-items-center py-2 relative max-w-screen-2xl mx-auto" style="height: 60px;">
+	<div class="grid grid-nav items-center place-items-center py-2 relative max-w-(--breakpoint-2xl) mx-auto" style="height: 60px;">
 		<a class="block" href="/">
 			{% include 'logo.html.twig' %}
 		</a>

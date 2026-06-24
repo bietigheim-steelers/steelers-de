@@ -9,7 +9,7 @@
 }) %}
 
 {% block content %}
-<div class="defaultcontainer tilastot-roster !mt-4 md:!mt-20 {{ cssClass }}"{% if cssId %} id="{{ cssId }}"{% endif %}>
+<div class="defaultcontainer tilastot-roster mt-4! md:mt-20! {{ cssClass }}"{% if cssId %} id="{{ cssId }}"{% endif %}>
 
   {% for position, posPlayers in players %}
     <h4 class="uppercase text-4xl md:text-5xl font-headline w-full border-b-4 border-gray-800 p-4 pl-0 mb-6 mt-16 md:mt-28 first:mt-0">
@@ -27,7 +27,7 @@
     <ul role="list" class="mb-16 md:mb-24 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {% if posPlayers is iterable %}
         {% for player in posPlayers %}
-          <li class="bg-white shadow group">
+          <li class="bg-white shadow-sm group">
             {% if position == 'Staff' %}
               <a class="col-span-1 flex flex-col">
             {% else %}
@@ -44,7 +44,7 @@
                   </div>
                 {% endif %}
 
-                <div class="hidden group-hover:block absolute z-20 text-white bg-steelgreen bg-opacity-80">
+                <div class="hidden group-hover:block absolute z-20 text-white bg-steelgreen/80">
                   <div class="flex flex-col justify-end h-full p-5">
                     <div class="text-sm uppercase">Geboren</div>
                     <div class="text-lg font-bold -mt-1">{{ player.birthday|date('d. F Y') }}</div>
@@ -88,7 +88,7 @@
               <div>
                 <div class="p-5 uppercase">
                   <div class="text-2xl">{{ player.firstname }}</div>
-                  <div class="-mt-2 text-steelgreen text-3xl md:text-4xl font-bold overflow-ellipsis">
+                  <div class="-mt-2 text-steelgreen text-3xl md:text-4xl font-bold text-ellipsis">
                     {{ player.lastname }}
                   </div>
                 </div>

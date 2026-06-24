@@ -17,7 +17,7 @@
     {% set inputType = this.rgxp|default == 'date' ? 'date' : this.type %}
 
     <div class="mt-2">
-        <div class="flex rounded-md shadow-sm sm:max-w-md">
+        <div class="flex rounded-md shadow-xs sm:max-w-md">
             <input{{ attrs()
                 .set('type', inputType)
                 .set('name', this.name)

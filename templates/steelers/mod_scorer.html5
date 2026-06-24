@@ -1,10 +1,10 @@
 <?php $this->block('content'); ?>
-<div class="defaultcontainer !mt-8 md:!mt-20 <?= $this->cssClass ?>" <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
+<div class="defaultcontainer mt-8! md:mt-20! <?= $this->cssClass ?>" <?= ($this->cssId) ? 'id="' . $this->cssId . '"' : '' ?>>
   <div class="default-table">
     <div class="table-header">
       <div class="sm:hidden">Pl.</div>
       <div class="hidden sm:block">Platz</div>
-      <div class="!text-left col-span-2 sm:col-span-4">Spieler</div>
+      <div class="text-left! col-span-2 sm:col-span-4">Spieler</div>
       <div class="block lg:hidden col-span-1">Sp.</div>
       <div class="hidden lg:block col-span-1">Spiele</div>
       <div class="col-span-1">Tore</div>
@@ -26,7 +26,7 @@
     ?>
       <div class="table-row <?= $class ?>">
         <div class="font-bold font-headline text-steelgreen sm:text-4xl lg:text-5xl"><?= $key + 1 ?></div>
-        <div class="!text-left font-bold col-span-2 sm:col-span-4 flex items-center text-ellipsis overflow-hidden">
+        <div class="text-left! font-bold col-span-2 sm:col-span-4 flex items-center text-ellipsis overflow-hidden">
           <div class="logo" style="width: 65px; height: 65px; text-align: center;">
             <?php if ($ogimage) : ?>
               <a href="/spieler/<?= $player['alias'] ?>"><img src="<?= $ogimage ?>" alt="<?= $player['firstname'] ?> <?= $player['lastname'] ?>" style="max-height: 65px; max-width: 65px; margin: auto;"></a>

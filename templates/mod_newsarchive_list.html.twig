@@ -1,7 +1,7 @@
 {% extends '@Contao/block_unsearchable.html.twig' %}
 
 {% block content %}
-<div class="max-w-screen-2xl mx-auto relative mt-8 mb-20 md:my-20">
+<div class="max-w-(--breakpoint-2xl) mx-auto relative mt-8 mb-20 md:my-20">
   {% if not articles %}
     <p class="empty">{{ empty }}</p>
   {% else %}

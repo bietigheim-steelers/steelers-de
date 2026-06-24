@@ -8,7 +8,7 @@
     densities: '1x, 2x'
 }) %}
 
-<div class="bg-white shadow group">
+<div class="bg-white shadow-sm group">
   <a class="col-span-1 flex flex-col">
     <div class="aspect-w-4 aspect-h-5 bg-white overflow-hidden relative">
       {% if keys.position is defined and keys.position == 'Staff' %}
@@ -21,7 +21,7 @@
         </div>
       {% endif %}
 
-      <div class="hidden group-hover:block absolute z-20 text-white bg-steelgreen bg-opacity-80">
+      <div class="hidden group-hover:block absolute z-20 text-white bg-steelgreen/80">
         <div class="flex flex-col justify-end h-full p-5">
           {% if keys.birthday is defined and keys.birthday %}
             <div class="text-sm uppercase">Geboren</div>
@@ -73,7 +73,7 @@
     <div>
       <div class="p-5 uppercase">
         <div class="text-2xl">{{ keys.firstname is defined ? keys.firstname : '' }}</div>
-        <div class="-mt-2 text-steelgreen text-3xl md:text-4xl font-bold overflow-ellipsis overflow-hidden">
+        <div class="-mt-2 text-steelgreen text-3xl md:text-4xl font-bold text-ellipsis overflow-hidden">
           {{ keys.lastname is defined ? keys.lastname : '' }}
         </div>
       </div>

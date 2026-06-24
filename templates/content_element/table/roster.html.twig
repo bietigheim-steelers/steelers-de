@@ -1,7 +1,7 @@
 {% extends "@Contao/content_element/table.html.twig" %}
 
 {# Outer wrapper: merge Tailwind layout classes into the content element wrapper div #}
-{% set attributes = attrs().addClass('defaultcontainer mb-8 max-lg:!my-12').mergeWith(attributes|default) %}
+{% set attributes = attrs().addClass('defaultcontainer mb-8 max-lg:my-12!').mergeWith(attributes|default) %}
 
 {# Headline: add Tailwind typography classes #}
 {% block headline_attributes %}
@@ -24,7 +24,7 @@
 
 {# Wrap the table in a responsive scroll container #}
 {% block content %}
-	<div class="!my-12 max-w-5xl mx-auto">
+	<div class="my-12! max-w-5xl mx-auto">
 		<div class="mt-8 flow-root">
 			<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
 				<div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">

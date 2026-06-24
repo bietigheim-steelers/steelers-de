@@ -28,7 +28,7 @@ function clickOnParent(el, openSub) {
   }
 }
 </script>
-<ul id="mobile-nav-ul" class="{{ level }} text-white w-full font-bold flex h-full items-stretch lg:!hidden">
+<ul id="mobile-nav-ul" class="{{ level }} text-white w-full font-bold flex h-full items-stretch lg:hidden!">
     {% for item in items %}
         {% if item.subitems|default %}
             <li class="{{ item.class }} {{ item.isActive ? 'active' : '' }} cursor-pointer">
@@ -53,7 +53,7 @@ function clickOnParent(el, openSub) {
     {% endfor %}
 </ul>
 {% else %}
-<ul class="{{ level }} text-white w-full font-bold flex absolute gap-2 top-0 mt-24 content-start lg:!hidden">
+<ul class="{{ level }} text-white w-full font-bold flex absolute gap-2 top-0 mt-24 content-start lg:hidden!">
     {% for item in items %}
         {% if item.isActive %}
             <li class="isSubElement active"><a>{{ item.link }}</a></li>

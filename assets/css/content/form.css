@@ -10,13 +10,11 @@
   @apply col-span-12 font-headline text-steelgreen text-3xl;
 }
 
-@screen lg {
+@media (width >= 64rem) {
   .steelers_form fieldset > legend {
     @apply text-4xl;
   }
-}
 
-@screen lg {
   .steelers_form fieldset {
     @apply grid-cols-12;
   }

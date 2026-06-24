@@ -20,7 +20,7 @@
                 {% endif %}
 
                 {% if option.type == 'option' %}
-                    <label class="relative block cursor-pointer rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-sm focus:outline-none sm:flex sm:justify-between" data-card-radio>
+                    <label class="relative block cursor-pointer rounded-lg border border-gray-300 bg-white px-6 py-4 shadow-xs focus:outline-hidden sm:flex sm:justify-between" data-card-radio>
                         <input{{ attrs()
                             .set('id', "opt_#{option.id}")
                             .set('name', option.name)
