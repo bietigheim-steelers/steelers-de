@@ -6,6 +6,9 @@ use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Form;
 use Doctrine\DBAL\Connection;
 
+use App\Model\Games;
+use App\Model\Standings;
+
 #[AsHook('processFormData')]
 class BirthdayGreetingsFormListener
 {
@@ -40,5 +43,12 @@ class BirthdayGreetingsFormListener
             'UPDATE tl_tilastot_client_games SET birthdayGreetingsCount = birthdayGreetingsCount + 1 WHERE id = ?',
             [$gameId]
         );
+
+        $game = Games::findByPk($gameId);
+        if ($game !== null) {
+            $away = Standings::findByIdAndRound($game->awayteam, $game->round, true);
+            $date = \Contao\Date::parse('D d.m.Y', $game->gamedate);
+            $arrLabels[$field['name']] = $date . ' - ' . $away['name'];
+        }
     }
 }
