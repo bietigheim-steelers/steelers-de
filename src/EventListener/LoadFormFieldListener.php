@@ -2,21 +2,20 @@
 
 namespace App\EventListener;
 
-use Contao\CoreBundle\ServiceAnnotation\Hook;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Form;
 use Contao\Widget;
 
 use App\Model\Games;
 use App\Model\Standings;
 use App\Model\Camps;
-use App\Model\BusTours;
 use App\Model\Players;
 
-/**
- * @Hook("loadFormField")
- */
+#[AsHook('loadFormField')]
 class LoadFormFieldListener
 {
+    private const BIRTHDAY_GREETINGS_MAX = 5;
+
     public function __invoke(Widget $widget, string $formId, array $formData, Form $form): Widget
     {
         if (get_class($widget) === 'Contao\FormSelect' && $widget->options[0]['value'] == 'gamedays_group') {
@@ -74,6 +73,32 @@ class LoadFormFieldListener
                     $text = $date . ' - '  . $away['name'];
                     return array('value' => $text, 'label' => $text);
                 }, $gameArray);
+            }
+        } else if (get_class($widget) === 'Contao\FormSelect' && $widget->options[0]['value'] == 'gamedays_birthday') {
+            $games = Games::findAll(array(
+                'order'   => ' gamedate ASC',
+                'column'  => array('gamedate >= ? AND hometeam = ? AND id != ? AND optional != ?'),
+                'value'   => array(time() + (10 * 60 * 60), 36, 2668692721, true)
+            ));
+            if (!$games) {
+                $widget->options = array(array('value' => 'no-game-found', 'label' => "Kein Spiel gefunden."));
+            } else {
+                $options = array(array('value' => '', 'label' => 'Bitte Spiel wählen...'));
+                foreach ($games->fetchAll() as $game) {
+                    $count = (int) $game['birthdayGreetingsCount'];
+                    if ($count >= self::BIRTHDAY_GREETINGS_MAX) {
+                        continue;
+                    }
+                    $away = Standings::findByIdAndRound($game['awayteam'], $game['round'], true);
+                    $date = \Contao\Date::parse('D d.m.Y', $game['gamedate']);
+                    $text = $date . ' - ' . $away['name'];
+                    $options[] = array('value' => (string) $game['id'], 'label' => $text);
+                }
+                if (count($options) <= 1) {
+                    $widget->options = array(array('value' => 'no-game-found', 'label' => 'Kein Spiel verfügbar.'));
+                } else {
+                    $widget->options = $options;
+                }
             }
         } else if (get_class($widget) === 'Contao\FormSelect' && $widget->options[0]['value'] == 'spielerliste') {
             $spieler = Players::findAll(array(
