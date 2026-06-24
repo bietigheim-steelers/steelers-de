@@ -1,4 +1,5 @@
 import de from '@vueform/vueform/locales/de'
+import vueform from '@vueform/vueform/dist/vueform'
 import { defineConfig } from '@vueform/vueform'
 
 export default defineConfig({
