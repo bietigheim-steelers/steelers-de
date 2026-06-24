@@ -30,7 +30,7 @@
       {% set row_span = ratio > 1.35 ? 34 : (ratio < 0.75 ? 14 : 22) %}
 
       <li class="masonry-gallery__item" style="--row-span: {{ row_span }};">
-        <a href="/{{ picture.image.img.src|add_root }}" class="masonry-gallery__link glightbox" data-gallery="gallery{{ data.id }}">
+        <a href="/{{ picture.image.img.src }}" class="masonry-gallery__link glightbox" data-gallery="gallery{{ data.id }}">
           {% with { figure: image } %}
             {{ block('figure_component') }}
           {% endwith %}
