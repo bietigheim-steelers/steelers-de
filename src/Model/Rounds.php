@@ -44,7 +44,7 @@ class Rounds extends Model
 			'value'   => array($roundId)
 		));
 
-		return $round->name;
+		return $round?->name ?? ' (round "' . $roundId . '" not found) ';
 	}
 
 	public static function findByPkFiltered($id, $justName = false)

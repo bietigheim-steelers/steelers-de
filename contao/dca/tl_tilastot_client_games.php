@@ -255,8 +255,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
         'birthdayGreetingsCount' => array(
             'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_client_games']['birthdayGreetingsCount'],
             'exclude'                 => true,
-            'inputType'               => 'number',
-            'eval'                    => array('mandatory' => false, 'tl_class' => 'w50'),
+            'inputType'               => 'text',
+            'eval'                    => array('rgxp' => 'numeric', 'mandatory' => false, 'tl_class' => 'w50'),
             'sql'                     => "smallint(5) unsigned NOT NULL default '0'"
         ),
         'cssClass' => array(

@@ -2,16 +2,11 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
 name: PROD // Deploy steelers.de
 jobs:
   web-deploy:
     name: Deploy to Production 🚀
-    if: github.event_name == 'push' || github.event.pull_request.merged == true
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Get latest code

@@ -40,7 +40,7 @@ class GamedaysBirthdayFormFieldListener
             $away = Standings::findByIdAndRound($game['awayteam'], $game['round'], true);
             $date = \Contao\Date::parse('D d.m.Y', $game['gamedate']);
             $text = $date . ' - ' . $away['name'];
-            $options[] = ['value' => (string) $game['id'], 'label' => $text];
+            $options[] = ['value' => $text, 'label' => $text];
         }
 
         if (count($options) <= 1) {
