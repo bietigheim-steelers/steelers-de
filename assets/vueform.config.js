@@ -1,9 +1,8 @@
 import de from '@vueform/vueform/locales/de'
-import tailwind from '@vueform/vueform/dist/tailwind'
 import { defineConfig } from '@vueform/vueform'
 
 export default defineConfig({
-  theme: tailwind,
+  theme: vueform,
   locales: { de },
   endpoints: {
     submit: {
