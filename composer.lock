@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4b3e415b89b593a0afe7f04662d8932f",
+    "content-hash": "5eea514a9b32387579f7331b2f5c9195",
     "packages": [
         {
             "name": "ausi/slug-generator",
@@ -1478,6 +1478,298 @@
                 "source": "https://github.com/contao-components/tristen-tablesort/tree/5.7.0"
             },
             "time": "2026-01-02T10:32:07+00:00"
+        },
+        {
+            "name": "contao-dd/advanced-classes-bundle",
+            "version": "1.6.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Contao-DD/advanced-classes-bundle.git",
+                "reference": "50cba47c93fc67b184259da7ddd832a8cf50cdae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Contao-DD/advanced-classes-bundle/zipball/50cba47c93fc67b184259da7ddd832a8cf50cdae",
+                "reference": "50cba47c93fc67b184259da7ddd832a8cf50cdae",
+                "shasum": ""
+            },
+            "require": {
+                "contao/core-bundle": "^5.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "contao/easy-coding-standard": "^3.0",
+                "contao/manager-plugin": "^2.0",
+                "phpunit/phpunit": "^9.5",
+                "symfony/phpunit-bridge": "^6.0"
+            },
+            "type": "contao-bundle",
+            "extra": {
+                "contao-manager-plugin": "ContaoDD\\AdvancedClassesBundle\\ContaoManager\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "ContaoDD\\AdvancedClassesBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Contao Stammtisch Dresden",
+                    "email": "kontakt@gondao.de",
+                    "homepage": "http://www.gondao.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Contao 4 advanced classes bundle",
+            "support": {
+                "email": "develop@pdir.de",
+                "issues": "https://github.com/contao-dd/advanced-classes-bundle/issues",
+                "source": "https://github.com/contao-dd/advanced-classes-bundle"
+            },
+            "time": "2026-05-18T09:08:59+00:00"
+        },
+        {
+            "name": "contao-themes-net/font-awesome-inserttag-bundle",
+            "version": "1.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/contao-themes-net/font-awesome-inserttag-bundle.git",
+                "reference": "643d2415e5c97e65ec00d37c0d211dba6c239441"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/contao-themes-net/font-awesome-inserttag-bundle/zipball/643d2415e5c97e65ec00d37c0d211dba6c239441",
+                "reference": "643d2415e5c97e65ec00d37c0d211dba6c239441",
+                "shasum": ""
+            },
+            "require": {
+                "contao/core-bundle": "^4.13 || ^5.0",
+                "php": "^7.4 || ^8.0"
+            },
+            "conflict": {
+                "contao/core": "*",
+                "contao/manager-plugin": "<2.0 || >=3.0"
+            },
+            "require-dev": {
+                "contao/easy-coding-standard": "^3.0",
+                "contao/manager-plugin": "^2.0",
+                "phpunit/phpunit": "^9.5",
+                "symfony/phpunit-bridge": "^6.0"
+            },
+            "type": "contao-bundle",
+            "extra": {
+                "contao-manager-plugin": "ContaoThemesNet\\FontAwesomeInserttagBundle\\ContaoManager\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "ContaoThemesNet\\FontAwesomeInserttagBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Webdesign für Dresden",
+                    "email": "develop@pdir.de",
+                    "homepage": "https://pdir.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Font Awesome Inserttag Bundle for Contao 4 and 5",
+            "support": {
+                "donate": "https://contao-themes.net/sponsoring.html",
+                "issues": "https://github.com/contao-themes-net/font-awesome-inserttag-bundle/issues",
+                "source": "https://github.com/contao-themes-net/font-awesome-inserttag-bundle"
+            },
+            "funding": [
+                {
+                    "url": "https://contao-themes.net/sponsoring.html",
+                    "type": "corporate"
+                },
+                {
+                    "url": "https://www.patreon.com/user?u=28241718",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2026-05-13T13:39:13+00:00"
+        },
+        {
+            "name": "contao-themes-net/nature-theme-bundle",
+            "version": "2.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/contao-themes-net/nature-theme-bundle.git",
+                "reference": "729541f66898240de7c101ad3968971d59dfe1c8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/contao-themes-net/nature-theme-bundle/zipball/729541f66898240de7c101ad3968971d59dfe1c8",
+                "reference": "729541f66898240de7c101ad3968971d59dfe1c8",
+                "shasum": ""
+            },
+            "require": {
+                "contao-themes-net/font-awesome-inserttag-bundle": "^1.0",
+                "contao-themes-net/theme-components-bundle": "^1.4",
+                "contao/core-bundle": "^5.3",
+                "pdir/contao-theme-helper-bundle": "^1.5",
+                "pdir/css-style-selector-bundle": "^1.7",
+                "php": "^8.0",
+                "terminal42/contao-folderpage": "^3.0"
+            },
+            "conflict": {
+                "contao/core": "*",
+                "contao/manager-plugin": "<2.0 || >=3.0"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.5",
+                "contao/easy-coding-standard": "^3.0",
+                "contao/manager-plugin": "^2.0",
+                "phpstan/phpstan": "^1.8",
+                "phpstan/phpstan-phpunit": "^1.1",
+                "phpstan/phpstan-symfony": "^1.2",
+                "phpunit/phpunit": "^7.1 || ^8.4 || ^9.5",
+                "symfony/phpunit-bridge": "^4.4 || ^5.1"
+            },
+            "suggest": {
+                "pdir/animated-timeline-bundle": "Render content in a dynamic timeline. / Zeige Inhalte in einem dynamischen Zeitstrahl an.",
+                "pdir/maklermodul-bundle": "NATURE Theme includes all styles for maklermodul bundle. / NATURE Theme enthält Stylesheets für das Maklermodul Bundle.",
+                "pdir/social-feed-bundle": "NATURE Theme includes all styles for social feed bundle. / NATURE Theme enthält Stylesheets für das Social Feed Bundle"
+            },
+            "type": "contao-bundle",
+            "extra": {
+                "contao-manager-plugin": "ContaoThemesNet\\NatureThemeBundle\\ContaoManager\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "ContaoThemesNet\\NatureThemeBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Webdesign für Contao",
+                    "email": "develop@pdir.de",
+                    "homepage": "https://pdir.de",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Kostenlose Contao Themes",
+                    "email": "develop@pdir.de",
+                    "homepage": "https://contao-themes.net",
+                    "role": "Supplier"
+                }
+            ],
+            "description": "Nature Theme Bundle for Contao 4",
+            "support": {
+                "docs": "https://docs.contao-themes.net/",
+                "donate": "https://contao-themes.net/sponsoring.html",
+                "email": "support@pdir.de",
+                "forum": "https://community.contao.org",
+                "issues": "https://github.com/contao-themes-net/nature-theme-bundle/issues",
+                "source": "https://github.com/contao-themes-net/nature-theme-bundle"
+            },
+            "funding": [
+                {
+                    "url": "https://contao-themes.net/sponsoring.html",
+                    "type": "corporate"
+                },
+                {
+                    "url": "https://www.patreon.com/user?u=28241718",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2024-12-12T10:32:46+00:00"
+        },
+        {
+            "name": "contao-themes-net/theme-components-bundle",
+            "version": "1.8.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/contao-themes-net/theme-components-bundle.git",
+                "reference": "712ec59a9dbe757d3e1a1c85e240d568bfdc59eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/contao-themes-net/theme-components-bundle/zipball/712ec59a9dbe757d3e1a1c85e240d568bfdc59eb",
+                "reference": "712ec59a9dbe757d3e1a1c85e240d568bfdc59eb",
+                "shasum": ""
+            },
+            "require": {
+                "contao-dd/advanced-classes-bundle": "^1.4",
+                "contao/core-bundle": "^5.0",
+                "php": "^8.1"
+            },
+            "conflict": {
+                "contao/core": "*"
+            },
+            "require-dev": {
+                "contao/easy-coding-standard": "^3.0",
+                "contao/manager-plugin": "^2.0",
+                "phpunit/phpunit": "^7.1 || ^8.4 || ^9.5",
+                "symfony/phpunit-bridge": "^4.4 || ^5.1"
+            },
+            "type": "contao-bundle",
+            "extra": {
+                "contao-manager-plugin": "ContaoThemesNet\\ThemeComponentsBundle\\ContaoManager\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "ContaoThemesNet\\ThemeComponentsBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "proprietary"
+            ],
+            "authors": [
+                {
+                    "name": "Webdesign für Dresden",
+                    "email": "develop@pdir.de",
+                    "homepage": "https://pdir.de",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Kostenlose Contao Themes",
+                    "email": "develop@pdir.de",
+                    "homepage": "https://contao-themes.net",
+                    "role": "Supplier"
+                }
+            ],
+            "description": "theme components bundle for Contao 4",
+            "homepage": "https://contao-themes.net",
+            "keywords": [
+                "contao",
+                "template",
+                "theme"
+            ],
+            "support": {
+                "docs": "https://docs.contao-themes.net/",
+                "donate": "https://contao-themes.net/sponsoring.html",
+                "email": "develop@pdir.de",
+                "forum": "https://community.contao.org",
+                "issues": "https://github.com/contao-themes-net/theme-components-bundle/issues",
+                "source": "https://github.com/contao-themes-net/theme-components-bundle"
+            },
+            "funding": [
+                {
+                    "url": "https://contao-themes.net/sponsoring.html",
+                    "type": "corporate"
+                },
+                {
+                    "url": "https://www.patreon.com/user?u=28241718",
+                    "type": "patreon"
+                }
+            ],
+            "time": "2026-01-05T16:28:00+00:00"
         },
         {
             "name": "contao/calendar-bundle",
@@ -6362,6 +6654,125 @@
                 "source": "https://github.com/paragonie/constant_time_encoding"
             },
             "time": "2025-09-24T15:06:41+00:00"
+        },
+        {
+            "name": "pdir/contao-theme-helper-bundle",
+            "version": "1.5.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pdir/contao-theme-helper-bundle.git",
+                "reference": "22bd0a310cd4aab2ed543d7883a77b7afff93dd0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pdir/contao-theme-helper-bundle/zipball/22bd0a310cd4aab2ed543d7883a77b7afff93dd0",
+                "reference": "22bd0a310cd4aab2ed543d7883a77b7afff93dd0",
+                "shasum": ""
+            },
+            "require": {
+                "contao/core-bundle": "^5.0",
+                "php": "^8.0"
+            },
+            "conflict": {
+                "contao/core": "*"
+            },
+            "type": "contao-bundle",
+            "extra": {
+                "contao-manager-plugin": "Pdir\\ThemeHelperBundle\\ContaoManager\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pdir\\ThemeHelperBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Webdesign für Dresden",
+                    "email": "develop@pdir.de",
+                    "homepage": "https://pdir.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "pdir theme helper bundle for Contao 5",
+            "homepage": "https://pdir.de",
+            "keywords": [
+                "contao",
+                "helper",
+                "template",
+                "theme",
+                "tools"
+            ],
+            "support": {
+                "email": "develop@pdir.de",
+                "issues": "https://github.com/pdir/contao-theme-helper-bundle/issues",
+                "source": "https://github.com/pdir/contao-theme-helper-bundle"
+            },
+            "time": "2025-02-05T16:39:53+00:00"
+        },
+        {
+            "name": "pdir/css-style-selector-bundle",
+            "version": "1.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pdir/css-style-selector-bundle.git",
+                "reference": "1d5844ce174d25e7626c8ff1c9e7e08f4dbe1605"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pdir/css-style-selector-bundle/zipball/1d5844ce174d25e7626c8ff1c9e7e08f4dbe1605",
+                "reference": "1d5844ce174d25e7626c8ff1c9e7e08f4dbe1605",
+                "shasum": ""
+            },
+            "require": {
+                "contao/core-bundle": "^4.13 || ^5.0",
+                "php": ">=7.1 || ^8.0"
+            },
+            "conflict": {
+                "contao/core": "*",
+                "contao/manager-plugin": "<2.0 || >=3.0"
+            },
+            "require-dev": {
+                "contao/easy-coding-standard": "^3.0",
+                "contao/manager-plugin": "^2.0",
+                "phpunit/phpunit": "^7.1 || ^8.2 || ^8.4 || ^9.5",
+                "symfony/phpunit-bridge": "^4.4 || ^5.1"
+            },
+            "type": "contao-bundle",
+            "extra": {
+                "contao-manager-plugin": "Craffft\\CssStyleSelectorBundle\\ContaoManager\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Craffft\\CssStyleSelectorBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniel Kiesel",
+                    "homepage": "https://github.com/iCodr8"
+                }
+            ],
+            "description": "Contao 4 Css Style Selector bundle",
+            "homepage": "https://craffft.de",
+            "keywords": [
+                "classes",
+                "css",
+                "list",
+                "selector"
+            ],
+            "support": {
+                "issues": "https://github.com/Craffft/css-style-selector-bundle/issues",
+                "source": "https://github.com/Craffft/css-style-selector-bundle"
+            },
+            "time": "2022-12-08T07:27:10+00:00"
         },
         {
             "name": "php-feed-io/feed-io",
@@ -14815,6 +15226,80 @@
                 }
             ],
             "time": "2025-01-15T20:32:06+00:00"
+        },
+        {
+            "name": "terminal42/contao-folderpage",
+            "version": "3.4.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/terminal42/contao-folderpage.git",
+                "reference": "dba12dddf513246d8ebb626105f3c7fc79eb3f89"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/terminal42/contao-folderpage/zipball/dba12dddf513246d8ebb626105f3c7fc79eb3f89",
+                "reference": "dba12dddf513246d8ebb626105f3c7fc79eb3f89",
+                "shasum": ""
+            },
+            "require": {
+                "contao/core-bundle": "~5.3.13 || ^5.4.1",
+                "doctrine/dbal": "^3 || ^4",
+                "php": "^8.1",
+                "symfony/dependency-injection": "^6.4 || ^7",
+                "symfony/http-foundation": "^6.4 || ^7",
+                "symfony/http-kernel": "^6.4 || ^7",
+                "symfony/security-core": "^6.4 || ^7",
+                "symfony/service-contracts": "^3.0"
+            },
+            "conflict": {
+                "contao/manager-plugin": "<2.0 || >=3.0"
+            },
+            "require-dev": {
+                "contao/manager-plugin": "^2.0",
+                "terminal42/contao-build-tools": "dev-main"
+            },
+            "type": "contao-bundle",
+            "extra": {
+                "contao-manager-plugin": "Terminal42\\FolderpageBundle\\ContaoManager\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "Terminal42\\FolderpageBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "terminal42 gmbh",
+                    "homepage": "https://www.terminal42.ch"
+                }
+            ],
+            "description": "Provides a new page type for Contao that allows you to group pages into folders.",
+            "keywords": [
+                "contao",
+                "folder",
+                "folderpage",
+                "page"
+            ],
+            "support": {
+                "forum": "https://community.contao.org",
+                "issues": "https://github.com/terminal42/contao-folderpage/issues",
+                "source": "https://github.com/terminal42/contao-folderpage"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/terminal42",
+                    "type": "github"
+                },
+                {
+                    "url": "https://ko-fi.com/terminal42",
+                    "type": "other"
+                }
+            ],
+            "time": "2026-04-15T10:17:09+00:00"
         },
         {
             "name": "terminal42/contao-leads",
