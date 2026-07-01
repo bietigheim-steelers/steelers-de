@@ -1,0 +1,32 @@
+{% set wrapperAttributes = attrs(cssID)
+    .addClass([class, 'navbar', 'navbar-expand-lg', 'navbar-light', 'bg-white', 'shadow', 'block'])
+    .addStyle(style|default)
+    .setIfExists('aria-label', ariaLabel)
+    .mergeWith(wrapperAttributes|default)
+%}
+
+{% set collapseId = 'navbar-toggler-' ~ (skipId|default('main')) %}
+
+<!-- indexer::stop -->
+<nav{{ wrapperAttributes }}>
+    {% if headline %}
+        <{{ hl }}>{{ headline|insert_tag_raw }}</{{ hl }}>
+    {% endif %}
+
+    <div class="container d-flex justify-content-end align-items-center">
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#{{ collapseId }}" aria-controls="{{ collapseId }}" aria-expanded="false" aria-label="{{ skipNavigation }}">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+
+    <a href="{{ request }}#{{ skipId }}" class="visually-hidden-focusable">{{ skipNavigation }}</a>
+
+    <div class="container">
+        <div class="align-self-center collapse navbar-collapse flex-fill d-lg-flex justify-content-lg-between" id="{{ collapseId }}">
+            {{ items|raw }}
+        </div>
+    </div>
+
+    <span id="{{ skipId }}" class="visually-hidden"></span>
+</nav>
+<!-- indexer::continue -->

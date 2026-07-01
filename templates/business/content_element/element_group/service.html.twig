@@ -1,0 +1,90 @@
+{% extends '@Contao/content_element/element_group.html.twig' %}
+{% use '@Contao/component/_rich_text.html.twig' %}
+
+{% set serviceId = element_html_id ?: 'business-service-' ~ random() %}
+
+{% block content %}
+    <div id="{{ serviceId }}" class="business-service-group">
+        <section class="service-wrapper py-3">
+            <div class="container-fluid pb-3">
+                {% if headline.text|default %}
+                <div class="row">
+                    <h2 class="h2 text-center col-12 py-5 semi-bold-600">{{ headline.text }}</h2>
+                    <div class="service-header col-2 col-lg-3 text-end light-300">
+                        <i class='bx bx-gift h3 mt-1'></i>
+                    </div>
+                    <div class="service-heading col-10 col-lg-9 text-start float-end light-300">
+                        {% if data.linkTitle|default %}
+                            <h3 class="h3 pb-4 typo-space-line">{{ data.linkTitle }}</h3>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if text|default %}
+                    <div class="service-footer col-10 offset-2 col-lg-9 offset-lg-3 text-start pb-3 text-muted px-2">
+                        {% with {text, attributes: text_attributes|default} %}{{ block('rich_text_component') }}{% endwith %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="service-tag py-5 bg-secondary">
+                <div class="col-md-12">
+                    <ul class="nav d-flex justify-content-center">
+                        <li class="nav-item mx-lg-4"><a class="filter-btn nav-link btn-outline-primary active shadow rounded-pill text-light px-4 light-300" href="#" data-filter="*"></a></li>
+                        <li class="nav-item mx-lg-4"><a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-300" href="#" data-filter=".graphic"></a></li>
+                        <li class="nav-item mx-lg-4"><a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-300" href="#" data-filter=".ui"></a></li>
+                        <li class="nav-item mx-lg-4"><a class="filter-btn nav-link btn-outline-primary rounded-pill text-light px-4 light-300" href="#" data-filter=".branding"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="container overflow-hidden py-5">
+            <div class="row gx-5 gx-sm-3 gx-lg-5 gy-lg-5 gy-3 pb-3 projects">
+                {% for fragment in nested_fragments %}
+                    {{ content_element(fragment) }}
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block script %}
+    {{ parent() }}
+
+    {% add 'business_jquery_js' to body %}
+        <script src="/files/steelers/tl/js/jquery.min.js"></script>
+    {% endadd %}
+
+    {% add 'business_isotope_js' to body %}
+        <script src="/files/steelers/tl/js/isotope.pkgd.js"></script>
+    {% endadd %}
+
+    {% add 'business_service_filter_' ~ serviceId to body %}
+        <script>
+            (function () {
+                var root = document.getElementById('{{ serviceId }}');
+                if (!root || typeof jQuery === 'undefined' || typeof jQuery.fn.isotope === 'undefined') {
+                    return;
+                }
+
+                var $projects = jQuery(root).find('.projects').isotope({
+                    itemSelector: '.project',
+                    layoutMode: 'fitRows'
+                });
+
+                jQuery(root).find('.filter-btn').on('click', function (event) {
+                    event.preventDefault();
+
+                    var $button = jQuery(this);
+                    var filter = $button.attr('data-filter') || '*';
+
+                    $projects.isotope({ filter: filter });
+                    jQuery(root).find('.filter-btn').removeClass('active shadow');
+                    $button.addClass('active shadow');
+                });
+            })();
+        </script>
+    {% endadd %}
+{% endblock %}
