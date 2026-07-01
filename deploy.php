@@ -25,6 +25,7 @@ task('deploy:update_code', function () {
       'config',
       'contao',
       'files/steelers',
+      'files/business',
       'files/js',
       'files/css',
       'templates',
