@@ -1,13 +1,148 @@
-{% extends 'fe_page.html.twig' %}
+{%- set rootAttributes = attrs()
+    .set('lang', language)
+    .set('dir', 'rtl', isRTL)
+    .mergeWith(rootAttributes|default)
+-%}
 
-{% block head %}
-    {{ parent() }}
-    <link href="/files/steelers/tl/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font CSS -->
-    <link href="/files/steelers/tl/css/boxicon.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
-    <!-- Load Tempalte CSS -->
-    <link rel="stylesheet" href="/files/steelers/tl/css/templatemo.css">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/files/steelers/tl/css/custom.css">
-{% endblock %}
+    {%- set bodyAttributes = attrs()
+    .set('id', 'top')
+    .addClass(class)
+    .addClass('pt-16.5 sm:pt-18.5 lg:pt-22')
+    .setIfExists('onload', onload)
+    .mergeWith(bodyAttributes|default)
+-%}
+<!DOCTYPE html>
+<html{{rootAttributes}}>
+  <head>
+    {% block head %}
+      <meta charset="{{ charset }}">
+      <title>
+        {{ title }}
+      </title>
+      <base href="{{ base }}">
+
+      {% block meta %}
+        <meta name="robots" content="{{ robots }}">
+        <meta name="description" content="{{ description|u.truncate(320, '…') }}">
+        <meta name="generator" content="Contao Open Source CMS">
+        {% for metaTag in metaTags|default %}
+          <meta{{metaTag}}>
+          {% endfor %}
+          {% for linkTag in linkTags|default %}
+            <meta{{linkTag}}>
+            {% endfor %}
+          {% endblock %}
+
+          {% if canonical|default %}
+            <link rel="canonical" href="{{ canonical }}">
+          {% endif %}
+
+          {{ viewport|raw }}
+          {{ framework|raw }}
+          {{ stylesheets|raw }}
+          {{ mooScripts|raw }}
+          {{ head|insert_tag_raw|raw }}
+          <link rel="stylesheet" type="text/css" href="/files/business/css/plugins.min.css">
+          <link rel="stylesheet" href="/files/business/css/style.css">
+        {% endblock %}
+  </head>
+  <body{{bodyAttributes}}>
+
+    {% block header %}
+      {% if header %}
+        <header class="header-area lg:py-1.5 bg-secondary fixed w-full top-0 left-0 right-0 z-999999 border-b border-white/10">
+          <div class="container">
+            <div class="header-wrapper flex items-center justify-between gap-5 py-3 sm:py-4 lg:py-0">
+              <a class="max-w-29.5 w-full logo" href="index.html">
+                {% include 'logo.html.twig' with {'css_classes': 'w-full h-auto bg-blend-exclusion'} %}
+              </a>
+              {{ header|raw }}
+              <div class="flex items-center gap-5">
+                <a href="apply-loan.html" class="button-primary hidden! sm:inline-flex!">
+                  Partner werden
+                </a>
+                <!-- Hamburger -->
+                <button type="button" class="menuToggle" aria-label="Toggle navigation menu">
+                  <svg class="stroke-current text-white" width="40" viewbox="0 0 100 100">
+                    <path class="line line1" d="M 20,29.000046 H 80.000231 C 80.000231,29.000046 94.498839,28.817352 94.532987,66.711331 94.543142,77.980673 90.966081,81.670246 85.259173,81.668997 79.552261,81.667751 75.000211,74.999942 75.000211,74.999942 L 25.000021,25.000058"/>
+                    <path class="line line2" d="M 20,50 H 80"/>
+                    <path class="line line3" d="M 20,70.999954 H 80.000231 C 80.000231,70.999954 94.498839,71.182648 94.532987,33.288669 94.543142,22.019327 90.966081,18.329754 85.259173,18.331003 79.552261,18.332249 75.000211,25.000058 75.000211,25.000058 L 25.000021,74.999942"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
+      {% endif %}
+    {% endblock %}
+    {% block main %}
+    <main id="main-content">
+      {{ main|raw }}
+    </main>
+    {% endblock %}
+
+    {% block footer %}
+      {% if footer %}
+        <footer class="bg-secondary pt-14 md:pt-20 lg:pt-23 relative z-1"
+        data-grid-reveal
+        data-cols="15"
+        data-rows="6"
+        data-cols-sm="5"
+        data-rows-sm="16"
+        data-cols-lg="10"
+        data-rows-lg="6"
+        data-animation="random"
+        data-bg-color="#ffffff"
+        data-trigger="top 70%"
+        data-stagger="0.004"
+        data-duration="0.5">
+          <img class="absolute left-0 bottom-0 lg:bottom-auto lg:top-1/2 transform lg:-translate-y-1/2 -z-1 w-[20%] lg:w-auto" src="./assets/img/footer/footer-left.webp" alt="footer-left-shape">
+          <img class="absolute top-0 right-0 -z-1 w-[20%] lg:w-auto" src="./assets/img/footer/footer-right.webp" alt="footer-left-shape">
+
+          <div class="container">
+            {{ footer|raw }}
+          </div>
+        </footer>
+      {% endif %}
+    {% endblock %}
+    {{ mootools|insert_tag_raw|raw }}
+    {{ jsonLdScripts|raw }}
+
+    <!-- jquery -->
+    <script src="/files/business/js/libs/jquery-3.7.1.min.js"></script>
+    <!-- gsap -->
+    <script src="/files/business/js/libs/gsap-latest-beta.min.js"></script>
+    <!-- scroll trigger -->
+    <script src="/files/business/js/libs/ScrollTrigger.min.js"></script>
+    <!-- lenis smooth scroll -->
+    <script src="/files/business/js/libs/Lenis.min.js"></script>
+    <!-- split text -->
+    <script src="/files/business/js/libs/SplitText.min.js"></script>
+    <!-- swiper (needed for sliders) -->
+    <script src="/files/business/js/libs/swiper.min.js"></script>
+    <!-- nice select (needed by main.js) -->
+    <script src="/files/business/js/libs/jquery.nice-select.min.js"></script>
+    <!-- lightbox (lazy load - only needed when user clicks) -->
+    <script src="/files/business/js/libs/fslightbox.min.js" defer></script>
+    <!-- chart.js (lazy load - only needed for charts) -->
+    <script src="/files/business/js/libs/chart.min.js"></script>
+    <!-- apexcharts (custom chart scripts, must load after ApexCharts library) -->
+    <script src="/files/business/js/apexcharts.js" defer></script>
+    <!-- matter.js (lazy load - only needed for canvas animations) -->
+    <script src="/files/business/js/libs/matter.min.js" defer></script>
+    <!-- email (lazy load - only needed for form submission) -->
+    <script src="/files/business/js/libs/email.min.js" defer></script>
+    <!-- email (lazy load - only needed for form submission) -->
+    <script src="/files/business/js/libs/jquery.toc.min.js" defer></script>
+    <!-- loader (preloader - must load first) -->
+    <script src="/files/business/js/loader.js"></script>
+    <!-- animation -->
+    <script src="/files/business/js/animation.js"></script>
+    <!-- grid reveal -->
+    <script src="/files/business/js/grid-reveal.js"></script>
+    <!-- main -->
+    <script src="/files/business/js/main.js"></script>
+
+  </body>
+</html>
+

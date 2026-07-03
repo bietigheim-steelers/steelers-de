@@ -1,0 +1,14 @@
+{% set wrapperAttributes = attrs(cssID)
+    .addClass([class, 'navbar', 'navbar-expand-lg', 'navbar-light', 'bg-white', 'shadow', 'block'])
+    .addStyle(style|default)
+    .setIfExists('aria-label', ariaLabel)
+    .mergeWith(wrapperAttributes|default)
+%}
+
+{% set collapseId = 'navbar-toggler-' ~ (skipId|default('main')) %}
+
+<!-- indexer::stop -->
+<nav class="main-menu" data-lenis-prevent>
+  {{ items|raw }}
+</nav>
+<!-- indexer::continue -->

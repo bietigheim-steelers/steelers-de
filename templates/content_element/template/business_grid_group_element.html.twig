@@ -1,0 +1,56 @@
+
+
+{% set colorPalettes = {
+	steelgreen: {
+		background: '#046a38',
+		number: '#f8fafc',
+		content: '#d1fae5'
+	},
+	steelblue: {
+		background: '#009cde',
+		number: '#052d3e',
+		content: '#083b52'
+	},
+	nightice: {
+		background: '#0f172a',
+		number: '#7dd3fc',
+		content: '#e2e8f0'
+	},
+	amberice: {
+		background: '#92400e',
+		number: '#fef3c7',
+		content: '#ffedd5'
+	},
+	frostwhite: {
+		background: '#f1f5f9',
+		number: '#0f172a',
+		content: '#1e293b'
+	},
+	matchdayred: {
+		background: '#9f1239',
+		number: '#ffe4e6',
+		content: '#fecdd3'
+	}
+} %}
+
+{% set selectedPalette = colorPalettes[keys.palette|default('steelgreen')] ?? colorPalettes.steelgreen %}
+
+{% set attributes = attrs()
+    .setIfExists('id', element_html_id)
+    .addClass([element_css_classes, "p-5 sm:p-8 rounded-2xl flex flex-col justify-between gap-5"])
+    .mergeWith(attributes|default)
+%}
+
+<div{{ attributes }} style="background-color: {{ selectedPalette.background }};">
+  <div class="flex items-start gap-1">
+		<h2 class="counter font-bold leading-[1.1] text-4xl sm:text-[40px] md:text-5xl lg:text-[52px] xl:text-[64px]" style="color: {{ selectedPalette.number }};" data-target="{{ keys.target }}">0<span class="font-bold leading-[1.1]" style="color: {{ selectedPalette.number }};">{{ keys.einheit }}</span>
+		</h2>
+		<h2 class="font-bold leading-[1.1] text-4xl sm:text-[40px] md:text-5xl lg:text-[52px] xl:text-[64px]" style="color: {{ selectedPalette.number }};">{{ keys.einheit }}</h2>
+	</div>
+	<div>
+		<h3 class="text-xl md:text-2xl font-semibold" style="color: {{ selectedPalette.content }};">
+			{{ keys.headline }}
+		</h3>
+		<p class="pt-3 sm:pt-4 text-base leading-normal" style="color: {{ selectedPalette.content }};">{{ keys.text|striptags }}</p>
+		</div>
+</div>

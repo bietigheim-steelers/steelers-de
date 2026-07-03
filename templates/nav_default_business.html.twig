@@ -1,17 +1,17 @@
-<ul class="{{ level }} nav navbar-nav d-flex justify-content-between mx-xl-5 text-center text-dark">
+<ul class="nav navbar-nav d-flex justify-content-start gap-3 mx-xl-5 text-center">
     {% for item in items %}
         {% set itemClass = [item.class|default, 'nav-item'] %}
 
         {% if item.isActive %}
             <li{{ attrs().addClass(itemClass) }}>
-                <strong class="nav-link btn-outline-primary rounded-pill px-3 active" aria-current="page">{{ item.link }}</strong>
+                <strong class="nav-link btn-outline-primary px-3 active" aria-current="page">{{ item.link }}</strong>
                 {{- item.subitems|default|raw -}}
             </li>
         {% else %}
             <li{{ attrs().addClass(itemClass) }}>
                 <a{{ attrs()
                     .set('href', item.href)
-                    .addClass(['nav-link', 'btn-outline-primary', 'rounded-pill', 'px-3'])
+                    .addClass(['nav-link', 'btn-outline-primary', 'px-3'])
                     .set('title', item.pageTitle ?: item.title)
                     .setIfExists('accesskey', item.accesskey|default)
                     .set('aria-haspopup', true, item.subitems|default)

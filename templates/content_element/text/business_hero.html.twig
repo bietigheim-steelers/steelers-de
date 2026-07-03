@@ -1,0 +1,41 @@
+{% set image = figure(
+  data.singleSRC,
+  [629, 542, 'crop'])
+%}
+
+<img class="hidden lg:block absolute top-[4%] left-0 -z-1" src="/files/business/img/background-shape.webp" alt="background-shape">
+	<div class="container">
+		<div class="flex items-center justify-between gap-10 flex-col md:flex-row">
+			<div class="md:max-w-137.5 w-full">
+				<div class="flex items-center gap-2.5" data-subtitle>
+					<p class="text-base sm:text-lg font-semibold leading-[1.1]! text-secondary uppercase">{{ data.titleText }}</p>
+				</div>
+				<h1 class="text-4xl sm:text-[40px] md:text-5xl lg:text-[52px] xl:text-[64px] font-bold leading-[1.1]! text-title_black mt-4 md:mt-5" data-title>{{ headline.text }}</h1>
+				<p class="text-base text-paragraph_black mt-4" data-excerpt>{{ text|striptags }}</p>
+        {% if data.url and data.linkTitle %}
+				<div class="mt-6 sm:mt-8 lg:mt-12 flex items-center gap-3" data-button>
+					<a href="{{ data.url }}" class="button-primary">{{ data.linkTitle }}</a>
+				</div>
+        {% endif %}
+			</div>
+			<div class="max-w-120 lg:max-w-157.25 xl:max-w-145 2xl:max-w-157.25 w-full xl:-mr-10.5 pb-12 px-3 pt-3 relative z-1">
+				<!-- Main Thumb -->
+				<img class="max-w-157.25 w-full ml-auto" src="{{ image.image.img.src }}" alt="{{ headline.text }}" data-thumbnail>
+				<!-- Cercile Shape -->
+				<div class="absolute top-0 right-[10%] -z-1 w-[70%] bg-primary aspect-square rounded-full" data-circle></div>
+				<!-- Counter Up -->
+				<div class="absolute bottom-0 max-[380px]:right-1/2 transform max-[380px]:translate-x-1/2 right-0 lg:right-auto lg:left-[50%] z-1 p-4 lg:p-6 bg-secondary rounded-xl lg:rounded-2xl shadow-[0px_4px_24px_0px_rgba(0,0,0,0.1)]" data-scale-up>
+					<div class="flex">
+						<h2 class="text-3xl md:text-4xl lg:text-[40px] xl:text-5xl text-white font-bold leading-none! counter" data-target="{{ "now"|date("Y") - 1988 }}">0</h2>
+						<h2 class="text-3xl md:text-4xl lg:text-[40px] xl:text-5xl text-white font-bold leading-none!">+</h2>
+					</div>
+					<div class="mt-2 lg:mt-4 flex flex-col gap-1.75">
+						<p class="text-sm text-white font-semibold">Jahre Eishockey!</p>
+						<svg width="136" height="5" viewBox="0 0 136 5" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path d="M0.75 3.75601C18.75 1.256 77.75 -0.743972 135.25 2.25601" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+						</svg>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
