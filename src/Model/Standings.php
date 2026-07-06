@@ -45,10 +45,6 @@ class Standings extends Model
 
 	public function findTeamsForDisplay($row, $label, $dc, $args)
 	{
-		$args[0] = date('d.m.Y', $args[0]);
-		$args[1] = self::getTeamData($args[1], $args[3]);
-		$args[2] = self::getTeamData($args[2], $args[3]);
-		$args[3] = Rounds::findForDisplay($args[3]);
 		return $args;
 	}
 
