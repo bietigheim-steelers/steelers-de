@@ -12,6 +12,7 @@
 namespace App\Controller\FrontendModule;
 
 use Contao\BackendModule;
+use Contao\Input; 
 use App\Model\Rounds;
 use App\Utils\ApiDEL;
 use App\Utils\ApiHockeydata;
@@ -25,9 +26,9 @@ class RefreshModule extends BackendModule
 	public function compile()
 	{
 
-		if (\Input::post('FORM_SUBMIT') == 'tl_tilastot_refresh') {
+		if (Input::post('FORM_SUBMIT') == 'tl_tilastot_refresh') {
 			$done = array();
-			foreach (\Input::post('round') as $round) {
+			foreach (Input::post('round') as $round) {
 				$r = Rounds::findById($round);
 				switch ($r->api) {
 					case 'del':
@@ -49,7 +50,7 @@ class RefreshModule extends BackendModule
 
 
 		$this->Template->href = $this->getReferer(true);
-		$this->Template->title = specialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
+		$this->Template->title = htmlspecialchars($GLOBALS['TL_LANG']['MSC']['backBTTitle']);
 		$this->Template->button = $GLOBALS['TL_LANG']['MSC']['backBT'];
 		$this->Template->formSubmit = 'contao?do=tilastot_refresh';
 		$this->Template->rounds = Rounds::findAll();
