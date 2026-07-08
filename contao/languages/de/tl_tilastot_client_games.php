@@ -16,7 +16,7 @@ $GLOBALS['TL_LANG']['tl_tilastot_client_games']['gamedate'] = array('Datum', 'Da
 $GLOBALS['TL_LANG']['tl_tilastot_client_games']['hometeam'] = array('Heimteam', 'Heimteam');
 $GLOBALS['TL_LANG']['tl_tilastot_client_games']['awayteam'] = array('Auswärtsteam', 'Auswärtsteam');
 $GLOBALS['TL_LANG']['tl_tilastot_client_games']['round'] = array('Runde', 'Holema ID der Runde');
-
+$GLOBALS['TL_LANG']['tl_tilastot_client_games']['birthdayGreetingsCount'] = array('Anzahl Geburtstagsgrüße', 'Anzahl der abgegebenen Geburtstagsgrüße für dieses Spiel. Kann manuell zurückgesetzt werden.');
 
 /**
  * Buttons

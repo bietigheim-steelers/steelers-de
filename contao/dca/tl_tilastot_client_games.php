@@ -72,7 +72,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
     ),
     // Palettes
     'palettes' => array(
-        'default' => 'round,hometeam,awayteam,gameday,gamedate,gametime,optional,location,spectators,periodscore,homescore,awayscore,resulttype,gamestatus,ended,magentaurl,eventimurl;eventUrl,eventTitle;gameConfig;cssClass'
+        'default' => 'round,hometeam,awayteam,gameday,gamedate,gametime,optional,location,spectators,periodscore,homescore,awayscore,resulttype,gamestatus,ended,magentaurl,eventimurl;eventUrl,eventTitle;gameConfig;birthdayGreetingsCount,cssClass'
     ),
     // Fields
     'fields'   => array(
@@ -251,6 +251,13 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_games'] = array(
             ),
             'eval'                    => array('multiple' => true),
             'sql'       => 'text NULL',
+        ),
+        'birthdayGreetingsCount' => array(
+            'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_client_games']['birthdayGreetingsCount'],
+            'exclude'                 => true,
+            'inputType'               => 'number',
+            'eval'                    => array('mandatory' => false, 'tl_class' => 'w50'),
+            'sql'                     => "smallint(5) unsigned NOT NULL default '0'"
         ),
         'cssClass' => array(
             'exclude'                 => true,
