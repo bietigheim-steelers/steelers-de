@@ -50,6 +50,8 @@ class GamedayBirthdayListener
               $widget->options = $options;
           }
       }
+      
+      return $widget;
 
   }
 }
