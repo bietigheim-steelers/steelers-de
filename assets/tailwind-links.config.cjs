@@ -1,8 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "../templates/**/*links*.html5.twig",
-    "../templates/**/*footer*.html5.twig",
+    "../templates/**/*links*.html.twig",
+    "../templates/**/*footer*.html.twig",
+    "../templates/**/*links*.twig",
+    "../templates/**/*footer*.twig",
     "../templates/**/*links*.html5",
     "../templates/**/*footer*.html5",
   ],
