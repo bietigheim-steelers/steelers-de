@@ -65,7 +65,7 @@
   @apply w-36;
 }
 .home-partner-platin .content-hyperlink img {
-  width: 15rem;
+  width: 18rem;
 }
 .home-partner .content-hyperlink:hover {
   @apply grayscale-0 opacity-100;

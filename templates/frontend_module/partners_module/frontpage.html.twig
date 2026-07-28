@@ -1,8 +1,8 @@
 {% use "@Contao/component/_figure.html.twig" %}
 
 {% set partner_frontpage_size = picture_config({
-    width: categories[0] == 'platin' ? 244 : 144,
-    height: categories[0] == 'platin' ? 244 : 144,
+    width: categories[0] == 'platin' ? 300: 144,
+    height: categories[0] == 'platin' ? 300 : 144,
     resizeMode: 'proportional'
 }) %}
 
@@ -22,4 +22,3 @@
     {% endfor %}
   </div>
 </div>
-{{ categories }}
