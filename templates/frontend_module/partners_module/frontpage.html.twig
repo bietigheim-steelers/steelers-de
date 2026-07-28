@@ -1,13 +1,13 @@
 {% use "@Contao/component/_figure.html.twig" %}
 
 {% set partner_frontpage_size = picture_config({
-    width: 144,
-    height: 144,
+    width: categories[0] == 'platin' ? 244 : 144,
+    height: categories[0] == 'platin' ? 244 : 144,
     resizeMode: 'proportional'
 }) %}
 
 <div class="defaultcontainer gridwrapper !px-2 md:px-0 block">
-  <div class="inside grid ce_wrapperStart home-partner">
+  <div class="inside grid ce_wrapperStart home-partner home-partner-{{ categories[0] }}">
     {% for partner in partners %}
       <div class="content-hyperlink block">
         <figure class="image_container">
@@ -22,3 +22,4 @@
     {% endfor %}
   </div>
 </div>
+{{ categories }}
