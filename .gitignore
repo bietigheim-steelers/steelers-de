@@ -12,6 +12,7 @@ var
 node_modules
 dist
 dist-ssr
+files/css/business.css
 files/css/steelers.css
 files/css/links.css
 files/steelers/css
@@ -29,6 +30,7 @@ files/steelers/js
 *.sln
 *.sw?
 
+_theme
 .env
 vendor
 assets/*/

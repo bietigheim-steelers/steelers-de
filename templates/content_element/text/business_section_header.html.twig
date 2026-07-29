@@ -1,0 +1,9 @@
+<div class="flex items-start justify-between gap-4 md:gap-10 mb-12 sm:mb-14 md:mb-16 lg:mb-20 flex-col md:flex-row max-w-125 md:max-w-full">
+  <div class="md:max-w-170 w-full">
+    <div class="flex items-center gap-2.5">
+      <span class="text-base lg:text-lg font-semibold leading-[1.1]! text-secondary uppercase block">{{ data.titleText }}</span>
+    </div>
+    <h2 class="text-3xl md:text-4xl lg:text-[40px] xl:text-5xl font-bold leading-tight text-title_black mt-4" data-content>{{ headline.text }}</h2>
+  </div>
+  <p class="md:max-w-115 w-full text-base sm:text-lg text-paragraph_black" data-content>{{ text|striptags }}</p>
+</div>

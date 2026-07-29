@@ -1,0 +1,15 @@
+{% set attributes = attrs()
+    .setIfExists('id', element_html_id)
+    .addClass([element_css_classes])
+    .mergeWith(attributes|default)
+%}
+
+{% set image_aspect_ratio_class = element_css_classes matches '/(^|\\s)(?:[^\\s:]+:)*col-span-2(\\s|$)/' ? 'aspect-835/310' : 'aspect-410/310' %}
+
+{% block content %}
+  <div{{ attributes }}>
+    {% if images %}
+      <img src="{{ (images|first).image.img.src }}" alt="" class="rounded-lg md:rounded-2xl object-cover {{ image_aspect_ratio_class }} w-full h-full">
+    {% endif %}
+  </div>
+{% endblock %}

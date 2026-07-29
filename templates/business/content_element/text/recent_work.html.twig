@@ -1,0 +1,28 @@
+{% extends '@Contao/content_element/_base.html.twig' %}
+{% use '@Contao/component/_rich_text.html.twig' %}
+
+{% block content %}
+    <section class="py-5 mb-5">
+        <div class="container">
+            {% if headline.text|default %}
+                <div class="recent-work-header row text-center pb-5">
+                    <h2 class="col-md-6 m-auto h2 semi-bold-600 py-5">{{ headline.text }}</h2>
+                </div>
+            {% endif %}
+
+            {% if text|default %}
+                <div class="row gy-5 g-lg-5 mb-4">
+                    {% with {text, attributes: text_attributes|default} %}
+                        {{ block('rich_text_component') }}
+                    {% endwith %}
+                </div>
+            {% endif %}
+
+            {% if data.url and data.linkTitle %}
+                <div class="text-center mt-4">
+                    <a class="btn btn-primary rounded-pill px-4 py-2" href="{{ data.url }}" {{ data.target == '1' ? 'target="_blank" rel="noreferrer"' }}>{{ data.linkTitle }}</a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}

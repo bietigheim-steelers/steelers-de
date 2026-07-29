@@ -1,0 +1,42 @@
+{% extends '@Contao/content_element/swiper.html.twig' %}
+
+{% block content %}
+    {% set carouselId = element_html_id ?: 'business-carousel-' ~ random() %}
+
+    <div id="{{ carouselId }}" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            {% for fragment in nested_fragments %}
+                <button
+                    type="button"
+                    data-bs-target="#{{ carouselId }}"
+                    data-bs-slide-to="{{ loop.index0 }}"
+                    class="{{ loop.first ? 'active' }}"
+                    aria-current="{{ loop.first ? 'true' : 'false' }}"
+                    aria-label="{{ loop.index }}"
+                ></button>
+            {% endfor %}
+        </div>
+
+        <div class="carousel-inner">
+            {% for fragment in nested_fragments %}
+                <div class="carousel-item {{ loop.first ? 'active' }}">
+                    {{ content_element(fragment) }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#{{ carouselId }}" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#{{ carouselId }}" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
+    </div>
+{% endblock %}
+
+{% block script %}
+    {{ parent() }}
+    {% add 'business_bootstrap_js' to body %}
+        <script src="/files/steelers/tl/js/bootstrap.bundle.min.js"></script>
+    {% endadd %}
+{% endblock %}
