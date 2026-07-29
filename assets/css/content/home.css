@@ -64,6 +64,9 @@
 .home-partner .content-hyperlink img {
   @apply w-36;
 }
+.home-partner-platin .content-hyperlink img {
+  width: 18rem;
+}
 .home-partner .content-hyperlink:hover {
   @apply grayscale-0 opacity-100;
 }

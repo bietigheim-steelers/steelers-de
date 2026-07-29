@@ -16,10 +16,6 @@ services:
     public: true
     tags: [controller.service_arguments]
 
-  App\EventListener\LoadFormFieldListener:
-    tags:
-      - { name: contao.hook, hook: LoadFormFieldListener }
-
   App\EventListener\GeneratePageListener:
     tags:
       - { name: contao.hook, hook: generatePage }

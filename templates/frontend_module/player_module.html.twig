@@ -48,7 +48,7 @@
         <div class="text-sm uppercase">Geboren</div>
         <div class="text-lg font-bold -mt-1">
           {% if player.birthday is defined %}
-            {{ player.birthday|format_datetime(locale='de', dateFormat='long') }}
+            {{ player.birthday|format_date(locale='de', dateFormat='long') }}
           {% endif %}
         </div>
         <div class="text-lg font-bold -mt-1">{{ player.birthplace is defined ? player.birthplace : '' }}</div>

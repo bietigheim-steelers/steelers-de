@@ -117,7 +117,7 @@ class ApiHolema
             $p->lastname = $player->lastname;
             $p->jersey = $player->jersey;
             $p->position = $player->position;
-            $p->nationality = $player->nationality;
+            $p->nationality = $player->nationality ? $player->nationality : '';
             if ($player->shoots) {
                 $p->shoots = $player->shoots;
             }

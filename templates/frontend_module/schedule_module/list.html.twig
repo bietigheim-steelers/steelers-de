@@ -85,7 +85,7 @@
           {% if game.optional %}
             <span>Findet nur statt, sofern noch keine Entschiedung in der Serie gefallen ist.</span>
           {% elseif game.home.shortname == 'SCB' and not game.ended and "now"|date('U') < game.gamedate %}
-            <a href="{{ game.eventimurl }}" class="btn-default">Tickets kaufen</a>
+            <!-- <a href="{{ game.eventimurl }}" class="btn-default">Tickets kaufen</a> -->
           {% endif %}
           {% if game.eventUrl and game.eventTitle and not game.ended and "now"|date('U') < game.gamedate %}
             <a href="{{ game.eventUrl }}" class="btn-default btn-blue">{{ game.eventTitle }}</a>
