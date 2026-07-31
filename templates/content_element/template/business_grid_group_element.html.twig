@@ -41,7 +41,7 @@
     .mergeWith(attributes|default)
 %}
 
-<div{{ attributes }} style="background-color: {{ selectedPalette.background }};">
+<div{{ attributes }} style="background-color: {{ selectedPalette.background }};" data-sttr-card>
   <div class="flex items-start gap-1">
 		<h2 class="counter font-bold leading-[1.1] text-4xl sm:text-[40px] md:text-5xl lg:text-[52px] xl:text-[64px]" style="color: {{ selectedPalette.number }};" data-target="{{ keys.target }}">0<span class="font-bold leading-[1.1]" style="color: {{ selectedPalette.number }};">{{ keys.einheit }}</span>
 		</h2>

@@ -1,0 +1,9 @@
+{% set wrapperAttributes = attrs()
+    .addClass(element_css_classes)
+    .addClass('container')
+%}
+  <div {{ wrapperAttributes }}>
+    <div class="text-center">
+      <h2 class="text-4xl sm:text-[40px] md:text-5xl lg:text-[52px] xl:text-[64px] leading-none! font-bold text-white" data-title>{{ headline.text }}</h2>
+    </div>
+  </div>

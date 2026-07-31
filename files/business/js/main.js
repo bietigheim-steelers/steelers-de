@@ -2244,38 +2244,6 @@ var swiper = new Swiper(".loan-option-slider", {
   pagination: { el: ".loan-option-slider-pagination", type: "progressbar" },
 });
 $(document).ready(function () {
-  $(".toc-list").toc({ content: "div.article-content", headings: "h2,h3,h4,h5" }),
-    (function () {
-      const e = document.querySelector("div.article-content"),
-        t = document.querySelector(".toc-list");
-      if (!e || !t) return;
-      const n = e.querySelectorAll("h2, h3, h4, h5");
-      if (!n.length) return;
-      t.innerHTML = "";
-      const o = new Set();
-      n.forEach((e, n) => {
-        let i = e.getAttribute("id");
-        if (!i) {
-          const t =
-            (e.textContent || e.innerText || "section")
-              .toString()
-              .trim()
-              .toLowerCase()
-              .replace(/[\s\W]+/g, "_")
-              .replace(/^_+|_+$/g, "") || "section";
-          let n = t,
-            r = 1;
-          for (; o.has(n) || document.getElementById(n);) n = `${t}_${r++}`;
-          (i = n), e.setAttribute("id", i), o.add(i);
-        }
-        const r = document.createElement("li"),
-          a = document.createElement("a");
-        (a.href = `#${i}`),
-          (a.textContent = e.textContent || e.innerText || `Section ${n + 1}`),
-          r.appendChild(a),
-          t.appendChild(r);
-      });
-    })(),
     $(document).on("click", ".toc-list a", function (e) {
       const t = $(this).attr("href");
       if (!t || "#" !== t.charAt(0)) return;

@@ -1,6 +1,7 @@
 {% set attributes = attrs()
     .setIfExists('id', element_html_id)
     .addClass([element_css_classes])
+    .set('data-sttr-card')
     .mergeWith(attributes|default)
 %}
 

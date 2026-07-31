@@ -1,6 +1,7 @@
 {% set wrapperAttributes = attrs(cssID)
     .addClass([class, 'section-spacing-lg-md'])
     .addStyle(style|default)
+    .set('digital' in alias|default ? 'data-digital-hero-banner' : 'data-hero-banner')
     .mergeWith(wrapperAttributes|default)
 %}
 
