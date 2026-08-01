@@ -1,0 +1,81 @@
+{% use "@Contao/component/_figure.html.twig" %}
+
+{% set partner_photo_size = picture_config({
+    width: 1200,
+    height: 800,
+    resizeMode: 'crop',
+    sizes: '(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px',
+    densities: '1x, 2x'
+}) %}
+
+{% set partner_logo_size = picture_config({
+    width: 400,
+    height: 260,
+    resizeMode: 'proportional',
+    densities: '1x, 2x'
+}) %}
+
+{% block content %}
+<div class="defaultcontainer partner-reader {{ cssClass }}"{% if cssId %} id="{{ cssId }}"{% endif %}>
+
+  {% if backUrl %}
+    <a href="{{ backUrl }}" class="inline-block mb-6 text-sm uppercase font-bold text-steelgreen hover:underline">
+      &larr; Zurück zur Partnerübersicht
+    </a>
+  {% endif %}
+
+  <div class="grid md:grid-cols-2 gap-8 items-start">
+    <div>
+      {% if partner.brancheLabels is not empty %}
+        <div class="text-sm uppercase tracking-wide text-steelgreen font-bold mb-2">
+          {{ partner.brancheLabels|join(' · ') }}
+        </div>
+      {% endif %}
+
+      <h1 class="text-4xl md:text-5xl font-sans uppercase font-bold text-black leading-tight !mt-0">
+        {{ partner.title }}
+      </h1>
+
+      {% if partner.logo %}
+        <div class="mt-6 max-w-xs">
+          {% set logo = figure(partner.logo.uuid, partner_logo_size, {metadata: {alt: partner.title}}) %}
+          {% with {figure: logo} %}
+            {{ block('figure_component') }}
+          {% endwith %}
+        </div>
+      {% endif %}
+
+      {% if partner.url %}
+        <a href="{{ partner.url }}" target="_blank" rel="noreferrer noopener"
+           class="mt-6 inline-block px-6 py-3 border-2 border-steelgreen bg-steelgreen text-white text-sm uppercase font-bold hover:bg-white hover:text-steelgreen transition-colors">
+          Zur Website
+        </a>
+      {% endif %}
+    </div>
+
+    {% if partner.photo %}
+      <div class="aspect-w-3 aspect-h-2 bg-gray-100 overflow-hidden">
+        {% set photo = figure(partner.photo.uuid, partner_photo_size, {metadata: {alt: partner.title}, lightboxSize: '_big'}) %}
+        {% with {figure: photo} %}
+          <div class="w-full h-full object-cover">{{ block('figure_component') }}</div>
+        {% endwith %}
+      </div>
+    {% endif %}
+  </div>
+
+  {% if partner.description %}
+    <div class="mt-12 md:mt-16 max-w-3xl">
+      <div class="border-t-4 border-gray-800 pt-8 leading-relaxed prose">
+        {{ partner.description|raw }}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if partner.categoryLabels is not empty %}
+    <div class="mt-12 md:mt-16">
+      <div class="text-sm uppercase text-gray-600">Partnerschaft</div>
+      <div class="text-lg font-bold -mt-1">{{ partner.categoryLabels|join(', ') }}</div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

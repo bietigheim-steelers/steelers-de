@@ -9,6 +9,7 @@
  * file that was distributed with this source code.
  */
 
+use App\Dca\PartnersDca;
 use Contao\DC_Table;
 
 $GLOBALS['TL_DCA']['tl_tilastot_partners'] = array(
@@ -18,7 +19,8 @@ $GLOBALS['TL_DCA']['tl_tilastot_partners'] = array(
         'enableVersioning' => true,
         'sql' => array(
             'keys' => array(
-                'id' => 'primary'
+                'id' => 'primary',
+                'alias' => 'index'
             )
         )
 
@@ -32,8 +34,9 @@ $GLOBALS['TL_DCA']['tl_tilastot_partners'] = array(
             'panelLayout'             => 'filter;search,limit'
         ),
         'label' => array(
-            'fields'                  => array('name', 'category'),
-            'format' => '%s <span style="color:#999;padding-left:3px">[%s]</span>'
+            'fields'                  => array('name', 'category', 'branche'),
+            'format' => '%s <span style="color:#999;padding-left:3px">[%s]</span> <span style="color:#999;padding-left:3px">%s</span>',
+            'label_callback'          => array(PartnersDca::class, 'formatListLabel')
         ),
         'global_operations' => array(
             'all' => array(
@@ -75,7 +78,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_partners'] = array(
     ),
     // Palettes
     'palettes' => array(
-        'default' => 'name,displayname,url;category;logo;published'
+        'default' => '{general_legend},name,displayname,alias,url;{category_legend},category,branche;{media_legend},logo,photo;{text_legend},teaser,description;{publish_legend},published'
     ),
     // Fields
     'fields'   => array(
@@ -103,6 +106,17 @@ $GLOBALS['TL_DCA']['tl_tilastot_partners'] = array(
             'eval'                    => array('mandatory' => false, 'maxlength' => 255, 'tl_class' => 'w50'),
             'sql'                     => "varchar(255) NOT NULL default ''"
         ),
+        'alias' => array(
+            'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_partners']['alias'],
+            'exclude'                 => true,
+            'search'                  => true,
+            'inputType'               => 'text',
+            'eval'                    => array('rgxp' => 'alias', 'unique' => true, 'maxlength' => 255, 'tl_class' => 'w50'),
+            'save_callback'           => array(
+                array(PartnersDca::class, 'generateAlias')
+            ),
+            'sql'                     => "varchar(255) NOT NULL default ''"
+        ),
         'url' => array(
             'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_partners']['url'],
             'exclude'                 => true,
@@ -120,6 +134,16 @@ $GLOBALS['TL_DCA']['tl_tilastot_partners'] = array(
             'eval'                    => array('multiple' => true, 'mandatory' => true, 'maxlength' => 255, 'tl_class' => 'clr w50'),
             'sql'                     => "varchar(255) NULL"
         ),
+        'branche' => array(
+            'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_partners']['branche'],
+            'exclude'                 => true,
+            'search'                  => true,
+            'filter'                  => true,
+            'inputType'               => 'select',
+            'options_callback'        => array('App\\Model\\Partners', 'getBrancheOptions'),
+            'eval'                    => array('multiple' => true, 'chosen' => true, 'mandatory' => false, 'tl_class' => 'w50'),
+            'sql'                     => "blob NULL"
+        ),
         'logo' => array(
             'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_partners']['logo'],
             'exclude'                 => true,
@@ -127,11 +151,35 @@ $GLOBALS['TL_DCA']['tl_tilastot_partners'] = array(
             'eval'                    => array('fieldType' => 'radio', 'filesOnly' => true, 'extensions' => '%contao.image.valid_extensions%', 'mandatory' => false),
             'sql'                     => "binary(16) NULL"
         ),
+        'photo' => array(
+            'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_partners']['photo'],
+            'exclude'                 => true,
+            'inputType'               => 'fileTree',
+            'eval'                    => array('fieldType' => 'radio', 'filesOnly' => true, 'extensions' => '%contao.image.valid_extensions%', 'mandatory' => false),
+            'sql'                     => "binary(16) NULL"
+        ),
+        'teaser' => array(
+            'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_partners']['teaser'],
+            'exclude'                 => true,
+            'search'                  => true,
+            'inputType'               => 'textarea',
+            'eval'                    => array('style' => 'height:60px', 'maxlength' => 500, 'mandatory' => false, 'tl_class' => 'clr'),
+            'sql'                     => "text NULL"
+        ),
+        'description' => array(
+            'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_partners']['description'],
+            'exclude'                 => true,
+            'search'                  => true,
+            'inputType'               => 'textarea',
+            'eval'                    => array('rte' => 'tinyMCE', 'basicEntities' => true, 'mandatory' => false, 'tl_class' => 'clr'),
+            'sql'                     => "mediumtext NULL"
+        ),
         'published' => array(
             'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_partners']['published'],
             'exclude'                 => true,
             'toggle'                  => true,
             'search'                  => true,
+            'filter'                  => true,
             'inputType'               => 'checkbox',
             'eval'                    => array('tl_class' => 'w50'),
             'sql'                     => "int(1) NOT NULL default '0'"

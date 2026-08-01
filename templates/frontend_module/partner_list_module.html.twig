@@ -1,0 +1,120 @@
+{% use "@Contao/component/_figure.html.twig" %}
+
+{% set partner_logo_size = picture_config({
+    width: 400,
+    height: 260,
+    resizeMode: 'proportional',
+    sizes: '(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 400px',
+    densities: '1x, 2x'
+}) %}
+
+{% set partner_photo_size = picture_config({
+    width: 600,
+    height: 400,
+    resizeMode: 'crop',
+    sizes: '(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 600px',
+    densities: '1x, 2x'
+}) %}
+
+{% block content %}
+<div class="defaultcontainer partner-list {{ cssClass }}"{% if cssId %} id="{{ cssId }}"{% endif %}>
+
+  {% if headline %}
+    <{{ headlineUnit|default('h2') }} class="uppercase font-headline text-4xl md:text-5xl w-full border-b-4 border-gray-800 p-4 pl-0 mb-6">
+      {{ headline }}
+    </{{ headlineUnit|default('h2') }}>
+  {% endif %}
+
+  {% if showFilter %}
+    <div class="partner-list-filter mb-10 flex flex-wrap gap-2" role="group" aria-label="Nach Branche filtern">
+      <a href="{{ filterBaseUrl }}"
+         class="inline-block px-4 py-2 text-sm uppercase font-bold border-2 transition-colors
+                {{ activeBranche ? 'border-gray-300 text-gray-700 hover:border-steelgreen hover:text-steelgreen' : 'border-steelgreen bg-steelgreen text-white' }}"
+         {{ activeBranche ? '' : 'aria-current="true"' }}>
+        Alle Branchen
+      </a>
+      {% for key, label in branchen %}
+        <a href="{{ filterBaseUrl }}?branche={{ key|url_encode }}"
+           class="inline-block px-4 py-2 text-sm uppercase font-bold border-2 transition-colors
+                  {{ activeBranche == key ? 'border-steelgreen bg-steelgreen text-white' : 'border-gray-300 text-gray-700 hover:border-steelgreen hover:text-steelgreen' }}"
+           {{ activeBranche == key ? 'aria-current="true"' : '' }}>
+          {{ label }}
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if empty %}
+    <p class="py-10 text-lg text-gray-600">
+      {% if activeBrancheLabel %}
+        Für die Branche „{{ activeBrancheLabel }}“ sind aktuell keine Partner eingetragen.
+      {% else %}
+        Aktuell sind keine Partner eingetragen.
+      {% endif %}
+    </p>
+  {% else %}
+    <ul role="list" class="mb-16 md:mb-24 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {% for partner in partners %}
+        {% set link = partner.detailUrl ?: partner.url %}
+        {% set isExternal = not partner.detailUrl and partner.url %}
+        <li class="bg-white shadow group flex">
+          {% if link %}
+            <a class="flex flex-col w-full" href="{{ link }}"{% if isExternal %} target="_blank" rel="noreferrer noopener"{% endif %}>
+          {% else %}
+            <div class="flex flex-col w-full">
+          {% endif %}
+
+            {% if partner.photo %}
+              <div class="aspect-w-3 aspect-h-2 bg-gray-100 overflow-hidden">
+                {% set image = figure(partner.photo.uuid, partner_photo_size, {metadata: {alt: partner.title}}) %}
+                {% with {figure: image} %}
+                  <div class="w-full h-full object-cover">{{ block('figure_component') }}</div>
+                {% endwith %}
+              </div>
+            {% elseif partner.logo %}
+              <div class="aspect-w-3 aspect-h-2 bg-white overflow-hidden flex items-center justify-center p-6">
+                {% set image = figure(partner.logo.uuid, partner_logo_size, {metadata: {alt: partner.title}}) %}
+                {% with {figure: image} %}
+                  <div class="w-full h-full flex items-center justify-center">{{ block('figure_component') }}</div>
+                {% endwith %}
+              </div>
+            {% endif %}
+
+            <div class="p-5 flex flex-col grow">
+              {% if partner.brancheLabels is not empty %}
+                <div class="text-xs uppercase tracking-wide text-steelgreen font-bold mb-1">
+                  {{ partner.brancheLabels|join(' · ') }}
+                </div>
+              {% endif %}
+
+              <h3 class="text-2xl font-bold uppercase text-black leading-tight !mt-0">
+                {{ partner.title }}
+              </h3>
+
+              {% set teaser = partner.teaser ?: partner.description %}
+              {% if teaser %}
+                <p class="mt-2 text-base text-gray-700">{{ teaser|truncate_text(160) }}</p>
+              {% endif %}
+
+              {% if partner.detailUrl %}
+                <span class="mt-auto pt-4 inline-block text-sm uppercase font-bold text-steelgreen group-hover:underline">
+                  Mehr erfahren
+                </span>
+              {% elseif partner.url %}
+                <span class="mt-auto pt-4 inline-block text-sm uppercase font-bold text-steelgreen group-hover:underline">
+                  Zur Website
+                </span>
+              {% endif %}
+            </div>
+
+          {% if link %}
+            </a>
+          {% else %}
+            </div>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
+{% endblock %}

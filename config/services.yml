@@ -44,6 +44,9 @@ services:
   App\Dca\SponsorsEventDca:
     public: true
 
+  App\Dca\PartnersDca:
+    public: true
+
 twig:
   globals:
     project_dir: '%kernel.project_dir%'

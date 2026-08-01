@@ -33,9 +33,17 @@ $GLOBALS['TL_LANG']['FMD']['player_module'] = array('Spieler Detailansicht', 'Sp
 $GLOBALS['TL_LANG']['FMD']['steelers_content_modules'] = array('🇸🇱 Steelers Inhaltsmodule 🇸🇱', 'Steelers Inhaltsmodule');
 $GLOBALS['TL_LANG']['FMD']['camps_module'] = array('Porsche Camps', 'Porsche Camps');
 
+$GLOBALS['TL_LANG']['FMD']['tilastot'] = array('🇸🇱 Steelers Module 🇸🇱', 'Steelers Module');
+$GLOBALS['TL_LANG']['FMD']['partner_list_module'] = array('Partnerliste', 'Partner als Liste bzw. Kachelübersicht – optional mit Branchenfilter und Verlinkung auf die Detailseite.');
+$GLOBALS['TL_LANG']['FMD']['partner_reader_module'] = array('Partner Detailansicht', 'Zeigt einen einzelnen Partner mit Foto, Beschreibung und Branchen an. Der Partner wird über den Alias in der URL ermittelt.');
+
 $GLOBALS['TL_LANG']['tl_module']['tilastot_round'] = array('Spielzeit', 'Die Spielzeit für die die Tabelle angezeigt werden soll.');
 $GLOBALS['TL_LANG']['tl_module']['tilastot_table_rows'] = array('Plätze', 'Wie viele Plätze sollen angezeigt werden. (für die Tabelle gilt: Es wird versucht der 1. Platz anzuzeigen. Sollte das nicht möglich sein, werden wenn möglich zwei Plätze hinter dem gewählten Team angezeigt.)');
 $GLOBALS['TL_LANG']['tl_module']['tilastot_my_team'] = array('Hervorgehobenes Team', 'An diesem Team wird immer angezeigt, ungeachtet der gewählten Anzahl an Tabellenplätze.');
+
+$GLOBALS['TL_LANG']['tl_module']['tilastot_partners_category'] = array('Kategorien', 'Nur Partner dieser Kategorien anzeigen. Ohne Auswahl werden alle Kategorien berücksichtigt.');
+$GLOBALS['TL_LANG']['tl_module']['tilastot_partners_branche'] = array('Branchen', 'Die Liste auf diese Branchen beschränken. Ohne Auswahl werden alle Branchen angezeigt.');
+$GLOBALS['TL_LANG']['tl_module']['tilastot_partner_filter'] = array('Branchenfilter anzeigen', 'Blendet über der Liste eine Filterleiste ein, mit der Besucher nach Branche filtern können.');
 
 $GLOBALS['TL_LANG']['tl_module']['tilastot_legend']  = 'Client Einstellungen';
 

@@ -75,6 +75,20 @@ $GLOBALS['TL_DCA']['tl_module']['fields']['tilastot_partners_category'] = array(
 	'sql'                     => "text NULL"
 );
 
+$GLOBALS['TL_DCA']['tl_module']['fields']['tilastot_partners_branche'] = array(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['tilastot_partners_branche'],
+	'inputType'               => 'select',
+	'options_callback'        => array('App\\Model\\Partners', 'getBrancheOptions'),
+	'eval'                    => array('multiple' => true, 'chosen' => true, 'tl_class' => 'clr'),
+	'sql'                     => "blob NULL"
+);
+$GLOBALS['TL_DCA']['tl_module']['fields']['tilastot_partner_filter'] = array(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['tilastot_partner_filter'],
+	'inputType'               => 'checkbox',
+	'eval'                    => array('tl_class' => 'w50 m12'),
+	'sql'                     => "char(1) NOT NULL default ''"
+);
+
 $GLOBALS['TL_DCA']['tl_module']['palettes']['schedule_module'] = '{title_legend},name,headline,type;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['schedule_module'] .= '{tilastot_legend},tilastot_my_team,tilastot_from_date,tilastot_to_date,tilastot_schedule_type;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['schedule_module'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
@@ -101,6 +115,15 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['standings_module'] .= '{template_le
 $GLOBALS['TL_DCA']['tl_module']['palettes']['partners_module'] = '{title_legend},name,headline,type;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['partners_module'] .= '{tilastot_legend},tilastot_partners_category;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['partners_module'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
+
+$GLOBALS['TL_DCA']['tl_module']['palettes']['partner_list_module'] = '{title_legend},name,headline,type;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['partner_list_module'] .= '{tilastot_legend},tilastot_partners_category,tilastot_partners_branche,tilastot_partner_filter;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['partner_list_module'] .= '{redirect_legend},jumpTo;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['partner_list_module'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID';
+
+$GLOBALS['TL_DCA']['tl_module']['palettes']['partner_reader_module'] = '{title_legend},name,headline,type;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['partner_reader_module'] .= '{redirect_legend},jumpTo;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['partner_reader_module'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID';
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['camps'] = '{title_legend},name,headline,type;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['camps'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
