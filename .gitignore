@@ -32,8 +32,17 @@ files/steelers/js
 
 _theme
 .env
+config/parameters.yml
+docker/db/dumps/*.sql
 vendor
 assets/*/
 !assets/css/
 !assets/js/
 booked_seats.json
+public/bundles
+public/.htaccess
+public/index.php
+public/preview.php
+bin/
+files/css
+files/js

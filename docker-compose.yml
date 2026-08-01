@@ -1,0 +1,54 @@
+services:
+  web:
+    build:
+      context: ./dev-docker
+      dockerfile: php/Dockerfile
+    ports:
+      - "5388:80"
+    volumes:
+      # Whole repo, so composer.json/composer.lock/bin/etc. are visible.
+      - .:/var/www/html
+      # Named volumes (Docker-native Linux storage), mounted on top of the
+      # bind mount above, for the directories Contao writes symlinks into
+      # (composer install, contao-setup, cache warmup). A Windows bind mount
+      # can't reliably hold real symlinks, so these paths must NOT resolve
+      # to the Windows-backed ./:/var/www/html mount.
+      - vendor_data:/var/www/html/vendor
+      - public_data:/var/www/html/public
+      - system_data:/var/www/html/system
+      - var_data:/var/www/html/var
+      # contao-component-dir: vendor JS libs get installed here on `composer
+      # install` too. Not needed by PHP at runtime (compiled output lives in
+      # files/css and files/js instead, which do come from the bind mount).
+      - assets_data:/var/www/html/assets
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mariadb:11.4
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_DATABASE: steelers
+      MARIADB_USER: steelers
+      MARIADB_PASSWORD: steelers
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - db_data:/var/lib/mysql
+      # Drop *.sql dump files here, then import with:
+      #   docker compose exec db mysql -u steelers -psteelers steelers -e "SOURCE /dumps/<file>.sql;"
+      - ./dev-docker/db/dumps:/dumps:ro
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  db_data:
+  vendor_data:
+  public_data:
+  system_data:
+  var_data:
+  assets_data:
