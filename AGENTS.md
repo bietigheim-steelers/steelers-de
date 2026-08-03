@@ -260,6 +260,11 @@ footer_bottom                               # row 3: copyright, legal links, soc
 
 - Controllers: `src/Controller/ContentElement/Footer*Controller.php`, all extending
   `AbstractFooterElementController` (MCW row parsing + insert-tag/URL resolution).
+- Templates live in `templates/content_element/`, **not** in `templates/business/`. A template
+  under a theme folder only resolves when a theme context is active — the backend renders
+  content elements without one and throws *"Could neither find template … nor the legacy
+  fallback template …"*. Theme folders are only safe for templates that are never rendered
+  in the backend.
 - Fields and palettes: `contao/dca/tl_content.php`, labels in `contao/languages/de/tl_content.php`
   (element category `business_footer`).
 - Repeatable lists use `multiColumnWizard`; the URL columns support the Contao page picker.

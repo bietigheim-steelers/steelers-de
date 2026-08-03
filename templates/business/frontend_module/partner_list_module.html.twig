@@ -70,11 +70,14 @@
         {% endif %}
       </p>
     {% else %}
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" data-sttr-wrapper>
+      {# Eigene Einblendung statt data-sttr-wrapper: die generische Timeline in
+         animation.js laeuft bei 150+ Karten ueber 30 Sekunden. Siehe
+         files/business/js/partner-list.js #}
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" data-partner-grid>
         {% for partner in partners %}
           {% set link = partner.detailUrl ?: partner.url %}
           {% set isExternal = not partner.detailUrl and partner.url %}
-          <div data-sttr-card>
+          <div data-partner-card>
             <div>
               <div>
                 {% if link %}
