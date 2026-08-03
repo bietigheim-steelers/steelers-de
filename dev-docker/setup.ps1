@@ -1,14 +1,17 @@
 <#
   Local dev setup. Run from the repository root:
 
-    .\docker\setup.ps1                      # full setup
-    .\docker\setup.ps1 -DumpFile dump.sql   # pick a specific dump
-    .\docker\setup.ps1 -SkipDb              # leave the database untouched
+    .\dev-docker\setup.ps1                      # full setup
+    .\dev-docker\setup.ps1 -DumpFile dump.sql   # pick a specific dump
+    .\dev-docker\setup.ps1 -SkipDb              # leave the database untouched
 
   - starts the containers if they aren't already running
   - composer install (as www-data, so Apache can read/write what it creates)
-  - drops and reimports the schema from a dump in docker/db/dumps/
-  - disables forced HTTPS and clears the cache
+  - drops and reimports the schema from a dump in dev-docker/db/dumps/
+  - rewrites the production hostnames and HTTPS flags for local use, then clears
+    the cache. Afterwards both sites are reachable side by side:
+      http://localhost:5388           steelers.de (root with an empty dns)
+      http://business.localhost:5388  business.steelers.de
 #>
 param(
     [string]$DumpFile = "",
@@ -31,7 +34,7 @@ if (-not $SkipDb) {
             $SkipDb = $true
         }
         elseif ($sqlFiles.Count -gt 1) {
-            throw "Multiple .sql files found in docker\db\dumps - pass -DumpFile <name>.sql to pick one."
+            throw "Multiple .sql files found in dev-docker\db\dumps - pass -DumpFile <name>.sql to pick one."
         }
         else {
             $DumpFile = $sqlFiles[0].Name
@@ -55,9 +58,16 @@ FLUSH PRIVILEGES;
     docker compose exec -T db mariadb -u steelers -psteelers steelers -e "SOURCE /dumps/$DumpFile;"
     if ($LASTEXITCODE -ne 0) { throw "DB import failed" }
 
-    Write-Host "==> disabling forced HTTPS (production dump forces it via tl_page.useSSL)"
-    docker compose exec -T db mariadb -u steelers -psteelers steelers -e "UPDATE tl_page SET useSSL = 0 WHERE type = 'root';"
-    if ($LASTEXITCODE -ne 0) { throw "failed to disable useSSL" }
+    # The dump carries production hostnames and forces HTTPS. Map every
+    # *.steelers.de root onto a matching *.localhost host, which browsers and curl
+    # resolve to loopback without a hosts entry, so host-based root page matching
+    # picks the right root locally. The root with an empty dns stays the catch-all.
+    Write-Host "==> applying local host overrides"
+    docker compose exec -T db mariadb -u steelers -psteelers steelers -e @"
+UPDATE tl_page SET useSSL = 0 WHERE type = 'root';
+UPDATE tl_page SET dns = REPLACE(dns, '.steelers.de', '.localhost') WHERE type = 'root' AND dns LIKE '%.steelers.de';
+"@
+    if ($LASTEXITCODE -ne 0) { throw "failed to apply local host overrides" }
 }
 
 # config/parameters.yml is not tracked as a cache resource, so edits to it
@@ -66,4 +76,4 @@ Write-Host "==> clearing cache"
 docker compose exec -T -u www-data web vendor/bin/contao-console cache:clear --env=prod
 if ($LASTEXITCODE -ne 0) { throw "cache clear failed" }
 
-Write-Host "==> done - http://localhost:5388"
+Write-Host "==> done - http://localhost:5388 (steelers.de) / http://business.localhost:5388 (business)"

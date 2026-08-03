@@ -237,3 +237,37 @@ Reference behavior in Contao core:
 - `contao/core-bundle/contao/templates/twig/mod_navigation.html.twig`
 - `contao/core-bundle/contao/templates/twig/nav_default.html.twig`
 
+## Business Footer (business.steelers.de)
+
+The footer is fully CMS-driven. Only the `<footer>` chrome (background, decorative shapes,
+grid-reveal attributes, `.container`) and the logo live in `templates/fe_page_business.html.twig`.
+
+Content flow: hidden resource page → article (template `mod_article_business_footer`) →
+content elements → rendered into the layout footer section via `{{insert_article::<alias>}}`
+inside an HTML module.
+
+Element structure inside the article:
+
+```
+footer_cta                                  # row 1: headline, text, buttons
+element_group  (variant footer_main)        # row 2 wrapper, renders dividers between children
+├── footer_about                            # logo (hardcoded), text, optional form
+└── element_group (variant footer_columns)  # right-hand grid
+    ├── footer_linklist                     # one link column (repeatable)
+    └── footer_contact                      # address / mail / phone column
+footer_bottom                               # row 3: copyright, legal links, social icons
+```
+
+- Controllers: `src/Controller/ContentElement/Footer*Controller.php`, all extending
+  `AbstractFooterElementController` (MCW row parsing + insert-tag/URL resolution).
+- Fields and palettes: `contao/dca/tl_content.php`, labels in `contao/languages/de/tl_content.php`
+  (element category `business_footer`).
+- Repeatable lists use `multiColumnWizard`; the URL columns support the Contao page picker.
+- The theme's `<symbol>` sprite is not shipped — icons are inlined via
+  `templates/business/icon.html.twig` (`{% include ... with {icon: 'facebook'} only %}`).
+- Newsletter form templates: `form_wrapper_business_newsletter`, `form_text_business_newsletter`,
+  `form_submit_business_newsletter`. Do not reuse the theme's `footer-newsletter-form` id —
+  `files/business/js/main.js` would intercept the Contao submit.
+- `files/business/css/style.css` is the theme's precompiled Tailwind build and is **not** rebuilt
+  by `npm run build`. Only use classes that already exist in that file.
+
