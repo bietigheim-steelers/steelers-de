@@ -1,0 +1,30 @@
+{% extends '@Contao/content_element/_base.html.twig' %}
+{% use '@Contao/component/_headline.html.twig' %}
+
+{% block inner %}
+    {% if headline.text|default %}
+        {% with {headline: {
+            text: headline.text,
+            tag_name: headline.tag_name|default('h3'),
+            attributes: attrs(headline.attributes|default).addClass('mb-6 text-white text-xl md:text-2xl font-semibold leading-none!')
+        }} %}
+            {{ block('headline_component') }}
+        {% endwith %}
+    {% endif %}
+
+    {% if links|default is not empty %}
+        <ul class="flex flex-col items-start gap-3 sm:gap-5">
+            {% for link in links %}
+                <li>
+                    <a{{ attrs()
+                        .set('href', link.href)
+                        .addClass('text-paragraph_white leading-none duration-300 hover:text-primary block')
+                        .setIfExists('title', link.title)
+                        .set('target', '_blank', link.target)
+                        .set('rel', 'noreferrer noopener', link.target)
+                    }}>{{ link.label }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

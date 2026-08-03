@@ -1,0 +1,107 @@
+{% use "@Contao/component/_picture.html.twig" %}
+
+{# Hero-Bild rechts im Stil von case-study-post.html #}
+{% set partner_hero_image = picture_config({
+    width: 600,
+    height: 400,
+    resizeMode: 'crop',
+    sizes: '(max-width: 1024px) 92vw, 600px',
+    densities: '1x, 2x'
+}) %}
+{% set partner_hero_image_attributes = attrs().addClass('h-full object-cover rounded-3xl w-full') %}
+
+{% set partner_hero_logo = picture_config({
+    width: 320,
+    height: 200,
+    resizeMode: 'proportional',
+    densities: '1x, 2x'
+}) %}
+{% set partner_hero_logo_attributes = attrs().addClass('max-w-full h-auto object-contain') %}
+
+{% block content %}
+<section class="section-spacing-lg bg-secondary relative z-1{{ cssClass ? ' ' ~ cssClass }}"{% if cssId %} id="{{ cssId }}"{% endif %}>
+  <div class="container" data-sttr-wrapper>
+    <div class="grid lg:grid-cols-2 gap-5 md:gap-8">
+      <div>
+        <div class="flex flex-col justify-between gap-5 md:gap-8 xl:gap-10">
+          <div>
+            {% if partner.brancheLabels is not empty %}
+              <span class="text-base md:text-lg leading-normal font-semibold text-primary" data-sttr-card>
+                {{ partner.brancheLabels|join(' · ') }}
+              </span>
+            {% endif %}
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white pt-4 leading-[1.2]" data-sttr-card>{{ partner.title }}</h1>
+          </div>
+
+          {% if partner.logo or partner.url %}
+            <div class="flex items-center gap-5 flex-wrap" data-sttr-card>
+              {% if partner.logo %}
+                <div class="bg-white/10 border border-white/10 rounded-2xl p-4 max-w-50 w-full flex items-center justify-center">
+                  {% with {figure: figure(partner.logo.uuid, partner_hero_logo, {metadata: {alt: partner.title}}), img_attributes: partner_hero_logo_attributes} %}
+                    {{ block('picture_component') }}
+                  {% endwith %}
+                </div>
+              {% endif %}
+              {% if partner.url %}
+                <a href="{{ partner.url }}" class="button-primary" target="_blank" rel="noreferrer noopener">
+                  Zur Website
+                  <svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 6 8" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M0 0h1.84l3.872 3.664L1.84 7.344H0l3.872-3.68L0 0Z"/>
+                  </svg>
+                </a>
+              {% endif %}
+            </div>
+          {% endif %}
+
+          {% if partner.categoryLabels is not empty %}
+            <div data-sttr-card>
+              <span class="text-[17px] md:text-lg text-white font-semibold">Partnerschaft</span>
+              <div class="mt-3 flex flex-wrap gap-3">
+                {% for label in partner.categoryLabels %}
+                  <span class="text-paragraph_white bg-white/10 border border-white/10 py-2 px-4 inline-block rounded-full hover:bg-primary hover:text-title_black duration-300 leading-none text-sm">{{ label }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if partner.photo %}
+        <div class="md:aspect-500/300 lg:aspect-600/400 overflow-hidden lg:pr-10 xl:pr-16" data-sttr-card>
+          {% with {figure: figure(partner.photo.uuid, partner_hero_image, {metadata: {alt: partner.title}}), img_attributes: partner_hero_image_attributes} %}
+            {{ block('picture_component') }}
+          {% endwith %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% if partner.teaser or partner.description %}
+  <div class="pt-14 md:pt-20 lg:pt-24 xl:pt-25">
+    <div class="container">
+      <article class="prose prose-headings:my-5 mx-auto md:max-w-225 prose-p:text-paragraph_black prose-p:text-base md:prose-p:text-lg prose-li:text-paragraph_black prose-li:text-base md:prose-li:text-lg prose-h5:text-xl md:prose-h5:text-2xl prose-headings:text-title_black prose-headings:font-semibold prose-strong:font-semibold prose-strong:text-paragraph_black prose-strong:text-base md:prose-strong:text-lg prose-img:rounded-2xl prose-img:object-cover prose-content prose-p:leading-[1.5] prose-headings:leading-[1.4]">
+        {% if partner.teaser %}
+          <p><strong>{{ partner.teaser }}</strong></p>
+        {% endif %}
+        {{ partner.description|raw }}
+      </article>
+    </div>
+  </div>
+{% endif %}
+
+{% if backUrl %}
+  <div class="pt-10 md:pt-12">
+    <div class="container">
+      <div class="mx-auto md:max-w-225">
+        <a href="{{ backUrl }}" class="button-autline-dark">
+          <svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 6 8" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M6 0H4.16L.288 3.664 4.16 7.344H6L2.128 3.664 6 0Z"/>
+          </svg>
+          Zurück zur Partnerübersicht
+        </a>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

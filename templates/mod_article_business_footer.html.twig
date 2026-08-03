@@ -1,0 +1,29 @@
+{#
+    Artikel-Template fuer den Footer des Business-Themes.
+
+    Der <footer>-Rahmen inkl. Container liegt in fe_page_business.html.twig, dieses
+    Template gibt daher nur die Inhaltselemente aus (kein <section>, kein .container).
+
+    Verwendung: Artikel auf der versteckten Ressourcen-Seite -> Template "business_footer".
+#}
+{% if teaserOnly|default %}
+
+    {% block alias %}
+        <article{{ attrs(cssID).addClass(class) }}>
+            <div class="ce_text block">
+                <h2>{{ headline|insert_tag_raw }}</h2>
+                <div class="teaser">
+                    {{ teaser|default|sanitize_html('contao')|csp_inline_styles|insert_tag_raw }}
+                    <p class="more"><a href="{{ href }}" title="{{ readMore }}">{{ more }} <span class="invisible">{{ headline }}</span></a></p>
+                </div>
+            </div>
+        </article>
+    {% endblock %}
+
+{% else %}
+
+    {% block content %}
+        {{ elements|join|raw }}
+    {% endblock %}
+
+{% endif %}

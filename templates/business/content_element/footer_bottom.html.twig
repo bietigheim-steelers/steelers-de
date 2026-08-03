@@ -1,0 +1,46 @@
+{% extends '@Contao/content_element/_base.html.twig' %}
+{% use '@Contao/component/_rich_text.html.twig' %}
+
+{% set attributes = attrs()
+    .addClass('py-5 md:py-8 lg:py-10.5 flex items-center justify-between gap-4 sm:gap-6 flex-col sm:flex-row')
+%}
+
+{% block inner %}
+    {% if text|default %}
+        {% with {text, attributes: attrs().addClass('text-paragraph_white text-center sm:text-left')} %}
+            {{ block('rich_text_component') }}
+        {% endwith %}
+    {% endif %}
+
+    {% if links|default is not empty %}
+        <ul class="flex items-center justify-center gap-4 sm:gap-6 flex-wrap">
+            {% for link in links %}
+                <li>
+                    <a{{ attrs()
+                        .set('href', link.href)
+                        .addClass('text-paragraph_white leading-none duration-300 hover:text-primary block')
+                        .setIfExists('title', link.title)
+                        .set('target', '_blank', link.target)
+                        .set('rel', 'noreferrer noopener', link.target)
+                    }}>{{ link.label }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if socials|default is not empty %}
+        <div class="flex items-center gap-4">
+            {% for social in socials %}
+                <a{{ attrs()
+                    .set('href', social.href)
+                    .addClass('w-8.5 h-8.5 bg-white/10 rounded-full flex items-center justify-center text-white duration-300 hover:bg-primary hover:text-title_black')
+                    .set('target', '_blank')
+                    .set('rel', 'noreferrer noopener')
+                    .set('aria-label', social.label)
+                }}>
+                    {% include 'business/icon.html.twig' with {icon: social.network, icon_class: 'w-4 h-4 fill-current'} only %}
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

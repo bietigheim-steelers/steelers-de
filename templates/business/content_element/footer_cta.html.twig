@@ -1,0 +1,44 @@
+{% extends '@Contao/content_element/_base.html.twig' %}
+{% use '@Contao/component/_headline.html.twig' %}
+{% use '@Contao/component/_rich_text.html.twig' %}
+
+{% set attributes = attrs()
+    .addClass('flex items-start md:items-center justify-start md:justify-between gap-6 md:gap-8 pb-10 md:pb-12 lg:pb-15 flex-col md:flex-row')
+%}
+
+{% block inner %}
+    <div class="md:max-w-120 lg:max-w-125 w-full">
+        {% if headline.text|default %}
+            {% with {headline: {
+                text: headline.text,
+                tag_name: headline.tag_name|default('h2'),
+                attributes: attrs(headline.attributes|default).addClass('text-3xl md:text-4xl lg:text-[40px] xl:text-5xl font-bold text-white leading-tight!')
+            }} %}
+                {{ block('headline_component') }}
+            {% endwith %}
+        {% endif %}
+
+        {% if text|default %}
+            {% with {text, attributes: attrs().addClass('mt-4 sm:mt-5 text-paragraph_white')} %}
+                {{ block('rich_text_component') }}
+            {% endwith %}
+        {% endif %}
+    </div>
+
+    {% if links|default is not empty %}
+        <div class="flex items-center justify-start sm:justify-end gap-4 flex-wrap">
+            {% for link in links %}
+                <a{{ attrs()
+                    .set('href', link.href)
+                    .addClass(link.style == 'outline' ? 'button-autline-white' : 'button-primary')
+                    .setIfExists('title', link.title)
+                    .set('target', '_blank', link.target)
+                    .set('rel', 'noreferrer noopener', link.target)
+                }}>
+                    {{ link.label }}
+                    {% include 'business/icon.html.twig' with {icon: 'button_arrow', icon_class: 'w-2.5 h-2.5 fill-current'} only %}
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

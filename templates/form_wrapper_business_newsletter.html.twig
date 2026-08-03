@@ -1,0 +1,50 @@
+{#
+    Newsletter-Formular im Footer des Business-Themes.
+
+    Im Formular (Backend -> Formulargenerator) als Template auswaehlen. Passende
+    Feld-Templates: form_text_business_newsletter, form_submit_business_newsletter.
+
+    Hinweis: Die ID "footer-newsletter-form" wird bewusst NICHT verwendet - das
+    Theme-Script main.js wuerde den Contao-Submit sonst abfangen.
+#}
+{% set wrapperAttributes = attrs(cssID|default)
+    .addClass(['relative w-full max-w-95 sm:max-w-100 lg:max-w-none', class])
+    .addStyle(style|default)
+    .mergeWith(wrapperAttributes|default)
+%}
+
+<!-- indexer::stop -->
+<div{{ wrapperAttributes }}>
+
+    {% if headline|default %}
+        <{{ hl }} class="mb-4 text-white text-xl md:text-2xl font-semibold leading-none!">{{ headline|insert_tag_raw }}</{{ hl }}>
+    {% endif %}
+
+    <form{{ attrs()
+        .setIfExists('action', action|default)
+        .set('method', method)
+        .set('enctype', enctype)
+        .addClass('relative')
+        .mergeWith(attributes|default)
+        .mergeWith(novalidate|default)
+    }}>
+        <div class="formbody relative">
+            {% if errors|default %}
+                {% for error in errors %}
+                    <p class="mt-2 text-sm text-red-400" role="alert">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+            {% if 'get' != method %}
+                <input type="hidden" name="FORM_SUBMIT" value="{{ formSubmit }}">
+                <input type="hidden" name="REQUEST_TOKEN" value="{{ contao.request_token }}">
+                {% if maxFileSize|default %}
+                    <input type="hidden" name="MAX_FILE_SIZE" value="{{ maxFileSize }}">
+                {% endif %}
+            {% endif %}
+            {{ hidden|raw }}
+            {{ fields|raw }}
+        </div>
+    </form>
+
+</div>
+<!-- indexer::continue -->

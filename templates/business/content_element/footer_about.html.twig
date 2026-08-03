@@ -1,0 +1,27 @@
+{% extends '@Contao/content_element/_base.html.twig' %}
+{% use '@Contao/component/_rich_text.html.twig' %}
+
+{% set attributes = attrs()
+    .addClass('py-10 lg:py-12.5 lg:max-w-87.5 w-full flex flex-col sm:flex-row lg:flex-col justify-between gap-6 sm:items-end')
+%}
+
+{% block inner %}
+    <div class="sm:max-w-100 w-full">
+        {# Logo wie im Header - bewusst fest im Template, nicht im Backend pflegbar.
+           Die Klasse "logo" liefert die weissen SVG-Fuellungen (.logo .puckcolor/.starcolor
+           in files/business/css/style.css). #}
+        <div class="logo max-w-43.5 w-full">
+            {% include 'logo.html.twig' with {'css_classes': 'w-full h-auto bg-blend-exclusion'} %}
+        </div>
+
+        {% if text|default %}
+            {% with {text, attributes: attrs().addClass('mt-4 sm:mt-6 md:mt-8 text-paragraph_white')} %}
+                {{ block('rich_text_component') }}
+            {% endwith %}
+        {% endif %}
+    </div>
+
+    {% if form|default %}
+        {{ form|raw }}
+    {% endif %}
+{% endblock %}

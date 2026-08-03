@@ -1,0 +1,46 @@
+{% extends '@Contao/content_element/_base.html.twig' %}
+{% use '@Contao/component/_headline.html.twig' %}
+
+{% set attributes = attrs().addClass('col-span-2 sm:max-w-57.5 w-full') %}
+
+{% block inner %}
+    {% if headline.text|default %}
+        {% with {headline: {
+            text: headline.text,
+            tag_name: headline.tag_name|default('h3'),
+            attributes: attrs(headline.attributes|default).addClass('mb-6 text-white text-xl md:text-2xl font-semibold leading-none!')
+        }} %}
+            {{ block('headline_component') }}
+        {% endwith %}
+    {% endif %}
+
+    {% if items|default is not empty %}
+        <ul class="flex flex-col items-start gap-3 sm:gap-5">
+            {% for item in items %}
+                {% set multiline = item.icon == 'map' %}
+                {% set item_classes = multiline
+                    ? 'text-paragraph_white leading-snug duration-300 hover:text-primary flex items-start gap-2.5'
+                    : 'text-paragraph_white leading-none duration-300 hover:text-primary flex items-center gap-2.5'
+                %}
+                <li>
+                    {% if item.href %}
+                        <a{{ attrs()
+                            .set('href', item.href)
+                            .addClass(item_classes)
+                            .set('target', '_blank', item.target)
+                            .set('rel', 'noreferrer noopener', item.target)
+                        }}>
+                            {% include 'business/icon.html.twig' with {icon: item.icon, icon_class: 'w-4 h-auto shrink-0 fill-current text-primary'} only %}
+                            <span class="flex-1">{{ item.label }}</span>
+                        </a>
+                    {% else %}
+                        <span class="{{ item_classes }}">
+                            {% include 'business/icon.html.twig' with {icon: item.icon, icon_class: 'w-4 h-auto shrink-0 fill-current text-primary'} only %}
+                            <span class="flex-1">{{ item.label }}</span>
+                        </span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

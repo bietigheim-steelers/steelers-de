@@ -1,0 +1,14 @@
+{#
+    Absende-Button des Newsletter-Formulars im Footer (Business-Theme).
+    Im Formularfeld "Absenden-Schaltflaeche" als Template auswaehlen.
+#}
+<button{{ attrs()
+    .set('type', 'submit')
+    .set('id', "ctrl_#{this.id}")
+    .addClass('w-8 h-8 bg-primary rounded-full flex items-center justify-center text-title_black absolute right-2 top-2')
+    .addClass(this.class|default)
+    .set('aria-label', this.slabel)
+    .mergeWith(getAttributes.invoke())
+}}>
+    {% include 'business/icon.html.twig' with {icon: 'tab_arrow', icon_class: 'w-5 h-4 fill-current'} only %}
+</button>

@@ -1,0 +1,23 @@
+{#
+    Mittlere Footer-Zeile (Business-Theme).
+
+    Erwartete Kindelemente:
+      1. "Footer: Logo & Text"  (footer_about)
+      2. Element-Gruppe "Footer: Spalten" (Variante footer_columns)
+
+    Zwischen allen Kindelementen wird automatisch der Trenner gerendert.
+#}
+{% extends '@Contao/content_element/element_group.html.twig' %}
+
+{% set attributes = attrs()
+    .addClass('flex justify-between lg:gap-10 border-y border-white/10 flex-col lg:flex-row')
+%}
+
+{% block content %}
+    {% for fragment in nested_fragments %}
+        {% if not loop.first %}
+            <div class="w-full lg:w-px h-px lg:h-auto bg-white/10"></div>
+        {% endif %}
+        {{ content_element(fragment) }}
+    {% endfor %}
+{% endblock %}
