@@ -36,7 +36,7 @@
           {% if partner.logo or partner.url %}
             <div class="flex items-center gap-5 flex-wrap" data-sttr-card>
               {% if partner.logo %}
-                <div class="bg-white/10 border border-white/10 rounded-2xl p-4 max-w-50 w-full flex items-center justify-center">
+                <div class="bg-white border border-white/10 rounded-2xl p-4 max-w-50 w-full flex items-center justify-center">
                   {% with {figure: figure(partner.logo.uuid, partner_hero_logo, {metadata: {alt: partner.title}}), img_attributes: partner_hero_logo_attributes} %}
                     {{ block('picture_component') }}
                   {% endwith %}
@@ -94,7 +94,7 @@
   <div class="pt-10 md:pt-12">
     <div class="container">
       <div class="mx-auto md:max-w-225">
-        <a href="{{ backUrl }}" class="button-autline-dark">
+        <a href="{{ backUrl }}" class="button-autline-primary">
           <svg class="w-2.5 h-2.5 fill-current" viewBox="0 0 6 8" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path d="M6 0H4.16L.288 3.664 4.16 7.344H6L2.128 3.664 6 0Z"/>
           </svg>
