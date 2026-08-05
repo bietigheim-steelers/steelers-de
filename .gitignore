@@ -46,3 +46,4 @@ public/preview.php
 bin/
 files/css
 files/js
+dev-docker/db/dumps/*.sql

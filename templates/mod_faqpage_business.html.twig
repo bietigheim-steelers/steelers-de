@@ -1,0 +1,79 @@
+{#
+    FAQ-Uebersicht im Look des Business-Themes ("FAQ Area" aus services.html).
+
+    Wird als eigenes Template im Modul "FAQ-Seite" (faqpage) ausgewaehlt. Die
+    Fragen kommen aus den FAQ-Kategorien von Contao, die Modul-Ueberschrift
+    bildet den Abschnittstitel. Sind mehrere Kategorien gewaehlt, wird deren
+    Ueberschrift als Zwischentitel ausgegeben.
+#}
+{% extends '@Contao/block_unsearchable.html.twig' %}
+
+{# Die Modul-Ueberschrift wird unten im Abschnittskopf ausgegeben #}
+{% block headline %}{% endblock %}
+
+{% block content %}
+<section class="section-spacing-lg-md">
+    <div class="container">
+
+        {% if headline|default %}
+            <div class="flex items-start justify-between gap-4 md:gap-10 mb-12 sm:mb-14 md:mb-16 lg:mb-20 flex-col md:flex-row max-w-125 md:max-w-full" data-section-title>
+                <div class="md:max-w-170 w-full">
+                    <div class="flex items-center gap-2.5">
+                        <img class="rotate" src="/files/business/img/title-icon.svg" alt="" width="18" height="18">
+                        <span class="text-base lg:text-lg font-semibold leading-[1.1]! text-secondary uppercase block">FAQ</span>
+                    </div>
+                    <{{ hl }} class="text-3xl md:text-4xl lg:text-[40px] xl:text-5xl font-bold leading-tight text-title_black mt-4" data-content>{{ headline|insert_tag_raw }}</{{ hl }}>
+                </div>
+            </div>
+        {% endif %}
+
+        {% set showCategoryHeadlines = faq|length > 1 %}
+
+        {% for category in faq %}
+            {% if showCategoryHeadlines and category.headline %}
+                <h3 class="text-2xl md:text-3xl font-bold leading-tight text-title_black mb-6{{ not loop.first ? ' mt-12' }}">{{ category.headline }}</h3>
+            {% endif %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6" data-sttr-wrapper>
+                {% for faq in category.items %}
+                    <div class="flex gap-4 lg:gap-6 p-4 lg:p-6 bg-background rounded-2xl border border-border" data-sttr-card>
+                        <div class="w-8 sm:w-10 h-8 sm:h-10 flex items-center justify-center rounded-full bg-secondary shrink-0 text-white">
+                            {% include 'business/icon.html.twig' with {icon: 'question_mark', icon_class: 'w-3 sm:w-3.25 h-4 sm:h-4.5 fill-current'} only %}
+                        </div>
+                        <div>
+                            <h3 id="{{ faq.alias }}" class="text-title_black leading-snug text-xl font-semibold">{{ faq.question }}</h3>
+
+                            <div class="text-base font-normal leading-normal text-paragraph_black mt-3 space-y-3">
+                                {% if not faq.addBefore %}
+                                    {{ faq.answer|sanitize_html('contao')|csp_inline_styles|insert_tag_raw }}
+                                {% endif %}
+
+                                {% if faq.addImage %}
+                                    {{ include('@Contao/image.html.twig', faq|map(v => v), false) }}
+                                {% endif %}
+
+                                {% if faq.addBefore %}
+                                    {{ faq.answer|sanitize_html('contao')|csp_inline_styles|insert_tag_raw }}
+                                {% endif %}
+                            </div>
+
+                            {% if faq.enclosure %}
+                                <ul class="mt-3 space-y-3">
+                                    {% for enclosure in faq.enclosure %}
+                                        <li>
+                                            <a class="text-base font-normal text-secondary underline" href="{{ enclosure.href }}" title="{{ enclosure.title }}">{{ enclosure.link }} <span>({{ enclosure.filesize }})</span></a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+    </div>
+</section>
+{% endblock %}
+
+{% do add_schema_org(getSchemaOrgData.invoke()|default(null)) %}

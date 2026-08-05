@@ -136,6 +136,178 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['footerForm'] = array(
 
 unset($footerLinkColumns);
 
+/*
+ * Preisliste des Business-Themes.
+ *
+ * Bewusst ohne den Monatlich/Jaehrlich-Umschalter des HTML-Themes – der
+ * Preiszeitraum ist ein freies Textfeld je Paket.
+ */
+
+// Kleine Ueberschrift ueber der Hauptueberschrift – in allen Business-Abschnitten gleich
+$GLOBALS['TL_DCA']['tl_content']['fields']['businessLabel'] = array(
+	'label'     => &$GLOBALS['TL_LANG']['tl_content']['businessLabel'],
+	'exclude'   => true,
+	'inputType' => 'text',
+	'eval'      => array('maxlength' => 64, 'tl_class' => 'w50'),
+	'sql'       => "varchar(64) NOT NULL default ''",
+);
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['pricingColumns'] = array(
+	'label'     => &$GLOBALS['TL_LANG']['tl_content']['pricingColumns'],
+	'exclude'   => true,
+	'inputType' => 'select',
+	'options'   => array('2', '3', '4'),
+	'default'   => '3',
+	'eval'      => array('tl_class' => 'w50'),
+	'sql'       => "varchar(2) NOT NULL default '3'",
+);
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['pricingPlans'] = array(
+	'label'     => &$GLOBALS['TL_LANG']['tl_content']['pricingPlans'],
+	'exclude'   => true,
+	'inputType' => 'multiColumnWizard',
+	'eval'      => array(
+		'tl_class'     => 'clr',
+		'columnFields' => array(
+			'title' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['pricingPlan_title'],
+				'inputType' => 'text',
+				'eval'      => array('mandatory' => true, 'style' => 'width:180px'),
+			),
+			'price' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['pricingPlan_price'],
+				'inputType' => 'text',
+				'eval'      => array('style' => 'width:120px'),
+			),
+			'period' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['pricingPlan_period'],
+				'inputType' => 'text',
+				'eval'      => array('style' => 'width:120px'),
+			),
+			'description' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['pricingPlan_description'],
+				'inputType' => 'textarea',
+				'eval'      => array('style' => 'width:260px;height:60px'),
+			),
+			'features' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['pricingPlan_features'],
+				'inputType' => 'textarea',
+				'eval'      => array('style' => 'width:260px;height:60px'),
+			),
+			'linkLabel' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['pricingPlan_linkLabel'],
+				'inputType' => 'text',
+				'eval'      => array('style' => 'width:160px'),
+			),
+			'linkUrl' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['pricingPlan_linkUrl'],
+				'inputType' => 'text',
+				'eval'      => array('rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 2048, 'dcaPicker' => true, 'style' => 'width:260px'),
+			),
+			'linkTarget' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['footerLink_target'],
+				'inputType' => 'checkbox',
+				'eval'      => array('style' => 'width:30px'),
+			),
+			'highlight' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['pricingPlan_highlight'],
+				'inputType' => 'checkbox',
+				'eval'      => array('style' => 'width:30px'),
+			),
+		),
+	),
+	'sql'       => "blob NULL",
+);
+
+$GLOBALS['TL_DCA']['tl_content']['palettes']['business_pricing'] = '{type_legend},type,headline;{text_legend},text;{pricing_legend},businessLabel,pricingColumns,pricingPlans;{template_legend:hide},customTpl;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
+
+/*
+ * Zeitstrahl des Business-Themes ("about-us-our-journey").
+ *
+ * Das Theme-Markup ist auf vier Eintraege je Zeile ausgelegt; weitere Eintraege
+ * werden im Template automatisch zu weiteren Vierergruppen gebuendelt.
+ */
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['timelineEntries'] = array(
+	'label'     => &$GLOBALS['TL_LANG']['tl_content']['timelineEntries'],
+	'exclude'   => true,
+	'inputType' => 'multiColumnWizard',
+	'eval'      => array(
+		'tl_class'     => 'clr',
+		'columnFields' => array(
+			'year' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['timelineEntry_year'],
+				'inputType' => 'text',
+				'eval'      => array('mandatory' => true, 'maxlength' => 32, 'style' => 'width:120px'),
+			),
+			'text' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['timelineEntry_text'],
+				'inputType' => 'text',
+				'eval'      => array('maxlength' => 128, 'style' => 'width:420px'),
+			),
+		),
+	),
+	'sql'       => "blob NULL",
+);
+
+$GLOBALS['TL_DCA']['tl_content']['palettes']['business_timeline'] = '{type_legend},type,headline;{text_legend},text;{timeline_legend},businessLabel,timelineEntries;{template_legend:hide},customTpl;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
+
+/*
+ * Teamuebersicht des Business-Themes ("expert-guidness").
+ *
+ * Das Theme kennt genau vier Netzwerke, deshalb feste Spalten statt einer
+ * frei waehlbaren Liste.
+ */
+
+$GLOBALS['TL_DCA']['tl_content']['fields']['teamMembers'] = array(
+	'label'     => &$GLOBALS['TL_LANG']['tl_content']['teamMembers'],
+	'exclude'   => true,
+	'inputType' => 'multiColumnWizard',
+	'eval'      => array(
+		'tl_class'     => 'clr',
+		'columnFields' => array(
+			'image' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['teamMember_image'],
+				'inputType' => 'fileTree',
+				'eval'      => array('mandatory' => true, 'fieldType' => 'radio', 'filesOnly' => true, 'extensions' => '%contao.image.valid_extensions%'),
+			),
+			'name' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['teamMember_name'],
+				'inputType' => 'text',
+				'eval'      => array('mandatory' => true, 'style' => 'width:180px'),
+			),
+			'position' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['teamMember_position'],
+				'inputType' => 'text',
+				'eval'      => array('style' => 'width:200px'),
+			),
+			'facebook' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['teamMember_facebook'],
+				'inputType' => 'text',
+				'eval'      => array('rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 2048, 'style' => 'width:170px'),
+			),
+			'instagram' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['teamMember_instagram'],
+				'inputType' => 'text',
+				'eval'      => array('rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 2048, 'style' => 'width:170px'),
+			),
+			'twitter' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['teamMember_twitter'],
+				'inputType' => 'text',
+				'eval'      => array('rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 2048, 'style' => 'width:170px'),
+			),
+			'linkedin' => array(
+				'label'     => &$GLOBALS['TL_LANG']['tl_content']['teamMember_linkedin'],
+				'inputType' => 'text',
+				'eval'      => array('rgxp' => 'url', 'decodeEntities' => true, 'maxlength' => 2048, 'style' => 'width:170px'),
+			),
+		),
+	),
+	'sql'       => "blob NULL",
+);
+
+$GLOBALS['TL_DCA']['tl_content']['palettes']['business_team'] = '{type_legend},type,headline;{text_legend},text;{team_legend},businessLabel,teamMembers;{template_legend:hide},customTpl;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
+
 $GLOBALS['TL_DCA']['tl_content']['palettes']['footer_cta'] = '{type_legend},type,headline;{text_legend},text;{link_legend},footerButtons;{template_legend:hide},customTpl;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['footer_about'] = '{type_legend},type;{text_legend},text;{form_legend},footerForm;{template_legend:hide},customTpl;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['footer_linklist'] = '{type_legend},type,headline;{link_legend},footerLinks;{template_legend:hide},customTpl;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';

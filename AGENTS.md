@@ -276,3 +276,87 @@ footer_bottom                               # row 3: copyright, legal links, soc
 - `files/business/css/style.css` is the theme's precompiled Tailwind build and is **not** rebuilt
   by `npm run build`. Only use classes that already exist in that file.
 
+## Weitere Business-Theme-Elemente
+
+Alle drei stammen aus `services.html` des SecureVest-Themes.
+
+**Logo-Slider** (Frontend-Modul `partner_slider_module`)
+- `src/Controller/FrontendModule/PartnerSliderModule.php`, Template
+  `templates/business/frontend_module/partner_slider_module.html.twig`.
+- Zeigt nur Partner mit hinterlegtem Logo. Die Laufanimation kommt aus
+  `files/business/js/main.js` (Klasse `.marquee-slider`): das Skript dupliziert den Inhalt
+  genau **einmal** und springt bei halber Scrollbreite zurück. Ist ein Durchlauf schmaler
+  als der Viewport, entsteht eine Lücke – deshalb wiederholt der Controller die Logo-Liste
+  bis `MIN_ITEMS` (12) erreicht ist.
+- Palette/Felder: `contao/dca/tl_module.php`, Labels in `contao/languages/de/modules.php`.
+
+**FAQ** (Contao-FAQ-Bundle)
+- Kein eigenes Modul: das Kernmodul „FAQ-Seite“ (`faqpage`) bekommt unter
+  *Template* `mod_faqpage_business` zugewiesen → `templates/mod_faqpage_business.html.twig`.
+- Die Modul-Überschrift bildet den Abschnittstitel. Sind mehrere FAQ-Kategorien gewählt,
+  wird deren `headline` als Zwischentitel ausgegeben.
+
+**Preisliste** (Inhaltselement `business_pricing`, Kategorie `business_elements`)
+- `src/Controller/ContentElement/BusinessPricingController.php`, Template
+  `templates/content_element/business_pricing.html.twig` (global, **nicht** im Theme-Ordner –
+  siehe Hinweis bei den Footer-Elementen).
+- Bewusst ohne den Monatlich/Jährlich-Umschalter des Themes; der Zeitraum ist je Paket ein
+  freies Textfeld. Pakete werden per `multiColumnWizard` gepflegt (`pricingPlans`),
+  Leistungen zeilenweise im Textarea `features`.
+- Bringt keinen eigenen `<section>`/`.container`-Rahmen mit – den liefert das Artikel-Template
+  (`mod_article_business_container`).
+
+**Zeitstrahl** (Inhaltselement `business_timeline`, aus `about-us.html`)
+- `src/Controller/ContentElement/BusinessTimelineController.php`, Template
+  `templates/content_element/business_timeline.html.twig`.
+- Das Theme-Markup ist auf **genau vier Eintraege pro Block** ausgelegt: Desktop vier Spalten
+  mit waagerechter Linie, mobil zwei Spalten mit senkrechter Linie. Der Controller zerlegt die
+  Eintraege deshalb in Vierergruppen; jede Gruppe ist ein eigener `[data-journey-section]`-Block
+  mit eigener Linie (`animation.js` verarbeitet beliebig viele davon).
+- Position innerhalb der Gruppe steuert die Varianten: gerader Index → Karte unter der Linie
+  (`md:mt-32`, Pfeil oben), ungerader Index → Karte darueber (`md:-mt-8`, Pfeil unten).
+  Die mobile Zeile (Index 0/1 vs. 2/3) steuert `pt-0`/`pt-10` und `top-14`/`top-23.5`.
+- Kein eigener `<section>`/`.container` – gehoert in einen Container-Artikel.
+
+**Team** (Inhaltselement `business_team`, aus `about-us.html`)
+- `src/Controller/ContentElement/BusinessTeamController.php`, Template
+  `templates/content_element/business_team.html.twig`.
+- **Bringt als einziges Business-Inhaltselement seinen eigenen `<section>` mit**, weil der
+  dunkle Hintergrund (`bg-secondary`) ueber die volle Breite laufen muss. Gehoert deshalb in
+  einen Artikel **ohne** Container-Template.
+- Zeilen ohne Foto werden uebersprungen: die Karte baut ueber `aspect-410/520` auf dem Bild auf
+  und haette sonst keine Hoehe.
+- Social-Links sind feste Spalten (Facebook, Instagram, X, LinkedIn) – das Theme liefert nur
+  fuer diese vier ein Symbol.
+
+Die kleine Ueberschrift ueber der H2 nutzen alle drei Elemente ueber das gemeinsame Feld
+`businessLabel`.
+
+Neue Icons (`question_mark`, `check_badge`, `team_facebook`, `team_instagram`, `team_twitter`,
+`team_linkedin`) liegen in `templates/business/icon.html.twig`.
+
+### Theme-Markup nicht anfassen
+
+CSS und HTML des SecureVest-Themes sind aufeinander abgestimmt und `files/business/css/style.css`
+ist ein fertiger Tailwind-Build. Beim Uebernehmen eines Theme-Abschnitts die Klassen und die
+Verschachtelung **unveraendert** aus der HTML-Datei kopieren – auch scheinbar redundante Klassen.
+Zum Pruefen alle `class`-Attribute des gerenderten Abschnitts mit denen der Theme-Datei
+vergleichen (Whitespace normalisiert).
+
+## Lokale Docker-Umgebung
+
+- Console-Befehle **immer als `www-data`** ausführen, sonst gehört `var/cache/prod` danach
+  root und die Seite antwortet mit einem leeren HTTP 500 (ohne Log-Eintrag):
+  `docker compose exec -u www-data web php vendor/bin/contao-console cache:clear`
+- `contao:migrate` würde auf diesem Datenbestand viele Alt-Spalten entfernter Extensions
+  löschen. Für neue DCA-Felder stattdessen gezielt das ausgeben lassen, was fehlt
+  (`contao:migrate --dry-run`) und nur das entsprechende `ALTER TABLE ... ADD` ausführen.
+- Der DB-Client im Container heißt `mariadb`, nicht `mysql`.
+- Partner-Logos und andere Dateien unter `files/steelers/content/` fehlen lokal; `figure()`
+  rendert dann `<img src alt>` ohne Quelle. Das ist ein Datenproblem, kein Template-Fehler.
+- **`contao:filesync` niemals ohne Pfad aufrufen.** Weil die meisten Dateien lokal fehlen,
+  loescht ein voller Lauf ~3000 `tl_files`-Eintraege und macht damit alle UUID-Referenzen
+  (Partner-Logos, News-Bilder, Downloads) kaputt. Immer nur den betroffenen Teilbaum syncen:
+  `contao:filesync files/business`. Zum Wiederherstellen von `tl_files` reicht der Dump unter
+  `dev-docker/db/dumps/` – nur den `tl_files`-Abschnitt einspielen.
+

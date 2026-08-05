@@ -42,6 +42,12 @@
           {{ stylesheets|raw }}
           {{ mooScripts|raw }}
           {{ head|insert_tag_raw|raw }}
+
+          <!-- DNS Prefetch for External Resources -->
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+          <!-- Fonts -->
+          <link href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&display=swap" rel="stylesheet">
           <link rel="stylesheet" type="text/css" href="/files/business/css/plugins.min.css">
           <link rel="stylesheet" href="/files/business/css/style.css">
         {% endblock %}
