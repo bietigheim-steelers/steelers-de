@@ -100,7 +100,7 @@
           " :class="'link-text--big ' + currentGame.cssClass">{{ currentGame.eventTitle }}</span>
         <a v-if="
             currentGame.gamedate * 1000 > Date.now() &&
-            currentGame.home.shortname == 'SCB'
+            (currentGame.home.shortname == 'SCB' || currentGame.home.shortname == 'SCBB')
           " :href="currentGame.eventimurl ? currentGame.eventimurl : '/tickets'" class="link-text--big">Tickets
           kaufen</a>
         <span v-else-if="currentGame.videos && currentGame.videos.length == 0" class="link-text--big">&nbsp;</span>
