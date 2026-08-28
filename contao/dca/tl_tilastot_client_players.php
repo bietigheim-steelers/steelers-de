@@ -186,14 +186,14 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_players'] = array(
         'height' => array(
             'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_client_standings']['height'],
             'exclude'                 => true,
-            'inputType'               => 'number',
+            'inputType'               => 'text',
             'eval'                    => array('mandatory' => true, 'maxlength' => 5, 'rgxp' => 'numeric', 'tl_class' => 'w50'),
             'sql'                     => "int(5) NOT NULL default '0'"
         ),
         'weight' => array(
             'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_client_standings']['weight'],
             'exclude'                 => true,
-            'inputType'               => 'number',
+            'inputType'               => 'text',
             'eval'                    => array('mandatory' => true, 'maxlength' => 5, 'rgxp' => 'numeric', 'tl_class' => 'w50'),
             'sql'                     => "int(5) NOT NULL default '0'"
         ),
