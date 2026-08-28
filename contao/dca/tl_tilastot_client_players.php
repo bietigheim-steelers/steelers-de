@@ -77,7 +77,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_players'] = array(
     ),
     // Palettes
     'palettes' => array(
-        'default' => 'lastname,firstname,eliteprospectsid,birthday,jersey,position,alias,steelersince,warmuppartner;about;{source_legend},pictures'
+        'default' => 'lastname,firstname,eliteprospectsid,birthday,height,weight,nationality,jersey,position,alias,steelersince,warmuppartner;about;{source_legend},pictures'
     ),
     // Fields
     'fields'   => array(
@@ -208,7 +208,7 @@ $GLOBALS['TL_DCA']['tl_tilastot_client_players'] = array(
             'label'                   => &$GLOBALS['TL_LANG']['tl_tilastot_client_standings']['about'],
             'exclude'                 => true,
             'inputType'               => 'textarea',
-            'eval'                    => array('rte'=>'tinyMCE', 'basicEntities'=>true, 'tl_class'=>'clr', 'mandatory' => false),
+            'eval'                    => array('rte' => 'tinyMCE', 'basicEntities' => true, 'tl_class' => 'clr', 'mandatory' => false),
             'sql'                     => "blob Null"
         ),
         'epstats' => array(
