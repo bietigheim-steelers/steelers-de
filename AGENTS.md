@@ -343,6 +343,48 @@ Verschachtelung **unveraendert** aus der HTML-Datei kopieren – auch scheinbar 
 Zum Pruefen alle `class`-Attribute des gerenderten Abschnitts mit denen der Theme-Datei
 vergleichen (Whitespace normalisiert).
 
+## Formular-Bestätigungsseite
+
+Alle Formulare teilen sich **eine** Bestätigungsseite; der Bestätigungstext kommt aus dem
+Formular selbst (`tl_form.confirmation`). Für ein neues Formular müssen also weder eine Seite
+noch ein Artikel angelegt werden.
+
+Einrichtung (einmalig): eine ganz normale Seite anlegen (z. B. `/danke`), darin einen Artikel
+und an der gewünschten Stelle das Frontend-Modul **„Formular-Bestätigung“** einbinden.
+Drumherum ist der Artikel frei gestaltbar. Pro Formular: *Weiterleitungsseite* auf diese Seite
+setzen und den Bestätigungstext füllen. Ein eigener Seitentyp ist nicht nötig.
+
+Ablauf:
+
+1. `App\Controller\FrontendModule\FormConfirmationModule` (Modultyp
+   `form_confirmation_module`) liest den Formular-Alias aus `auto_item`, lädt das Formular
+   (unbekannter Alias → 404) und gibt den Text aus. Ohne Alias bleibt das Modul stumm, der
+   übrige Artikel wird trotzdem ausgegeben. Das Modul setzt `noindex,nofollow` und
+   `private, no-store` – letzteres wandert über die Fragment-Cache-Merge-Logik in die
+   Seitenantwort.
+2. `App\EventListener\FormConfirmationRedirectListener` (kernel.response) hängt an die
+   Weiterleitung nach dem Absenden den Alias an: `/danke` → `/danke/mein-formular`. Der
+   Eingriff passiert bewusst erst an der fertigen Weiterleitung und **nicht** im
+   `processFormData`-Hook, damit Notification Center und Leads unberührt bleiben.
+3. Den bereits mit den übermittelten Werten befüllten Text legt Contao vor der Weiterleitung
+   in der Flash-Bag ab (`Contao\Form::SESSION_CONFIRMATION_KEY`). Beim Reload oder Direktaufruf
+   ist er weg – dann wird `confirmation` ohne Formulardaten ausgegeben und übrig gebliebene
+   `##token##`-Platzhalter werden entfernt.
+
+**Erkennung der Bestätigungsseite:** Der Listener hängt den Alias nur an, wenn die Zielseite
+das Modul tatsächlich ausgibt – geprüft werden die Layout-Module der Seite und die
+Inhaltselemente ihrer veröffentlichten Artikel (verschachtelte Elemente, z. B. in einer
+Elementgruppe, werden auf ihren Artikel zurückgeführt). Dadurch bleiben die Weiterleitungen
+aller Formulare unverändert, die noch auf eine eigene Dankeseite zeigen: ein zusätzlicher
+Pfadteil würde dort zu einem 404 führen (unbenutzter Routen-Parameter). Nicht erkannt wird
+das Modul, wenn es nur über `{{insert_module::…}}` eingebunden ist – dann bleibt der Alias weg
+und die Seite zeigt den Text nicht mehr an.
+
+- Template: `templates/frontend_module/form_confirmation_module.html.twig`, Theme-Override
+  `templates/business/frontend_module/form_confirmation_module.html.twig`. Markup und Klassen
+  entsprechen dem Textelement in der Variante `small`. Variablen: `message` (HTML), `form`.
+- Palette: `contao/dca/tl_module.php`, Label in `contao/languages/de/modules.php`.
+
 ## Lokale Docker-Umgebung
 
 - Console-Befehle **immer als `www-data`** ausführen, sonst gehört `var/cache/prod` danach
