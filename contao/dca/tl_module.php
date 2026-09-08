@@ -141,3 +141,7 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['camps'] .= '{template_legend:hide},
 
 $GLOBALS['TL_DCA']['tl_module']['palettes']['auction'] = '{title_legend},name,headline,type;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['auction'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID,space';
+
+// Bestätigungstext des Formulars aus der URL (siehe App\Controller\FrontendModule\FormConfirmationModule)
+$GLOBALS['TL_DCA']['tl_module']['palettes']['form_confirmation_module'] = '{title_legend},name,headline,type;';
+$GLOBALS['TL_DCA']['tl_module']['palettes']['form_confirmation_module'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID';

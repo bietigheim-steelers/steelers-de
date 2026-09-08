@@ -38,6 +38,8 @@ $GLOBALS['TL_LANG']['FMD']['partner_list_module'] = array('Partnerliste', 'Partn
 $GLOBALS['TL_LANG']['FMD']['partner_reader_module'] = array('Partner Detailansicht', 'Zeigt einen einzelnen Partner mit Foto, Beschreibung und Branchen an. Der Partner wird über den Alias in der URL ermittelt.');
 $GLOBALS['TL_LANG']['FMD']['partner_slider_module'] = array('Partner Logo-Slider', 'Partner-Logos als endlos laufendes Band. Es werden nur Partner mit hinterlegtem Logo angezeigt.');
 
+$GLOBALS['TL_LANG']['FMD']['form_confirmation_module'] = array('Formular-Bestätigung', 'Gibt den Bestätigungstext des Formulars aus, dessen Alias in der URL steht. Einmalig in den Artikel der Bestätigungsseite einbinden – alle Formulare teilen sich diese Seite.');
+
 $GLOBALS['TL_LANG']['tl_module']['tilastot_round'] = array('Spielzeit', 'Die Spielzeit für die die Tabelle angezeigt werden soll.');
 $GLOBALS['TL_LANG']['tl_module']['tilastot_table_rows'] = array('Plätze', 'Wie viele Plätze sollen angezeigt werden. (für die Tabelle gilt: Es wird versucht der 1. Platz anzuzeigen. Sollte das nicht möglich sein, werden wenn möglich zwei Plätze hinter dem gewählten Team angezeigt.)');
 $GLOBALS['TL_LANG']['tl_module']['tilastot_my_team'] = array('Hervorgehobenes Team', 'An diesem Team wird immer angezeigt, ungeachtet der gewählten Anzahl an Tabellenplätze.');

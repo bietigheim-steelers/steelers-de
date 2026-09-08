@@ -1,0 +1,18 @@
+{#
+    Bestätigungstext eines Formulars (Frontend-Modul "Formular-Bestätigung",
+    App\Controller\FrontendModule\FormConfirmationModule).
+
+    Markup und Klassen entsprechen dem Textelement in der Variante "small"
+    (templates/content_element/text/small.html.twig) – Änderungen dort bitte
+    hier nachziehen.
+
+    Verfügbar: message (HTML), form (tl_form-Datensatz)
+    Theme-Override: templates/<theme>/frontend_module/form_confirmation_module.html.twig
+#}
+{% use '@Contao/component/_rich_text.html.twig' %}
+
+<div class="content-text defaultcontainer mb-8 max-lg:!my-12">
+    <div class="!my-12 max-w-5xl mx-auto prose">
+        {% with {text: message} %}{{ block('rich_text_component') }}{% endwith %}
+    </div>
+</div>

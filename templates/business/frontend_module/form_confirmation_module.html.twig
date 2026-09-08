@@ -1,0 +1,11 @@
+{#
+    Bestätigungstext eines Formulars im Business-Theme.
+    Siehe templates/frontend_module/form_confirmation_module.html.twig
+#}
+{% use '@Contao/component/_rich_text.html.twig' %}
+
+<section class="section-spacing-lg-md">
+    <div class="container">
+        {% with {text: message} %}{{ block('rich_text_component') }}{% endwith %}
+    </div>
+</section>
