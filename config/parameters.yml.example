@@ -13,3 +13,16 @@ parameters:
   mailer_port: 
   mailer_encryption:
   mixpanel_project_token: 
+
+  # Microsoft 365 / Entra ID App-Registrierung für den Graph-Mailer
+  # (Azure Portal > Microsoft Entra ID > App-Registrierungen)
+  microsoft_graph_tenant_id: nicht-konfiguriert
+  microsoft_graph_client_id: nicht-konfiguriert
+  microsoft_graph_client_secret: nicht-konfiguriert
+  # Solange die Platzhalter stehen bleiben, bleibt der SMTP-Versand intakt;
+  # nur ein Versand ueber "microsoft365" schlaegt dann fehl.
+  # Hinweis: Die Werte werden zu einer DSN zusammengesetzt. Enthaelt das
+  # Secret Sonderzeichen (: @ / ? # %), muss es URL-kodiert werden,
+  # ein % zusaetzlich als %% geschrieben werden.
+  # Postfach, in dessen Namen Graph verschickt (muss im Tenant existieren)
+  microsoft_graph_from: webseite@steelers.de

@@ -50,3 +50,38 @@ services:
 twig:
   globals:
     project_dir: '%kernel.project_dir%'
+
+# --- E-Mail-Versand ------------------------------------------------------
+#
+# Der ERSTE Transport in dieser Liste ist der Standard-Transport, über den
+# alle E-Mails laufen, die keinen expliziten Transport gewählt haben.
+#
+#   webseite     – klassischer SMTP-Versand (Zugangsdaten in parameters.yml).
+#                  Der Name MUSS "webseite" bleiben: tl_page.mailerTransport,
+#                  tl_form.mailerTransport (~35 Formulare) und das
+#                  Notification-Center-Gateway verweisen darauf.
+#   microsoft365 – Microsoft 365 über die Graph API (OAuth2 Client Credentials).
+#                  Kein SMTP, kein Benutzerpasswort, daher unabhängig von der
+#                  erzwungenen MFA. Benötigt eine App-Registrierung in Entra ID.
+#
+# Zum Umschalten des Standards einfach "microsoft365" nach oben ziehen.
+framework:
+  mailer:
+    transports:
+      webseite: '%env(MAILER_DSN)%'
+      microsoft365: 'microsoftgraph+api://%microsoft_graph_client_id%:%microsoft_graph_client_secret%@default?tenantId=%microsoft_graph_tenant_id%'
+
+# Macht die Transports im Backend auswählbar (Seitenstruktur, Formulare,
+# Notification-Center-Gateways).
+#
+# "from" erzwingt die Absenderadresse: Graph verschickt immer im Namen eines
+# konkreten Postfachs des Tenants (POST /users/{from}/sendMail). Weicht der
+# Absender davon ab, lehnt Microsoft die Zustellung ab. Reply-To bleibt
+# unangetastet, Antworten gehen also weiterhin an die fachliche Adresse.
+contao:
+  mailer:
+    transports:
+      webseite:
+        from: ~
+      microsoft365:
+        from: '%microsoft_graph_from%'
