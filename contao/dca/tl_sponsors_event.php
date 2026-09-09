@@ -79,7 +79,7 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
     // Palettes
     'palettes' => [
         '__selector__' => ['addImage'],
-        'default' => '{title_legend},title;{date_legend},startDate,startTime;{teaser_legend},teaser;{image_legend},addImage;{form_legend},form_id;{notes_legend:hide},notes;{access_legend},access_link;{publish_legend},published',
+        'default' => '{title_legend},title;{date_legend},startDate,startTime;{teaser_legend},teaser;{image_legend},addImage;{form_legend},form_id;{confirmation_legend},confirmationText;{notification_legend},notificationSubject,notificationText;{notes_legend:hide},notes;{access_legend},access_link;{publish_legend},published',
     ],
 
     // Sub-palettes
@@ -126,6 +126,23 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
             'options_callback' => [SponsorsEventDca::class, 'getForms'],
             'eval'             => ['mandatory' => true, 'includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
             'sql'              => "int(10) unsigned NOT NULL default 0",
+        ],
+        'confirmationText' => [
+            'inputType' => 'textarea',
+            'eval'      => ['rte' => 'tinyMCE', 'basicEntities' => true, 'tl_class' => 'clr'],
+            'sql'       => "text NULL",
+        ],
+        'notificationSubject' => [
+            'inputType' => 'text',
+            'eval'      => ['maxlength' => 255, 'decodeEntities' => true, 'tl_class' => 'long clr'],
+            'sql'       => "varchar(255) NOT NULL default ''",
+        ],
+        'notificationText' => [
+            'inputType' => 'textarea',
+            // decodeEntities wie beim Textfeld des Notification Centers: gespeichert
+            // wird genau der eingegebene Rohtext.
+            'eval'      => ['rte' => false, 'decodeEntities' => true, 'tl_class' => 'clr'],
+            'sql'       => "text NULL",
         ],
         'notes' => [
             'inputType' => 'textarea',

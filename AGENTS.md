@@ -385,6 +385,68 @@ und die Seite zeigt den Text nicht mehr an.
   entsprechen dem Textelement in der Variante `small`. Variablen: `message` (HTML), `form`.
 - Palette: `contao/dca/tl_module.php`, Label in `contao/languages/de/modules.php`.
 
+## Sponsor-Events (ein Formular für mehrere Events)
+
+Ein Sponsor-Event (`tl_sponsors_event`, Backend-Modul *Sponsor Events*) verweist auf ein
+Contao-Formular und bekommt beim Speichern einen Zugriffslink
+`…/<seite>?token=<access_token>`. Mehrere Events dürfen dasselbe Formular **und** dieselbe
+Notification-Center-Nachricht nutzen; die eventspezifischen Texte stehen deshalb am Event:
+
+| Feld | Wofür |
+|------|-------|
+| `confirmationText` | Text der Bestätigungsseite (TinyMCE) |
+| `notificationSubject` | Betreff der E-Mail-Benachrichtigung |
+| `notificationText` | Text der E-Mail-Benachrichtigung (nur Rohtext) |
+
+Welches Event gemeint ist, steht ausschließlich im URL-Parameter `token`. Contao-Formulare
+senden per POST an die aktuelle URL, der Parameter ist beim Absenden also noch vorhanden –
+`App\Sponsors\SponsorsEventResolver` liest ihn (nur veröffentlichte Events) und wird von
+beiden Ersetzungswegen genutzt.
+
+**Bestätigungsseite** – nutzt unverändert die dynamische Bestätigungsseite (siehe oben).
+`App\InsertTag\SponsorsEventInsertTag` stellt Insert-Tags bereit, die in
+*Formular → Bestätigungstext* (`tl_form.confirmation`) eingesetzt werden:
+
+- `{{sponsor_event_confirmation}}` – der Text aus dem Event (HTML)
+- `{{sponsor_event_title}}`, `{{sponsor_event_date}}`, `{{sponsor_event_time}}`
+
+Contao ersetzt sie beim Absenden und legt das Ergebnis wie gewohnt in der Flash-Bag ab;
+`FormConfirmationModule` und `FormConfirmationRedirectListener` bleiben unberührt. Weil Contao
+erst die `##Formular-Tokens##` und danach die Insert-Tags auflöst, kann der Event-Text selbst
+**keine** `##Formularfelder##` enthalten – die gehören in den Bestätigungstext des Formulars
+drumherum. Ohne gültiges Token (Reload, Direktaufruf) liefern die Tags einen Leerstring.
+
+**E-Mail-Benachrichtigung** – `App\EventListener\SponsorsEventNotificationTokenListener`
+hängt beim `CreateParcelEvent` Tokens an das Parcel (also vor dem Versand und auch bei
+asynchroner Zustellung serialisiert). In der Notification-Center-Nachricht stehen nur die
+Platzhalter:
+
+- Betreff: `##sponsor_event_subject##`
+- Textmail: `##sponsor_event_text##`
+- HTML-Mail: `##sponsor_event_text_html##` (Sonderzeichen maskiert, Zeilenumbrüche als `<br>`)
+- zusätzlich `##sponsor_event_title##`, `##sponsor_event_date##`, `##sponsor_event_time##`
+
+Die Tokens werden nur gesetzt, wenn `tl_sponsors_event.form_id` zum abgeschickten Formular
+passt (`FormConfigStamp`) – ein zufälliger `token`-Parameter beeinflusst so keine anderen
+Formulare. Beschreibungen für die Vorschlagsliste liegen in
+`contao/languages/de/nc_tokens.php`.
+
+Die drei Spalten legt `App\Migration\SponsorsEventTextsMigration` an, damit sie sich mit
+`contao:migrate --migrations-only` ausrollen lassen – der Schema-Abgleich ist auf diesem
+Datenbestand nicht benutzbar (siehe *Lokale Docker-Umgebung*).
+
+Fallstricke:
+
+- `startTime` speichert Contao als Zeitstempel, nicht als `19:00`; formatiert wird über
+  `SponsorsEventResolver::formatTime()`, damit Mail und Formularseite dasselbe anzeigen.
+- `title` wird mit kodierten Entities gespeichert (`&#35;`), `notificationSubject`/
+  `notificationText` dank `decodeEntities` nicht – deshalb dekodiert nur
+  `SponsorsEventResolver::formatTitle()`.
+- Das versteckte Formularfeld `sponsor_event_title`, das
+  `templates/frontend_module/sponsors_event_form.html.twig` per JS füllt, ist durch
+  `##sponsor_event_title##` überflüssig geworden, bleibt aber für bestehende
+  Benachrichtigungen erhalten.
+
 ## Lokale Docker-Umgebung
 
 - Console-Befehle **immer als `www-data`** ausführen, sonst gehört `var/cache/prod` danach
