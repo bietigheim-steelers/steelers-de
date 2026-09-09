@@ -53,35 +53,48 @@ twig:
 
 # --- E-Mail-Versand ------------------------------------------------------
 #
-# Der ERSTE Transport in dieser Liste ist der Standard-Transport, über den
-# alle E-Mails laufen, die keinen expliziten Transport gewählt haben.
+# Der ERSTE Transport ist der Standard, ueber den alle E-Mails laufen, die
+# keinen eigenen Transport gewaehlt haben.
 #
-#   webseite     – klassischer SMTP-Versand (Zugangsdaten in parameters.yml).
-#                  Der Name MUSS "webseite" bleiben: tl_page.mailerTransport,
-#                  tl_form.mailerTransport (~35 Formulare) und das
-#                  Notification-Center-Gateway verweisen darauf.
-#   microsoft365 – Microsoft 365 über die Graph API (OAuth2 Client Credentials).
-#                  Kein SMTP, kein Benutzerpasswort, daher unabhängig von der
-#                  erzwungenen MFA. Benötigt eine App-Registrierung in Entra ID.
+#   webseite  – klassischer SMTP-Versand (Zugangsdaten in parameters.yml).
+#               Der Name MUSS "webseite" bleiben: tl_page.mailerTransport,
+#               tl_form.mailerTransport (~35 Formulare) und das
+#               Notification-Center-Gateway verweisen darauf.
+#   m365_*    – Microsoft 365 ueber die Graph API (OAuth2 Client Credentials).
+#               Kein SMTP, kein Benutzerpasswort, daher unabhaengig von der
+#               erzwungenen MFA. Benoetigt eine App-Registrierung in Entra ID.
 #
-# Zum Umschalten des Standards einfach "microsoft365" nach oben ziehen.
+# Alle m365-Transports teilen sich EINE App-Registrierung. Unterschiedliche
+# Absender brauchen trotzdem je einen eigenen Transport, weil Graph das
+# Postfach aus dem Envelope-Sender ableitet (POST /users/{from}/sendMail)
+# und dieser in Contao pro Transport ueber "from" festgelegt wird.
+parameters:
+  microsoft_graph_dsn: 'microsoftgraph+api://%microsoft_graph_client_id%:%microsoft_graph_client_secret%@default?tenantId=%microsoft_graph_tenant_id%'
+
 framework:
   mailer:
     transports:
       webseite: '%env(MAILER_DSN)%'
-      microsoft365: 'microsoftgraph+api://%microsoft_graph_client_id%:%microsoft_graph_client_secret%@default?tenantId=%microsoft_graph_tenant_id%'
+      m365_noreply: '%microsoft_graph_dsn%'
+      m365_ticketing: '%microsoft_graph_dsn%'
+      m365_office: '%microsoft_graph_dsn%'
 
-# Macht die Transports im Backend auswählbar (Seitenstruktur, Formulare,
-# Notification-Center-Gateways).
+# Macht die Transports im Backend auswaehlbar (Seitenstruktur, Formulare,
+# Notification-Center-Gateways). Angezeigt wird "<name> (<from>)".
 #
-# "from" erzwingt die Absenderadresse: Graph verschickt immer im Namen eines
-# konkreten Postfachs des Tenants (POST /users/{from}/sendMail). Weicht der
-# Absender davon ab, lehnt Microsoft die Zustellung ab. Reply-To bleibt
-# unangetastet, Antworten gehen also weiterhin an die fachliche Adresse.
+# "from" erzwingt die Absenderadresse. Das ist bei Graph nicht optional: die
+# Adresse muss ein echtes Postfach des Tenants sein, sonst wird der Versand
+# abgelehnt – eine Besucheradresse aus einem Formular waere es nicht.
+# Reply-To bleibt unangetastet, Antworten gehen also weiter an die fachliche
+# Adresse.
 contao:
   mailer:
     transports:
       webseite:
         from: ~
-      microsoft365:
-        from: '%microsoft_graph_from%'
+      m365_noreply:
+        from: no-reply@steelers.de
+      m365_ticketing:
+        from: ticketing@steelers.de
+      m365_office:
+        from: office@steelers.de

@@ -19,10 +19,9 @@ parameters:
   microsoft_graph_tenant_id: nicht-konfiguriert
   microsoft_graph_client_id: nicht-konfiguriert
   microsoft_graph_client_secret: nicht-konfiguriert
+  # Die Absenderadressen stehen nicht hier, sondern in config/services.yml.
   # Solange die Platzhalter stehen bleiben, bleibt der SMTP-Versand intakt;
-  # nur ein Versand ueber "microsoft365" schlaegt dann fehl.
+  # nur ein Versand ueber die m365-Transports schlaegt dann fehl.
   # Hinweis: Die Werte werden zu einer DSN zusammengesetzt. Enthaelt das
   # Secret Sonderzeichen (: @ / ? # %), muss es URL-kodiert werden,
   # ein % zusaetzlich als %% geschrieben werden.
-  # Postfach, in dessen Namen Graph verschickt (muss im Tenant existieren)
-  microsoft_graph_from: webseite@steelers.de
