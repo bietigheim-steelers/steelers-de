@@ -2,10 +2,9 @@
 
 namespace App\EventListener\FormField;
 
+use App\Form\GamedayBirthdayLabel;
 use App\Model\Games;
-use App\Model\Standings;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
-use Contao\Date;
 use Contao\Form;
 use Contao\Widget;
 
@@ -39,10 +38,7 @@ class GamedayBirthdayListener
               if ($count >= self::BIRTHDAY_GREETINGS_MAX) {
                   continue;
               }
-              $away = Standings::findByIdAndRound($game['awayteam'], $game['round'], true);
-              $date = \Contao\Date::parse('D d.m.Y', $game['gamedate']);
-              $text = $date . ' - ' . $away['name'];
-              $options[] = array('value' => (string) $game['id'], 'label' => $text);
+              $options[] = array('value' => (string) $game['id'], 'label' => GamedayBirthdayLabel::fromRow($game));
           }
           if (count($options) <= 1) {
               $widget->options = array(array('value' => 'no-game-found', 'label' => 'Kein Spiel verfügbar.'));
