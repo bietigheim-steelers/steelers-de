@@ -10,6 +10,7 @@
             .addClass(this.class|default)
             .set('title', this.slabel)
             .set('alt', this.slabel)
+            .set('data-submit-lock')
             .mergeWith(getAttributes.invoke())
         }}>
     {% else %}
@@ -17,7 +18,12 @@
             .set('type', 'submit')
             .set('id', "ctrl_#{this.id}")
             .addClass(['submit', 'btn-default', this.class|default])
+            .set('data-submit-lock')
+            .set('data-submit-lock-label', 'Bitte warten …')
             .mergeWith(getAttributes.invoke())
         }}>{{ this.slabel }}</button>
     {% endif %}
+
+    {# Verhindert, dass das Formular mehrfach abgeschickt wird #}
+    {% include 'custom/submit_lock.html.twig' %}
 {% endblock %}

@@ -1,0 +1,168 @@
+{#
+    Schutz gegen mehrfaches Absenden von Formularen.
+
+    Das Skript wird pro Seite nur einmal ausgeliefert (Guard ueber window) und
+    arbeitet per Event-Delegation: Es reagiert auf jedes Formular, das einen
+    Submit-Button mit dem Attribut "data-submit-lock" enthaelt. Nach dem ersten
+    Submit wird der Button gesperrt (Spinner statt Beschriftung), jeder weitere
+    Submit desselben Formulars wird verworfen.
+
+    Verwendung im Submit-Template:
+
+        <button{{ attrs()
+            ...
+            .set('data-submit-lock')
+            .set('data-submit-lock-label', 'Bitte warten …')
+        }}>{{ this.slabel }}</button>
+
+        {% include 'custom/submit_lock.html.twig' %}
+
+    "data-submit-lock-label" ist optional: Ohne Label zeigt der Button waehrend
+    des Absendens nur den Spinner (z. B. bei reinen Icon-Buttons).
+
+    Hinweise zur Implementierung:
+    - Der Button wird erst im naechsten Tick auf "disabled" gesetzt, weil der
+      Browser sonst Name/Wert des Buttons nicht mit abschickt.
+    - Der Spinner ist ein SVG mit SMIL-Animation, damit er ohne zusaetzliches
+      CSS (und ohne Tailwind-Build) funktioniert.
+    - Wird der Submit von anderer Stelle per preventDefault() abgebrochen, wird
+      die Sperre wieder aufgehoben.
+#}
+<script{{ attrs().setIfExists('nonce', csp_nonce('script-src')) }}>
+    (function () {
+        if (window.steelersSubmitLock) {
+            return;
+        }
+        window.steelersSubmitLock = true;
+
+        var SPINNER = '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">'
+            + '<circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" opacity=".25"></circle>'
+            + '<path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round">'
+            + '<animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur=".8s" repeatCount="indefinite"></animateTransform>'
+            + '</path></svg>';
+
+        function buttons(form) {
+            return Array.prototype.slice.call(form.querySelectorAll('[data-submit-lock]'));
+        }
+
+        function lock(button) {
+            if (button.steelersLocked) {
+                return;
+            }
+
+            button.steelersLocked = true;
+            button.setAttribute('aria-busy', 'true');
+            button.style.pointerEvents = 'none';
+            button.style.cursor = 'wait';
+
+            if ('BUTTON' !== button.tagName) {
+                // <input type="image"> kann keine Kindelemente aufnehmen
+                button.style.opacity = '.5';
+
+                return;
+            }
+
+            // Breite und Hoehe festhalten, damit das Layout nicht springt
+            var rect = button.getBoundingClientRect();
+            button.style.minWidth = rect.width + 'px';
+            button.style.minHeight = rect.height + 'px';
+
+            button.steelersMarkup = button.innerHTML;
+
+            var label = button.getAttribute('data-submit-lock-label');
+            var content = document.createElement('span');
+            content.style.display = 'inline-flex';
+            content.style.alignItems = 'center';
+            content.style.justifyContent = 'center';
+            content.style.gap = '.5em';
+            content.innerHTML = SPINNER;
+
+            if (label) {
+                content.appendChild(document.createTextNode(label));
+            }
+
+            button.innerHTML = '';
+            button.appendChild(content);
+        }
+
+        function unlock(button) {
+            if (!button.steelersLocked) {
+                return;
+            }
+
+            button.steelersLocked = false;
+            button.disabled = false;
+            button.removeAttribute('aria-busy');
+            button.style.pointerEvents = '';
+            button.style.cursor = '';
+            button.style.opacity = '';
+            button.style.minWidth = '';
+            button.style.minHeight = '';
+
+            if ('BUTTON' === button.tagName && undefined !== button.steelersMarkup) {
+                button.innerHTML = button.steelersMarkup;
+            }
+        }
+
+        function unlockForm(form) {
+            form.removeAttribute('data-submit-locked');
+            buttons(form).forEach(unlock);
+        }
+
+        document.addEventListener('submit', function (event) {
+            var form = event.target;
+
+            if (!form || 'FORM' !== form.tagName) {
+                return;
+            }
+
+            var candidates = buttons(form);
+
+            if (!candidates.length) {
+                return;
+            }
+
+            // Zweiter Submit desselben Formulars: verwerfen
+            if (form.hasAttribute('data-submit-locked')) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+
+                return;
+            }
+
+            form.setAttribute('data-submit-locked', '');
+
+            var submitter = event.submitter && event.submitter.hasAttribute('data-submit-lock') ? event.submitter : null;
+
+            candidates.forEach(function (button) {
+                if (!submitter || submitter === button) {
+                    lock(button);
+                }
+            });
+
+            window.setTimeout(function () {
+                // Ein anderes Skript hat den Submit abgebrochen -> Sperre zuruecknehmen
+                if (event.defaultPrevented) {
+                    unlockForm(form);
+
+                    return;
+                }
+
+                candidates.forEach(function (button) {
+                    if (button.steelersLocked) {
+                        button.disabled = true;
+                    }
+                });
+            }, 0);
+        }, true);
+
+        // Zurueck-Navigation aus dem bfcache: gesperrte Formulare wieder freigeben
+        window.addEventListener('pageshow', function (event) {
+            if (!event.persisted) {
+                return;
+            }
+
+            Array.prototype.slice.call(document.querySelectorAll('form[data-submit-locked]')).forEach(unlockForm);
+        });
+    })();
+</script>

@@ -1,6 +1,10 @@
 {#
     Absende-Button des Newsletter-Formulars im Footer (Business-Theme).
     Im Formularfeld "Absenden-Schaltflaeche" als Template auswaehlen.
+
+    Der Button sperrt sich nach dem Absenden selbst (siehe custom/submit_lock),
+    zeigt dann anstelle des Pfeil-Icons einen Spinner. Ohne
+    "data-submit-lock-label" bleibt es beim reinen Icon-Zustand.
 #}
 <button{{ attrs()
     .set('type', 'submit')
@@ -8,7 +12,11 @@
     .addClass('w-8 h-8 bg-primary rounded-full flex items-center justify-center text-title_black absolute right-2 top-2')
     .addClass(this.class|default)
     .set('aria-label', this.slabel)
+    .set('data-submit-lock')
     .mergeWith(getAttributes.invoke())
 }}>
     {% include 'business/icon.html.twig' with {icon: 'tab_arrow', icon_class: 'w-5 h-4 fill-current'} only %}
 </button>
+
+{# Verhindert, dass das Formular mehrfach abgeschickt wird #}
+{% include 'custom/submit_lock.html.twig' %}
