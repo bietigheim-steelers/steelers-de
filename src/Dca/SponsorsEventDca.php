@@ -177,6 +177,15 @@ class SponsorsEventDca
             $args[1] = Date::parse('d.m.Y', (int) $row['startDate']);
         }
 
+        // Bei begrenzten Events den Stand direkt in der Liste zeigen
+        if (!empty($row['limitParticipants']) && (int) $row['maxParticipants'] > 0) {
+            $args[0] .= \sprintf(
+                ' <span style="color:#999;padding-left:3px">%s/%s</span>',
+                (int) $row['participantCount'],
+                (int) $row['maxParticipants'],
+            );
+        }
+
         return $args;
     }
 }

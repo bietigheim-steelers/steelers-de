@@ -44,15 +44,35 @@
   </div>
 </div>
 
-{{ formHtml|raw }}
+{# Optionaler Stand der Anmeldungen (tl_sponsors_event.showParticipantCount) #}
+{% if participants %}
+  <div class="content-text defaultcontainer mb-8">
+    <div class="max-w-5xl mx-auto">
+      <p class="text-lg font-bold leading-[1.4rem]">
+        {{ participants.count }} von {{ participants.max }} Plätzen belegt
+      </p>
+    </div>
+  </div>
+{% endif %}
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var field = document.querySelector('form input[name="sponsor_event_title"]');
-  if (field) {
-    field.value = {{ event.title|json_encode|raw }};
-  }
-});
-</script>
+{% if bookedOut %}
+  {# Alle Plätze belegt: das Modul rendert das Formular gar nicht erst #}
+  <div class="content-text defaultcontainer mb-8 max-lg:!my-12">
+    <div class="!my-12 max-w-5xl mx-auto prose">
+      {{ bookedOutMsg|raw }}
+    </div>
+  </div>
+{% else %}
+  {{ formHtml|raw }}
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var field = document.querySelector('form input[name="sponsor_event_title"]');
+    if (field) {
+      field.value = {{ event.title|json_encode|raw }};
+    }
+  });
+  </script>
+{% endif %}
 
 {% endif %}

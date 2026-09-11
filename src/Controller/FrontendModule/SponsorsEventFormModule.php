@@ -27,15 +27,23 @@ use Symfony\Component\HttpFoundation\Response;
 #[AsFrontendModule(type: 'sponsors_event_form', category: 'tilastot', template: 'frontend_module/sponsors_event_form')]
 class SponsorsEventFormModule extends AbstractFrontendModuleController
 {
+    /**
+     * Hinweis, wenn am Event kein eigener Text für ein ausgebuchtes Event hinterlegt ist.
+     */
+    private const BOOKED_OUT_FALLBACK = '<p>Für dieses Event sind alle Plätze belegt. Eine Anmeldung ist leider nicht mehr möglich.</p>';
+
     protected function getResponse(FragmentTemplate $template, ModuleModel $model, Request $request): Response
     {
         $token = Input::get('token');
 
         if (empty($token)) {
-            $template->error     = true;
-            $template->errorMsg  = 'Kein Zugriffstoken angegeben.';
-            $template->formHtml  = null;
-            $template->event     = null;
+            $template->error        = true;
+            $template->errorMsg     = 'Kein Zugriffstoken angegeben.';
+            $template->formHtml     = null;
+            $template->event        = null;
+            $template->bookedOut    = false;
+            $template->bookedOutMsg = null;
+            $template->participants = null;
 
             return $template->getResponse();
         }
@@ -44,19 +52,30 @@ class SponsorsEventFormModule extends AbstractFrontendModuleController
         $sponsorEvent = SponsorsEvent::findOneBy('access_token', $token);
 
         if ($sponsorEvent === null || !$sponsorEvent->published) {
-            $template->error    = true;
-            $template->errorMsg = 'Ungültiger oder abgelaufener Zugriffslink.';
-            $template->formHtml = null;
-            $template->event    = null;
+            $template->error        = true;
+            $template->errorMsg     = 'Ungültiger oder abgelaufener Zugriffslink.';
+            $template->formHtml     = null;
+            $template->event        = null;
+            $template->bookedOut    = false;
+            $template->bookedOutMsg = null;
+            $template->participants = null;
 
             return $template->getResponse();
         }
 
-        // Formular über Contao Insert-Tag rendern
+        // Optionale Teilnehmerbegrenzung: maxParticipants wird vom
+        // App\EventListener\SponsorsEventParticipantListener bei jeder Anmeldung
+        // gegen participantCount hochgezählt.
+        $maxParticipants  = $sponsorEvent->limitParticipants ? (int) $sponsorEvent->maxParticipants : 0;
+        $participantCount = max(0, (int) $sponsorEvent->participantCount);
+        $bookedOut        = $maxParticipants > 0 && $participantCount >= $maxParticipants;
+
+        // Ausgebucht: das Formular wird gar nicht erst gerendert, damit auch eine
+        // abgeschickte Anmeldung nicht mehr verarbeitet wird.
         $formId   = (int) $sponsorEvent->form_id;
         $formHtml = '';
 
-        if ($formId > 0) {
+        if ($formId > 0 && !$bookedOut) {
             $framework = System::getContainer()->get('contao.framework');
             $framework->initialize();
 
@@ -65,9 +84,16 @@ class SponsorsEventFormModule extends AbstractFrontendModuleController
                 ->replace('{{insert_form::' . $formId . '}}');
         }
 
-        $template->error    = false;
-        $template->errorMsg = null;
-        $template->formHtml = $formHtml;
+        $template->error        = false;
+        $template->errorMsg     = null;
+        $template->formHtml     = $formHtml;
+        $template->bookedOut    = $bookedOut;
+        $template->bookedOutMsg = $bookedOut
+            ? ((string) $sponsorEvent->bookedOutText ?: self::BOOKED_OUT_FALLBACK)
+            : null;
+        $template->participants = $maxParticipants > 0 && $sponsorEvent->showParticipantCount
+            ? ['count' => $participantCount, 'max' => $maxParticipants]
+            : null;
         $template->event    = [
             'title'     => $sponsorEvent->title,
             'startDate' => $sponsorEvent->startDate,

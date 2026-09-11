@@ -435,6 +435,49 @@ Die drei Spalten legt `App\Migration\SponsorsEventTextsMigration` an, damit sie 
 `contao:migrate --migrations-only` ausrollen lassen – der Schema-Abgleich ist auf diesem
 Datenbestand nicht benutzbar (siehe *Lokale Docker-Umgebung*).
 
+**Teilnehmerbegrenzung (optional)** – die Checkbox `limitParticipants` schaltet eine
+Subpalette frei:
+
+| Feld | Wofür |
+|------|-------|
+| `maxParticipants` | Anzahl der Plätze (`minval` 1) |
+| `participantCount` | belegte Plätze, im Backend korrigierbar |
+| `showParticipantCount` | „5 von 40 Plätzen belegt“ über dem Formular anzeigen |
+| `bookedOutText` | Hinweis statt des Formulars; leer → Fallback im Modul |
+
+`App\EventListener\SponsorsEventParticipantListener` (`processFormData`) zählt
+`participantCount` bei jeder Anmeldung atomar hoch (`SET participantCount =
+participantCount + ?`). **Gezählt werden Personen**: die Anmeldung selbst belegt einen
+Platz, eine ausgefüllte Begleitperson einen zweiten. Gezählt wird unabhängig von
+`limitParticipants`, damit der Stand stimmt, wenn die Begrenzung später eingeschaltet
+wird. Der Zähler liegt bewusst am Event und nicht in den Leads: mehrere Events teilen
+sich ein Formular, und `tl_lead` hat keine belastbare Event-Zuordnung (das versteckte
+Feld `sponsor_event_title` ist nur ein per JS gefüllter Titel-String).
+
+Als Begleitperson zählt ein gefülltes Formularfeld, dessen Name `begleitperson` enthält
+(Marker-Konvention wie `-singleuse-` im `SingleUseSelectFormListener`; ohne Trennzeichen,
+weil das Formular sowohl `vorname_begleitperson` als auch `email-begleitperson` benutzt).
+Berücksichtigt werden nur `tl_form_field`-Typen aus `COMPANION_FIELD_TYPES`
+(`text`, `textarea`): **„Anrede Begleitperson“ ist ein Select ohne Leeroption** und
+liefert auch ohne Begleitung immer `herr` – als Auswahlfeld würde es bei jeder Anmeldung
+eine Begleitperson vortäuschen.
+
+Ist `participantCount >= maxParticipants`, rendert `SponsorsEventFormModule` das Formular
+**gar nicht erst**. Damit wird auch eine gleichzeitig abgeschickte Anmeldung nicht mehr
+verarbeitet – der Absender sieht dann den Ausgebucht-Hinweis statt einer Bestätigung.
+Die Formularseite antwortet ohnehin mit `no-cache, no-store, private`, der Stand ist
+also immer live.
+
+Beim **letzten freien Platz** kann dadurch um eins überbucht werden: bei 39/40 ist das
+Formular noch sichtbar, und eine Anmeldung mit Begleitperson landet bei 41/40. Wer das
+verhindern will, müsste die Begleitperson-Felder in einem `validateFormField`-Hook
+ablehnen, solange weniger als zwei Plätze frei sind.
+
+Die Spalten legt `App\Migration\SponsorsEventParticipantsMigration` an. Die Listenansicht
+zeigt bei begrenzten Events den Stand hinter dem Titel (`SponsorsEventDca::formatListLabel`).
+Das Template nutzt nur Klassen, die in `sponsors_event_form.html.twig` schon vorkommen –
+so ist kein Tailwind-Rebuild nötig.
+
 Fallstricke:
 
 - `startTime` speichert Contao als Zeitstempel, nicht als `19:00`; formatiert wird über

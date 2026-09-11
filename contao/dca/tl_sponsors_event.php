@@ -78,13 +78,14 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
 
     // Palettes
     'palettes' => [
-        '__selector__' => ['addImage'],
-        'default' => '{title_legend},title;{date_legend},startDate,startTime;{teaser_legend},teaser;{image_legend},addImage;{form_legend},form_id;{confirmation_legend},confirmationText;{notification_legend},notificationSubject,notificationText;{notes_legend:hide},notes;{access_legend},access_link;{publish_legend},published',
+        '__selector__' => ['addImage', 'limitParticipants'],
+        'default' => '{title_legend},title;{date_legend},startDate,startTime;{teaser_legend},teaser;{image_legend},addImage;{form_legend},form_id;{participants_legend},limitParticipants;{confirmation_legend},confirmationText;{notification_legend},notificationSubject,notificationText;{notes_legend:hide},notes;{access_legend},access_link;{publish_legend},published',
     ],
 
     // Sub-palettes
     'subpalettes' => [
         'addImage' => 'singleSRC',
+        'limitParticipants' => 'maxParticipants,participantCount,showParticipantCount,bookedOutText',
     ],
 
     // Fields
@@ -126,6 +127,34 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
             'options_callback' => [SponsorsEventDca::class, 'getForms'],
             'eval'             => ['mandatory' => true, 'includeBlankOption' => true, 'chosen' => true, 'tl_class' => 'w50'],
             'sql'              => "int(10) unsigned NOT NULL default 0",
+        ],
+        'limitParticipants' => [
+            'inputType' => 'checkbox',
+            'eval'      => ['submitOnChange' => true],
+            'sql'       => ['type' => 'boolean', 'default' => false],
+        ],
+        'maxParticipants' => [
+            'inputType' => 'text',
+            'eval'      => ['rgxp' => 'natural', 'mandatory' => true, 'minval' => 1, 'maxlength' => 6, 'tl_class' => 'w50'],
+            'sql'       => "int(10) unsigned NOT NULL default 0",
+        ],
+        // Wird vom App\EventListener\SponsorsEventParticipantListener bei jeder
+        // Anmeldung hochgezählt und bleibt für die Redaktion korrigierbar (z. B. als
+        // Startwert für ein Event, das schon Anmeldungen hat).
+        'participantCount' => [
+            'inputType' => 'text',
+            'eval'      => ['rgxp' => 'natural', 'maxlength' => 6, 'doNotCopy' => true, 'tl_class' => 'w50'],
+            'sql'       => "int(10) unsigned NOT NULL default 0",
+        ],
+        'showParticipantCount' => [
+            'inputType' => 'checkbox',
+            'eval'      => ['tl_class' => 'w50 clr'],
+            'sql'       => ['type' => 'boolean', 'default' => false],
+        ],
+        'bookedOutText' => [
+            'inputType' => 'textarea',
+            'eval'      => ['rte' => 'tinyMCE', 'basicEntities' => true, 'tl_class' => 'clr'],
+            'sql'       => "text NULL",
         ],
         'confirmationText' => [
             'inputType' => 'textarea',
