@@ -7,6 +7,7 @@ use App\Model\Standings;
 use Contao\CoreBundle\DependencyInjection\Attribute\AsHook;
 use Contao\Date;
 use Contao\Form;
+use Contao\StringUtil;
 use Contao\Widget;
 
 #[AsHook('loadFormField')]
@@ -31,7 +32,7 @@ class GamedayGroupSelectListener
         }
 
         $options = array_map(function ($game) use ($widget) {
-            $gameConfig = unserialize($game['gameConfig']);
+            $gameConfig = StringUtil::deserialize($game['gameConfig'], true);
             $away = Standings::findByIdAndRound($game['awayteam'], $game['round'], true);
             $date = Date::parse('D d.m.Y', $game['gamedate']);
             $text = $date . ' - ' . $away['name'];
