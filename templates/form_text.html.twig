@@ -26,6 +26,7 @@
                 .addClass('password', this.hideInput|default)
                 .addClass(this.class|default)
                 .set('value', this.value|default|insert_tag)
+                .set('inputmode', 'decimal', this.rgxp|default == 'amount')
                 .mergeWith(inputAttributes)
                 .setIfExists('placeholder', inputAttributes.placeholder|default|insert_tag)
             }}>

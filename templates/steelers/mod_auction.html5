@@ -8,15 +8,10 @@
     </tr>
   </thead>
   <tbody>
-    <?php foreach ($this->players as $player): ?>
+    <?php foreach ($this->bids as $bid): ?>
       <tr>
-        <td><?php echo htmlspecialchars($player['label']); ?></td>
-        <td>
-          <?php
-          $bidding = $this->biddings[$player['value']];
-          echo $bidding == 0 ? '&mdash;' : htmlspecialchars(number_format($bidding, 2, ',', '.') . ' €');
-          ?>
-        </td>
+        <td><?= Contao\StringUtil::specialchars($bid['label']) ?></td>
+        <td><?= $bid['highestBid'] ? number_format($bid['highestBid'], 2, ',', '.') . ' €' : '&mdash;' ?></td>
       </tr>
     <?php endforeach; ?>
   </tbody>

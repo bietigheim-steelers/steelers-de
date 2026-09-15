@@ -52,3 +52,5 @@ $GLOBALS['TL_LANG']['tl_module']['tilastot_partner_slider_link'] = array('Logos 
 $GLOBALS['TL_LANG']['tl_module']['tilastot_legend']  = 'Client Einstellungen';
 
 $GLOBALS['TL_LANG']['MOD']['sponsors_events'] = array('Sponsoren Events', 'Hier können Sponsoren Events verwaltet werden.');
+$GLOBALS['TL_LANG']['MOD']['auction_bids'] = array('Auktionsgebote', 'Gebote aus den Auktionsformularen (Zieltabelle steelers_auktion).');
+$GLOBALS['TL_LANG']['FMD']['auction'] = array('Auktion: Höchstgebote', 'Listet alle Artikel aus dem Auswahlfeld "player" des gewählten Auktionsformulars mit dem jeweils höchsten Gebot.');

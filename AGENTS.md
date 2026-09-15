@@ -490,6 +490,38 @@ Fallstricke:
   `##sponsor_event_title##` überflüssig geworden, bleibt aber für bestehende
   Benachrichtigungen erhalten.
 
+## Auktionen (Trikot- und Charityauktion)
+
+Fans bieten über normale Contao-Formulare („Trikotauktion“, „Charityauktion“) mit
+*Eingaben speichern* → Zieltabelle **`steelers_auktion`**. Die Formularfelder heißen deshalb
+exakt wie die Spalten (`player`, `gebot`, `vorname`, …). Die Tabelle hat trotz fehlendem
+`tl_`-Präfix ein DCA (`contao/dca/steelers_auktion.php`) und ist im Backend unter
+*Inhalte → Auktionsgebote* sichtbar (nur ansehen, korrigieren, löschen – z. B. alte Gebote
+vor einer neuen Auktion).
+
+- **Gebot**: Spalte `DECIMAL(10,2)`, Formularfeld mit Eingabeprüfung **„Betrag“**
+  (`rgxp = amount`, `App\EventListener\AmountFormFieldListener`, `validateFormField`).
+  Erlaubt sind höchstens zwei Nachkommastellen mit Komma oder Punkt; weitergegeben
+  (Datenbank, E-Mail, Hooks) wird immer mit Punkt. Tausenderpunkte werden abgelehnt.
+  Mindest-/Höchstwert des Formularfelds prüft der Listener selbst, weil `FormText` sie bei
+  allen Eingabeprüfungen außer `digit` verwirft. Das Feld wird als `type="text"` mit
+  `inputmode="decimal"` gerendert (`templates/form_text.html.twig`) – `digit` ergäbe
+  `type="number"` ohne `step`, das im Browser nur ganze Zahlen zulässt.
+- **Höchstgebote**: Frontend-Modul `auction` (`App\Controller\FrontendModule\AuctionModule`,
+  Template `templates/steelers/mod_auction.html5`). Im Modul wird das Auktionsformular
+  gewählt; die Artikel kommen aus dessen Auswahlfeld `player`. Gebote werden über den
+  Options-Wert zugeordnet und **nicht** nach Formular oder Zeitraum gefiltert – bleibt ein
+  Gebot aus einer früheren Auktion mit gleichem Options-Wert stehen, zählt es mit.
+- `tstamp` (Zeitpunkt des Gebots) füllt Contao beim Speichern automatisch; ältere Gebote
+  haben `0`.
+- `trikotsatz` ist für ein optionales **verstecktes Formularfeld** gleichen Namens gedacht
+  (Feldtyp „Verstecktes Feld“, Wert z. B. der Name des Trikotsatzes). Formulare ohne das Feld
+  speichern einen Leerstring. Wichtig: Contao schreibt **jedes** abgeschickte Feld in eine
+  gleichnamige Spalte – ein Formularfeld ohne passende Spalte lässt das Speichern mit einem
+  SQL-Fehler scheitern. Neue Felder also immer erst als Spalte (Migration + DCA) anlegen.
+- `App\Migration\AuctionMigration` legt die Spalten an bzw. stellt sie um und setzt
+  Gebotsfelder (`digit` → `amount`) sowie Module ohne Formular. Sie läuft erneut, falls ein Gebotsfeld wieder auf `digit` gesetzt wird.
+
 ## Lokale Docker-Umgebung
 
 - Console-Befehle **immer als `www-data`** ausführen, sonst gehört `var/cache/prod` danach

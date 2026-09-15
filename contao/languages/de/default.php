@@ -29,3 +29,7 @@ $GLOBALS['TL_LANG']['tilastot_standings_columns']['points'] = 'Punkte';
 $GLOBALS['TL_LANG']['tilastot_standings_columns']['goalsfor'] = 'Tore';
 $GLOBALS['TL_LANG']['tilastot_standings_columns']['goalsagainst'] = 'Gegentore';
 $GLOBALS['TL_LANG']['tilastot_standings_columns']['penalties'] = 'Strafzeiten';
+/**
+ * Errors
+ */
+$GLOBALS['TL_LANG']['ERR']['amount'] = 'Bitte im Feld "%s" einen Betrag mit höchstens zwei Nachkommastellen eingeben, z. B. 75 oder 75,50 (ohne Tausenderpunkt).';

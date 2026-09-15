@@ -37,6 +37,7 @@ $GLOBALS['BE_MOD']['content']['tilastot_camps'] = array('tables' => array('tl_ti
 $GLOBALS['BE_MOD']['content']['tilastot_seats'] = array('tables' => array('tl_tilastot_seats'));
 $GLOBALS['BE_MOD']['content']['tilastot_season_ticket'] = array('tables' => array('tl_tilastot_season_ticket'));
 $GLOBALS['BE_MOD']['content']['sponsors_events'] = array('tables' => array('tl_sponsors_event'));
+$GLOBALS['BE_MOD']['content']['auction_bids'] = array('tables' => array('steelers_auktion'));
 
 /* Model Classes */
 $GLOBALS['TL_MODELS']['tl_tilastot_client_rounds'] = Rounds::class;
