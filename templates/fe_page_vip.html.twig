@@ -1,0 +1,20 @@
+{% extends "fe_page.html.twig" %}
+
+{% set bodyAttributes = attrs(bodyAttributes|default)
+	.addClass(['overflow-hidden'])
+%}
+
+{% block body %}
+	<div class="relative flex w-full flex-col overflow-hidden" style="height: 100dvh;">
+		<img src="/files/steelers/layout/bg_vip.png" alt="" role="presentation"
+			class="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover" style="opacity: 0.2;">
+
+		<header class="shrink-0 flex justify-center px-4 pt-6 sm:pt-10">
+			{% include 'logo.html.twig' with {'css_classes': 'h-16 w-auto sm:h-20 md:h-24'} %}
+		</header>
+
+		<main id="main" class="relative min-h-0 flex-1 overflow-hidden px-4 pb-6 sm:px-10">
+			{{ main|raw }}
+		</main>
+	</div>
+{% endblock %}
