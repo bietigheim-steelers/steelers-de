@@ -10,20 +10,44 @@
 ] %}
 
 <div id="{{ vip_id }}" class="vip-lines" data-vip-lines>
-    {% for line in vip_lines %}
-        <div class="vip-line{{ line.bold ? ' vip-line--bold' : '' }}">
-            <span>{{ line.text }}</span>
-        </div>
-    {% endfor %}
+    <div class="vip-lines-inner">
+        {% for group in vip_lines|batch(2) %}
+            <div class="vip-group">
+                {% for line in group %}
+                    <div class="vip-line{{ line.bold ? ' vip-line--bold' : '' }}">
+                        <span>{{ line.text }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
 </div>
 
 <style>
     .vip-lines {
+        color: #fff;
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        justify-content: center;
         position: absolute;
         inset: 0;
         overflow: hidden;
+    }
+
+    .vip-lines-inner {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 60dvh;
+        max-height: 50dvh;
+        gap: 10%;
+    }
+
+    .vip-group {
+        flex: 1 1 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
     }
 
     .vip-line {
@@ -65,7 +89,7 @@
             }
 
             var min = 8;
-            var max = 400;
+            var max = 150;
             var best = min;
 
             for (var i = 0; i < 20; i++) {
