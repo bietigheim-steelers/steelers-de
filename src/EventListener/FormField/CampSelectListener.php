@@ -12,7 +12,7 @@ class CampSelectListener
 {
     public function __invoke(Widget $widget, string $formId, array $formData, Form $form): Widget
     {
-        if (get_class($widget) !== 'Contao\FormSelect' || $widget->options[0]['value'] !== 'porschecamps') {
+        if (get_class($widget) !== 'Contao\FormRadio' || $widget->options[0]['value'] !== 'porschecamps') {
             return $widget;
         }
 
