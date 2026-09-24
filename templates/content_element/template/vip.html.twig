@@ -1,0 +1,146 @@
+{# Custom template for the CE "Individuelles Template" (type "template"). #}
+{# Expects four key/value pairs in the "data" field: zeile1, zeile2, zeile3, zeile4. #}
+
+{% set vip_id = 'vip-lines-' ~ data.id %}
+{% set vip_lines = [
+    { text: keys.zeile1|default(''), bold: true },
+    { text: keys.zeile2|default(''), bold: true },
+    { text: keys.zeile3|default(''), bold: false },
+    { text: keys.zeile4|default(''), bold: false },
+] %}
+
+<div id="{{ vip_id }}" class="vip-lines" data-vip-lines>
+    <div class="vip-lines-inner">
+        {% for group in vip_lines|batch(2) %}
+            <div class="vip-group">
+                {% for line in group %}
+                    <div class="vip-line{{ line.bold ? ' vip-line--bold' : '' }}">
+                        <span>{{ line.text }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    .vip-lines {
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+    }
+
+    .vip-lines-inner {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 60dvh;
+        max-height: 50dvh;
+        gap: 10%;
+    }
+
+    .vip-group {
+        flex: 1 1 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .vip-line {
+        flex: 1 1 0;
+        min-height: 0;
+        min-width: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    .vip-line span {
+        display: inline-block;
+        white-space: nowrap;
+        line-height: 1;
+        font-weight: 400;
+    }
+
+    .vip-line--bold span {
+        font-weight: 700;
+    }
+</style>
+
+<script>
+    (function () {
+        if (window.__vipLinesFitInit) {
+            window.__vipLinesFitInit();
+            return;
+        }
+
+        function fit(container) {
+            var lines = container.querySelectorAll('.vip-line');
+            var spans = container.querySelectorAll('.vip-line span');
+
+            if (!spans.length) {
+                return;
+            }
+
+            var min = 8;
+            var max = 150;
+            var best = min;
+
+            for (var i = 0; i < 20; i++) {
+                var mid = (min + max) / 2;
+
+                for (var s = 0; s < spans.length; s++) {
+                    spans[s].style.fontSize = mid + 'px';
+                }
+
+                var fits = true;
+
+                for (var l = 0; l < lines.length; l++) {
+                    if (lines[l].scrollWidth > lines[l].clientWidth + 0.5 || lines[l].scrollHeight > lines[l].clientHeight + 0.5) {
+                        fits = false;
+                        break;
+                    }
+                }
+
+                if (fits) {
+                    best = mid;
+                    min = mid;
+                } else {
+                    max = mid;
+                }
+            }
+
+            for (var b = 0; b < spans.length; b++) {
+                spans[b].style.fontSize = best + 'px';
+            }
+        }
+
+        function fitAll() {
+            var containers = document.querySelectorAll('[data-vip-lines]');
+
+            for (var c = 0; c < containers.length; c++) {
+                fit(containers[c]);
+            }
+        }
+
+        window.__vipLinesFitInit = fitAll;
+
+        document.addEventListener('DOMContentLoaded', fitAll);
+        window.addEventListener('load', fitAll);
+        window.addEventListener('resize', fitAll);
+
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(fitAll);
+        }
+
+        if (document.readyState === 'complete' || document.readyState === 'interactive') {
+            fitAll();
+        }
+    })();
+</script>
