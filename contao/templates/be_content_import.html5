@@ -1,0 +1,59 @@
+<div id="tl_buttons">
+  <a href="<?= $this->href ?>" class="header_back" title="<?= $this->title ?>"><?= $this->button ?></a>
+</div>
+
+<h2 class="sub_headline">Content-Import</h2>
+
+<p style="margin-bottom:15px;max-width:800px;">
+	Erstellt Artikel und Inhaltselemente auf einer bestehenden Seite aus einer JSON-Datei
+	(Schema: <code>.claude/skills/contao-content-import</code>). Der Import läuft in einer
+	Transaktion &ndash; entweder wird alles angelegt, oder gar nichts.
+</p>
+
+<?php if ($this->error): ?>
+<div class="tl_error" style="margin-bottom:15px;">
+	<ul style="margin:0;padding-left:20px;">
+		<?php foreach (explode("\n", $this->error) as $line): ?>
+		<li><?= htmlspecialchars($line) ?></li>
+		<?php endforeach; ?>
+	</ul>
+</div>
+<?php endif; ?>
+
+<?php if ($this->result): ?>
+<div class="tl_confirm" style="margin-bottom:15px;">
+	<h4 style="margin-bottom:10px;">Import erfolgreich. Angelegte Artikel:</h4>
+	<ul style="margin:0;padding-left:20px;">
+		<?php foreach ($this->result['articles'] as $article): ?>
+		<li>
+			<a href="contao?do=article&amp;table=tl_content&amp;id=<?= $article['id'] ?>">
+				<?= htmlspecialchars($article['title']) ?> (<?= htmlspecialchars($article['alias']) ?>, ID <?= $article['id'] ?>)
+			</a>
+		</li>
+		<?php endforeach; ?>
+	</ul>
+</div>
+<?php endif; ?>
+
+<form action="<?= $this->formSubmit ?>" id="tl_content_import" class="tl_form tl_edit_form" method="post" enctype="multipart/form-data">
+<div class="tl_formbody_edit">
+<input type="hidden" name="FORM_SUBMIT" value="tl_content_import" />
+<input type="hidden" name="REQUEST_TOKEN" value="<?= $this->requestToken ?>" />
+
+<fieldset class="tl_tbox nolegend">
+<div class="widget">
+	<h3><label for="ctrl_jsonFile">JSON-Datei</label></h3>
+	<input type="file" name="jsonFile" id="ctrl_jsonFile" accept="application/json,.json" class="tl_upload_field">
+</div>
+
+<div class="widget" style="margin-top:15px;">
+	<h3><label for="ctrl_json">... oder JSON einfügen</label></h3>
+	<textarea name="json" id="ctrl_json" rows="20" cols="80" style="width:100%;font-family:monospace;"><?= htmlspecialchars($this->json) ?></textarea>
+</div>
+</fieldset>
+
+<div style="margin-left:15px;padding:5px;">
+	<button type="submit" name="save" id="save" class="tl_submit" accesskey="s">importieren</button>
+</div>
+</div>
+</form>
