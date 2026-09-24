@@ -53,9 +53,6 @@ $GLOBALS['TL_MODELS']['tl_tilastot_seats'] = Seats::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_season_ticket'] = SeasonTicket::class;
 $GLOBALS['TL_MODELS']['tl_sponsors_event'] = SponsorsEvent::class;
 
-/* Cronjob */
-$GLOBALS['TL_CRON']['hourly'][] = array('App\\Utils\\TilastotApi', 'refreshAll');
-
 /* Wrapper */
 $GLOBALS['TL_WRAPPERS']['start'][] = 'wrapper_block_start_element';
 $GLOBALS['TL_WRAPPERS']['stop'][] = 'wrapper_block_end_element';

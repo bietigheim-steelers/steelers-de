@@ -12,6 +12,7 @@
 namespace App\Utils;
 
 use Contao\StringUtil;
+use Contao\CoreBundle\DependencyInjection\Attribute\AsCronJob;
 
 use App\Model\Rounds;
 use App\Model\Standings;
@@ -67,6 +68,7 @@ class TilastotApi
 		return $t;
 	}
 
+	#[AsCronJob('hourly')]
 	public static function refreshAll()
 	{
 		$r = Rounds::findAll(array(
