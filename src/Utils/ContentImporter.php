@@ -2,61 +2,63 @@
 
 namespace App\Utils;
 
+use Contao\ArticleModel;
 use Contao\Controller;
 use Contao\Database;
-use Contao\PageModel;
 use Contao\StringUtil;
-use Contao\System;
 
 /**
- * Creates tl_article / tl_content rows from a JSON payload (see
- * .claude/skills/contao-content-import for the schema and generation rules).
+ * Creates tl_content rows on a given, already existing article from a JSON
+ * payload (see .claude/skills/contao-content-import for the schema and
+ * generation rules). The article is always passed in explicitly by the
+ * caller (the content list is always opened for one specific article),
+ * never taken from the JSON.
  *
- * Runs inside one DB transaction: either every article/element is created, or
- * nothing is. Field names and the "type" of every content element are
- * validated against the live tl_content/tl_article DCA before anything is
- * written, so a typo is reported instead of silently failing or corrupting
- * the target page.
+ * Runs inside one DB transaction: either every element is created, or none
+ * is. Field names and the "type" of every content element are validated
+ * against the live tl_content DCA before anything is written, so a typo is
+ * reported instead of silently failing or corrupting the target article.
  */
 class ContentImporter
 {
-    private const RESERVED_ARTICLE_FIELDS = ['id', 'pid', 'sorting', 'tstamp'];
-
     private const RESERVED_CONTENT_FIELDS = ['id', 'pid', 'ptable', 'sorting', 'tstamp', 'children'];
 
     /**
-     * @return array{articles: list<array{id:int, alias:string, title:string}>}
+     * @return list<array{id:int, type:string}>
      */
-    public function import(string $json, int $currentUserId): array
+    public function import(string $json, int $articleId): array
     {
         try {
-            $data = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
+            $elements = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
         } catch (\JsonException $e) {
             throw new \RuntimeException('Ungültiges JSON: ' . $e->getMessage());
         }
 
-        if (!is_array($data)) {
-            throw new \RuntimeException('Das JSON muss ein Objekt mit "page_id" und "articles" sein.');
+        if (!is_array($elements)) {
+            throw new \RuntimeException('Das JSON muss ein Array von Inhaltselementen sein.');
         }
 
-        Controller::loadDataContainer('tl_article');
+        if (!ArticleModel::findById($articleId)) {
+            throw new \RuntimeException("Artikel $articleId existiert nicht.");
+        }
+
         Controller::loadDataContainer('tl_content');
 
-        $errors = $this->validate($data);
+        $errors = $this->validate($elements);
 
         if ($errors) {
             throw new \RuntimeException(implode("\n", $errors));
         }
 
-        $pageId = (int) $data['page_id'];
         $db = Database::getInstance();
         $db->query('START TRANSACTION');
 
         try {
             $created = [];
 
-            foreach (array_values($data['articles']) as $articleData) {
-                $created[] = $this->createArticle($pageId, $articleData, $currentUserId);
+            foreach (array_values($elements) as $elementData) {
+                $id = $this->createContent('tl_article', $articleId, $elementData);
+                $created[] = ['id' => $id, 'type' => $elementData['type']];
             }
 
             $db->query('COMMIT');
@@ -65,26 +67,16 @@ class ContentImporter
             throw $e;
         }
 
-        return ['articles' => $created];
+        return $created;
     }
 
     /**
      * @return list<string>
      */
-    private function validate(array $data): array
+    private function validate(array $elements): array
     {
-        $errors = [];
-
-        if (empty($data['page_id']) || !is_numeric($data['page_id'])) {
-            $errors[] = 'page_id fehlt oder ist keine Zahl.';
-        } elseif (!PageModel::findById((int) $data['page_id'])) {
-            $errors[] = 'page_id ' . $data['page_id'] . ' verweist auf keine existierende Seite.';
-        }
-
-        if (empty($data['articles']) || !is_array($data['articles'])) {
-            $errors[] = 'articles fehlt oder ist kein Array.';
-
-            return $errors;
+        if (!$elements) {
+            return ['Das JSON enthält keine Inhaltselemente.'];
         }
 
         $validTypes = array_diff(
@@ -92,41 +84,15 @@ class ContentImporter
             ['__selector__', 'default']
         );
 
-        $articleFields = array_keys($GLOBALS['TL_DCA']['tl_article']['fields'] ?? []);
         $contentFields = array_keys($GLOBALS['TL_DCA']['tl_content']['fields'] ?? []);
 
-        foreach (array_values($data['articles']) as $ai => $article) {
-            $path = 'Artikel ' . ($ai + 1);
+        $errors = [];
 
-            if (!is_array($article)) {
-                $errors[] = "$path: kein Objekt.";
-                continue;
-            }
-
-            if (empty($article['title']) || !is_string($article['title'])) {
-                $errors[] = "$path: 'title' fehlt oder ist kein String.";
-            }
-
-            foreach (array_keys($article) as $field) {
-                if ('content' === $field || in_array($field, self::RESERVED_ARTICLE_FIELDS, true)) {
-                    continue;
-                }
-
-                if (!in_array($field, $articleFields, true)) {
-                    $errors[] = "$path: Feld '$field' existiert nicht in tl_article.";
-                }
-            }
-
-            if (isset($article['content']) && !is_array($article['content'])) {
-                $errors[] = "$path: 'content' ist kein Array.";
-            }
-
-            foreach (array_values($article['content'] ?? []) as $ci => $content) {
-                $errors = [
-                    ...$errors,
-                    ...$this->validateContent("$path, Element " . ($ci + 1), $content, $validTypes, $contentFields),
-                ];
-            }
+        foreach (array_values($elements) as $ei => $element) {
+            $errors = [
+                ...$errors,
+                ...$this->validateContent('Element ' . ($ei + 1), $element, $validTypes, $contentFields),
+            ];
         }
 
         return $errors;
@@ -177,55 +143,6 @@ class ContentImporter
         return $errors;
     }
 
-    /**
-     * @return array{id:int, alias:string, title:string}
-     */
-    private function createArticle(int $pageId, array $articleData, int $currentUserId): array
-    {
-        $alias = System::getContainer()->get('contao.slug')->generate(
-            $articleData['alias'] ?? $articleData['title'],
-            $pageId,
-            static fn (string $alias): bool => (bool) Database::getInstance()
-                ->prepare('SELECT id FROM tl_article WHERE alias = ?')
-                ->execute($alias)
-                ->numRows
-        );
-
-        $row = [
-            'pid' => $pageId,
-            'sorting' => $this->nextSorting('tl_article', 'pid', $pageId),
-            'tstamp' => time(),
-            'title' => $articleData['title'],
-            'alias' => $alias,
-            'inColumn' => $articleData['inColumn'] ?? 'main',
-            'author' => (int) ($articleData['author'] ?? $currentUserId),
-            'published' => ($articleData['published'] ?? true) ? '1' : '',
-        ];
-
-        $handled = [...self::RESERVED_ARTICLE_FIELDS, 'title', 'alias', 'inColumn', 'author', 'published', 'content'];
-
-        foreach ($articleData as $field => $value) {
-            if (in_array($field, $handled, true)) {
-                continue;
-            }
-
-            $row[$field] = $this->transformValue($value);
-        }
-
-        $result = Database::getInstance()
-            ->prepare('INSERT INTO tl_article %s')
-            ->set($row)
-            ->execute();
-
-        $articleId = (int) $result->insertId;
-
-        foreach (array_values($articleData['content'] ?? []) as $contentData) {
-            $this->createContent('tl_article', $articleId, $contentData);
-        }
-
-        return ['id' => $articleId, 'alias' => $alias, 'title' => $articleData['title']];
-    }
-
     private function createContent(string $ptable, int $pid, array $contentData): int
     {
         $children = $contentData['children'] ?? [];
@@ -234,7 +151,7 @@ class ContentImporter
         $row = [
             'pid' => $pid,
             'ptable' => $ptable,
-            'sorting' => $this->nextSorting('tl_content', 'pid', $pid, $ptable),
+            'sorting' => $this->nextSorting($pid, $ptable),
             'tstamp' => time(),
         ];
 
@@ -260,17 +177,11 @@ class ContentImporter
         return $contentId;
     }
 
-    private function nextSorting(string $table, string $pidColumn, int $pid, string|null $ptable = null): int
+    private function nextSorting(int $pid, string $ptable): int
     {
-        $sql = "SELECT MAX(sorting) AS maxSorting FROM $table WHERE $pidColumn = ?";
-        $params = [$pid];
-
-        if (null !== $ptable) {
-            $sql .= ' AND ptable = ?';
-            $params[] = $ptable;
-        }
-
-        $row = Database::getInstance()->prepare($sql)->execute(...$params);
+        $row = Database::getInstance()
+            ->prepare('SELECT MAX(sorting) AS maxSorting FROM tl_content WHERE pid = ? AND ptable = ?')
+            ->execute($pid, $ptable);
 
         return ((int) $row->maxSorting) + 128;
     }
