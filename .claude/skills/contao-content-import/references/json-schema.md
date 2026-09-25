@@ -1,48 +1,29 @@
 # JSON-Schema für den Content-Import
 
 Wird von `App\Utils\ContentImporter::import()` gelesen. Grundprinzip: **jedes
-Feld, das keine Sonderbehandlung hat, wird 1:1 als Spaltenname in `tl_article`
-bzw. `tl_content` übernommen.** Es gibt also keine feste Liste erlaubter
-Felder pro Elementtyp im Code — die Validierung prüft stattdessen live gegen
-die geladene DCA (`$GLOBALS['TL_DCA']['tl_article'/'tl_content']['fields']`).
-Ein Tippfehler im Feldnamen führt zu einer Fehlermeldung, nicht zu einem
-stillen Fehlschlag.
+Feld, das keine Sonderbehandlung hat, wird 1:1 als Spaltenname in
+`tl_content` übernommen.** Es gibt also keine feste Liste erlaubter Felder
+pro Elementtyp im Code — die Validierung prüft stattdessen live gegen die
+geladene DCA (`$GLOBALS['TL_DCA']['tl_content']['fields']`). Ein Tippfehler
+im Feldnamen führt zu einer Fehlermeldung, nicht zu einem stillen Fehlschlag.
 
 ## Grundgerüst
 
+Das JSON ist ein **Array von Inhaltselementen**, keine Hülle mit Artikel-
+oder Seiten-ID — der Zielartikel ist immer der, dessen
+Inhaltselement-Ansicht gerade offen ist
+(`contao?do=article&table=tl_content&id=<Artikel>`, Button *Content-Import*):
+
 ```json
-{
-  "page_id": 185,
-  "articles": [
-    {
-      "title": "Artikeltitel",
-      "content": [
-        { "type": "headline", "headline": { "value": "Überschrift", "unit": "h2" } },
-        { "type": "text", "text": "<p>HTML-Text</p>" }
-      ]
-    }
-  ]
-}
+[
+  { "type": "headline", "headline": { "value": "Überschrift", "unit": "h2" } },
+  { "type": "text", "text": "<p>HTML-Text</p>" }
+]
 ```
 
-`page_id` muss eine existierende, nicht gelöschte `tl_page.id` sein. Jeder
-Eintrag in `articles` erzeugt eine Zeile in `tl_article`, jeder Eintrag in
-dessen `content`-Array eine Zeile in `tl_content` mit `ptable = tl_article`.
-
-## Artikel-Felder
-
-| Feld | Pflicht | Verhalten |
-|---|---|---|
-| `title` | ja | — |
-| `alias` | nein | Ohne Angabe wird der Alias aus `title` erzeugt (Contaos `contao.slug`-Service, seitenbezogene Umlaut-Regeln). Kollisionen werden automatisch mit `-2`, `-3`, … aufgelöst — sowohl bei eigenem als auch bei automatisch erzeugtem Alias. |
-| `inColumn` | nein | Default `main`. |
-| `author` | nein | Default: der Backend-User, der den Import ausführt (`tl_user.id`). Nur überschreiben, wenn eine bestimmte `tl_user.id` gebraucht wird — auf Prod ist die ID unbekannt, ohne Vorgabe lieber weglassen. |
-| `published` | nein | Default `true`. |
-| `content` | nein | Array von Inhaltselementen (siehe unten). Ohne dieses Feld entsteht ein leerer Artikel. |
-| beliebiges anderes `tl_article`-Feld | nein | Wird direkt übernommen (z. B. `cssID`, `customTpl`, `showTeaser`, `teaserCssID`, `printable`, `protected`). Array-Werte werden serialisiert (siehe unten). |
-
-`id`, `pid`, `sorting`, `tstamp` werden ignoriert, falls mitgeschickt — sie
-werden vom Importer berechnet.
+Jeder Eintrag im obersten Array erzeugt eine Zeile in `tl_content` mit
+`pid = <Artikel-ID>` und `ptable = tl_article`. Der Artikel muss bereits
+existieren — der Importer legt keine Artikel an, nur Inhaltselemente darin.
 
 ## Inhaltselement-Felder
 
@@ -53,7 +34,7 @@ werden vom Importer berechnet.
 | beliebiges andere `tl_content`-Feld | je nach Typ | Direkt als Spalte übernommen, z. B. `text`, `headline`, `cssID`, `customTpl`, `singleSRC`, `multiSRC`, `size`, `listtype`, `listitems`, projekteigene Felder wie `teamMembers`, `pricingPlans`, `businessLabel`. |
 
 `id`, `pid`, `ptable`, `sorting`, `tstamp` werden ignoriert, falls
-mitgeschickt.
+mitgeschickt — sie werden vom Importer berechnet.
 
 ## Werttransformation
 
@@ -115,41 +96,33 @@ Twig-Auflösung in AGENTS.md und existierende Werte in der jeweiligen
 ## Vollständiges Beispiel (Text, Bild, verschachtelte Gruppe)
 
 ```json
-{
-  "page_id": 185,
-  "articles": [
-    {
-      "title": "Vereinsgeschichte",
-      "content": [
-        { "type": "headline", "headline": { "value": "Unsere Geschichte", "unit": "h2" } },
-        {
-          "type": "text",
-          "text": "<p>Die Bietigheim Steelers wurden ... gegründet.</p>",
-          "cssID": ["", "text-lg"]
-        },
-        {
-          "type": "image",
-          "singleSRC": { "__file__": "3cdcbd5f10d611ed9b7a0cc47a045e1a" },
-          "size": ["800", "450", "crop"],
-          "fullsize": false
-        },
-        {
-          "type": "element_group",
-          "children": [
-            { "type": "text", "headline": { "value": "1985", "unit": "h3" }, "text": "<p>Gründung des Vereins.</p>" },
-            { "type": "text", "headline": { "value": "2010", "unit": "h3" }, "text": "<p>Aufstieg in die Oberliga.</p>" }
-          ]
-        }
-      ]
-    }
-  ]
-}
+[
+  { "type": "headline", "headline": { "value": "Unsere Geschichte", "unit": "h2" } },
+  {
+    "type": "text",
+    "text": "<p>Die Bietigheim Steelers wurden ... gegründet.</p>",
+    "cssID": ["", "text-lg"]
+  },
+  {
+    "type": "image",
+    "singleSRC": { "__file__": "3cdcbd5f10d611ed9b7a0cc47a045e1a" },
+    "size": ["800", "450", "crop"],
+    "fullsize": false
+  },
+  {
+    "type": "element_group",
+    "children": [
+      { "type": "text", "headline": { "value": "1985", "unit": "h3" }, "text": "<p>Gründung des Vereins.</p>" },
+      { "type": "text", "headline": { "value": "2010", "unit": "h3" }, "text": "<p>Aufstieg in die Oberliga.</p>" }
+    ]
+  }
+]
 ```
 
 ## Fehlerausgabe
 
 Der Import validiert **alles** vor dem ersten Schreibzugriff und listet alle
-gefundenen Probleme auf einmal auf (z. B. `Artikel 1, Element 3: Feld 'foo'
-existiert nicht in tl_content.`). Erst wenn keine Fehler gefunden wurden,
-startet die Transaktion. Ein abgelehnter Import hat also nie Datenmüll
-hinterlassen — das JSON kann korrigiert und erneut hochgeladen werden.
+gefundenen Probleme auf einmal auf (z. B. `Element 3: Feld 'foo' existiert
+nicht in tl_content.`). Erst wenn keine Fehler gefunden wurden, startet die
+Transaktion. Ein abgelehnter Import hat also nie Datenmüll hinterlassen —
+das JSON kann korrigiert und erneut hochgeladen werden.

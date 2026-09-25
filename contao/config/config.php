@@ -6,7 +6,7 @@ use App\Model\Standings;
 use App\Model\Players;
 use App\Model\PlayerStats;
 use App\Controller\FrontendModule\RefreshModule;
-use App\Controller\Backend\ContentImportModule;
+use App\Controller\Backend\ContentImportAction;
 use App\Model\Partners;
 use App\Model\Camps;
 use App\Model\SeasonTicket;
@@ -39,7 +39,15 @@ $GLOBALS['BE_MOD']['content']['tilastot_seats'] = array('tables' => array('tl_ti
 $GLOBALS['BE_MOD']['content']['tilastot_season_ticket'] = array('tables' => array('tl_tilastot_season_ticket'));
 $GLOBALS['BE_MOD']['content']['sponsors_events'] = array('tables' => array('tl_sponsors_event'));
 $GLOBALS['BE_MOD']['content']['auction_bids'] = array('tables' => array('steelers_auktion'));
-$GLOBALS['BE_MOD']['content']['content_import'] = array('callback' => ContentImportModule::class);
+
+/*
+ * "Content-Import"-Icon neben jedem Artikel im Artikelbaum einer Seite
+ * (tl_article, key=content_import), siehe contao/dca/tl_article.php. Läuft
+ * immer im Kontext des angeklickten Artikels (Input::get('id') = dessen
+ * eigene ID, per Zeilen-Operation automatisch gesetzt), deshalb kein
+ * eigener Menüpunkt.
+ */
+$GLOBALS['BE_MOD']['content']['article']['content_import'] = array(ContentImportAction::class, 'run');
 
 /* Model Classes */
 $GLOBALS['TL_MODELS']['tl_tilastot_client_rounds'] = Rounds::class;
