@@ -21,7 +21,8 @@
     "symfony/microsoft-graph-mailer": "^7.4"
   },
   "require-dev": {
-    "contao/manager-plugin": "^2.0"
+    "contao/manager-plugin": "^2.0",
+    "phpunit/phpunit": "*"
   },
   "extra": {
     "public-dir": "public",

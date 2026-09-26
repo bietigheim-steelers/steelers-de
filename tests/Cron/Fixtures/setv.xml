@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns:yt="http://www.youtube.com/xml/schemas/2015" xmlns:media="http://search.yahoo.com/mrss/" xmlns="http://www.w3.org/2005/Atom">
+ <title>Dummy Feed</title>
+ <entry>
+  <id>yt:video:setv0001</id>
+  <yt:videoId>setv0001</yt:videoId>
+  <title>Highlights | Kassel Huskies vs. Bietigheim Steelers</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=setv0001"/>
+  <published>2026-01-12T22:00:00+01:00</published>
+  <media:group>
+   <media:title>Highlights | Kassel Huskies vs. Bietigheim Steelers</media:title>
+   <media:description>DEL2 Highlights</media:description>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:setv0002</id>
+  <yt:videoId>setv0002</yt:videoId>
+  <title>Pressekonferenz | Kassel Huskies vs. Bietigheim Steelers</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=setv0002"/>
+  <published>2026-01-12T22:30:00+01:00</published>
+  <media:group>
+   <media:title>Pressekonferenz | Kassel Huskies vs. Bietigheim Steelers</media:title>
+   <media:description>PK nach dem Spiel</media:description>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:setv0003</id>
+  <yt:videoId>setv0003</yt:videoId>
+  <title>Highlights | Ravensburg Towerstars vs. Selber Wölfe</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=setv0003"/>
+  <published>2026-01-12T22:00:00+01:00</published>
+  <media:group>
+   <media:title>Highlights | Ravensburg Towerstars vs. Selber Wölfe</media:title>
+   <media:description>Kein Steelers-Spiel</media:description>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:setv0004</id>
+  <yt:videoId>setv0004</yt:videoId>
+  <title>Interview | Dresdner Eislöwen vs. Bietigheim Steelers</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=setv0004"/>
+  <published>2026-01-12T22:00:00+01:00</published>
+  <media:group>
+   <media:title>Interview | Dresdner Eislöwen vs. Bietigheim Steelers</media:title>
+   <media:description>Weder Highlights noch PK</media:description>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:setv0005</id>
+  <yt:videoId>setv0005</yt:videoId>
+  <title>Bietigheim Steelers vs. Kassel Huskies | Highlights</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=setv0005"/>
+  <published>2026-01-12T22:00:00+01:00</published>
+  <media:group>
+   <media:title>Bietigheim Steelers vs. Kassel Huskies | Highlights</media:title>
+   <media:description>Titel beginnt mit Bietigheim</media:description>
+  </media:group>
+ </entry>
+</feed>

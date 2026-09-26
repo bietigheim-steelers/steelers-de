@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns:yt="http://www.youtube.com/xml/schemas/2015" xmlns:media="http://search.yahoo.com/mrss/" xmlns="http://www.w3.org/2005/Atom">
+ <title>Dummy Feed</title>
+ <entry>
+  <id>yt:video:steel001</id>
+  <yt:videoId>steel001</yt:videoId>
+  <title>Razorsharp | Folge 12</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=steel001"/>
+  <published>2026-01-10T12:00:00+01:00</published>
+  <media:group>
+   <media:title>Razorsharp | Folge 12</media:title>
+   <media:description>Hinter den Kulissen</media:description>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:steel002</id>
+  <yt:videoId>steel002</yt:videoId>
+  <title>Heimsieg gegen Kassel</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=steel002"/>
+  <published>2026-01-11T12:00:00+01:00</published>
+  <media:group>
+   <media:title>Heimsieg gegen Kassel</media:title>
+   <media:description>Impressionen vom Heimspiel</media:description>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:steel003</id>
+  <yt:videoId>steel003</yt:videoId>
+  <title>Steelers - Huskies 5:2</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=steel003"/>
+  <published>2026-01-12T12:00:00+01:00</published>
+  <media:group>
+   <media:title>Steelers - Huskies 5:2</media:title>
+   <media:description>GAME RECAP vom Freitag</media:description>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:steel004</id>
+  <yt:videoId>steel004</yt:videoId>
+  <title>Autogrammstunde im Einkaufszentrum</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=steel004"/>
+  <published>2026-01-12T15:00:00+01:00</published>
+  <media:group>
+   <media:title>Autogrammstunde im Einkaufszentrum</media:title>
+   <media:description>Fanaktion</media:description>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:steel005</id>
+  <yt:videoId>steel005</yt:videoId>
+  <title>Razorsharp | Sommerpause</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=steel005"/>
+  <published>2026-07-01T12:00:00+02:00</published>
+  <media:group>
+   <media:title>Razorsharp | Sommerpause</media:title>
+   <media:description>Kein Spiel an diesem Tag</media:description>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:steel006</id>
+  <yt:videoId>steel006</yt:videoId>
+  <title>*GAME RECAP* - Bietigheim Steelers vs. Blue Devils Weiden | 03 | 25.09.2026</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=steel006"/>
+  <published>2026-09-26T07:00:12+00:00</published>
+  <media:group>
+   <media:title>*GAME RECAP* - Bietigheim Steelers vs. Blue Devils Weiden | 03 | 25.09.2026</media:title>
+   <media:description></media:description>
+  </media:group>
+ </entry>
+ <entry>
+  <id>yt:video:steel007</id>
+  <yt:videoId>steel007</yt:videoId>
+  <title>20.09.2026 | Heimspiel-Impressionen Bietigheim Steelers vs. Lausitzer Füchse</title>
+  <link rel="alternate" href="https://www.youtube.com/watch?v=steel007"/>
+  <published>2026-09-21T16:00:26+00:00</published>
+  <media:group>
+   <media:title>20.09.2026 | Heimspiel-Impressionen Bietigheim Steelers vs. Lausitzer Füchse</media:title>
+   <media:description></media:description>
+  </media:group>
+ </entry>
+</feed>

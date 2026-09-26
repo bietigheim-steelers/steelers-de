@@ -17,6 +17,10 @@ use Contao\Database;
  */
 class updateVideoportal
 {
+    public const STEELERS_FEED = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCaVaIAlCziRfT9A4Yw5cb5Q';
+    public const SETV_FEED = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCy7nHxKl2ZQ9ZkxFlvt8lWQ';
+    public const DEL2_FEED = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLLj7IG0GXbwpeJEamF3R2Iy2LDasYFDZR';
+
     private $framework;
     private $pid = 7;
     private $currentSeasonCategory = 36;
@@ -35,9 +39,9 @@ class updateVideoportal
 
         $this->log("Starting update process");
 
-        $steelersFeed = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCaVaIAlCziRfT9A4Yw5cb5Q';
-        $setvFeed1 = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCy7nHxKl2ZQ9ZkxFlvt8lWQ';
-        $del2Feed1 = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLLj7IG0GXbwpeJEamF3R2Iy2LDasYFDZR';
+        $steelersFeed = self::STEELERS_FEED;
+        $setvFeed1 = self::SETV_FEED;
+        $del2Feed1 = self::DEL2_FEED;
         // $spradeFeed1 = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpIteElx6nKfKsytUHq0g6xbsj';
         // $spradeFeed2 = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLnuQ1LaZpItdGEy0y2NDwVvXxJvn8LXU6';
 
@@ -51,14 +55,20 @@ class updateVideoportal
         // Steelers Latest Videos
         foreach ($steelersVideos as $video) {
             $this->log("Check video: " . $video['title'] . " - " . $video['desc']);
+            // keywords may appear in the title or in the description
+            $text = $video['title'] . ' ' . $video['desc'];
             if (strpos($video['title'], 'Razorsharp') !== false) {
                 $display_category = 'Razorsharp';
                 $category = 35;
-            } elseif (strpos($video['desc'], 'Impressionen') !== false) {
+            } elseif (strpos($text, 'Impressionen') !== false) {
                 $display_category = 'Impressionen';
                 $category = 33;
+            } elseif (strpos($text, 'GAME RECAP') !== false) {
+                $display_category = 'Highlights';
+                $category = 29;
             } else {
                 // not a game needs to be added manually
+                $this->log("Video with link " . $video['link'] . " skipped. No category found");
                 continue;
             }
 
@@ -78,7 +88,7 @@ class updateVideoportal
 
         // SportEurope.TV Latest Videos
         foreach ($setvVideos as $video) {
-            if (strpos($video['title'], 'Bietigheim') == false) {
+            if (strpos($video['title'], 'Bietigheim') === false) {
                 continue;
             }
             $game = $this->determineGame($video);
@@ -91,10 +101,7 @@ class updateVideoportal
             $category = 0;
 
 
-            if (strpos($video['title'], 'Highlights') !== false) {
-                $display_category = 'Highlights';
-                $category = 29;
-            } elseif (strpos($video['title'], 'Pressekonferenz') !== false) {
+            if (strpos($video['title'], 'Pressekonferenz') !== false) {
                 $display_category = 'Pressekonferenz';
                 $category = 30;
             }
@@ -113,7 +120,7 @@ class updateVideoportal
             ]);
         }
     }
-    private function addNewsEntry($data)
+    protected function addNewsEntry($data)
     {
         $this->log("Adding news entry: " . print_r($data, true));
 
@@ -174,7 +181,7 @@ class updateVideoportal
         return $result->affectedRows > 0;
     }
 
-    private function determineGame($video)
+    protected function determineGame($video)
     {
         $this->log("determing game: " . print_r($video['published'], true));
 
@@ -209,11 +216,12 @@ class updateVideoportal
     }
 
 
-    private function getLatestVideos($feedUrl)
+    protected function getLatestVideos($feedUrl)
     {
-        $xml = simplexml_load_file($feedUrl);
+        $xml = @simplexml_load_file($feedUrl);
         if ($xml === false) {
-            return "Failed to load XML";
+            $this->log("Failed to load XML from " . $feedUrl);
+            return [];
         }
 
         $videos = [];
@@ -233,7 +241,7 @@ class updateVideoportal
         return $videos;
     }
 
-    private function log($message)
+    protected function log($message)
     {
         file_put_contents($this->logFile, $message . PHP_EOL, FILE_APPEND);
     }
