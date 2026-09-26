@@ -19,7 +19,7 @@ class updateVideoportal
 {
     public const STEELERS_FEED = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCaVaIAlCziRfT9A4Yw5cb5Q';
     public const SETV_FEED = 'https://www.youtube.com/feeds/videos.xml?channel_id=UCy7nHxKl2ZQ9ZkxFlvt8lWQ';
-    public const DEL2_FEED = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLLj7IG0GXbwpeJEamF3R2Iy2LDasYFDZR';
+    public const DEL2_FEED = 'https://www.youtube.com/feeds/videos.xml?playlist_id=PLbHpKwJCUGsc';
 
     private $framework;
     private $pid = 7;
