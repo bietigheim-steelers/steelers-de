@@ -88,7 +88,7 @@ class AppExtension extends AbstractExtension
       $length = 0;
       $last_part = 0;
       for (; $last_part < $parts_count; ++$last_part) {
-        $length += mb_strlen($parts[$last_part]); 
+        $length += mb_strlen($parts[$last_part]);
         if ($length > $targetLength) {
           break;
         }
@@ -133,9 +133,9 @@ class AppExtension extends AbstractExtension
   {
     parse_str(parse_url($video_url, PHP_URL_QUERY), $queryParams);
     $video_id = $queryParams['v'];
-    $url = 'https://img.youtube.com/vi/' . $video_id . '/hq2.jpg';
+    $url = 'https://img.youtube.com/vi/' . $video_id . '/hqdefault.jpg';
     $tmpDir = $this->addRoot('/var/tmp');
-    $localFile = $tmpDir . DIRECTORY_SEPARATOR . $video_id . '_hq2.jpg';
+    $localFile = $tmpDir . DIRECTORY_SEPARATOR . $video_id . '_hqdefault.jpg';
 
     if (!file_exists($localFile)) {
       $ch = curl_init($url);
