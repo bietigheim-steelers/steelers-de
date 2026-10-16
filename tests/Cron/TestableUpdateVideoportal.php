@@ -39,7 +39,12 @@ final class TestableUpdateVideoportal extends updateVideoportal
 
     protected function determineGame($video)
     {
-        // like the real lookup: game on the publishing day, otherwise on the day before
+        // like the real lookup: date in the title, else game on the publishing day, otherwise on the day before
+        $titleDate = $this->extractDateFromTitle($video['title'] ?? '');
+        if ($titleDate !== null) {
+            return $this->games[date('Y-m-d', $titleDate)] ?? null;
+        }
+
         $published = strtotime($video['published']);
 
         return $this->games[date('Y-m-d', $published)]

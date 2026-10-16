@@ -183,20 +183,21 @@ class updateVideoportal
 
     protected function determineGame($video)
     {
-        $this->log("determing game: " . print_r($video['published'], true));
+        // A date (d.m.Y) in the title is the game day and wins over the upload date,
+        // because videos are not always uploaded right after the game.
+        $titleDate = $this->extractDateFromTitle($video['title'] ?? '');
 
-        $videoDate = strtotime($video['published']);
-        $gameDateStart = strtotime(date('Y-m-d 00:00:00', $videoDate));
-        $gameDateEnd = strtotime(date('Y-m-d 23:59:59', $videoDate));
-        $previousDateStart = strtotime(date('Y-m-d 00:00:00', strtotime('-1 day', $videoDate)));
-        $previousDateEnd = strtotime(date('Y-m-d 23:59:59', strtotime('-1 day', $videoDate)));
+        if ($titleDate !== null) {
+            $this->log("determing game by title date: " . date('d.m.Y', $titleDate));
+            $game = $this->findGameOnDay($titleDate);
+        } else {
+            $this->log("determing game: " . print_r($video['published'], true));
 
-        // Find game on the same date
-        $game = Games::findOneBy(['gamedate >= ? AND gamedate <= ?'], [$gameDateStart, $gameDateEnd]);
+            $videoDate = strtotime($video['published']);
 
-        // If no game found, check the previous day
-        if (!$game) {
-            $game = Games::findOneBy(['gamedate >= ? AND gamedate <= ?'], [$previousDateStart, $previousDateEnd]);
+            // Find game on the same date, otherwise on the previous day
+            $game = $this->findGameOnDay($videoDate)
+                ?? $this->findGameOnDay(strtotime('-1 day', $videoDate));
         }
 
         if ($game) {
@@ -212,7 +213,33 @@ class updateVideoportal
             ];
         }
 
-        return $game;
+        return null;
+    }
+
+    /**
+     * Returns the timestamp (midnight) of the first valid d.m.Y date in the title, or null.
+     */
+    protected function extractDateFromTitle(string $title): ?int
+    {
+        if (!preg_match_all('/(?<!\d)(\d{1,2})\.(\d{1,2})\.(\d{4})(?!\d)/', $title, $matches, PREG_SET_ORDER)) {
+            return null;
+        }
+
+        foreach ($matches as $m) {
+            if (checkdate((int) $m[2], (int) $m[1], (int) $m[3])) {
+                return mktime(0, 0, 0, (int) $m[2], (int) $m[1], (int) $m[3]);
+            }
+        }
+
+        return null;
+    }
+
+    protected function findGameOnDay(int $timestamp)
+    {
+        $start = strtotime(date('Y-m-d 00:00:00', $timestamp));
+        $end = strtotime(date('Y-m-d 23:59:59', $timestamp));
+
+        return Games::findOneBy(['gamedate >= ? AND gamedate <= ?'], [$start, $end]);
     }
 
 
