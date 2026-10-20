@@ -10,23 +10,25 @@
 
   {% set game = game_id|get_game_details %}
   {% if game %}
-    {% set homeLogo = figure(game.homeTeamLogo, logo_size, {
+    {% set homeLogo = game.homeTeamLogo is defined and game.homeTeamLogo ? figure(game.homeTeamLogo, logo_size, {
     metadata: { alt: game.homeTeamDetails.name },
     options: { attr: { class: 'Image Logo Gamestrip__Logo Gamestrip__Logo--xl Logo__xl' } },
-  }) %}
-    {% set awayLogo = figure(game.awayTeamLogo, logo_size, {
+  }) : null %}
+    {% set awayLogo = game.awayTeamLogo is defined and game.awayTeamLogo ? figure(game.awayTeamLogo, logo_size, {
     metadata: { alt: game.awayTeamDetails.name },
     options: { attr: { class: 'Image Logo Gamestrip__Logo Gamestrip__Logo--xl Logo__xl' } },
-  }) %}
+  }) : null %}
     <div class="Gamestrip relative overflow-hidden nhl Gamestrip--xl Gamestrip--post bb py-3">
       <div class="Gamestrip__Competitors relative flex Gamestrip__Competitors--border">
         <div class="Gamestrip__Team relative flex w-full items-center Gamestrip__Team--left">
           <div class="Gamestrip__TeamContent flex tc w-full Gamestrip__TeamContent--left Gamestrip__TeamContent--post">
             <div class="Gamestrip__TeamContainer flex items-center">
               <div class="Gamestrip__InfoLogo Gamestrip__InfoLogo--Left">
+                {% if homeLogo %}
                 {% with {figure: homeLogo} %}
                 {{ block('figure_component') }}
                 {% endwith %}
+                {% endif %}
               </div>
               <div class="Gamestrip__Info Gamestrip__Info--post hidden lg:block">
                 <div class="Gamestrip__InfoWrapper items-center flex">
@@ -77,9 +79,11 @@
           <div class="Gamestrip__TeamContent flex tc w-full Gamestrip__TeamContent--right Gamestrip__TeamContent--post">
             <div class="Gamestrip__TeamContainer flex items-center">
               <div class="Gamestrip__InfoLogo Gamestrip__InfoLogo--Right">
+                {% if awayLogo %}
                 {% with {figure: awayLogo} %}
                 {{ block('figure_component') }}
                 {% endwith %}
+                {% endif %}
               </div>
               <div class="Gamestrip__Info Gamestrip__Info--post hidden lg:block">
                 <div class="Gamestrip__InfoWrapper items-center flex">

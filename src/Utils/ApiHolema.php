@@ -198,10 +198,10 @@ class ApiHolema
             $g->gamedate = mktime($time[0], $time[1], 0, $date['month'], $date['day'], $date['year']);
             $g->gametime = $game->gametime;
             $g->round = $round;
-            $g->periodscore = $game->periodscore;
+            $g->periodscore = $game->periodscore ?? '';
             $g->gameday = $game->gameday;
             $g->gamestatus = $game->gamestatus;
-            $g->resulttype = $game->resulttype;
+            $g->resulttype = $game->resulttype ?? '';
             $g->homescore = $game->homescore;
             $g->awayscore = $game->awayscore;
             $g->ended = ($game->ended == 'False') ? 0 : 1;

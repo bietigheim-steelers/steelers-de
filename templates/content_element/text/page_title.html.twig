@@ -7,7 +7,7 @@
 %}
 
 {% add to head %}
-  {% if data.addImage and image %}
+  {% if data.addImage and image and image.image.img.src is not empty %}
     <meta property="og:image" content="{{ image.image.img.src|add_domain }}"/>
     <meta property="og:image:width" content="{{ image.image.img.width }}"/>
     <meta property="og:image:height" content="{{ image.image.img.height }}"/>

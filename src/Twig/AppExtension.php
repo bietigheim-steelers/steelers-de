@@ -119,8 +119,11 @@ class AppExtension extends AbstractExtension
     return null;
   }
 
-  public function addDomain(string $url): string
+  public function addDomain(?string $url): ?string
   {
+    if ($url === null) {
+      return null;
+    }
     $request = $this->requestStack->getCurrentRequest();
     if ($request) {
       $schemeAndHost = $request->getSchemeAndHttpHost();
