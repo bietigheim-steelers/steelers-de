@@ -522,6 +522,80 @@ vor einer neuen Auktion).
 - `App\Migration\AuctionMigration` legt die Spalten an bzw. stellt sie um und setzt
   Gebotsfelder (`digit` → `amount`) sowie Module ohne Formular. Sie läuft erneut, falls ein Gebotsfeld wieder auf `digit` gesetzt wird.
 
+## CleverReach-Anmeldungen (serverseitig)
+
+Von CleverReach gelieferte Formulare werden **nicht** eingebettet, sondern als normales
+Contao-Formular nachgebaut (eigenes Styling über die vorhandenen `form_*`-Templates). Der
+Browser spricht nur mit steelers.de; die Anmeldung reicht
+`App\EventListener\CleverReachFormListener` (`prepareFormData`) serverseitig weiter.
+
+Geschaltet wird das über ein einziges Feld am Formular:
+
+| Feld | Wofür |
+|------|-------|
+| `tl_form.cleverreachUrl` | Die Flow-URL aus dem `action`-Attribut des CleverReach-Formulars |
+
+Ist das Feld leer, tut der Listener nichts – ein weiteres CleverReach-Formular braucht
+deshalb keinen Code, nur den Backend-Eintrag. Die Spalte legt
+`App\Migration\CleverReachFormMigration` an, Palette/Feld stehen in `contao/dca/tl_form.php`,
+das Label in `contao/languages/de/tl_form.php`.
+
+**Feldnamen** – CleverReach erwartet `email` und `tags` unverändert, alle übrigen
+Kontaktattribute mit dem Präfix `global.` (`global.firstname`). Der Contao-Feldname ist
+deshalb der Attributname **ohne** Präfix: aus dem Feld `firstname` wird `global.firstname`.
+Der Punkt kann nicht direkt im Contao-Feldnamen stehen, weil PHP Punkte in POST-Namen zu
+Unterstrichen macht. Die Zuordnung steuert `PLAIN_FIELDS` im Listener.
+
+Der Request-Body wird bewusst von Hand kodiert (`rawurlencode`), damit er **byte-identisch**
+zu dem ist, was der Browser aus dem Original-Formular geschickt hätte: Punkte bleiben stehen,
+Mehrfachwerte werden `name[]` (nicht `name[0]`), und der Honeypot `email_confirm` wird leer
+mitgeschickt. Gefüllt wertet CleverReach die Anmeldung als Spam.
+
+**Warum `prepareFormData` und nicht `processFormData`** – scheitert die Übergabe, soll das
+Formular einen Fehler anzeigen. `prepareFormData` läuft nach der Validierung, aber noch vor
+Session, E-Mail-Versand, *Eingaben speichern* und Weiterleitung, und Contao prüft direkt
+dahinter `Form::hasErrors()` und bricht ab (`Form::processFormData()`, "see #6611"). Ein
+`Form::addError()` im Listener wird damit zum echten Formularfehler: der Besucher bleibt mit
+seinen Eingaben auf dem Formular stehen, es wird nichts gespeichert, keine Mail verschickt und
+nicht auf die Bestätigungsseite weitergeleitet. In `processFormData` wäre das zu spät – dort
+sind Mail und Speicherung schon durch.
+
+Die Meldung steht als `$GLOBALS['TL_LANG']['ERR']['cleverreach']` in
+`contao/languages/de/default.php`. Ausgegeben wird sie vom Wrapper-Template über `errors`;
+`form_wrapper.html.twig`, `form_wrapper_business_newsletter.html.twig` und
+`form_wrapper_vip.html.twig` tun das, **`form_wrapper_season_tickets.html.twig` nicht** – dort
+würde der Fehler stumm verschluckt.
+
+Fallstricke:
+
+- **Nur Felder anlegen, die CleverReach kennt.** Jedes Eingabefeld des Contao-Formulars wird
+  mitgeschickt; ein unbekanntes Attribut kann die ganze Anmeldung scheitern lassen.
+- Die **AGB-/Einwilligungs-Checkbox** heißt bei CleverReach `tags[]` und schickt den Wert `on`.
+  Im Contao-Formular also ein Checkbox-Feld mit Namen `tags` und dem Optionswert `on` –
+  dann stimmt der Body ohne Sonderbehandlung im Code.
+- Submit- und Captcha-Felder landen nicht in `$arrSubmitted` (`blnSubmitInput` ist dort
+  `false`), müssen also nicht ausgefiltert werden. Upload-Felder stehen in `$arrFiles` und
+  werden nicht übertragen.
+- Die **Double-Opt-In-Mail verschickt CleverReach** selbst (Flow-URL endet auf `/confirm`).
+  Die Bestätigung im Frontend kommt aus Contao – am besten über die gemeinsame
+  Bestätigungsseite (siehe *Formular-Bestätigungsseite*).
+- Als Fehler zählen ein **HTTP-Status ab 400** und ein Transportfehler (Timeout, DNS,
+  Verbindung). Eine Ablehnung, die CleverReach mit HTTP 200 und einem Hinweis im Body
+  beantwortet, fällt durchs Raster – deshalb protokolliert der Listener **jede** Übergabe mit
+  Status, nicht nur die gescheiterten. Der Besucher sieht die Antwort nie, das Log ist der
+  einzige Ort, an dem sich das nachvollziehen lässt.
+- Der Timeout liegt bei 10 Sekunden: der Besucher wartet darauf. Weiterleitungen werden
+  nicht verfolgt (`max_redirects => 0`), die 302 auf die CleverReach-Hinweisseite ist der
+  Normalfall und kein Fehler.
+- `symfony/http-client` steht nicht in der `composer.json`, ist aber über
+  `contao/core-bundle` und `contao/manager-bundle` fest verlangt und damit immer vorhanden.
+- CleverReach ist als Auftragsverarbeiter in der Datenschutzerklärung zu nennen – daran
+  ändert der serverseitige Weg nichts, die Daten gehen weiterhin dorthin.
+
+`tests/EventListener/CleverReachFormListenerTest.php` prüft den Body gegen die
+Browser-Kodierung und dass aus Ablehnung und Ausfall ein Formularfehler wird
+(`MockHttpClient`, kein Netzzugriff).
+
 ## Lokale Docker-Umgebung
 
 - Console-Befehle **immer als `www-data`** ausführen, sonst gehört `var/cache/prod` danach

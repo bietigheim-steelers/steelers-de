@@ -33,3 +33,7 @@ $GLOBALS['TL_LANG']['tilastot_standings_columns']['penalties'] = 'Strafzeiten';
  * Errors
  */
 $GLOBALS['TL_LANG']['ERR']['amount'] = 'Bitte im Feld "%s" einen Betrag mit höchstens zwei Nachkommastellen eingeben, z. B. 75 oder 75,50 (ohne Tausenderpunkt).';
+
+// Fehlgeschlagene Uebergabe an CleverReach (App\EventListener\CleverReachFormListener).
+// Wird als Formularfehler ausgegeben, die Anmeldung gilt dann als nicht erfolgt.
+$GLOBALS['TL_LANG']['ERR']['cleverreach'] = 'Die Anmeldung konnte gerade nicht abgeschlossen werden. Bitte versuche es in einigen Minuten noch einmal.';
