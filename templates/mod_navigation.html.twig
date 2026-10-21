@@ -8,8 +8,13 @@
 			</button>
 		</div>
 		<a class="block" href="/">
-			{% include 'logo.html.twig' %}
-		</a> 
+			{% if contao.page.alias|default starts with 'kids-club' %}
+				{# Kids-Club-Seiten: Kids-Club-Logo statt Steelers-Logo #}
+				<img src="/files/steelers/layout/kids_club.png" alt="Steelers Kids Club" class="header-nav-logo absolute left-0 right-0 m-auto !-bottom-3">
+			{% else %}
+				{% include 'logo.html.twig' %}
+			{% endif %}
+		</a>
 	</div>
 </nav>
 <drawer-menu>
