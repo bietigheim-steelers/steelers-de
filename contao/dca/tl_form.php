@@ -1,27 +1,37 @@
 <?php
 
 /*
- * Haengt dem Formular die CleverReach-Flow-URL an.
+ * Haengt dem Formular die CleverReach-Anbindung an.
  *
- * Ist sie gefuellt, reicht App\EventListener\CleverReachFormListener die Anmeldung
- * serverseitig dorthin weiter. Die Spalte legt App\Migration\CleverReachFormMigration
- * an (contao:migrate ist auf diesem Datenbestand nicht benutzbar, siehe AGENTS.md).
+ * Sind Gruppe und Formular gefuellt, traegt App\EventListener\CleverReachFormListener
+ * die Anmeldung ueber die CleverReach-REST-API ein. Die Spalten legt
+ * App\Migration\CleverReachFormMigration an (contao:migrate ist auf diesem
+ * Datenbestand nicht benutzbar, siehe AGENTS.md).
  */
 
 use Contao\CoreBundle\DataContainer\PaletteManipulator;
 
 PaletteManipulator::create()
     ->addLegend('cleverreach_legend', 'store_legend', PaletteManipulator::POSITION_BEFORE, true)
-    ->addField('cleverreachUrl', 'cleverreach_legend', PaletteManipulator::POSITION_APPEND)
+    ->addField(['cleverreachGroupId', 'cleverreachFormId'], 'cleverreach_legend', PaletteManipulator::POSITION_APPEND)
     ->applyToPalette('default', 'tl_form');
 
-$GLOBALS['TL_DCA']['tl_form']['fields']['cleverreachUrl'] = [
+$GLOBALS['TL_DCA']['tl_form']['fields']['cleverreachGroupId'] = [
     'inputType' => 'text',
     'eval'      => [
-        'rgxp'           => 'url',
-        'decodeEntities' => true,
-        'maxlength'      => 255,
-        'tl_class'       => 'long',
+        'rgxp'      => 'digit',
+        'maxlength' => 20,
+        'tl_class'  => 'w50',
     ],
-    'sql'       => "varchar(255) NOT NULL default ''",
+    'sql'       => "varchar(20) NOT NULL default ''",
+];
+
+$GLOBALS['TL_DCA']['tl_form']['fields']['cleverreachFormId'] = [
+    'inputType' => 'text',
+    'eval'      => [
+        'rgxp'      => 'digit',
+        'maxlength' => 20,
+        'tl_class'  => 'w50',
+    ],
+    'sql'       => "varchar(20) NOT NULL default ''",
 ];

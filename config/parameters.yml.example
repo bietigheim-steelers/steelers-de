@@ -14,6 +14,9 @@ parameters:
   mailer_encryption:
   mixpanel_project_token: 
 
+  # CleverReach-REST-API (Newsletter-Anmeldung): Account > Extras > REST API
+  cleverreach_api_token: 
+
   # Microsoft 365 / Entra ID App-Registrierung für den Graph-Mailer
   # (Azure Portal > Microsoft Entra ID > App-Registrierungen)
   microsoft_graph_tenant_id: nicht-konfiguriert

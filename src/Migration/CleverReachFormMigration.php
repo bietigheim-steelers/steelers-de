@@ -7,12 +7,15 @@ use Contao\CoreBundle\Migration\MigrationResult;
 use Doctrine\DBAL\Connection;
 
 /**
- * Legt die CleverReach-Flow-URL am Formular an.
+ * Legt die CleverReach-Gruppen- und Formular-ID am Formular an.
  *
- * Die Spalte steht in contao/dca/tl_form.php und wuerde auch vom Schema-Abgleich
+ * Die Spalten stehen in contao/dca/tl_form.php und wuerden auch vom Schema-Abgleich
  * erzeugt – der ist auf diesem Datenbestand aber nicht benutzbar, weil er zahlreiche
  * Alt-Spalten entfernter Extensions loeschen wuerde (siehe AGENTS.md). Als Migration
  * laesst sich die Aenderung mit "contao:migrate --migrations-only" ausrollen.
+ *
+ * Die frueher genutzte Spalte "cleverreachUrl" (Flow-URL) bleibt unangetastet; sie wird
+ * nicht mehr gelesen und kann bei Gelegenheit von Hand entfernt werden.
  */
 class CleverReachFormMigration extends AbstractMigration
 {
@@ -20,7 +23,8 @@ class CleverReachFormMigration extends AbstractMigration
      * Spaltenname => DDL.
      */
     private const COLUMNS = [
-        'cleverreachUrl' => "ADD cleverreachUrl VARCHAR(255) DEFAULT '' NOT NULL",
+        'cleverreachGroupId' => "ADD cleverreachGroupId VARCHAR(20) DEFAULT '' NOT NULL",
+        'cleverreachFormId' => "ADD cleverreachFormId VARCHAR(20) DEFAULT '' NOT NULL",
     ];
 
     public function __construct(private readonly Connection $connection)

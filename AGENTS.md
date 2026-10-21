@@ -522,43 +522,62 @@ vor einer neuen Auktion).
 - `App\Migration\AuctionMigration` legt die Spalten an bzw. stellt sie um und setzt
   Gebotsfelder (`digit` → `amount`) sowie Module ohne Formular. Sie läuft erneut, falls ein Gebotsfeld wieder auf `digit` gesetzt wird.
 
-## CleverReach-Anmeldungen (serverseitig)
+## CleverReach-Anmeldungen (serverseitig, REST-API)
 
-Von CleverReach gelieferte Formulare werden **nicht** eingebettet, sondern als normales
-Contao-Formular nachgebaut (eigenes Styling über die vorhandenen `form_*`-Templates). Der
-Browser spricht nur mit steelers.de; die Anmeldung reicht
-`App\EventListener\CleverReachFormListener` (`prepareFormData`) serverseitig weiter.
+Newsletter-Formulare sind normale Contao-Formulare (eigenes Styling über die vorhandenen
+`form_*`-Templates). Der Browser spricht nur mit steelers.de; die Anmeldung trägt
+`App\EventListener\CleverReachFormListener` (`prepareFormData`) über die **CleverReach-REST-API**
+ein. Der frühere Weg – POST auf die Flow-URL (`flow.cleverreach.com/fl/…/confirm`) – ist
+abgelöst: CleverReach beantwortete ihn mit 302, verschickte aber keine Bestätigungsmail
+(vermutlich Bot-Filter für Server-Anfragen), und die Antwort ließ keinen Rückschluss zu.
 
-Geschaltet wird das über ein einziges Feld am Formular:
+Geschaltet wird das über zwei Felder am Formular (Legende *CleverReach*):
 
 | Feld | Wofür |
 |------|-------|
-| `tl_form.cleverreachUrl` | Die Flow-URL aus dem `action`-Attribut des CleverReach-Formulars |
+| `tl_form.cleverreachGroupId` | ID der Empfängerliste, in die eingetragen wird |
+| `tl_form.cleverreachFormId` | ID des CleverReach-Formulars dieser Gruppe, über das die Double-Opt-In-Mail rausgeht |
 
-Ist das Feld leer, tut der Listener nichts – ein weiteres CleverReach-Formular braucht
-deshalb keinen Code, nur den Backend-Eintrag. Die Spalte legt
-`App\Migration\CleverReachFormMigration` an, Palette/Feld stehen in `contao/dca/tl_form.php`,
-das Label in `contao/languages/de/tl_form.php`.
+Ist eines von beiden leer, tut der Listener nichts – ein weiteres Newsletter-Formular braucht
+deshalb keinen Code, nur den Backend-Eintrag. Die Spalten legt `App\Migration\CleverReachFormMigration`
+an; die alte Spalte `cleverreachUrl` wird nicht mehr gelesen und bleibt stehen.
+Formular-IDs liefert `GET /v3/groups/{id}/forms`.
 
-**Feldnamen** – CleverReach erwartet `email` und `tags` unverändert, alle übrigen
-Kontaktattribute mit dem Präfix `global.` (`global.firstname`). Der Contao-Feldname ist
-deshalb der Attributname **ohne** Präfix: aus dem Feld `firstname` wird `global.firstname`.
-Der Punkt kann nicht direkt im Contao-Feldnamen stehen, weil PHP Punkte in POST-Namen zu
-Unterstrichen macht. Die Zuordnung steuert `PLAIN_FIELDS` im Listener.
+**API-Token** – als `cleverreach_api_token` in `config/parameters.yml` (steht nicht im Git, Vorlage:
+`parameters.yml.example`). Der Parameter **muss vor dem Deploy auf dem Zielsystem stehen**, sonst
+startet der Container nicht und die ganze Seite ist weg. Ein leerer Wert ist erlaubt; die
+Newsletter-Formulare zeigen dann den Formularfehler.
 
-Der Request-Body wird bewusst von Hand kodiert (`rawurlencode`), damit er **byte-identisch**
-zu dem ist, was der Browser aus dem Original-Formular geschickt hätte: Punkte bleiben stehen,
-Mehrfachwerte werden `name[]` (nicht `name[0]`), und der Honeypot `email_confirm` wird leer
-mitgeschickt. Gefüllt wertet CleverReach die Anmeldung als Spam.
+**SDK** – `cleverreach/php-sdk` (v1.1, PSR-18). Es kennt nur Gruppen und Empfänger *lesen*; alle
+Schreibaufrufe gehen deshalb über `CleverReachClient::request()`. Der Client ist in
+`config/services.yml` verdrahtet: Symfonys `Psr18Client` mit 8 s Timeout je Anfrage und
+`nyholm/psr7` als PSR-17-Fabrik.
+
+**Ablauf**
+
+1. `POST groups/{gruppe}/receivers` legt den Empfänger an – mit `registered`, aber **ohne
+   `activated`**. Fehlen beide, aktiviert CleverReach sofort, und die Bestätigungsmail wäre
+   wirkungslos.
+2. `POST forms/{formular}/send/activate` mit `email` und `doidata` (IP, Seite ohne Query-String,
+   User-Agent des Besuchers – der Nachweis für das Double-Opt-In) löst die Bestätigungsmail aus.
+   Aktiv wird der Empfänger erst mit dem Klick darin.
+3. Kennt die Gruppe die Adresse schon (400 mit „duplicate“/„already“/„exist“ im Text), wird nur
+   Schritt 2 ausgeführt; lehnt CleverReach den dann ab (aktiver Empfänger), ist das **kein**
+   Fehler – der Besucher soll nicht erfahren, ob die Adresse schon im Verteiler steht.
+
+**Feldnamen** – `email` ist die Adresse, `tags` nimmt CleverReach-Tags auf, alle übrigen Felder
+werden als `global_attributes` unter ihrem Feldnamen angelegt (`firstname`, `lastname`, …). Leere
+Werte entfallen. Ein Attribut, das es in CleverReach nicht gibt, kann die Anmeldung scheitern
+lassen – also nur Felder anlegen, die dort existieren. Die Einwilligungs-Checkbox heißt `tags` und
+schickt `on`; dieser Wert wird nicht als Tag angelegt.
 
 **Warum `prepareFormData` und nicht `processFormData`** – scheitert die Übergabe, soll das
 Formular einen Fehler anzeigen. `prepareFormData` läuft nach der Validierung, aber noch vor
-Session, E-Mail-Versand, *Eingaben speichern* und Weiterleitung, und Contao prüft direkt
-dahinter `Form::hasErrors()` und bricht ab (`Form::processFormData()`, "see #6611"). Ein
-`Form::addError()` im Listener wird damit zum echten Formularfehler: der Besucher bleibt mit
-seinen Eingaben auf dem Formular stehen, es wird nichts gespeichert, keine Mail verschickt und
-nicht auf die Bestätigungsseite weitergeleitet. In `processFormData` wäre das zu spät – dort
-sind Mail und Speicherung schon durch.
+Session, E-Mail-Versand, *Eingaben speichern* und Weiterleitung, und Contao prüft direkt dahinter
+`Form::hasErrors()` und bricht ab (`Form::processFormData()`, "see #6611"). Ein `Form::addError()`
+im Listener wird damit zum echten Formularfehler: der Besucher bleibt mit seinen Eingaben auf dem
+Formular stehen, es wird nichts gespeichert, keine Mail verschickt und nicht auf die
+Bestätigungsseite weitergeleitet. In `processFormData` wäre das zu spät.
 
 Die Meldung steht als `$GLOBALS['TL_LANG']['ERR']['cleverreach']` in
 `contao/languages/de/default.php`. Ausgegeben wird sie vom Wrapper-Template über `errors`;
@@ -568,33 +587,26 @@ würde der Fehler stumm verschluckt.
 
 Fallstricke:
 
-- **Nur Felder anlegen, die CleverReach kennt.** Jedes Eingabefeld des Contao-Formulars wird
-  mitgeschickt; ein unbekanntes Attribut kann die ganze Anmeldung scheitern lassen.
-- Die **AGB-/Einwilligungs-Checkbox** heißt bei CleverReach `tags[]` und schickt den Wert `on`.
-  Im Contao-Formular also ein Checkbox-Feld mit Namen `tags` und dem Optionswert `on` –
-  dann stimmt der Body ohne Sonderbehandlung im Code.
-- Submit- und Captcha-Felder landen nicht in `$arrSubmitted` (`blnSubmitInput` ist dort
-  `false`), müssen also nicht ausgefiltert werden. Upload-Felder stehen in `$arrFiles` und
-  werden nicht übertragen.
-- Die **Double-Opt-In-Mail verschickt CleverReach** selbst (Flow-URL endet auf `/confirm`).
-  Die Bestätigung im Frontend kommt aus Contao – am besten über die gemeinsame
-  Bestätigungsseite (siehe *Formular-Bestätigungsseite*).
-- Als Fehler zählen ein **HTTP-Status ab 400** und ein Transportfehler (Timeout, DNS,
-  Verbindung). Eine Ablehnung, die CleverReach mit HTTP 200 und einem Hinweis im Body
-  beantwortet, fällt durchs Raster – deshalb protokolliert der Listener **jede** Übergabe mit
-  Status, nicht nur die gescheiterten. Der Besucher sieht die Antwort nie, das Log ist der
-  einzige Ort, an dem sich das nachvollziehen lässt.
-- Der Timeout liegt bei 10 Sekunden: der Besucher wartet darauf. Weiterleitungen werden
-  nicht verfolgt (`max_redirects => 0`), die 302 auf die CleverReach-Hinweisseite ist der
-  Normalfall und kein Fehler.
-- `symfony/http-client` steht nicht in der `composer.json`, ist aber über
-  `contao/core-bundle` und `contao/manager-bundle` fest verlangt und damit immer vorhanden.
-- CleverReach ist als Auftragsverarbeiter in der Datenschutzerklärung zu nennen – daran
-  ändert der serverseitige Weg nichts, die Daten gehen weiterhin dorthin.
+- **`send/activate` ist als veraltet markiert** („use the new flow endpoints“), die REST-Spezifikation
+  (`https://rest.cleverreach.com/v3/explorer/swagger.json`) enthält aber keinen Ersatz. Fällt der
+  Endpunkt irgendwann weg, scheitert jede Anmeldung mit Formularfehler; im Log steht dann die
+  Antwort von CleverReach.
+- **Das SDK erwartet JSON-Objekt/-Array.** `send/activate` antwortet mit einem nackten Boolean;
+  das SDK wirft dafür eine `CleverReachException` ohne Status und ohne `previous`. Der Listener
+  wertet genau diese Kombination als Erfolg (Status < 400, siehe `call()`). Netzwerkfehler haben
+  immer ein `previous`, HTTP-Fehler immer einen Status.
+- Transportfehler (DNS, Verbindung, Timeout) werden einmal wiederholt (`ATTEMPTS`), HTTP-Antworten
+  nie. Das Anlegen ist wiederholbar, weil ein Duplikat als bestehender Empfänger behandelt wird.
+- Der Besucher sieht von CleverReach nichts. Der Listener protokolliert deshalb **jede** Übergabe
+  (Gruppe, Formular) und jeden Fehler (Status, Meldung, die ersten 500 Zeichen der Antwort).
+- Die Erkennung des Duplikats stützt sich auf den Fehlertext von CleverReach (`duplicate|already|exist`).
+  Weicht der ab, landet ein bestehender Empfänger im Formularfehler – das Log zeigt dann den Wortlaut.
+- CleverReach ist als Auftragsverarbeiter in der Datenschutzerklärung zu nennen.
 
-`tests/EventListener/CleverReachFormListenerTest.php` prüft den Body gegen die
-Browser-Kodierung und dass aus Ablehnung und Ausfall ein Formularfehler wird
-(`MockHttpClient`, kein Netzzugriff).
+`tests/EventListener/CleverReachFormListenerTest.php` prüft Anfragen, Anlegen ohne `activated`,
+Duplikate, Fehlerfälle und Wiederholung gegen einen `MockHttpClient` (kein Netzzugriff). PHPUnit 13
+verlangt PHP 8.4; mit einem älteren PHP lässt sich ein PHPUnit 12 mit dem Projekt-Autoloader als
+`--bootstrap` nutzen.
 
 ## Lokale Docker-Umgebung
 

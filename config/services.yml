@@ -47,6 +47,28 @@ services:
   App\Dca\PartnersDca:
     public: true
 
+  # --- CleverReach-REST-API -------------------------------------------------
+  # Genutzt von App\EventListener\CleverReachFormListener. Den API-Token traegt man als
+  # cleverreach_api_token in config/parameters.yml ein (nicht im Git). Der Parameter MUSS
+  # vor dem Deploy auf dem Zielsystem stehen, sonst startet der Container nicht.
+  # Der Timeout gilt je Anfrage, der Besucher wartet darauf.
+  cleverreach.psr17_factory:
+    class: Nyholm\Psr7\Factory\Psr17Factory
+
+  cleverreach.http_client:
+    class: Symfony\Component\HttpClient\Psr18Client
+    arguments:
+      - '@=service("http_client").withOptions({"timeout": 8})'
+      - '@cleverreach.psr17_factory'
+      - '@cleverreach.psr17_factory'
+
+  CleverReach\SDK\CleverReachClient:
+    arguments:
+      $apiToken: '%cleverreach_api_token%'
+      $httpClient: '@cleverreach.http_client'
+      $requestFactory: '@cleverreach.psr17_factory'
+      $streamFactory: '@cleverreach.psr17_factory'
+
 twig:
   globals:
     project_dir: '%kernel.project_dir%'
