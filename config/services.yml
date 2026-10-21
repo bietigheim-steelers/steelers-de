@@ -55,10 +55,19 @@ services:
   cleverreach.psr17_factory:
     class: Nyholm\Psr7\Factory\Psr17Factory
 
+  # Kein "@=service('http_client')": der Dienst ist privat und im kompilierten Container
+  # entfernt bzw. eingebettet, der Ausdruck wuerde zur Laufzeit scheitern. Eine Factory
+  # mit Referenz wird dagegen schon beim Kompilieren aufgeloest.
+  cleverreach.symfony_http_client:
+    class: Symfony\Contracts\HttpClient\HttpClientInterface
+    factory: ['@http_client', 'withOptions']
+    arguments:
+      - { timeout: 8 }
+
   cleverreach.http_client:
     class: Symfony\Component\HttpClient\Psr18Client
     arguments:
-      - '@=service("http_client").withOptions({"timeout": 8})'
+      - '@cleverreach.symfony_http_client'
       - '@cleverreach.psr17_factory'
       - '@cleverreach.psr17_factory'
 
