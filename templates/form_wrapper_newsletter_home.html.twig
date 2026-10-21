@@ -5,7 +5,7 @@
 
 <!-- indexer::stop -->
 <div{{ wrapperAttributes }}>
-    {% set image = figure('steelers/layout/player_newsletter.png', [700, 700, 'proportional'], {options: {attr: {class: 'hidden lg:block absolute bottom-0', loading: 'lazy'}}}) %}
+    {% set image = figure('files/steelers/layout/newsletter_laptop.png', [700, 700, 'proportional'], {options: {attr: {class: 'hidden lg:block absolute bottom-0', loading: 'lazy'}}}) %}
     {% if image.image|default %}
         {{ image.image.img|raw }}
     {% endif %}
