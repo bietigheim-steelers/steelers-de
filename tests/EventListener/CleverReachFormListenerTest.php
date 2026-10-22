@@ -94,6 +94,52 @@ class CleverReachFormListenerTest extends TestCase
         $this->assertSame(['firstname' => 'Max'], $this->requests[0]['body']['global_attributes']);
     }
 
+    public function testAttributeFieldsAreSetViaPut(): void
+    {
+        $form = $this->form();
+
+        $this->invoke(
+            [$this->json([]), $this->json(true), $this->json(true), $this->json(true)],
+            $this->submitted(['attr-lieblingsspieler-42' => 'Kapitän', 'attr-ort-7' => 'Bietigheim', 'attr-leer-9' => '']),
+            $form,
+        );
+
+        $this->assertFalse($form->hasErrors());
+        $this->assertCount(4, $this->requests);
+        $this->assertSame(['firstname' => 'Max', 'lastname' => 'Mustermann'], $this->requests[0]['body']['global_attributes']);
+        $this->assertSame('PUT', $this->requests[1]['method']);
+        $this->assertStringContainsString('/receivers/max%40example.com/attributes/42', $this->requests[1]['url']);
+        $this->assertSame(['value' => 'Kapitän'], $this->requests[1]['body']);
+        $this->assertStringContainsString('/attributes/7', $this->requests[2]['url']);
+        $this->assertStringContainsString('/send/activate', $this->requests[3]['url']);
+    }
+
+    public function testFailedAttributeDoesNotFailSignup(): void
+    {
+        $form = $this->form();
+
+        $this->invoke(
+            [$this->json([]), $this->json(['error' => ['code' => 404, 'message' => 'unknown attribute']], 404), $this->json(true)],
+            $this->submitted(['attr-ort-7' => 'Bietigheim']),
+            $form,
+        );
+
+        $this->assertFalse($form->hasErrors());
+        $this->assertCount(3, $this->requests);
+    }
+
+    public function testExistingReceiverAttributesAreNotOverwritten(): void
+    {
+        $this->invoke(
+            [$this->json(['error' => ['code' => 400, 'message' => 'duplicate']], 400), $this->json(true)],
+            $this->submitted(['attr-ort-7' => 'Bietigheim']),
+            $this->form(),
+        );
+
+        $this->assertCount(2, $this->requests);
+        $this->assertStringContainsString('/send/activate', $this->requests[1]['url']);
+    }
+
     /**
      * Kennt CleverReach die Adresse schon, wird nur die Bestaetigungsmail ausgeloest.
      */

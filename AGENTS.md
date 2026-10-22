@@ -571,6 +571,13 @@ Werte entfallen. Ein Attribut, das es in CleverReach nicht gibt, kann die Anmeld
 lassen – also nur Felder anlegen, die dort existieren. Die Einwilligungs-Checkbox heißt `tags` und
 schickt `on`; dieser Wert wird nicht als Tag angelegt.
 
+**Zusatzattribute per PUT** – Felder `attr-<name>-<id>` (z. B. `attr-lieblingsspieler-42`; `<name>`
+nur zur Lesbarkeit, `<id>` ist die CleverReach-Attribut-ID) setzen nach dem Anlegen den Wert über
+`PUT /v3/receivers/{email}/attributes/{id}` (Body `{"value": …}`). Sie gehen nicht in
+`global_attributes`. Leere Werte entfallen. Scheitert ein Aufruf, steht eine Warnung im Log, die
+Anmeldung läuft weiter. Bei bereits bekannten Empfängern (Duplikat) werden sie **nicht** gesetzt,
+damit niemand über eine fremde Adresse Werte überschreiben kann.
+
 **Warum `prepareFormData` und nicht `processFormData`** – scheitert die Übergabe, soll das
 Formular einen Fehler anzeigen. `prepareFormData` läuft nach der Validierung, aber noch vor
 Session, E-Mail-Versand, *Eingaben speichern* und Weiterleitung, und Contao prüft direkt dahinter

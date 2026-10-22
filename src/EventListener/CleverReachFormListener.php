@@ -40,7 +40,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Feldnamen: "email" ist die Adresse, "tags" nimmt CleverReach-Tags auf, alle uebrigen
  * Felder werden unter ihrem Namen als globales Attribut (global_attributes) angelegt –
  * das Feld "firstname" fuellt also das CleverReach-Attribut "firstname". Das Attribut
- * muss in CleverReach existieren.
+ * muss in CleverReach existieren. Felder "attr-<name>-<id>" sind davon ausgenommen: sie
+ * setzen nach dem Anlegen per PUT receivers/{email}/attributes/{id} den Wert des
+ * Attributs mit der ID <id> (der <name> dient nur der Lesbarkeit im Backend). Scheitert
+ * ein solcher Aufruf, wird er protokolliert, die Anmeldung aber nicht abgebrochen.
  */
 #[AsHook('prepareFormData')]
 class CleverReachFormListener
@@ -163,6 +166,12 @@ class CleverReachFormListener
             $this->logger->info('CleverReach kennt den Empfaenger in dieser Gruppe bereits, loese nur die Bestaetigungsmail aus.');
         }
 
+        // Bei bestehenden Empfaengern bleiben die Werte unangetastet: wer eine fremde
+        // Adresse eintraegt, soll deren Attribute nicht ueberschreiben koennen.
+        if (!$duplicate) {
+            $this->updateAttributes($email, $submitted);
+        }
+
         try {
             $this->call(fn (): array => $this->client->request(
                 'POST',
@@ -180,6 +189,51 @@ class CleverReachFormListener
 
             $this->logger->info(\sprintf('CleverReach hat keine Bestaetigungsmail fuer einen bestehenden Empfaenger verschickt: %s', $e->getMessage()));
         }
+    }
+
+    /**
+     * Setzt die Felder "attr-<name>-<id>" per PUT receivers/{email}/attributes/{id}.
+     * Die Attribute sind optional: scheitert ein Aufruf, wird er protokolliert und die
+     * Anmeldung laeuft weiter – der Empfaenger ist zu diesem Zeitpunkt schon angelegt.
+     *
+     * @param array<string, mixed> $submitted
+     */
+    private function updateAttributes(string $email, array $submitted): void
+    {
+        foreach ($submitted as $name => $value) {
+            $id = $this->attributeId((string) $name);
+            $value = $this->stringify($value);
+
+            if (null === $id || '' === $value) {
+                continue;
+            }
+
+            try {
+                $this->call(fn (): array => $this->client->request(
+                    'PUT',
+                    \sprintf('receivers/%s/attributes/%s', rawurlencode($email), $id),
+                    [],
+                    ['value' => $value],
+                ));
+            } catch (CleverReachException $e) {
+                $this->logger->warning(\sprintf(
+                    'CleverReach-Attribut "%s" (ID %s) konnte nicht gesetzt werden (HTTP %s): %s %s',
+                    $name,
+                    $id,
+                    $e->statusCode() ?? '-',
+                    $e->getMessage(),
+                    substr((string) $e->responseBody(), 0, 500),
+                ));
+            }
+        }
+    }
+
+    /**
+     * Attribut-ID aus einem Feldnamen "attr-<name>-<id>"; der Name ist nur zur Lesbarkeit.
+     */
+    private function attributeId(string $field): string|null
+    {
+        return 1 === preg_match('/^attr-.+-(\d+)$/', $field, $m) ? $m[1] : null;
     }
 
     /**
@@ -238,7 +292,7 @@ class CleverReachFormListener
         foreach ($submitted as $name => $value) {
             $name = (string) $name;
 
-            if (self::EMAIL_FIELD === $name || self::TAGS_FIELD === $name) {
+            if (self::EMAIL_FIELD === $name || self::TAGS_FIELD === $name || null !== $this->attributeId($name)) {
                 continue;
             }
 
