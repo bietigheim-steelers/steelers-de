@@ -1,0 +1,84 @@
+{% set game = next_home_game() %}
+{% if game %}
+  {% set images = ticket_banner_images() %}
+  {% set cutouts = ticket_banner_cutouts() %}
+  <div class="mb-12 mt-28 md:mb-16 md:mt-32">
+    <a href="/ticketshop" data-ticket-banner
+       class="group relative block text-white no-underline drop-shadow-2xl hover:no-underline">
+
+      {# Background pool: crossfading images, first one visible without JS. Spans the full page width; the content below sits in the regular container so the badge and cutout can break out above it #}
+      <div class="absolute inset-0 overflow-hidden bg-steelgreen" aria-hidden="true">
+        {% for image in images %}
+          <img src="{{ image }}" alt="" loading="lazy" decoding="async" data-ticket-banner-slide
+               class="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1500ms] ease-in-out {{ loop.first ? 'opacity-100' : 'opacity-0' }}">
+        {% endfor %}
+        <div class="absolute inset-0 bg-gradient-to-r from-steelgreen via-steelgreen/85 to-steelgreen/30"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+      </div>
+
+      <div class="defaultcontainer">
+      <div class="relative">
+      {# Breakout 1: opponent badge tilted over the top edge #}
+      {% if game.logo %}
+        <div class="absolute -top-16 right-4 z-10 flex h-28 w-28 -rotate-6 items-center justify-center rounded-full bg-white p-4 shadow-xl ring-4 ring-steelgreen transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110 md:-top-20 md:right-16 md:h-40 md:w-40" aria-hidden="true">
+          <img src="{{ game.logo }}" alt="" class="h-full w-full object-contain" loading="lazy">
+        </div>
+      {% endif %}
+
+      {# Breakout 2: optional player cutout, random per page view #}
+      {% if cutouts %}
+        <img src="{{ random(cutouts) }}" alt="" loading="lazy" aria-hidden="true"
+             class="pointer-events-none absolute bottom-0 right-[18rem] z-0 hidden h-[125%] w-auto max-w-none object-contain object-bottom drop-shadow-2xl origin-bottom transition-transform duration-500 group-hover:scale-110 lg:block xl:right-[24rem]">
+      {% endif %}
+
+      <div class="relative z-10 flex flex-col gap-8 px-6 py-10 md:flex-row md:items-center md:justify-between md:gap-12 md:px-12 md:py-14">
+        <div>
+          <p class="flex flex-wrap items-center gap-3 text-sm font-bold uppercase tracking-widest md:text-base">
+            <span>Nächstes Heimspiel</span>
+            <span class="bg-white px-3 py-1 text-steelgreen">{{ game.when }}</span>
+          </p>
+
+          <time datetime="{{ game.datetime }}" class="mt-4 block">
+            <span class="block text-lg font-bold uppercase tracking-wide md:text-2xl">
+              {{ game.weekday }}, {{ game.day }} {{ game.month }}
+            </span>
+            <span class="mt-1 block font-headline text-7xl uppercase leading-none md:text-9xl">
+              {{ game.time }}<span class="ml-3 text-3xl md:text-5xl">Uhr</span>
+            </span>
+          </time>
+
+          {% if game.opponent %}
+            <p class="mt-5 flex items-center gap-3 text-lg font-bold md:text-2xl">
+              <span><span class="font-normal opacity-80">gegen</span> {{ game.opponent }}</span>
+            </p>
+          {% endif %}
+        </div>
+
+        <div class="shrink-0">
+          <span class="inline-flex animate-wiggle items-center gap-3 bg-white px-8 py-4 text-lg font-bold uppercase text-steelgreen transition-colors group-hover:bg-steelblue group-hover:text-white md:text-xl">
+            Tickets sichern
+            <svg class="h-6 w-6 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </div>
+      </div>
+      </div>
+    </a>
+  </div>
+
+  {% if images|length > 1 %}
+    <script>
+      (function () {
+        var banner = document.currentScript.previousElementSibling.querySelector('[data-ticket-banner]');
+        if (!banner || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var slides = banner.querySelectorAll('[data-ticket-banner-slide]');
+        var current = 0;
+        setInterval(function () {
+          slides[current].classList.replace('opacity-100', 'opacity-0');
+          current = (current + 1) % slides.length;
+          slides[current].classList.replace('opacity-0', 'opacity-100');
+        }, 6000);
+      })();
+    </script>
+  {% endif %}
+{% endif %}

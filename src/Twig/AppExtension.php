@@ -4,6 +4,7 @@ namespace App\Twig;
 
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Contao\ArticleModel;
 use Contao\PageModel;
@@ -31,6 +32,15 @@ class AppExtension extends AbstractExtension
       new TwigFilter('decode_entities', [$this, 'decodeEntities']),
       new TwigFilter('parse_int', [$this, 'parseInt']),
 
+    ];
+  }
+
+  public function getFunctions(): array
+  {
+    return [
+      new TwigFunction('next_home_game', [$this, 'getNextHomeGame']),
+      new TwigFunction('ticket_banner_images', [$this, 'getTicketBannerImages']),
+      new TwigFunction('ticket_banner_cutouts', [$this, 'getTicketBannerCutouts']),
     ];
   }
 
@@ -186,5 +196,90 @@ class AppExtension extends AbstractExtension
   public function parseInt(string $value): int
   {
     return (int)$value;
+  }
+
+  private const MY_TEAM_ID = 36;
+  private const GAME_DURATION = 3 * 3600;
+  private const WEEKDAYS = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
+  private const MONTHS = ['', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+
+  /**
+   * Next home game of the Steelers that has not finished yet, prepared for display.
+   */
+  public function getNextHomeGame(): ?array
+  {
+    $games = \App\Model\Games::findAll([
+      'order'  => ' gamedate ASC',
+      'limit'  => ' LIMIT 10',
+      'column' => ['gamedate >= ? AND hometeam = ? AND optional != ?'],
+      'value'  => [strtotime('today'), self::MY_TEAM_ID, true],
+    ]);
+
+    if (!$games) {
+      return null;
+    }
+
+    $now = time();
+
+    foreach ($games as $game) {
+      [$hour, $minute] = array_pad(array_map('intval', explode(':', (string) $game->gametime)), 2, 0);
+      $start = (new \DateTimeImmutable('@' . $game->gamedate))
+        ->setTimezone(new \DateTimeZone(date_default_timezone_get()))
+        ->setTime($hour, $minute);
+
+      // keep today's game visible until it should be over
+      if ($start->getTimestamp() + self::GAME_DURATION < $now) {
+        continue;
+      }
+
+      $away = \App\Model\Standings::findByIdAndRound($game->awayteam, $game->round);
+      $logo = $away['logo'] ?? null;
+      $days = (int) (new \DateTimeImmutable('today'))->diff($start->setTime(0, 0))->format('%r%a');
+
+      return [
+        'weekday'  => self::WEEKDAYS[(int) $start->format('w')],
+        'day'      => $start->format('j') . '.',
+        'month'    => self::MONTHS[(int) $start->format('n')],
+        'time'     => $start->format('H:i'),
+        'datetime' => $start->format('c'),
+        'opponent' => $away['name'] ?? '',
+        'logo'     => (is_string($logo) && str_starts_with($logo, '/')) ? $logo : null,
+        'when'     => match (true) {
+          $days <= 0 => 'Heute',
+          $days === 1 => 'Morgen',
+          default => 'In ' . $days . ' Tagen',
+        },
+      ];
+    }
+
+    return null;
+  }
+
+  /**
+   * Pool of background images for the ticket banner: every image in files/steelers/ticketbanner.
+   * Falls back to the arena picture while the folder is empty.
+   */
+  public function getTicketBannerImages(): array
+  {
+    $files = glob($this->addRoot('/files/steelers/ticketbanner/*.{jpg,jpeg,png,webp,avif}'), GLOB_BRACE) ?: [];
+    sort($files);
+
+    if (!$files) {
+      return ['/files/steelers/layout/arena-bg.jpg'];
+    }
+
+    return array_map(static fn (string $file): string => '/files/steelers/ticketbanner/' . rawurlencode(basename($file)), $files);
+  }
+
+  /**
+   * Optional player cutouts (transparent png/webp) that break out of the ticket banner.
+   * Lives in files/steelers/ticketbanner/freisteller; empty while the folder is missing.
+   */
+  public function getTicketBannerCutouts(): array
+  {
+    $files = glob($this->addRoot('/files/steelers/ticketbanner/freisteller/*.{png,webp,avif}'), GLOB_BRACE) ?: [];
+    sort($files);
+
+    return array_map(static fn (string $file): string => '/files/steelers/ticketbanner/freisteller/' . rawurlencode(basename($file)), $files);
   }
 }
