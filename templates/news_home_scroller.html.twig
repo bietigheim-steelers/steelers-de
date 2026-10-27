@@ -8,15 +8,19 @@
 }) %}
 
     <div class="swiper-slide bg-white h-full">
-      {% set image = figure(singleSRC, news_image_size, {
+      {% if addImage and singleSRC %}
+        {% set image = figure(singleSRC, news_image_size, {
   metadata: { alt: newsHeadline },
   linkHref: link,
   options: { attr: { loading: 'lazy', class: 'aspect-news w-full' } },
 }) %}
 
-      {% with {figure: image} %}
-      {{ block('figure_component') }}
-      {% endwith %}
+        {% with {figure: image} %}
+        {{ block('figure_component') }}
+        {% endwith %}
+      {% else %}
+        <a href="{{ link }}" class="block aspect-news w-full bg-steelgreen" aria-hidden="true" tabindex="-1"></a>
+      {% endif %}
       <div class="p-5 grow flex flex-col">
 <div class="text-gray-400 italic uppercase">
       {% if categoriesList|length >0 %}
