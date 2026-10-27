@@ -232,8 +232,10 @@ class AppExtension extends AbstractExtension
         continue;
       }
 
+      $home = \App\Model\Standings::findByIdAndRound($game->hometeam, $game->round);
       $away = \App\Model\Standings::findByIdAndRound($game->awayteam, $game->round);
       $logo = $away['logo'] ?? null;
+      $homeLogo = $home['logo'] ?? null;
       $days = (int) (new \DateTimeImmutable('today'))->diff($start->setTime(0, 0))->format('%r%a');
 
       return [
@@ -243,6 +245,8 @@ class AppExtension extends AbstractExtension
         'time'     => $start->format('H:i'),
         'datetime' => $start->format('c'),
         'opponent' => $away['name'] ?? '',
+        'home'     => $home['name'] ?? '',
+        'homeLogo' => (is_string($homeLogo) && str_starts_with($homeLogo, '/')) ? $homeLogo : null,
         'logo'     => (is_string($logo) && str_starts_with($logo, '/')) ? $logo : null,
         'when'     => match (true) {
           $days <= 0 => 'Heute',

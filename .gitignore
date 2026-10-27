@@ -46,4 +46,5 @@ public/preview.php
 bin/
 files/css
 files/js
+files/steelers/teams
 dev-docker/db/dumps/*.sql

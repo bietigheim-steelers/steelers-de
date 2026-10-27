@@ -18,14 +18,7 @@
 
       <div class="defaultcontainer">
       <div class="relative">
-      {# Breakout 1: opponent badge tilted over the top edge #}
-      {% if game.logo %}
-        <div class="absolute -top-16 right-4 z-10 flex h-28 w-28 -rotate-6 items-center justify-center rounded-full bg-white p-4 shadow-xl ring-4 ring-steelgreen transition-transform duration-300 group-hover:rotate-3 group-hover:scale-110 md:-top-20 md:right-16 md:h-40 md:w-40" aria-hidden="true">
-          <img src="{{ game.logo }}" alt="" class="h-full w-full object-contain" loading="lazy">
-        </div>
-      {% endif %}
-
-      {# Breakout 2: optional player cutout, random per page view #}
+      {# Breakout:  optional player cutout, random per page view #}
       {% if cutouts %}
         <img src="{{ random(cutouts) }}" alt="" loading="lazy" aria-hidden="true"
              class="pointer-events-none absolute bottom-0 right-[18rem] z-0 hidden h-[125%] w-auto max-w-none object-contain object-bottom drop-shadow-2xl origin-bottom transition-transform duration-500 group-hover:scale-110 lg:block xl:right-[24rem]">
@@ -33,23 +26,29 @@
 
       <div class="relative z-10 flex flex-col gap-8 px-6 py-10 md:flex-row md:items-center md:justify-between md:gap-12 md:px-12 md:py-14">
         <div>
-          <p class="flex flex-wrap items-center gap-3 text-sm font-bold uppercase tracking-widest md:text-base">
-            <span>Nächstes Heimspiel</span>
-            <span class="bg-white px-3 py-1 text-steelgreen">{{ game.when }}</span>
+          <p class="inline-flex -skew-x-12 items-stretch font-headline text-xl uppercase tracking-wider shadow-lg md:text-3xl">
+            <span class="inline-flex items-center gap-3 bg-steelblue px-5 py-2">
+              <span class="relative flex h-3 w-3">
+                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75"></span>
+                <span class="relative inline-flex h-3 w-3 rounded-full bg-white"></span>
+              </span>
+              Nächstes Heimspiel
+            </span>
+            <span class="inline-flex items-center bg-white px-5 py-2 text-steelgreen">{{ game.when }}</span>
           </p>
 
-          <time datetime="{{ game.datetime }}" class="mt-4 block">
-            <span class="block text-lg font-bold uppercase tracking-wide md:text-2xl">
+          <time datetime="{{ game.datetime }}" class="mt-5 block">
+            <span class="block font-headline text-4xl uppercase leading-none md:text-6xl">
               {{ game.weekday }}, {{ game.day }} {{ game.month }}
             </span>
-            <span class="mt-1 block font-headline text-7xl uppercase leading-none md:text-9xl">
-              {{ game.time }}<span class="ml-3 text-3xl md:text-5xl">Uhr</span>
+            <span class="mt-2 block font-headline text-5xl uppercase leading-none md:text-7xl">
+              {{ game.time }}<span class="ml-2 text-2xl md:text-4xl">Uhr</span>
             </span>
           </time>
 
           {% if game.opponent %}
-            <p class="mt-5 flex items-center gap-3 text-lg font-bold md:text-2xl">
-              <span><span class="font-normal opacity-80">gegen</span> {{ game.opponent }}</span>
+            <p class="mt-5 text-xl font-bold md:text-3xl">
+              {{ game.home }} <span class="mx-1 font-headline uppercase opacity-80">vs.</span> {{ game.opponent }}
             </p>
           {% endif %}
         </div>
