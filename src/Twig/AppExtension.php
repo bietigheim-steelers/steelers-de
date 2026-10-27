@@ -262,6 +262,7 @@ class AppExtension extends AbstractExtension
   /**
    * Pool of background images for the ticket banner: every image in files/steelers/ticketbanner.
    * Falls back to the arena picture while the folder is empty.
+   * Returns file paths (not URLs) so the templates can resize them with the Contao image studio.
    */
   public function getTicketBannerImages(): array
   {
@@ -269,10 +270,10 @@ class AppExtension extends AbstractExtension
     sort($files);
 
     if (!$files) {
-      return ['/files/steelers/layout/arena-bg.jpg'];
+      return [$this->addRoot('/files/steelers/layout/arena-bg.jpg')];
     }
 
-    return array_map(static fn (string $file): string => '/files/steelers/ticketbanner/' . rawurlencode(basename($file)), $files);
+    return $files;
   }
 
   /**
@@ -284,6 +285,6 @@ class AppExtension extends AbstractExtension
     $files = glob($this->addRoot('/files/steelers/ticketbanner/freisteller/*.{png,webp,avif}'), GLOB_BRACE) ?: [];
     sort($files);
 
-    return array_map(static fn (string $file): string => '/files/steelers/ticketbanner/freisteller/' . rawurlencode(basename($file)), $files);
+    return $files;
   }
 }

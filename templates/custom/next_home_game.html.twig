@@ -2,6 +2,19 @@
 {% if game %}
   {% set images = ticket_banner_images() %}
   {% set cutouts = ticket_banner_cutouts() %}
+
+  {% set bg_size = picture_config({
+    width: 1920,
+    height: 640,
+    resizeMode: 'crop',
+    densities: '640w, 960w, 1440w, 1920w',
+    sizes: '100vw'
+  }) %}
+  {% set cutout_size = picture_config({
+    height: 700,
+    resizeMode: 'proportional',
+    densities: '1x, 2x'
+  }) %}
   <div class="mb-12 mt-28 md:mb-16 md:mt-32">
     <a href="/ticketshop" data-ticket-banner
        class="group relative block text-white no-underline drop-shadow-2xl hover:no-underline">
@@ -9,8 +22,12 @@
       {# Background pool: crossfading images, first one visible without JS. Spans the full page width; the content below sits in the regular container so the badge and cutout can break out above it #}
       <div class="absolute inset-0 overflow-hidden bg-steelgreen" aria-hidden="true">
         {% for image in images %}
-          <img src="{{ image }}" alt="" loading="lazy" decoding="async" data-ticket-banner-slide
-               class="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1500ms] ease-in-out {{ loop.first ? 'opacity-100' : 'opacity-0' }}">
+          {% set bg = figure(image, bg_size) %}
+          {% if bg %}
+            {% set img = bg.image.img %}
+            <img src="{{ img.src }}"{% if img.srcset is not empty %} srcset="{{ img.srcset }}" sizes="{{ img.sizes|default('100vw') }}"{% endif %} width="{{ img.width }}" height="{{ img.height }}" alt="" loading="lazy" decoding="async" data-ticket-banner-slide
+                 class="absolute inset-0 h-full w-full object-cover transition-opacity duration-[1500ms] ease-in-out {{ loop.first ? 'opacity-100' : 'opacity-0' }}">
+          {% endif %}
         {% endfor %}
         <div class="absolute inset-0 bg-gradient-to-r from-steelgreen via-steelgreen/85 to-steelgreen/30"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
@@ -19,8 +36,10 @@
       <div class="defaultcontainer">
       <div class="relative">
       {# Breakout:  optional player cutout, random per page view #}
-      {% if cutouts %}
-        <img src="{{ random(cutouts) }}" alt="" loading="lazy" aria-hidden="true"
+      {% set cutout = cutouts ? figure(random(cutouts), cutout_size) : null %}
+      {% if cutout %}
+        {% set img = cutout.image.img %}
+        <img src="{{ img.src }}"{% if img.srcset is not empty %} srcset="{{ img.srcset }}"{% endif %} width="{{ img.width }}" height="{{ img.height }}" alt="" loading="lazy" aria-hidden="true"
              class="pointer-events-none absolute bottom-0 right-[18rem] z-0 hidden h-[125%] w-auto max-w-none object-contain object-bottom drop-shadow-2xl origin-bottom transition-transform duration-500 group-hover:scale-110 lg:block xl:right-[24rem]">
       {% endif %}
 
