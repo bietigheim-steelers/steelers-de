@@ -6,6 +6,12 @@
   @apply grid grid-cols-6 gap-2 mb-8;
 }
 
+/* Checkbox-Gruppen sind verschachtelte Fieldsets und duerfen kein Grid sein,
+   sonst landet der Inhalt in einer einzelnen schmalen Spalte. */
+.steelers_form fieldset.checkbox_container {
+  @apply block mb-0;
+}
+
 .steelers_form fieldset > legend {
   @apply col-span-12 font-headline text-steelgreen text-3xl;
 }
