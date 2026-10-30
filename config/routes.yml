@@ -14,3 +14,40 @@ backend_season_ticket_download:
   methods: GET
   defaults:
     _scope: backend
+
+# --- App-API (read-only, Vertrag: docs/openapi.yaml) -----------------------
+app_api_news:
+  controller: App\Controller\Api\NewsController::list
+  path: /api/v1/news
+  methods: GET
+app_api_news_detail:
+  controller: App\Controller\Api\NewsController::detail
+  path: /api/v1/news/{id}
+  methods: GET
+  requirements: { id: '\d+' }
+app_api_games:
+  controller: App\Controller\Api\GamesController::list
+  path: /api/v1/games
+  methods: GET
+app_api_games_detail:
+  controller: App\Controller\Api\GamesController::detail
+  path: /api/v1/games/{id}
+  methods: GET
+  requirements: { id: '\d+' }
+app_api_standings:
+  controller: App\Controller\Api\StandingsController::list
+  path: /api/v1/standings
+  methods: GET
+app_api_players:
+  controller: App\Controller\Api\PlayersController::list
+  path: /api/v1/players
+  methods: GET
+app_api_players_detail:
+  controller: App\Controller\Api\PlayersController::detail
+  path: /api/v1/players/{id}
+  methods: GET
+  requirements: { id: '\d+' }
+app_api_partners:
+  controller: App\Controller\Api\PartnersController::list
+  path: /api/v1/partners
+  methods: GET

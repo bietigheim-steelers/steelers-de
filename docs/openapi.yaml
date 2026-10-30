@@ -1,0 +1,720 @@
+openapi: 3.0.3
+info:
+  title: Steelers App API
+  version: 1.0.0
+  description: |
+    Read-only JSON-API der Contao-Installation (steelers.de) für die mobile App (iOS/Android).
+    Contao bleibt die einzige Datenquelle, die App pflegt keine eigenen Inhalte.
+
+    **Allgemein**
+    - Alle Antworten sind UTF-8-JSON im Envelope `{ "data": …, "meta": … }`.
+    - Nur veröffentlichte Datensätze (inkl. Start/Stop-Zeitraum) werden ausgeliefert.
+    - Zeitangaben sind ISO 8601 mit Zeitzone (`Europe/Berlin`), Datumsangaben `YYYY-MM-DD`.
+    - Bild- und Datei-URLs sind immer absolut.
+    - Antworten tragen `Cache-Control` und `ETag`; die App sendet `If-None-Match` und erhält ggf. `304`.
+    - Unbekannte Felder und unbekannte Block-Typen muss die App ignorieren (Abwärtskompatibilität).
+    - Content-Blöcke sind in `docs/app-blocks.md` beschrieben; hier das Schema `Block`.
+
+    **Umsetzungsstand:** `/news`, `/games`, `/standings`, `/players` und `/partners` sind in Contao
+    umgesetzt (Phase 1). `/pages` (Phase 2) und `/devices` (Phase 3) sind noch Spezifikation.
+    Die Parameter `perPage` (max. 50) und `since` gibt es nur bei `/news`.
+  contact:
+    name: Bietigheim Steelers
+    url: https://www.steelers.de
+servers:
+  - url: https://www.steelers.de/api/v1
+    description: Produktion
+  - url: https://dev.steelers.de/api/v1
+    description: Entwicklung
+  - url: http://localhost:8080/api/v1
+    description: Lokale Docker-Umgebung
+tags:
+  - name: News
+  - name: Spielbetrieb
+    description: Spielplan, Ergebnisse und Tabelle
+  - name: Kader
+  - name: Partner
+  - name: Seiten
+    description: Artikel, die in Contao mit „In App anzeigen“ markiert sind
+  - name: Push
+    description: Geräteregistrierung für Push-Benachrichtigungen (FCM)
+security:
+  - AppKey: []
+paths:
+  /news:
+    get:
+      tags: [News]
+      summary: News-Liste
+      description: Titel, Teaser und Bild. Kein Volltext.
+      operationId: listNews
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - name: category
+          in: query
+          description: Alias einer News-Kategorie (codefog/news_categories).
+          schema: { type: string }
+        - name: archive
+          in: query
+          description: |
+            Kommagetrennte News-Archiv-IDs. Ohne Angabe alle Archive außer dem Videoportal (ID 7),
+            dessen Cron-Importe sonst die Liste füllen würden.
+          schema: { type: string, example: '1,2' }
+        - name: since
+          in: query
+          description: Nur Einträge mit `updatedAt` nach diesem Zeitpunkt (Delta-Sync).
+          schema: { type: string, format: date-time }
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+            Cache-Control: { $ref: '#/components/headers/CacheControl' }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, meta]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/NewsItem' }
+                  meta: { $ref: '#/components/schemas/PageMeta' }
+        '304': { $ref: '#/components/responses/NotModified' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+  /news/{id}:
+    get:
+      tags: [News]
+      summary: Einzelne News
+      operationId: getNews
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data: { $ref: '#/components/schemas/NewsItem' }
+        '304': { $ref: '#/components/responses/NotModified' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /games:
+    get:
+      tags: [Spielbetrieb]
+      summary: Spielplan und Ergebnisse
+      operationId: listGames
+      parameters:
+        - name: round
+          in: query
+          description: |
+            ID der Runde/Saison (`tl_tilastot_client_rounds`). Ohne Angabe die Runde des nächsten
+            anstehenden Spiels, sonst die des letzten Spiels.
+          schema: { type: integer }
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [upcoming, live, finished]
+        - name: from
+          in: query
+          schema: { type: string, format: date }
+        - name: to
+          in: query
+          schema: { type: string, format: date }
+        - name: team
+          in: query
+          description: Nur Spiele dieses Teams (`Team.id`, also die `tilastotid`).
+          schema: { type: integer }
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+            Cache-Control: { $ref: '#/components/headers/CacheControl' }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Game' }
+        '304': { $ref: '#/components/responses/NotModified' }
+  /games/{id}:
+    get:
+      tags: [Spielbetrieb]
+      summary: Einzelnes Spiel
+      operationId: getGame
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data: { $ref: '#/components/schemas/Game' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /standings:
+    get:
+      tags: [Spielbetrieb]
+      summary: Tabelle
+      operationId: listStandings
+      parameters:
+        - name: round
+          in: query
+          schema: { type: integer }
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+            Cache-Control: { $ref: '#/components/headers/CacheControl' }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/StandingsRow' }
+        '304': { $ref: '#/components/responses/NotModified' }
+  /players:
+    get:
+      tags: [Kader]
+      summary: Kader
+      operationId: listPlayers
+      parameters:
+        - name: position
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+            Cache-Control: { $ref: '#/components/headers/CacheControl' }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Player' }
+        '304': { $ref: '#/components/responses/NotModified' }
+  /players/{id}:
+    get:
+      tags: [Kader]
+      summary: Einzelner Spieler
+      operationId: getPlayer
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data: { $ref: '#/components/schemas/Player' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /partners:
+    get:
+      tags: [Partner]
+      summary: Partner und Sponsoren
+      operationId: listPartners
+      parameters:
+        - name: category
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+            Cache-Control: { $ref: '#/components/headers/CacheControl' }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Partner' }
+        '304': { $ref: '#/components/responses/NotModified' }
+  /pages:
+    get:
+      tags: [Seiten]
+      summary: App-Menü
+      description: Alle Artikel mit gesetztem Flag „In App anzeigen“, sortiert nach `appSort`.
+      operationId: listPages
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+            Cache-Control: { $ref: '#/components/headers/CacheControl' }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/PageSummary' }
+        '304': { $ref: '#/components/responses/NotModified' }
+  /pages/{id}:
+    get:
+      tags: [Seiten]
+      summary: Artikel als Blöcke
+      description: |
+        Die Inhaltselemente des Artikels als Liste strukturierter Blöcke. Elemente ohne App-Darstellung
+        werden ausgelassen. Steht `fallbackUrl` im Ergebnis, soll die App den Artikel stattdessen im Browser/
+        der WebView öffnen.
+      operationId: getPage
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data: { $ref: '#/components/schemas/Page' }
+        '304': { $ref: '#/components/responses/NotModified' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /devices:
+    post:
+      tags: [Push]
+      summary: Gerät registrieren oder aktualisieren
+      description: |
+        Idempotent über `token`. Die App ruft dies beim Start, bei Token-Wechsel und bei Änderung der
+        Benachrichtigungs-Einstellungen auf. Der Server abonniert die Topics bei FCM.
+      operationId: registerDevice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/DeviceRegistration' }
+      responses:
+        '200':
+          description: Aktualisiert
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/DeviceRegistration' }
+        '201':
+          description: Neu angelegt
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data: { $ref: '#/components/schemas/DeviceRegistration' }
+        '422': { $ref: '#/components/responses/ValidationError' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+  /devices/{token}:
+    delete:
+      tags: [Push]
+      summary: Gerät abmelden
+      operationId: unregisterDevice
+      parameters:
+        - name: token
+          in: path
+          required: true
+          description: FCM-Token (URL-kodiert).
+          schema: { type: string }
+      responses:
+        '204':
+          description: Abgemeldet (auch wenn das Token unbekannt war)
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+components:
+  securitySchemes:
+    AppKey:
+      type: apiKey
+      in: header
+      name: X-App-Key
+      description: |
+        Einfacher App-Schlüssel gegen beiläufigen Missbrauch (kein Nutzer-Login). Die Inhalte sind öffentlich;
+        ist der Schutz am Server abgeschaltet, kann der Header entfallen.
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer }
+    Page:
+      name: page
+      in: query
+      schema: { type: integer, minimum: 1, default: 1 }
+    PerPage:
+      name: perPage
+      in: query
+      schema: { type: integer, minimum: 1, maximum: 50, default: 20 }
+  headers:
+    ETag:
+      description: Entity-Tag für bedingte Anfragen (`If-None-Match`).
+      schema: { type: string }
+    CacheControl:
+      description: z. B. `public, max-age=120`.
+      schema: { type: string }
+  responses:
+    NotModified:
+      description: Inhalt unverändert (`If-None-Match` passt).
+    Unauthorized:
+      description: Fehlender oder ungültiger `X-App-Key`.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Nicht gefunden oder nicht veröffentlicht.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    ValidationError:
+      description: Ungültige Eingabe.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    TooManyRequests:
+      description: Rate-Limit überschritten.
+      headers:
+        Retry-After:
+          schema: { type: integer }
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: object
+          required: [code, message]
+          properties:
+            code: { type: string, example: not_found }
+            message: { type: string, example: Eintrag nicht gefunden. }
+            details:
+              type: object
+              additionalProperties: true
+    PageMeta:
+      type: object
+      required: [page, perPage, total]
+      properties:
+        page: { type: integer }
+        perPage: { type: integer }
+        total: { type: integer }
+    Image:
+      type: object
+      required: [url]
+      properties:
+        url: { type: string, format: uri }
+        width: { type: integer, nullable: true }
+        height: { type: integer, nullable: true }
+        alt: { type: string, nullable: true }
+        caption: { type: string, nullable: true }
+    NewsItem:
+      type: object
+      required: [id, title, date, updatedAt]
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        date: { type: string, format: date-time, description: Veröffentlichungsdatum (`date` + `time`). }
+        updatedAt: { type: string, format: date-time, description: Aus `tstamp`. }
+        teaser:
+          type: string
+          nullable: true
+          description: Teaser als Klartext, Entities dekodiert.
+        image:
+          allOf:
+            - $ref: '#/components/schemas/Image'
+          nullable: true
+        categories:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              title: { type: string }
+              alias: { type: string }
+        featured: { type: boolean }
+        webUrl:
+          type: string
+          format: uri
+          description: Kanonische Adresse auf steelers.de (Teilen-Funktion).
+        gameId:
+          type: integer
+          nullable: true
+          description: Verknüpftes Spiel (`tl_news.game_id`).
+        video:
+          type: object
+          nullable: true
+          description: Nur bei Videoportal-Einträgen.
+          properties:
+            url: { type: string, format: uri }
+    Team:
+      type: object
+      required: [id, name]
+      properties:
+        id: { type: integer, description: '`tilastotid` des Teams (rundenübergreifend gleich, nicht die Datenbank-ID).' }
+        name: { type: string }
+        shortName: { type: string, nullable: true }
+        city: { type: string, nullable: true }
+        logo:
+          allOf:
+            - $ref: '#/components/schemas/Image'
+          nullable: true
+    Game:
+      type: object
+      required: [id, round, home, away, startsAt, status]
+      properties:
+        id: { type: integer }
+        round: { type: integer }
+        gameday: { type: integer, nullable: true, description: Spieltag }
+        startsAt:
+          type: string
+          format: date-time
+          description: Aus `gamedate` + `gametime`.
+        location: { type: string, nullable: true }
+        spectators: { type: integer, nullable: true }
+        home: { $ref: '#/components/schemas/Team' }
+        away: { $ref: '#/components/schemas/Team' }
+        homeScore: { type: integer, nullable: true }
+        awayScore: { type: integer, nullable: true }
+        periodScores:
+          type: array
+          description: Drittelergebnisse, z. B. `["1:0","2:2","0:1"]`.
+          items: { type: string, pattern: '^\d+:\d+$' }
+        resultType:
+          type: string
+          nullable: true
+          enum: [regulation, overtime, shootout, awarded]
+          description: '`awarded` = Spielwertung. Nur gesetzt, wenn ein Ergebnis vorliegt.'
+        status:
+          type: string
+          enum: [upcoming, live, finished]
+          description: |
+            `finished`, sobald der Import das Spiel als beendet markiert hat. Ohne dieses Flag gilt ein
+            Spiel bis vier Stunden nach Beginn als `live`, danach als `finished` (wenn ein Ergebnis
+            vorliegt).
+        optional: { type: boolean, description: Optionales Spiel (z. B. Playoff-Serie). }
+        tickets:
+          type: object
+          nullable: true
+          properties:
+            eventimUrl: { type: string, format: uri, nullable: true }
+            magentaUrl: { type: string, format: uri, nullable: true }
+    StandingsRow:
+      type: object
+      required: [rank, team, games, points]
+      properties:
+        rank: { type: integer }
+        team: { $ref: '#/components/schemas/Team' }
+        games: { type: integer }
+        regulationWins: { type: integer }
+        overtimeWins: { type: integer }
+        penaltyWins: { type: integer }
+        penaltyLosses: { type: integer }
+        overtimeLosses: { type: integer }
+        regulationLosses: { type: integer }
+        goalsFor: { type: integer }
+        goalsAgainst: { type: integer }
+        goalDifference: { type: integer }
+        penalties: { type: integer, nullable: true, description: Strafminuten }
+        points: { type: integer }
+    Player:
+      type: object
+      required: [id, firstname, lastname]
+      properties:
+        id: { type: integer }
+        alias: { type: string }
+        jersey: { type: integer, nullable: true }
+        firstname: { type: string }
+        lastname: { type: string }
+        position: { type: string, nullable: true }
+        nationality: { type: string, nullable: true }
+        shoots: { type: string, nullable: true, description: Schusshand }
+        birthplace: { type: string, nullable: true }
+        birthday: { type: string, format: date, nullable: true }
+        height: { type: integer, nullable: true, description: cm }
+        weight: { type: integer, nullable: true, description: kg }
+        steelersSince: { type: string, nullable: true }
+        about:
+          type: string
+          nullable: true
+          description: Freitext, auf einfaches HTML (`p, strong, em, a, ul, ol, li, br`) reduziert.
+        pictures:
+          type: array
+          description: In der in Contao gepflegten Reihenfolge.
+          items: { $ref: '#/components/schemas/Image' }
+    Partner:
+      type: object
+      required: [id, name]
+      properties:
+        id: { type: integer }
+        name: { type: string, description: '`displayname`, sonst `name`.' }
+        categories:
+          type: array
+          items: { $ref: '#/components/schemas/KeyLabel' }
+        branches:
+          type: array
+          items: { $ref: '#/components/schemas/KeyLabel' }
+        url: { type: string, format: uri, nullable: true }
+        teaser: { type: string, nullable: true }
+        description: { type: string, nullable: true }
+        logo:
+          allOf:
+            - $ref: '#/components/schemas/Image'
+          nullable: true
+        photo:
+          allOf:
+            - $ref: '#/components/schemas/Image'
+          nullable: true
+    KeyLabel:
+      type: object
+      required: [key, label]
+      properties:
+        key: { type: string, example: platin }
+        label: { type: string, example: Platinpartner }
+    PageSummary:
+      type: object
+      required: [id, title]
+      properties:
+        id: { type: integer, description: Artikel-ID }
+        title: { type: string, description: '`appTitle`, sonst Artikeltitel.' }
+        sort: { type: integer }
+        updatedAt: { type: string, format: date-time }
+        webUrl: { type: string, format: uri }
+    Page:
+      allOf:
+        - $ref: '#/components/schemas/PageSummary'
+        - type: object
+          required: [blocks]
+          properties:
+            blocks:
+              type: array
+              items: { $ref: '#/components/schemas/Block' }
+            fallbackUrl:
+              type: string
+              format: uri
+              nullable: true
+              description: Gesetzt, wenn der Artikel als Ganzes im Browser geöffnet werden soll.
+    Block:
+      description: |
+        Strukturierter Inhaltsblock. Die App rendert je `type` eine eigene Flutter-Komponente und ignoriert
+        unbekannte Typen. Weitere Typen können ohne API-Versionssprung hinzukommen.
+      oneOf:
+        - $ref: '#/components/schemas/HeadlineBlock'
+        - $ref: '#/components/schemas/TextBlock'
+        - $ref: '#/components/schemas/ImageBlock'
+        - $ref: '#/components/schemas/ListBlock'
+        - $ref: '#/components/schemas/ButtonBlock'
+        - $ref: '#/components/schemas/DownloadBlock'
+        - $ref: '#/components/schemas/VideoBlock'
+      discriminator:
+        propertyName: type
+        mapping:
+          headline: '#/components/schemas/HeadlineBlock'
+          text: '#/components/schemas/TextBlock'
+          image: '#/components/schemas/ImageBlock'
+          list: '#/components/schemas/ListBlock'
+          button: '#/components/schemas/ButtonBlock'
+          download: '#/components/schemas/DownloadBlock'
+          video: '#/components/schemas/VideoBlock'
+    HeadlineBlock:
+      type: object
+      required: [type, text]
+      properties:
+        type: { type: string, enum: [headline] }
+        text: { type: string }
+        level: { type: integer, minimum: 1, maximum: 6, default: 2 }
+    TextBlock:
+      type: object
+      required: [type, html]
+      properties:
+        type: { type: string, enum: [text] }
+        html:
+          type: string
+          description: Per HTML-Sanitizer auf `p, strong, em, a, ul, ol, li, br` reduziert.
+    ImageBlock:
+      type: object
+      required: [type, image]
+      properties:
+        type: { type: string, enum: [image] }
+        image: { $ref: '#/components/schemas/Image' }
+        linkUrl: { type: string, format: uri, nullable: true }
+    ListBlock:
+      type: object
+      required: [type, items]
+      properties:
+        type: { type: string, enum: [list] }
+        ordered: { type: boolean, default: false }
+        items:
+          type: array
+          items: { type: string }
+    ButtonBlock:
+      type: object
+      required: [type, label, url]
+      properties:
+        type: { type: string, enum: [button] }
+        label: { type: string }
+        url: { type: string, format: uri }
+        external: { type: boolean, description: true = im Browser öffnen. }
+    DownloadBlock:
+      type: object
+      required: [type, label, url]
+      properties:
+        type: { type: string, enum: [download] }
+        label: { type: string }
+        url: { type: string, format: uri }
+        mimeType: { type: string, nullable: true }
+        size: { type: integer, nullable: true, description: Bytes }
+    VideoBlock:
+      type: object
+      required: [type, provider, id]
+      properties:
+        type: { type: string, enum: [video] }
+        provider: { type: string, enum: [youtube, vimeo, file] }
+        id: { type: string, description: Video-ID bzw. bei `file` die absolute URL. }
+        title: { type: string, nullable: true }
+    DeviceRegistration:
+      type: object
+      required: [token, platform]
+      properties:
+        token:
+          type: string
+          description: FCM-Registrierungstoken.
+          maxLength: 4096
+        platform:
+          type: string
+          enum: [ios, android]
+        topics:
+          type: array
+          description: Gewünschte Benachrichtigungs-Kanäle. Weggelassen = alle.
+          items:
+            type: string
+            enum: [news, games, results]
+          uniqueItems: true
+        appVersion: { type: string, example: 1.0.3 }
+        locale: { type: string, example: de-DE }
