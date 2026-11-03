@@ -1,0 +1,42 @@
+{# Slim teaser for the next home game, same look as the big ticket banner (next_home_game.html.twig) #}
+{% set game = next_home_game() %}
+{% if game %}
+  <a href="/ticketshop" class="group relative z-10 block bg-steelgreen text-white no-underline hover:no-underline">
+    <div class="absolute inset-0 bg-gradient-to-r from-steelgreen via-steelgreen/85 to-steelgreen/30" aria-hidden="true"></div>
+    <div class="defaultcontainer relative">
+      <div class="flex flex-col items-center gap-3 py-3 lg:flex-row lg:justify-between lg:gap-6 lg:py-4">
+
+        <p class="inline-flex shrink-0 -skew-x-12 items-stretch font-headline text-base uppercase tracking-wider shadow-lg xl:text-xl">
+          <span class="inline-flex items-center gap-2 bg-steelblue px-4 py-1.5">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75"></span>
+              <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-white"></span>
+            </span>
+            Nächstes Heimspiel
+          </span>
+          <span class="inline-flex items-center bg-white px-4 py-1.5 text-steelgreen">{{ game.when }}</span>
+        </p>
+
+        <div class="flex flex-col items-center gap-2">
+          <div class="flex items-center gap-4 xl:gap-6">
+            {% if game.homeLogo %}<img src="{{ game.homeLogo }}" alt="{{ game.home }}" class="h-10 w-auto xl:h-12" loading="lazy">{% endif %}
+            <time datetime="{{ game.datetime }}" class="text-center font-headline uppercase leading-none">
+              <span class="block whitespace-nowrap text-xl xl:text-3xl">{{ game.weekday }}, {{ game.day }} {{ game.month }}</span>
+              <span class="mt-1 block text-lg xl:text-2xl">{{ game.time }} <span class="text-sm xl:text-lg">Uhr</span></span>
+            </time>
+            {% if game.logo %}<img src="{{ game.logo }}" alt="{{ game.opponent }}" class="h-10 w-auto xl:h-12" loading="lazy">{% endif %}
+          </div>
+          {# Event of the game (Ladies-Night, After-Work Hockey, ...): same pill and colour class as in the schedule. A span, because the whole stripe is already a link #}
+          {% if game.eventTitle %}
+            <span class="btn-default btn-blue !py-1 text-sm {{ game.cssClass }}">{{ game.eventTitle }}</span>
+          {% endif %}
+        </div>
+
+        <span class="inline-flex shrink-0 items-center gap-2 bg-white px-5 py-2 text-base font-bold uppercase text-steelgreen transition-colors group-hover:bg-steelblue group-hover:text-white xl:text-lg">
+          Tickets sichern
+          <svg class="h-5 w-5 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </span>
+      </div>
+    </div>
+  </a>
+{% endif %}
