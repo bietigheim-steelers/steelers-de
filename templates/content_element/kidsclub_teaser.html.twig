@@ -1,0 +1,49 @@
+{% extends '@Contao/content_element/_base.html.twig' %}
+{% use '@Contao/component/_headline.html.twig' %}
+{% use '@Contao/component/_rich_text.html.twig' %}
+{% use '@Contao/component/_picture.html.twig' %}
+
+{% set attributes = attrs().addClass('relative mt-16 mb-24 md:mt-28 md:mb-28') %}
+
+{% block inner %}
+    {% set image = data.singleSRC ? figure(data.singleSRC, [720, 720, 'proportional'], {metadata: {alt: data.alt|default('Ella, das Steelers-Maskottchen')}}) : null %}
+
+    <div class="relative bg-steelgreen text-white">
+        <span aria-hidden="true" class="pointer-events-none absolute left-4 -top-6 md:left-10 md:-top-10 select-none text-[6rem] md:text-[10rem] font-black italic leading-none text-transparent [-webkit-text-stroke:2px_rgba(255,255,255,0.28)]">KIDS</span>
+
+        <div class="defaultcontainer relative grid grid-cols-1 md:grid-cols-2 items-center gap-6 py-12 md:py-14 pb-64 md:pb-14">
+            <div class="relative z-10">
+                {% if headline.text|default %}
+                    {% with {headline: {
+                        text: headline.text,
+                        tag_name: headline.tag_name|default('h2'),
+                        attributes: attrs(headline.attributes|default).addClass('text-3xl md:text-4xl xl:text-5xl font-black italic uppercase leading-none text-white mb-4')
+                    }} %}
+                        {{ block('headline_component') }}
+                    {% endwith %}
+                {% endif %}
+
+                {% if text|default %}
+                    {% with {text, attributes: attrs().addClass('mb-6 max-w-md text-lg leading-snug text-white')} %}
+                        {{ block('rich_text_component') }}
+                    {% endwith %}
+                {% endif %}
+
+                {% if href|default and link_label|default %}
+                    <a href="{{ href }}" class="inline-block rounded-full bg-white px-7 py-3.5 font-black uppercase tracking-wide text-steelgreen no-underline hover:bg-steelwhite">{{ link_label }}</a>
+                {% endif %}
+            </div>
+
+            {% if image %}
+                <div class="relative self-stretch">
+                    {% if badge|default %}
+                        <span class="absolute right-0 md:right-6 -top-10 md:-top-20 z-20 flex h-24 w-24 rotate-12 items-center justify-center rounded-full border-[3px] border-white bg-steelblue p-2 text-center text-sm font-black uppercase leading-tight text-white">{{ badge }}</span>
+                    {% endif %}
+                    <div class="absolute left-1/2 -translate-x-1/2 md:left-auto md:right-6 md:translate-x-0 bottom-[-17rem] md:-bottom-24 z-10 w-72 md:w-[22rem] xl:w-[26rem] [&_img]:w-full [&_img]:h-auto">
+                        {% with {figure: image} %}{{ block('picture_component') }}{% endwith %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

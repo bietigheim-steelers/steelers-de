@@ -308,6 +308,20 @@ $GLOBALS['TL_DCA']['tl_content']['fields']['teamMembers'] = array(
 
 $GLOBALS['TL_DCA']['tl_content']['palettes']['business_team'] = '{type_legend},type,headline;{text_legend},text;{team_legend},businessLabel,teamMembers;{template_legend:hide},customTpl;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
 
+/*
+ * Kids-Club-Teaser (Startseite). Link und Linktext nutzen die Standardfelder url/linkTitle,
+ * Bild und Alt-Text singleSRC/alt.
+ */
+$GLOBALS['TL_DCA']['tl_content']['fields']['kidsBadge'] = array(
+	'label'     => &$GLOBALS['TL_LANG']['tl_content']['kidsBadge'],
+	'exclude'   => true,
+	'inputType' => 'text',
+	'eval'      => array('maxlength' => 32, 'tl_class' => 'w50'),
+	'sql'       => "varchar(32) NOT NULL default ''",
+);
+
+$GLOBALS['TL_DCA']['tl_content']['palettes']['kidsclub_teaser'] = '{type_legend},type,headline;{text_legend},text,kidsBadge;{source_legend},singleSRC,alt;{link_legend},url,linkTitle;{template_legend:hide},customTpl;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
+
 $GLOBALS['TL_DCA']['tl_content']['palettes']['footer_cta'] = '{type_legend},type,headline;{text_legend},text;{link_legend},footerButtons;{template_legend:hide},customTpl;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['footer_about'] = '{type_legend},type;{text_legend},text;{form_legend},footerForm;{template_legend:hide},customTpl;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';
 $GLOBALS['TL_DCA']['tl_content']['palettes']['footer_linklist'] = '{type_legend},type,headline;{link_legend},footerLinks;{template_legend:hide},customTpl;{expert_legend:hide},cssID;{invisible_legend:hide},invisible,start,stop';

@@ -3,6 +3,9 @@
 $GLOBALS['TL_LANG']['CTE']['wrapper_block_start_element'] = array('Block Start', 'Beginn eines neuen Blocks.');
 $GLOBALS['TL_LANG']['CTE']['wrapper_block_end_element'] = array('Block Ende', 'Abschluss eines Blocks.');
 
+$GLOBALS['TL_LANG']['CTE']['kidsclub_teaser'] = array('Kids-Club-Teaser', 'Gruenes Band mit Ueberschrift, Text, Button und Ella (Startseite).');
+$GLOBALS['TL_LANG']['tl_content']['kidsBadge'] = array('Stempel-Text', 'Kurzer Text im blauen Stempel am Maskottchen, z. B. "0-14 Jahre". Leer lassen, um ihn auszublenden.');
+
 /*
  * Footer-Elemente des Business-Themes
  */
