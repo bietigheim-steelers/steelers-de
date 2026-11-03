@@ -248,6 +248,8 @@ class AppExtension extends AbstractExtension
         'home'     => $home['name'] ?? '',
         'homeLogo' => (is_string($homeLogo) && str_starts_with($homeLogo, '/')) ? $homeLogo : null,
         'logo'     => (is_string($logo) && str_starts_with($logo, '/')) ? $logo : null,
+        'eventTitle' => trim((string) $game->eventTitle),
+        'cssClass'   => trim((string) $game->cssClass),
         'when'     => match (true) {
           $days <= 0 => 'Heute',
           $days === 1 => 'Morgen',
