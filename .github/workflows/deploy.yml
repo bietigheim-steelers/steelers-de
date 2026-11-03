@@ -31,9 +31,22 @@ jobs:
       - run: cd assets && npm ci
       - run: cd assets && npm run build
 
+      # Deployer comes from Packagist instead of deployer.org (deployphp/action
+      # downloads the phar from there, which makes the pipeline fragile).
+      - name: 📦 Install Deployer
+        run: |
+          composer global require --no-interaction deployer/deployer:7.5.12
+          echo "$(composer global config bin-dir --absolute)" >> "$GITHUB_PATH"
+
+      - name: 🔑 Setup SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H web01.steelers.de >> ~/.ssh/known_hosts
+
       - name: 🚀 Deploy to prod
-        uses: deployphp/action@v1
-        with:
-          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          dep: deploy stage=prod
-          deployer-version: "7.5.12"
+        run: dep deploy stage=prod
