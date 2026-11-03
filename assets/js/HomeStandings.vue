@@ -19,7 +19,7 @@
             </tr>
             <tr
               :class="[
-                row.tilastotid === myTeam ? 'text-steelgreen font-bold' : '',
+                String(row.tilastotid) === String(myTeam) ?'text-steelgreen font-bold' : '',
               ]"
             >
               <td class="text-center py-2 pr-2">{{ row.rank }}</td>
