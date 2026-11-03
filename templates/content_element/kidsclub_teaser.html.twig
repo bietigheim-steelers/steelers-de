@@ -2,39 +2,41 @@
 {% use '@Contao/component/_rich_text.html.twig' %}
 {% use '@Contao/component/_picture.html.twig' %}
 
-{% set attributes = attrs().addClass('mt-32 mb-28 md:mb-16 xl:mt-52') %}
+{# Aufbau wie mod_newslist_home_scroller_blue: Block-Ueberschrift ueber dem gruenen Band #}
+{% set attributes = attrs().addClass('relative z-10 mt-32 xl:mt-52 mb-24 md:mb-16') %}
 
 {% block inner %}
     {% set image = data.singleSRC ? figure(data.singleSRC, [720, 720, 'proportional'], {metadata: {alt: data.alt|default('Ella, das Steelers-Maskottchen')}}) : null %}
 
-    <div class="max-w-screen-2xl mx-auto relative mt-24">
-        {% if headline.text|default %}
-            <h2 class="block-headline headline--small z-40 -mb-16 md:mb-0">{{ headline.text }}</h2>
-        {% endif %}
+    <div class="max-w-screen-2xl mx-auto relative mt-24 lg:mt-defaultbig -mb-16 md:mb-0">
+        <h2 class="block-headline headline--small z-40">Kids</h2>
     </div>
+    <div class="absolute overflow-hidden -z-10 w-screen top-0 bottom-0 bg-steelgreen" style="max-width: 100%;"></div>
 
-    <div class="bg-steelgreen text-white -mt-16 md:-mt-16">
-        <div class="max-w-screen-2xl mx-auto relative px-2 pt-24 pb-10 md:pb-12 md:min-h-[26rem]">
-            <div class="relative z-10 md:w-1/2 lg:w-3/5">
-                {% if text|default %}
-                    {% with {text, attributes: attrs().addClass('mb-6 max-w-xl text-lg font-bold leading-snug text-white')} %}
-                        {{ block('rich_text_component') }}
-                    {% endwith %}
-                {% endif %}
+    <div class="max-w-screen-2xl mx-auto relative px-2 -mt-14 pb-10 md:pb-16 md:min-h-[20rem]">
+        <div class="md:w-1/2">
+            {% if headline.text|default %}
+                <h3 class="text-3xl lg:text-4xl xl:text-5xl uppercase font-bold font-sans text-white leading-none">{{ headline.text }}</h3>
+            {% endif %}
 
-                {% if href|default and link_label|default %}
-                    <a href="{{ href }}" class="inline-block bg-white px-6 py-3 font-bold uppercase tracking-wide text-steelgreen no-underline hover:bg-steelwhite">{{ link_label }}</a>
-                {% endif %}
-            </div>
+            {% if text|default %}
+                {% with {text, attributes: attrs().addClass('mt-4 text-lg font-bold leading-[1.4rem] text-white')} %}
+                    {{ block('rich_text_component') }}
+                {% endwith %}
+            {% endif %}
 
-            {% if image %}
-                <div class="relative mx-auto mt-8 -mb-20 w-64 md:absolute md:bottom-0 md:right-2 md:mt-0 md:mb-0 md:mx-0 md:w-96 lg:w-[30rem] xl:w-[34rem] [&_picture]:block [&_img]:h-auto [&_img]:w-full">
-                    {% if badge|default %}
-                        <span class="absolute -left-4 top-0 z-20 flex h-24 w-24 -rotate-12 items-center justify-center rounded-full border-[3px] border-white bg-steelblue p-2 text-center text-sm font-black uppercase leading-tight text-white">{{ badge }}</span>
-                    {% endif %}
-                    {% with {figure: image} %}{{ block('picture_component') }}{% endwith %}
-                </div>
+            {% if href|default and link_label|default %}
+                <p class="mt-6"><a href="{{ href }}" class="btn-default btn-blue">{{ link_label }}</a></p>
             {% endif %}
         </div>
+
+        {% if image %}
+            <div class="relative mx-auto mt-8 -mb-20 h-64 w-fit md:absolute md:bottom-[-3rem] md:right-2 md:mx-0 md:mt-0 md:mb-0 md:h-[26rem] lg:h-[38rem] [&_picture]:block [&_picture]:h-full [&_img]:h-full [&_img]:w-auto">
+                {% if badge|default %}
+                    <span class="absolute left-2 top-1/3 z-20 flex h-24 w-24 -rotate-12 items-center justify-center rounded-full border-[3px] border-white bg-steelblue p-2 text-center text-sm font-black uppercase leading-tight text-white">{{ badge }}</span>
+                {% endif %}
+                {% with {figure: image} %}{{ block('picture_component') }}{% endwith %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
