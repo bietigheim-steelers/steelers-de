@@ -669,11 +669,18 @@ components:
           description: Schlüssel aus dem Icon-Satz der App; unbekannte Schlüssel zeigt die App ohne Icon.
         type:
           type: string
-          enum: [screen, native, link]
+          enum: [screen, native, link, group]
           description: |
             `screen` = Screen aus `/app/screens/{key}`, `native` = fest in der App eingebaute Funktion
-            (z. B. Einstellungen), `link` = externe Seite (`url`).
+            (z. B. Einstellungen), `link` = externe Seite (`url`), `group` = aufklappbare Gruppe mit
+            Untereinträgen in `children` (Akkordeon im Menü). Ältere App-Versionen blenden unbekannte Typen aus.
         url: { type: string, format: uri, nullable: true }
+        children:
+          type: array
+          description: |
+            Nur bei `type: group`. Untereinträge (zweite Ebene) in Reihenfolge. Gruppen sind nur in `menu`
+            erlaubt (nicht in `tabs`) und dürfen nicht verschachtelt werden; die App ignoriert beides.
+          items: { $ref: '#/components/schemas/NavItem' }
     Screen:
       type: object
       required: [key, title, blocks, updatedAt]

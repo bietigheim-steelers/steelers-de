@@ -123,7 +123,10 @@ Testversionen auf `dev` zeigen.
       { "key": "news",  "title": "News",  "icon": "news", "type": "screen", "url": null }
     ],
     "menu": [
-      { "key": "info",     "title": "Info & Anfahrt", "icon": "info",     "type": "screen",   "url": null },
+      { "key": "club", "title": "Verein", "icon": "info", "type": "group", "url": null, "children": [
+        { "key": "history", "title": "Geschichte",     "icon": null,   "type": "screen", "url": null },
+        { "key": "info",    "title": "Info & Anfahrt", "icon": "info", "type": "screen", "url": null }
+      ] },
       { "key": "settings", "title": "Einstellungen",  "icon": "settings", "type": "native",   "url": null },
       { "key": "shop",     "title": "Fanshop",        "icon": "cart",     "type": "link",     "url": "https://www.steelers.de" }
     ],
@@ -134,13 +137,29 @@ Testversionen auf `dev` zeigen.
 
 - **`tabs`** – untere Navigationsleiste in der gelieferten Reihenfolge. Empfehlung: höchstens 5 Einträge;
   zeigt der Server mehr, die ersten 4 als Tabs und den Rest unter „Mehr“.
-- **`menu`** – weitere Einträge (Bereich „Mehr“ bzw. Seitenmenü), ebenfalls in Reihenfolge.
+- **`menu`** – weitere Einträge (Bereich „Mehr“ bzw. Seitenmenü), ebenfalls in Reihenfolge. Einträge
+  vom Typ `group` bilden eine zweite Ebene (siehe unten).
 - **`home`** – Schlüssel des Screens, der beim Start erscheint. Ist es kein Tab, trotzdem öffnen.
 - **`type` eines Eintrags**
   - `screen` → Inhalt kommt von `GET /app/screens/{key}`.
   - `native` → fest in der App eingebaute Funktion (z. B. `settings`). Die App hat eine kleine Tabelle
     „bekannte native Schlüssel → Seite“. **Unbekannter nativer Schlüssel → Eintrag nicht anzeigen.**
   - `link` → externe Seite `url` im In-App-Browser (`url_launcher`/Custom Tab) öffnen.
+  - `group` → Gruppe mit Untereinträgen in `children`. Die Gruppe selbst öffnet nichts, sondern klappt im
+    Menü als Akkordeon auf und zu. Regeln:
+    - Nur **eine** Untereben: Gruppen in `children` werden ignoriert.
+    - Nur im **`menu`** erlaubt; in `tabs` wird eine Gruppe ignoriert (ein Tab muss direkt etwas öffnen).
+    - `children` enthält normale Einträge (`screen`, `native`, `link`) mit denselben Feldern; deren Schlüssel
+      sind global eindeutig und per `app://screen/{key}` und als `home` erreichbar.
+    - Eine Gruppe ohne darstellbare Kinder (leer oder nur Unbekanntes) wird nicht angezeigt.
+    - Die Gruppe startet aufgeklappt, wenn eines ihrer Kinder gerade aktiv ist; sonst zugeklappt.
+    - `url` ist bei Gruppen `null`; `icon` ist optional, Kinder dürfen eigene Icons haben.
+    - Pflege im Backend (App › Screens): Eintrag mit Art „Gruppe“ anlegen (liegt immer im Menü), bei den
+      Untereinträgen im Feld „Gruppe“ die Gruppe wählen. Die Zuordnung gilt unabhängig von der Platzierung.
+      Ist die Gruppe unveröffentlicht oder für die App-Version/Plattform ausgeblendet, entfallen auch ihre
+      Kinder; eine Gruppe ohne Kinder wird nicht ausgeliefert. Für Gruppen gibt es keinen `/app/screens/{key}`.
+    - Ältere App-Versionen kennen `group` nicht und blenden die Gruppe samt Kindern aus – bei Bedarf
+      über die `appVersion`-Sichtbarkeit im Backend steuern.
 - **`icon`** – Schlüssel aus dem Icon-Satz der App (Zuordnung `String → IconData`). Unbekannt oder `null` →
   Standard-Icon bzw. gar keins. Die Liste der Schlüssel legt das App-Projekt fest und sollte dem Redakteur
   mitgeteilt werden (z. B. in dieser Datei ergänzen).

@@ -14,7 +14,8 @@ use Contao\Model;
  * @property string $title
  * @property string $icon
  * @property string $placement  tab|menu|hidden
- * @property string $kind       screen|native|link
+ * @property string $kind       screen|native|link|group
+ * @property string $parentKey  Schlüssel der Gruppe (kind=group), der der Eintrag zugeordnet ist; '' = keine
  * @property string $url
  * @property bool   $isHome
  * @property bool   $published

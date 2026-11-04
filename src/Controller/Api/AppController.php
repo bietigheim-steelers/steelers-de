@@ -40,6 +40,8 @@ class AppController extends AbstractApiController
 
         $tabs = [];
         $menu = [];
+        $children = []; // Gruppenschlüssel => Untereinträge
+        $groupIndex = []; // Gruppenschlüssel => Position in $menu
         $home = null;
         $firstScreen = null;
         $revision = 0;
@@ -69,12 +71,36 @@ class AppController extends AbstractApiController
                 }
             }
 
+            // Eintrag mit Gruppe: gehört in deren Untermenü, unabhängig von der Platzierung.
+            $parentKey = $screen->kind === 'group' ? '' : (string) $screen->parentKey;
+            if ($parentKey !== '') {
+                $children[$parentKey][] = $item;
+                continue;
+            }
+
+            if ($screen->kind === 'group') {
+                // Gruppen gibt es nur im Menü (ein Tab muss direkt etwas öffnen).
+                $groupIndex[$item['key']] = \count($menu);
+                $menu[] = $item;
+                continue;
+            }
+
             match ($screen->placement) {
                 'tab' => $tabs[] = $item,
                 'menu' => $menu[] = $item,
                 default => null,
             };
         }
+
+        // Kinder an ihre Gruppen hängen. Kinder unsichtbarer oder fehlender Gruppen entfallen,
+        // Gruppen ohne Kinder werden nicht ausgeliefert.
+        foreach ($groupIndex as $key => $position) {
+            $menu[$position]['children'] = $children[$key] ?? [];
+        }
+        $menu = array_values(array_filter(
+            $menu,
+            static fn (array $i): bool => $i['type'] !== 'group' || $i['children'] !== [],
+        ));
 
         if ($home === null) {
             $home = $this->firstTabScreen($tabs) ?? $firstScreen ?? '';
@@ -161,7 +187,7 @@ class AppController extends AbstractApiController
             'key' => (string) $screen->screenKey,
             'title' => $this->format->text($screen->title) ?? '',
             'icon' => $this->format->text($screen->icon),
-            'type' => \in_array($screen->kind, ['native', 'link'], true) ? $screen->kind : 'screen',
+            'type' => \in_array($screen->kind, ['native', 'link', 'group'], true) ? $screen->kind : 'screen',
             'url' => $url,
         ];
     }

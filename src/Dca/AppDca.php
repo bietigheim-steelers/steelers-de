@@ -2,6 +2,7 @@
 
 namespace App\Dca;
 
+use App\Model\AppScreen;
 use Contao\ArticleModel;
 use Contao\DataContainer;
 use Contao\Date;
@@ -74,19 +75,39 @@ class AppDca
     }
 
     /**
+     * Gruppen (kind=group) als Auswahl für das Feld "Gruppe": Schlüssel => Titel.
+     *
+     * @return array<string, string>
+     */
+    public function groupOptions(): array
+    {
+        $options = [];
+
+        foreach (AppScreen::findBy(["kind='group'"], [], ['order' => 'sortOrder ASC, id ASC']) ?? [] as $group) {
+            $options[$group->screenKey] = $group->title . ' (' . $group->screenKey . ')';
+        }
+
+        return $options;
+    }
+
+    /**
      * Zeile in der Screen-Liste: Titel, Schlüssel, Platzierung und Sichtbarkeit.
      */
     public function screenLabel(array $row, string $label): string
     {
-        $placement = $GLOBALS['TL_LANG']['tl_app_screen']['placements'][$row['placement']] ?? $row['placement'];
+        $placements = $GLOBALS['TL_LANG']['tl_app_screen']['placements'];
+        $placement = $placements[$row['kind'] === 'group' ? 'menu' : $row['placement']] ?? $row['placement'];
         $kind = $GLOBALS['TL_LANG']['tl_app_screen']['kinds'][$row['kind']] ?? $row['kind'];
         $home = $row['isHome'] ? ' &#9733; Start' : '';
+        $parent = ($row['parentKey'] ?? '') !== '' && $row['kind'] !== 'group'
+            ? ' &rsaquo; ' . StringUtil::specialchars($row['parentKey'])
+            : '';
 
         return \sprintf(
             '%s <span class="label-info">[%s · %s · %s]%s</span>',
             StringUtil::specialchars($row['title']),
             StringUtil::specialchars($row['screenKey']),
-            $placement,
+            $placement . $parent,
             $kind,
             $home,
         ) . $this->visibilityHint($row);

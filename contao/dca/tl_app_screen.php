@@ -51,9 +51,11 @@ $GLOBALS['TL_DCA']['tl_app_screen'] = [
 
     'palettes' => [
         '__selector__' => ['kind'],
-        'default' => '{screen_legend},title,screenKey,kind,placement,icon,sortOrder,isHome;{publish_legend},published,start,stop,minAppVersion,platform',
-        'link' => '{screen_legend},title,screenKey,kind,url,placement,icon,sortOrder;{publish_legend},published,start,stop,minAppVersion,platform',
-        'native' => '{screen_legend},title,screenKey,kind,placement,icon,sortOrder;{publish_legend},published,start,stop,minAppVersion,platform',
+        'default' => '{screen_legend},title,screenKey,kind,placement,parentKey,icon,sortOrder,isHome;{publish_legend},published,start,stop,minAppVersion,platform',
+        'link' => '{screen_legend},title,screenKey,kind,url,placement,parentKey,icon,sortOrder;{publish_legend},published,start,stop,minAppVersion,platform',
+        'native' => '{screen_legend},title,screenKey,kind,placement,parentKey,icon,sortOrder;{publish_legend},published,start,stop,minAppVersion,platform',
+        // Gruppe: aufklappbarer Menüpunkt mit Untereinträgen; liegt immer im Menü.
+        'group' => '{screen_legend},title,screenKey,kind,icon,sortOrder;{publish_legend},published,start,stop,minAppVersion,platform',
     ],
 
     'fields' => [
@@ -92,10 +94,17 @@ $GLOBALS['TL_DCA']['tl_app_screen'] = [
         'kind' => [
             'filter' => true,
             'inputType' => 'select',
-            'options' => ['screen', 'native', 'link'],
+            'options' => ['screen', 'native', 'link', 'group'],
             'reference' => &$GLOBALS['TL_LANG']['tl_app_screen']['kinds'],
             'eval' => ['submitOnChange' => true, 'maxlength' => 16, 'tl_class' => 'w50'],
             'sql' => "varchar(16) NOT NULL default 'screen'",
+        ],
+        'parentKey' => [
+            'filter' => true,
+            'inputType' => 'select',
+            'options_callback' => [AppDca::class, 'groupOptions'],
+            'eval' => ['includeBlankOption' => true, 'maxlength' => 64, 'tl_class' => 'w50'],
+            'sql' => "varchar(64) NOT NULL default ''",
         ],
         'url' => [
             'inputType' => 'text',
