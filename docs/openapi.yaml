@@ -816,6 +816,7 @@ components:
         title: { type: string, nullable: true }
         status: { type: string, enum: [upcoming, finished], default: upcoming }
         limit: { type: integer, nullable: true }
+        layout: { type: string, enum: [list, slider], default: list, description: 'slider: letztes Spiel (Ergebnis), nächstes Heimspiel, nächstes weiteres Spiel; status/limit entfallen.' }
     StandingsBlock:
       type: object
       required: [type]

@@ -46,7 +46,7 @@ $GLOBALS['TL_LANG']['tl_app_block']['blockVideoId'] = ['Video-ID', 'Nur die ID, 
 $GLOBALS['TL_LANG']['tl_app_block']['blockLimit'] = ['Anzahl', 'Maximale Anzahl Einträge. 0 = Standard der App.'];
 $GLOBALS['TL_LANG']['tl_app_block']['blockCategory'] = ['News-Kategorie', 'Alias einer News-Kategorie. Leer = alle.'];
 $GLOBALS['TL_LANG']['tl_app_block']['blockPartnerCategory'] = ['Partner-Kategorie', 'Leer = alle Partner.'];
-$GLOBALS['TL_LANG']['tl_app_block']['blockLayout'] = ['Darstellung', 'News: Liste oder Karussell. Partner: Raster oder Slider. Andere Werte ignoriert der Server.'];
+$GLOBALS['TL_LANG']['tl_app_block']['blockLayout'] = ['Darstellung', 'News: Liste oder Karussell. Partner: Raster oder Slider. Spiele: Liste oder Slider (letztes Spiel, nächstes Heimspiel, nächstes weiteres Spiel; Status und Anzahl werden dann ignoriert). Andere Werte ignoriert der Server.'];
 $GLOBALS['TL_LANG']['tl_app_block']['blockStatus'] = ['Welche Spiele', ''];
 $GLOBALS['TL_LANG']['tl_app_block']['blockCompact'] = ['Kompakt', 'Nur Platz, Team und Punkte anzeigen.'];
 $GLOBALS['TL_LANG']['tl_app_block']['blockPosition'] = ['Position', 'Nur diese Position (wie im Kader gepflegt, z. B. G, D, F). Leer = alle.'];

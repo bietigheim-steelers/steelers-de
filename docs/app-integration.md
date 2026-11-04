@@ -223,7 +223,7 @@ Die App lädt die Daten selbst. Alle haben `title?` (optionale Überschrift übe
 |---|---|---|---|
 | `news_list` | `limit` (Standard 5), `category?` (Alias), `layout` (`list`\|`carousel`) | `GET /news?perPage={limit}&category={category}` | Karten mit Bild, Titel, Datum, gekürztem Teaser; Antippen → News-Detail (unten) |
 | `next_game` | – | `GET /games?status=upcoming` → **erstes** Element | große Karte: Gegner, Logos, Datum/Uhrzeit, Ort, Ticketlink (`tickets`) |
-| `games` | `status` (`upcoming`\|`finished`), `limit?` | `GET /games?status={status}` | Spielliste; bei `finished` **absteigend** sortieren (neueste zuerst), bei `upcoming` aufsteigend; `limit` in der App anwenden |
+| `games` | `status` (`upcoming`\|`finished`), `limit?`, `layout` (`list`\|`slider`) | `GET /games?status={status}` (bei `slider`: `GET /games`) | Spielliste; bei `finished` **absteigend** sortieren (neueste zuerst), bei `upcoming` aufsteigend; `limit` in der App anwenden. `layout=slider`: Startseiten-Slider mit bis zu 3 Karten – links das letzte Spiel (mit Ergebnis), Mitte das nächste Heimspiel, rechts das nächste weitere Spiel (heim oder auswärts, aber nicht das mittlere); `status`/`limit` entfallen |
 | `standings` | `compact` | `GET /standings` | Tabelle; `compact` = Platz, Team, Punkte (ggf. nur Umfeld des eigenen Teams) |
 | `roster` | `position?` | `GET /players?position={position}` | Spielerliste mit Foto/Nummer; Antippen → Spieler-Detail |
 | `partners` | `category?`, `layout` (`grid`\|`slider`) | `GET /partners?category={category}` | Logo-Raster bzw. Slider; Antippen → Partner-Detail oder `url` |
