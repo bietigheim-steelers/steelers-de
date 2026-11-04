@@ -64,7 +64,7 @@ $GLOBALS['TL_DCA']['tl_app_block'] = [
         'blockType_promo' => 'blockTitle,blockPlain,blockImage,blockLabel,blockUrl',
         'blockType_news_list' => 'blockTitle,blockLimit,blockCategory,blockLayout',
         'blockType_next_game' => 'blockTitle',
-        'blockType_games' => 'blockTitle,blockStatus,blockLimit,blockLayout',
+        'blockType_games' => 'blockTitle,blockStatus,blockLimit',
         'blockType_standings' => 'blockTitle,blockCompact',
         'blockType_roster' => 'blockTitle,blockPosition',
         'blockType_partners' => 'blockTitle,blockPartnerCategory,blockLayout',
@@ -195,7 +195,7 @@ $GLOBALS['TL_DCA']['tl_app_block'] = [
         ],
         'blockStatus' => [
             'inputType' => 'select',
-            'options' => ['upcoming', 'finished'],
+            'options' => ['upcoming', 'finished', 'slider'],
             'reference' => &$GLOBALS['TL_LANG']['tl_app_block']['statuses'],
             'eval' => ['maxlength' => 16, 'tl_class' => 'w50'],
             'sql' => "varchar(16) NOT NULL default 'upcoming'",

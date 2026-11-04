@@ -52,7 +52,7 @@ class AppBlockBuilder
                 'title' => $title,
                 'status' => $b->blockStatus === 'finished' ? 'finished' : 'upcoming',
                 'limit' => (int) $b->blockLimit > 0 ? (int) $b->blockLimit : null,
-                'layout' => $b->blockLayout === 'slider' ? 'slider' : 'list',
+                'layout' => $b->blockStatus === 'slider' ? 'slider' : 'list',
             ],
             'standings' => ['type' => 'standings', 'title' => $title, 'compact' => (bool) $b->blockCompact],
             'roster' => ['type' => 'roster', 'title' => $title, 'position' => $this->format->text($b->blockPosition)],

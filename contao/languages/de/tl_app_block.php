@@ -26,7 +26,7 @@ $GLOBALS['TL_LANG']['tl_app_block']['types'] = [
     'content_element' => 'Inhaltselement der Webseite einbinden',
 ];
 $GLOBALS['TL_LANG']['tl_app_block']['layouts'] = ['list' => 'Liste', 'carousel' => 'Karussell', 'grid' => 'Raster', 'slider' => 'Slider'];
-$GLOBALS['TL_LANG']['tl_app_block']['statuses'] = ['upcoming' => 'Kommende Spiele', 'finished' => 'Beendete Spiele'];
+$GLOBALS['TL_LANG']['tl_app_block']['statuses'] = ['upcoming' => 'Kommende Spiele', 'finished' => 'Beendete Spiele', 'slider' => 'Slider (letztes Spiel, nächstes Heimspiel, nächstes weiteres Spiel)'];
 
 $GLOBALS['TL_LANG']['tl_app_block']['blockType'] = ['Typ', 'Inhalts-Bausteine bringen ihren Inhalt mit. Daten-Bausteine (News-Liste bis Partner) werden von der App selbst mit Daten gefüllt; hier steht nur die Konfiguration. Artikel/Inhaltselement binden vorhandene Webseiten-Inhalte ein (Text, Bild, Liste, Link, Download, YouTube/Vimeo; alles andere entfällt).'];
 $GLOBALS['TL_LANG']['tl_app_block']['blockTitle'] = ['Titel / Text', 'Bei „Überschrift“ der Text der Überschrift, sonst die optionale Überschrift über dem Baustein.'];
@@ -46,7 +46,7 @@ $GLOBALS['TL_LANG']['tl_app_block']['blockVideoId'] = ['Video-ID', 'Nur die ID, 
 $GLOBALS['TL_LANG']['tl_app_block']['blockLimit'] = ['Anzahl', 'Maximale Anzahl Einträge. 0 = Standard der App.'];
 $GLOBALS['TL_LANG']['tl_app_block']['blockCategory'] = ['News-Kategorie', 'Alias einer News-Kategorie. Leer = alle.'];
 $GLOBALS['TL_LANG']['tl_app_block']['blockPartnerCategory'] = ['Partner-Kategorie', 'Leer = alle Partner.'];
-$GLOBALS['TL_LANG']['tl_app_block']['blockLayout'] = ['Darstellung', 'News: Liste oder Karussell. Partner: Raster oder Slider. Spiele: Liste oder Slider (letztes Spiel, nächstes Heimspiel, nächstes weiteres Spiel; Status und Anzahl werden dann ignoriert). Andere Werte ignoriert der Server.'];
+$GLOBALS['TL_LANG']['tl_app_block']['blockLayout'] = ['Darstellung', 'News: Liste oder Karussell. Partner: Raster oder Slider. Andere Werte ignoriert der Server.'];
 $GLOBALS['TL_LANG']['tl_app_block']['blockStatus'] = ['Welche Spiele', ''];
 $GLOBALS['TL_LANG']['tl_app_block']['blockCompact'] = ['Kompakt', 'Nur Platz, Team und Punkte anzeigen.'];
 $GLOBALS['TL_LANG']['tl_app_block']['blockPosition'] = ['Position', 'Nur diese Position (wie im Kader gepflegt, z. B. G, D, F). Leer = alle.'];
