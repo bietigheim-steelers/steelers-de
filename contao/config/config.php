@@ -12,6 +12,9 @@ use App\Model\Camps;
 use App\Model\SeasonTicket;
 use App\Model\Seats;
 use App\Model\SponsorsEvent;
+use App\Model\AppScreen;
+use App\Model\AppBlock;
+use App\Model\AppFlag;
 
 /* Backend Module */
 
@@ -40,6 +43,16 @@ $GLOBALS['BE_MOD']['content']['tilastot_season_ticket'] = array('tables' => arra
 $GLOBALS['BE_MOD']['content']['sponsors_events'] = array('tables' => array('tl_sponsors_event'));
 $GLOBALS['BE_MOD']['content']['auction_bids'] = array('tables' => array('steelers_auktion'));
 
+/* App: Aufbau und Inhalte der mobilen App (API: /api/v1/app/*, Vertrag docs/openapi.yaml) */
+$GLOBALS['BE_MOD']['app'] = array(
+	'app_screens' => array(
+		'tables' => array('tl_app_screen', 'tl_app_block')
+	),
+	'app_flags' => array(
+		'tables' => array('tl_app_flag')
+	),
+);
+
 /*
  * "Content-Import"-Icon neben jedem Artikel im Artikelbaum einer Seite
  * (tl_article, key=content_import), siehe contao/dca/tl_article.php. Läuft
@@ -60,6 +73,9 @@ $GLOBALS['TL_MODELS']['tl_tilastot_camps'] = Camps::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_seats'] = Seats::class;
 $GLOBALS['TL_MODELS']['tl_tilastot_season_ticket'] = SeasonTicket::class;
 $GLOBALS['TL_MODELS']['tl_sponsors_event'] = SponsorsEvent::class;
+$GLOBALS['TL_MODELS']['tl_app_screen'] = AppScreen::class;
+$GLOBALS['TL_MODELS']['tl_app_block'] = AppBlock::class;
+$GLOBALS['TL_MODELS']['tl_app_flag'] = AppFlag::class;
 
 /* Wrapper */
 $GLOBALS['TL_WRAPPERS']['start'][] = 'wrapper_block_start_element';

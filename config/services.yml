@@ -47,6 +47,9 @@ services:
   App\Dca\PartnersDca:
     public: true
 
+  App\Dca\AppDca:
+    public: true
+
   # --- CleverReach-REST-API -------------------------------------------------
   # Genutzt von App\EventListener\CleverReachFormListener. Den API-Token traegt man als
   # cleverreach_api_token in config/parameters.yml ein (nicht im Git). Der Parameter MUSS

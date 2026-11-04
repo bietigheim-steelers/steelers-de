@@ -13,10 +13,20 @@ info:
     - Bild- und Datei-URLs sind immer absolut.
     - Antworten tragen `Cache-Control` und `ETag`; die App sendet `If-None-Match` und erhält ggf. `304`.
     - Unbekannte Felder und unbekannte Block-Typen muss die App ignorieren (Abwärtskompatibilität).
-    - Content-Blöcke sind in `docs/app-blocks.md` beschrieben; hier das Schema `Block`.
+    - Content-Blöcke sind in `docs/app-integration.md` (Abschnitt „Bausteine“) beschrieben; hier das Schema `Block`.
+
+    **Zwei Ebenen**
+    1. *Daten* (`/news`, `/games`, `/standings`, `/players`, `/partners`): fachliche Inhalte, die schon in Contao gepflegt werden.
+    2. *App-Aufbau* (`/app/config`, `/app/screens/{key}`): im Backend-Bereich „App“ gepflegte Navigation und Screens.
+       Die App besitzt einen festen Satz an Bausteinen (Block-Typen) und Design; Contao bestimmt nur, welche
+       Bausteine in welcher Reihenfolge mit welchen Texten erscheinen. Neue Block-Typen brauchen ein App-Release,
+       alles andere (Texte, Reihenfolge, Ein-/Ausblenden) nicht. Die App legt die letzte Konfiguration im Cache ab
+       und liefert eine eingebaute Standardkonfiguration mit.
+    3. Einbindungen von Webseiten-Inhalten (Artikel, Inhaltselemente) löst der Server auf; die App erhält
+       ausschließlich fertige Blöcke.
 
     **Umsetzungsstand:** `/news`, `/games`, `/standings`, `/players` und `/partners` sind in Contao
-    umgesetzt (Phase 1). `/pages` (Phase 2) und `/devices` (Phase 3) sind noch Spezifikation.
+    umgesetzt (Phase 1). `/app/*` (Phase 2) und `/devices` (Phase 3) sind noch Spezifikation.
     Die Parameter `perPage` (max. 50) und `since` gibt es nur bei `/news`.
   contact:
     name: Bietigheim Steelers
@@ -26,7 +36,7 @@ servers:
     description: Produktion
   - url: https://dev.steelers.de/api/v1
     description: Entwicklung
-  - url: http://localhost:8080/api/v1
+  - url: http://localhost:5388/api/v1
     description: Lokale Docker-Umgebung
 tags:
   - name: News
@@ -34,8 +44,8 @@ tags:
     description: Spielplan, Ergebnisse und Tabelle
   - name: Kader
   - name: Partner
-  - name: Seiten
-    description: Artikel, die in Contao mit „In App anzeigen“ markiert sind
+  - name: App-Konfiguration
+    description: Navigation, Schalter und Screens aus dem Backend-Bereich „App“
   - name: Push
     description: Geräteregistrierung für Push-Benachrichtigungen (FCM)
 security:
@@ -256,12 +266,18 @@ paths:
                     type: array
                     items: { $ref: '#/components/schemas/Partner' }
         '304': { $ref: '#/components/responses/NotModified' }
-  /pages:
+  /app/config:
     get:
-      tags: [Seiten]
-      summary: App-Menü
-      description: Alle Artikel mit gesetztem Flag „In App anzeigen“, sortiert nach `appSort`.
-      operationId: listPages
+      tags: [App-Konfiguration]
+      summary: Navigation und Schalter
+      description: |
+        Einstiegspunkt der App beim Start. Liefert Tabs, Menü, Startscreen und Schalter. Einträge, die für
+        `platform`/`appVersion` nicht freigegeben sind oder außerhalb von Start/Stop liegen, fehlen in der Antwort.
+        Kurz cachen (ca. 60 s); die App fällt bei Fehlern auf die zuletzt gespeicherte oder eingebaute Konfiguration zurück.
+      operationId: getAppConfig
+      parameters:
+        - $ref: '#/components/parameters/Platform'
+        - $ref: '#/components/parameters/AppVersion'
       responses:
         '200':
           description: OK
@@ -274,31 +290,37 @@ paths:
                 type: object
                 required: [data]
                 properties:
-                  data:
-                    type: array
-                    items: { $ref: '#/components/schemas/PageSummary' }
+                  data: { $ref: '#/components/schemas/AppConfig' }
         '304': { $ref: '#/components/responses/NotModified' }
-  /pages/{id}:
+  /app/screens/{key}:
     get:
-      tags: [Seiten]
-      summary: Artikel als Blöcke
+      tags: [App-Konfiguration]
+      summary: Screen als Blöcke
       description: |
-        Die Inhaltselemente des Artikels als Liste strukturierter Blöcke. Elemente ohne App-Darstellung
-        werden ausgelassen. Steht `fallbackUrl` im Ergebnis, soll die App den Artikel stattdessen im Browser/
-        der WebView öffnen.
-      operationId: getPage
+        Die Blöcke eines Screens in der im Backend festgelegten Reihenfolge. Eingebundene Webseiten-Inhalte
+        (Artikel, Inhaltselemente) sind bereits in einfache Blöcke aufgelöst. Inhaltselemente ohne App-Darstellung
+        werden ausgelassen.
+      operationId: getAppScreen
       parameters:
-        - $ref: '#/components/parameters/Id'
+        - name: key
+          in: path
+          required: true
+          schema: { type: string, example: home }
+        - $ref: '#/components/parameters/Platform'
+        - $ref: '#/components/parameters/AppVersion'
       responses:
         '200':
           description: OK
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+            Cache-Control: { $ref: '#/components/headers/CacheControl' }
           content:
             application/json:
               schema:
                 type: object
                 required: [data]
                 properties:
-                  data: { $ref: '#/components/schemas/Page' }
+                  data: { $ref: '#/components/schemas/Screen' }
         '304': { $ref: '#/components/responses/NotModified' }
         '404': { $ref: '#/components/responses/NotFound' }
   /devices:
@@ -367,6 +389,16 @@ components:
       name: page
       in: query
       schema: { type: integer, minimum: 1, default: 1 }
+    Platform:
+      name: platform
+      in: query
+      description: Plattform der App; Einträge können auf eine Plattform beschränkt sein.
+      schema: { type: string, enum: [ios, android] }
+    AppVersion:
+      name: appVersion
+      in: query
+      description: Installierte App-Version (SemVer); Einträge mit höherer `minAppVersion` werden ausgelassen.
+      schema: { type: string, example: 1.2.0 }
     PerPage:
       name: perPage
       in: query
@@ -597,33 +629,69 @@ components:
       properties:
         key: { type: string, example: platin }
         label: { type: string, example: Platinpartner }
-    PageSummary:
+    AppConfig:
       type: object
-      required: [id, title]
+      required: [revision, home, tabs]
       properties:
-        id: { type: integer, description: Artikel-ID }
-        title: { type: string, description: '`appTitle`, sonst Artikeltitel.' }
-        sort: { type: integer }
+        revision:
+          type: integer
+          description: Änderungsstand der gesamten App-Konfiguration (größter `tstamp`); die App erkennt damit Änderungen.
+        home:
+          type: string
+          description: Schlüssel des Startscreens.
+          example: home
+        tabs:
+          type: array
+          description: Untere Navigation (üblich 3–5 Einträge).
+          items: { $ref: '#/components/schemas/NavItem' }
+        menu:
+          type: array
+          description: Weitere Einträge (z. B. unter „Mehr“).
+          items: { $ref: '#/components/schemas/NavItem' }
+        flags:
+          type: object
+          description: Frei benannte Schalter (z. B. `ticketShop`) zum Ein-/Ausblenden von App-Funktionen.
+          additionalProperties:
+            oneOf:
+              - { type: boolean }
+              - { type: string }
+              - { type: number }
+          example: { ticketShop: true }
+    NavItem:
+      type: object
+      required: [key, title, type]
+      properties:
+        key: { type: string, example: news }
+        title: { type: string, example: News }
+        icon:
+          type: string
+          nullable: true
+          description: Schlüssel aus dem Icon-Satz der App; unbekannte Schlüssel zeigt die App ohne Icon.
+        type:
+          type: string
+          enum: [screen, native, link]
+          description: |
+            `screen` = Screen aus `/app/screens/{key}`, `native` = fest in der App eingebaute Funktion
+            (z. B. Einstellungen), `link` = externe Seite (`url`).
+        url: { type: string, format: uri, nullable: true }
+    Screen:
+      type: object
+      required: [key, title, blocks, updatedAt]
+      properties:
+        key: { type: string }
+        title: { type: string }
         updatedAt: { type: string, format: date-time }
-        webUrl: { type: string, format: uri }
-    Page:
-      allOf:
-        - $ref: '#/components/schemas/PageSummary'
-        - type: object
-          required: [blocks]
-          properties:
-            blocks:
-              type: array
-              items: { $ref: '#/components/schemas/Block' }
-            fallbackUrl:
-              type: string
-              format: uri
-              nullable: true
-              description: Gesetzt, wenn der Artikel als Ganzes im Browser geöffnet werden soll.
+        blocks:
+          type: array
+          items: { $ref: '#/components/schemas/Block' }
     Block:
       description: |
-        Strukturierter Inhaltsblock. Die App rendert je `type` eine eigene Flutter-Komponente und ignoriert
+        Baustein eines Screens. Die App rendert je `type` eine eigene Flutter-Komponente und ignoriert
         unbekannte Typen. Weitere Typen können ohne API-Versionssprung hinzukommen.
+
+        *Inhaltsblöcke* (`headline` bis `promo`) bringen ihren Inhalt mit. *Datenblöcke* (`news_list` bis `partners`)
+        enthalten nur Konfiguration; die App lädt die Daten selbst über die Daten-Endpunkte.
+        Links (`url`) sind `https://…`-Adressen oder `app://screen/{key}` für einen Screen der App.
       oneOf:
         - $ref: '#/components/schemas/HeadlineBlock'
         - $ref: '#/components/schemas/TextBlock'
@@ -632,6 +700,13 @@ components:
         - $ref: '#/components/schemas/ButtonBlock'
         - $ref: '#/components/schemas/DownloadBlock'
         - $ref: '#/components/schemas/VideoBlock'
+        - $ref: '#/components/schemas/PromoBlock'
+        - $ref: '#/components/schemas/NewsListBlock'
+        - $ref: '#/components/schemas/NextGameBlock'
+        - $ref: '#/components/schemas/GamesBlock'
+        - $ref: '#/components/schemas/StandingsBlock'
+        - $ref: '#/components/schemas/RosterBlock'
+        - $ref: '#/components/schemas/PartnersBlock'
       discriminator:
         propertyName: type
         mapping:
@@ -642,6 +717,13 @@ components:
           button: '#/components/schemas/ButtonBlock'
           download: '#/components/schemas/DownloadBlock'
           video: '#/components/schemas/VideoBlock'
+          promo: '#/components/schemas/PromoBlock'
+          news_list: '#/components/schemas/NewsListBlock'
+          next_game: '#/components/schemas/NextGameBlock'
+          games: '#/components/schemas/GamesBlock'
+          standings: '#/components/schemas/StandingsBlock'
+          roster: '#/components/schemas/RosterBlock'
+          partners: '#/components/schemas/PartnersBlock'
     HeadlineBlock:
       type: object
       required: [type, text]
@@ -698,6 +780,64 @@ components:
         provider: { type: string, enum: [youtube, vimeo, file] }
         id: { type: string, description: Video-ID bzw. bei `file` die absolute URL. }
         title: { type: string, nullable: true }
+    PromoBlock:
+      type: object
+      required: [type, title]
+      properties:
+        type: { type: string, enum: [promo] }
+        title: { type: string }
+        text: { type: string, nullable: true }
+        image:
+          allOf:
+            - $ref: '#/components/schemas/Image'
+          nullable: true
+        label: { type: string, nullable: true, description: Beschriftung des Buttons. }
+        url: { type: string, nullable: true, description: 'https://… oder app://screen/{key}' }
+    NewsListBlock:
+      type: object
+      required: [type]
+      properties:
+        type: { type: string, enum: [news_list] }
+        title: { type: string, nullable: true }
+        limit: { type: integer, default: 5 }
+        category: { type: string, nullable: true, description: 'Alias der News-Kategorie (wie `/news?category=`).' }
+        layout: { type: string, enum: [list, carousel], default: list }
+    NextGameBlock:
+      type: object
+      required: [type]
+      properties:
+        type: { type: string, enum: [next_game] }
+        title: { type: string, nullable: true }
+    GamesBlock:
+      type: object
+      required: [type]
+      properties:
+        type: { type: string, enum: [games] }
+        title: { type: string, nullable: true }
+        status: { type: string, enum: [upcoming, finished], default: upcoming }
+        limit: { type: integer, nullable: true }
+    StandingsBlock:
+      type: object
+      required: [type]
+      properties:
+        type: { type: string, enum: [standings] }
+        title: { type: string, nullable: true }
+        compact: { type: boolean, default: false, description: 'Nur Platz, Team und Punkte.' }
+    RosterBlock:
+      type: object
+      required: [type]
+      properties:
+        type: { type: string, enum: [roster] }
+        title: { type: string, nullable: true }
+        position: { type: string, nullable: true, description: 'Filter wie bei `/players`.' }
+    PartnersBlock:
+      type: object
+      required: [type]
+      properties:
+        type: { type: string, enum: [partners] }
+        title: { type: string, nullable: true }
+        category: { type: string, nullable: true, description: 'Filter wie bei `/partners`.' }
+        layout: { type: string, enum: [grid, slider], default: grid }
     DeviceRegistration:
       type: object
       required: [token, platform]

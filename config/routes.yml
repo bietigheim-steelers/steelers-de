@@ -51,3 +51,14 @@ app_api_partners:
   controller: App\Controller\Api\PartnersController::list
   path: /api/v1/partners
   methods: GET
+
+# --- App-Aufbau aus dem Backend-Bereich "App" -------------------------------
+app_api_app_config:
+  controller: App\Controller\Api\AppController::config
+  path: /api/v1/app/config
+  methods: GET
+app_api_app_screen:
+  controller: App\Controller\Api\AppController::screen
+  path: /api/v1/app/screens/{key}
+  methods: GET
+  requirements: { key: '[A-Za-z0-9_.-]+' }

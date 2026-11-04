@@ -95,6 +95,24 @@ class ContentFormatter
     }
 
     /**
+     * Link für die App: Insert-Tags aufgelöst, relative Adressen absolut; `app://screen/<key>`,
+     * mailto: und tel: bleiben unverändert.
+     */
+    public function url(?string $url): ?string
+    {
+        $url = trim(StringUtil::decodeEntities($this->insertTags->replaceInline((string) $url)));
+
+        if ($url === '' || str_starts_with($url, '#')) {
+            return null;
+        }
+        if (preg_match('#^(https?://|app://|mailto:|tel:)#i', $url)) {
+            return $url;
+        }
+
+        return $this->images->absolute($url);
+    }
+
+    /**
      * Zeitstempel als ISO-8601-String in Europe/Berlin.
      */
     public function date(int|string|null $timestamp): ?string
