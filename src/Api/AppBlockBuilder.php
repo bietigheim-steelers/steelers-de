@@ -67,7 +67,7 @@ class AppBlockBuilder
 
         return match ($b->blockType) {
             'article' => $this->content->forArticle((int) $b->blockArticle),
-            'content_element' => ($element = $this->content->forElementId((int) $b->blockContent)) === null ? [] : [$element],
+            'content_element' => $this->content->forElementId((int) $b->blockContent),
             default => $block === null ? [] : [$block],
         };
     }
