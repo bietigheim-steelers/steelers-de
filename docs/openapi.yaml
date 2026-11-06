@@ -794,6 +794,7 @@ components:
         - $ref: '#/components/schemas/DownloadBlock'
         - $ref: '#/components/schemas/VideoBlock'
         - $ref: '#/components/schemas/PromoBlock'
+        - $ref: '#/components/schemas/FormBlock'
         - $ref: '#/components/schemas/NewsListBlock'
         - $ref: '#/components/schemas/NextGameBlock'
         - $ref: '#/components/schemas/GamesBlock'
@@ -811,6 +812,7 @@ components:
           download: '#/components/schemas/DownloadBlock'
           video: '#/components/schemas/VideoBlock'
           promo: '#/components/schemas/PromoBlock'
+          form: '#/components/schemas/FormBlock'
           news_list: '#/components/schemas/NewsListBlock'
           next_game: '#/components/schemas/NextGameBlock'
           games: '#/components/schemas/GamesBlock'
@@ -886,6 +888,43 @@ components:
           nullable: true
         label: { type: string, nullable: true, description: Beschriftung des Buttons. }
         url: { type: string, nullable: true, description: 'https://… oder app://screen/{key}' }
+    FormBlock:
+      description: |
+        Formular der Webseite. Die App zeigt die Felder nativ und sendet per `POST`
+        (`application/x-www-form-urlencoded`, **ohne Cookies**) an `action` mit allen Feldwerten und
+        `FORM_SUBMIT={formSubmit}` – genau wie der Browser, damit Speichern, Mails und Hooks der Webseite
+        unverändert laufen. `302/303` = erfolgreich, `200` = Validierungsfehler. Nicht darstellbare
+        Formulare (Upload, Captcha, GET) kommen weiterhin als `button`.
+      type: object
+      required: [type, action, formSubmit, fields]
+      properties:
+        type: { type: string, enum: [form] }
+        title: { type: string, nullable: true }
+        action: { type: string, format: uri, description: Seite, die das Formular enthält (Ziel des POST). }
+        formSubmit: { type: string, description: Wert für das Feld `FORM_SUBMIT`. }
+        submitLabel: { type: string }
+        fields:
+          type: array
+          items:
+            type: object
+            required: [type]
+            properties:
+              type: { type: string, enum: [text, email, phone, number, date, textarea, select, radio, checkbox, hidden, explanation] }
+              name: { type: string }
+              label: { type: string }
+              required: { type: boolean }
+              value: { type: string, nullable: true }
+              placeholder: { type: string, nullable: true }
+              html: { type: string, description: Nur bei `explanation`. }
+              multiple: { type: boolean, description: Mehrfachauswahl (Feldname dann mit `[]` senden). }
+              options:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    value: { type: string }
+                    label: { type: string }
+                    default: { type: boolean }
     NewsListBlock:
       type: object
       required: [type]

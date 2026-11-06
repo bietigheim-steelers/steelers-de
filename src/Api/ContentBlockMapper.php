@@ -7,13 +7,16 @@ use Contao\ContentModel;
 use Contao\Date;
 use Contao\File;
 use Contao\FilesModel;
+use Contao\Form;
+use Contao\FormFieldModel;
 use Contao\FormModel;
+use Contao\System;
 use Contao\StringUtil;
 
 /**
  * Übersetzt Inhaltselemente der Webseite (tl_content) in App-Bausteine (docs/openapi.yaml: Block).
  * Unterstützt: headline (auch als Überschrift anderer Elemente), text, image, list, hyperlink,
- * download, youtube, vimeo, Formulare (als Button zur Webseite) und verschachtelte Gruppen.
+ * download, youtube, vimeo, Formulare (nativ als form, sonst Button zur Webseite) und verschachtelte Gruppen.
  * Alles andere (Module, Slider-Inhalte …) hat keine App-Darstellung und entfällt.
  */
 class ContentBlockMapper
@@ -108,8 +111,10 @@ class ContentBlockMapper
     }
 
     /**
-     * Formulare lassen sich nicht nativ abbilden: Button zur Webseite des Artikels, auf der
-     * das Formular steht.
+     * Formulare werden nativ als `form`-Block geliefert: Feldbeschreibung plus die Seite des Artikels,
+     * an die die App per POST sendet (wie der Browser; Contao verarbeitet es wie gewohnt).
+     * Enthält das Formular etwas, das die App nicht darstellen kann (Upload, Captcha, HTML, GET-Formular,
+     * dynamische Felder ohne Optionen), bleibt es beim Button zur Webseite.
      */
     private function form(ContentModel $element): ?array
     {
@@ -124,13 +129,124 @@ class ContentBlockMapper
         }
 
         $form = FormModel::findByPk((int) $element->form);
+        $title = $this->format->text($form?->title);
+
+        $fields = $form !== null && $form->method !== 'GET' ? $this->formFields($form) : null;
+        if ($fields === null) {
+            return ['type' => 'button', 'label' => $title ?? 'Zum Formular', 'url' => $url, 'external' => true];
+        }
 
         return [
-            'type' => 'button',
-            'label' => $this->format->text($form?->title) ?? 'Zum Formular',
-            'url' => $url,
-            'external' => true,
+            'type' => 'form',
+            'title' => $title,
+            'action' => $url,
+            'formSubmit' => $form->formID ? 'auto_' . $form->formID : 'auto_form_' . $form->id,
+            'submitLabel' => $fields['submit'],
+            'fields' => $fields['fields'],
         ];
+    }
+
+    /**
+     * Baut die Felder wie Contao\Form (inklusive `loadFormField`-Hooks, die z. B. Optionen dynamisch füllen).
+     * `null`, wenn ein Feld nicht darstellbar ist.
+     *
+     * @return array{fields: list<array>, submit: string}|null
+     */
+    private function formFields(FormModel $form): ?array
+    {
+        $models = FormFieldModel::findPublishedByPid((int) $form->id);
+        if ($models === null) {
+            return null;
+        }
+
+        $formObject = new Form($form);
+        $formId = $form->formID ? 'auto_' . $form->formID : 'auto_form_' . $form->id;
+        $hooks = $GLOBALS['TL_HOOKS']['loadFormField'] ?? [];
+        $fields = [];
+        $submit = 'Absenden';
+
+        foreach ($models as $model) {
+            $type = $model->type;
+            $class = $GLOBALS['TL_FFL'][$type] ?? null;
+
+            if (\in_array($type, ['fieldsetStart', 'fieldsetStop'], true)) {
+                continue;
+            }
+            if ($class === null || !class_exists($class) || !\in_array($type, ['text', 'textarea', 'select', 'radio', 'checkbox', 'hidden', 'explanation', 'submit'], true)) {
+                return null;
+            }
+
+            $data = $model->row();
+            $data['decodeEntities'] = true;
+            if ($type === 'submit') {
+                $data['name'] = '';
+            }
+            $widget = new $class($data);
+            $widget->required = $model->mandatory;
+            foreach ($hooks as $callback) {
+                $widget = System::importStatic($callback[0])->{$callback[1]}($widget, $formId, $form->row(), $formObject);
+            }
+
+            if ($type === 'submit') {
+                $submit = $this->format->text($model->slabel) ?? $submit;
+                continue;
+            }
+
+            $label = $this->format->text($widget->label);
+
+            if ($type === 'explanation') {
+                $html = $this->format->html($model->text);
+                if ($html !== null) {
+                    $fields[] = ['type' => 'explanation', 'html' => $html];
+                }
+                continue;
+            }
+
+            $name = (string) $model->name;
+            if ($name === '') {
+                return null;
+            }
+
+            $field = [
+                'name' => $name,
+                'label' => $label ?? $name,
+                'type' => $type,
+                'required' => (bool) $model->mandatory,
+                'value' => $this->format->text($model->value),
+                'placeholder' => $this->format->text($model->placeholder),
+            ];
+
+            if ($type === 'text') {
+                $field['type'] = match ((string) $model->rgxp) {
+                    'email' => 'email',
+                    'digit', 'natural', 'prcnt' => 'number',
+                    'phone' => 'phone',
+                    'date' => 'date',
+                    default => 'text',
+                };
+            } elseif (\in_array($type, ['select', 'radio', 'checkbox'], true)) {
+                $options = [];
+                foreach ((array) $widget->options as $option) {
+                    if (!empty($option['group'])) {
+                        continue;
+                    }
+                    $options[] = [
+                        'value' => (string) ($option['value'] ?? ''),
+                        'label' => $this->format->text($option['label'] ?? null) ?? (string) ($option['value'] ?? ''),
+                        'default' => !empty($option['default']),
+                    ];
+                }
+                if ($options === []) {
+                    return null;
+                }
+                $field['options'] = $options;
+                $field['multiple'] = $type === 'checkbox' ? \count($options) > 1 : (bool) $model->multiple;
+            }
+
+            $fields[] = $field;
+        }
+
+        return ['fields' => $fields, 'submit' => $submit];
     }
 
     private function articleOf(ContentModel $element): ?ArticleModel

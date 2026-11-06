@@ -228,6 +228,7 @@ bleibt sichtbar).
 | `download` | `label`, `url`, `mimeType?`, `size?` (Bytes) | Zeile mit Dateisymbol; Antippen öffnet/lädt die Datei (PDF im Systemviewer) |
 | `video` | `provider` (`youtube`\|`vimeo`), `id`, `title?` | Vorschaubild mit Abspielen; YouTube-ID → `youtube_player_iframe` o. ä. oder Link zur Video-App |
 | `promo` | `title`, `text?`, `image?`, `label?`, `url?` | auffälliger Banner (Bild, Titel, Text, optional Button/Antippen) |
+| `form` | `title?`, `action`, `formSubmit`, `submitLabel`, `fields[]` | native Felder; Absenden per `POST` (urlencoded, **ohne Cookies**) an `action` mit allen Werten + `FORM_SUBMIT={formSubmit}`, genau wie der Browser, damit Speichern/Mails/Hooks der Webseite laufen. `3xx` = Erfolg, `200` = Validierungsfehler. Währenddessen Warteansicht, danach Bestätigung |
 
 **HTML-Teilmenge in `text.html`** (und in `Player.about`, `Partner.description`): nur
 `<p> <strong> <em> <ul> <ol> <li> <br> <a href>`. Alles andere hat der Server schon entfernt. Mit
@@ -346,8 +347,8 @@ Die Block-Typen dort entsprechen exakt Abschnitt 4. Zusätzlich gibt es zwei Bau
 nicht als eigener Typ auftauchen, weil der Server sie auflöst:
 
 - **Artikel der Webseite einbinden** – die Inhaltselemente eines Artikels werden zu `text`, `headline`,
-  `image`, `list`, `button`, `download` und `video` Blöcken. Alles andere (Galerien, Akkordeons, Formulare,
-  Slider …) entfällt.
+  `image`, `list`, `button`, `download` und `video` Blöcken. Formulare kommen als `form` (nicht darstellbare
+  – Upload, Captcha, GET – als `button` zur Webseite). Alles andere (Galerien, Slider …) entfällt.
 - **Inhaltselement der Webseite einbinden** – dasselbe für ein einzelnes Element.
 
 **Regel für neue Bausteine:** Sobald die App einen neuen Block-Typ kann, trägt der Redakteur beim ersten
