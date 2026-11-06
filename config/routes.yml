@@ -25,6 +25,15 @@ app_api_news_detail:
   path: /api/v1/news/{id}
   methods: GET
   requirements: { id: '\d+' }
+app_api_videos:
+  controller: App\Controller\Api\VideosController::list
+  path: /api/v1/videos
+  methods: GET
+app_api_videos_detail:
+  controller: App\Controller\Api\VideosController::detail
+  path: /api/v1/videos/{id}
+  methods: GET
+  requirements: { id: '\d+' }
 app_api_games:
   controller: App\Controller\Api\GamesController::list
   path: /api/v1/games

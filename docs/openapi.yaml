@@ -112,6 +112,67 @@ paths:
                   data: { $ref: '#/components/schemas/NewsItem' }
         '304': { $ref: '#/components/responses/NotModified' }
         '404': { $ref: '#/components/responses/NotFound' }
+  /videos:
+    get:
+      tags: [News]
+      summary: Videoportal
+      description: |
+        Videos aus dem Videoportal (News-Archiv 7) mit dem zugewiesenen Spiel. Über `game` lassen sich
+        die Videos eines Spiels abfragen (Gamecenter).
+      operationId: listVideos
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PerPage'
+        - name: game
+          in: query
+          description: Spiel-ID (wie `/games/{id}`); nur Videos zu diesem Spiel.
+          schema: { type: integer }
+        - name: category
+          in: query
+          description: Alias der Kategorie (z. B. Highlights, Pressekonferenz).
+          schema: { type: string }
+        - name: since
+          in: query
+          description: Nur Einträge mit Änderung nach diesem Zeitpunkt.
+          schema: { type: string, format: date-time }
+      responses:
+        '200':
+          description: OK
+          headers:
+            ETag: { $ref: '#/components/headers/ETag' }
+            Cache-Control: { $ref: '#/components/headers/CacheControl' }
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data, meta]
+                properties:
+                  data:
+                    type: array
+                    items: { $ref: '#/components/schemas/Video' }
+                  meta: { $ref: '#/components/schemas/PageMeta' }
+        '304': { $ref: '#/components/responses/NotModified' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+  /videos/{id}:
+    get:
+      tags: [News]
+      summary: Einzelnes Video
+      operationId: getVideo
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [data]
+                properties:
+                  data: { $ref: '#/components/schemas/Video' }
+        '304': { $ref: '#/components/responses/NotModified' }
+        '404': { $ref: '#/components/responses/NotFound' }
   /games:
     get:
       tags: [Spielbetrieb]
@@ -517,6 +578,31 @@ components:
           allOf:
             - $ref: '#/components/schemas/Image'
           nullable: true
+    Video:
+      type: object
+      required: [id, title, date, url]
+      properties:
+        id: { type: integer, description: News-ID des Videoportal-Eintrags. }
+        title: { type: string }
+        date: { type: string, format: date-time }
+        url: { type: string, format: uri }
+        provider: { type: string, nullable: true, enum: [youtube], description: Erkannter Anbieter. }
+        videoId: { type: string, nullable: true, description: Anbieter-ID (YouTube). }
+        thumbnail: { type: string, format: uri, nullable: true }
+        categories:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer }
+              title: { type: string }
+              alias: { type: string }
+        gameId: { type: integer, nullable: true }
+        game:
+          allOf:
+            - $ref: '#/components/schemas/Game'
+          nullable: true
+          description: Zugewiesenes Spiel.
     Game:
       type: object
       required: [id, round, home, away, startsAt, status]
