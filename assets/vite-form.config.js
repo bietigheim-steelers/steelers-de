@@ -5,7 +5,7 @@ import vue from "@vitejs/plugin-vue";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue()],
-  optimizeDeps: { include: ["lodash.throttle", "lodash.orderby"] },
+  optimizeDeps: { include: ["lodash.throttle"] },
   build: {
     outDir: "../files/js/",
     assetsDir: "./",

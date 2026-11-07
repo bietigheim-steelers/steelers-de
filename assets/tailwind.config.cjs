@@ -5,9 +5,6 @@ module.exports = {
     "../templates/**/*.twig",
     "./js/**/*.js",
     "./js/**/*.vue",
-    "./vueform.config.js",
-    "./node_modules/@vueform/vueform/themes/tailwind/**/*.vue",
-    "./node_modules/@vueform/vueform/themes/tailwind/**/*.js",
   ],
   theme: {
     extend: {
@@ -46,6 +43,11 @@ module.exports = {
       aspectRatio: {
         news: "4 / 5",
         video: "16 / 9",
+      },
+      // Kräftigeres ease-out für die Bewegungen im Dauerkarten-Formular.
+      // Die eingebauten CSS-Kurven wirken bei kurzen Dauern zu weich.
+      transitionTimingFunction: {
+        steelers: "cubic-bezier(0.23, 1, 0.32, 1)",
       },
       spacing: {
         defaultbig: "150px",
@@ -110,8 +112,6 @@ module.exports = {
       strategy: "base", // only generate global styles
     }),
     require("@tailwindcss/aspect-ratio"),
-    require("@vueform/vueform/tailwind"),
     require("autoprefixer"),
   ],
-  vfDarkMode: false,
 };

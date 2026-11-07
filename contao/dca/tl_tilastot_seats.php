@@ -109,11 +109,28 @@ $GLOBALS['TL_DCA']['tl_tilastot_seats'] = array(
         'seat_status' => array(
             'label' => &$GLOBALS['TL_LANG']['tl_tilastot_seats']['seat_status'],
             'inputType' => 'select',
+            // Die befristete Reservierung waehrend einer Bestellung ist
+            // bewusst KEIN eigener Status: sie steht in reserved_until und
+            // hold_token. Sonst wuerde das Freigeben eines Platzes, der
+            // vorher "reserved" war (Vorbehalt fuer den bisherigen Inhaber),
+            // diesen Vorbehalt loeschen.
             'options' => array('available', 'reserved', 'booked', 'non-existent'),
             'sql' => "varchar(32) NOT NULL default 'available'",
             'search' => true,
             'filter' => true,
             'sorting' => true
+        ),
+        'reserved_until' => array(
+            'label' => &$GLOBALS['TL_LANG']['tl_tilastot_seats']['reserved_until'],
+            'eval' => array('rgxp' => 'datim', 'doNotCopy' => true),
+            'sql' => "int(10) unsigned NOT NULL default '0'",
+            'sorting' => true
+        ),
+        'hold_token' => array(
+            // Kennzeichnet, wessen Bestellvorgang den Platz haelt. Nicht im
+            // Backend editierbar, nur Technik.
+            'eval' => array('doNotCopy' => true),
+            'sql' => "varchar(64) NOT NULL default ''"
         )
     )
 );
@@ -143,6 +160,16 @@ class tl_tilastot_seats extends Contao\Backend
             case 'non-existent':
                 $status = '<span style="color:gray;">nicht existent</span>';
                 break;
+        }
+
+        // Ein laufender Bestellvorgang haelt den Platz befristet, ohne den
+        // Status anzufassen. Abgelaufene Holds zaehlen als frei und werden
+        // deshalb gar nicht erst angezeigt.
+        $until = (int) ($row['reserved_until'] ?? 0);
+
+        if ($until > time() && $row['seat_status'] !== 'booked') {
+            $status .= ' <span style="color:#b36b00;">– in Bestellung bis '
+                . date('H:i', $until) . '</span>';
         }
 
         return $ticket . $status;

@@ -13,68 +13,206 @@ use Contao\Database;
 use Symfony\Component\Mime\Address;
 use App\Model\SeasonTicket;
 use App\Model\Seats;
+use App\Seats\SeatHoldService;
+use App\Seats\SeatInventory;
+use App\Seats\SeatUnavailableException;
+use App\SeasonTicket\PriceTable;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\RateLimiter\RateLimiterFactory;
 
 class SeasonTicketController
 {
-  public function order(Request $request, MailerInterface $mailer, ContaoFramework $framework): Response
+  /**
+   * Felder, die das Formular setzen darf und die als Spalte in
+   * tl_tilastot_season_ticket existieren.
+   */
+  private const ORDER_FIELDS = [
+    'ticket_type',
+    'ticket_area',
+    'ticket_category',
+    'seat_block',
+    'seat_row',
+    'seat_seat',
+    'ticket_form',
+    'ticket_payment',
+    'customer_firstname',
+    'customer_name',
+    'customer_street',
+    'customer_plz',
+    'customer_city',
+    'customer_phone',
+    'customer_email',
+    'customer_birthday',
+    'customer_last_season',
+    'eventim',
+    'eventim_email',
+    'eventim_account',
+    'bemerkung',
+    'terms',
+    'data_privacy',
+  ];
+
+  /**
+   * Felder, die das Formular mitschickt, fuer die es aber keine Spalte gibt.
+   * Sie werden fuer die Platzaufloesung und die Bestellmail gebraucht und
+   * landen bewusst nicht im Datensatz.
+   */
+  private const TRANSIENT_FIELDS = [
+    'seat_rollstuhl_block',
+    'customer_member',
+  ];
+
+  public function __construct(
+    private readonly ContaoFramework $framework,
+    private readonly MailerInterface $mailer,
+    private readonly SeatInventory $inventory,
+    private readonly SeatHoldService $holds,
+    private readonly LoggerInterface $logger,
+    private readonly RateLimiterFactory $orderLimiter,
+  ) {
+  }
+
+  public function order(Request $request): Response
   {
-    $framework->initialize();
-    $data = $request->request->all();
+    $this->framework->initialize();
 
-    if (in_array($data['ticket_area'], ['sitzplatz', 'rollstuhl'])) {
-      $seatBookingData = $this->resolveSeatBookingData($data);
+    // Bestelldaten gehoeren nicht im Klartext uebers Netz. Lokale
+    // Entwicklung laeuft ueber http und bleibt ausgenommen.
+    if (!$request->isSecure() && !in_array($request->getHost(), ['localhost', '127.0.0.1', '::1'], true)) {
+      return new Response('https_required', 400);
+    }
 
-      $baseSeat = $seatBookingData['baseSeat'];
-      $block = $seatBookingData['block'];
-      $row = $seatBookingData['row'];
-      $seatsToBlock = $seatBookingData['seatsToBlock'];
+    // Ohne Limit kann ein Skript die Halle leerbuchen. Geschluesselt wird
+    // ueber den Request-Token, nicht ueber die IP: Trusted Proxies sind nicht
+    // konfiguriert, getClientIp() liefert hinter einem Proxy also fuer alle
+    // dieselbe Adresse -- ein IP-Limit wuerde am Verkaufstag alle gemeinsam
+    // ausbremsen. Der Token ist pro Browser stabil und wurde vom
+    // RequestTokenListener bereits geprueft.
+    $requestToken = (string) $request->request->get('REQUEST_TOKEN', '');
+    $limiterKey = $requestToken !== ''
+      ? 'token:' . hash('sha256', $requestToken)
+      : 'ip:' . ($request->getClientIp() ?? 'unknown');
 
-      for ($i = 0; $i < $seatsToBlock; $i++) {
-        $seatNum = $baseSeat + $i;
+    if (!$this->orderLimiter->create($limiterKey)->consume()->isAccepted()) {
+      return new Response('too_many_requests', 429);
+    }
 
-        // Check if seat exists in database
-        $seat = Seats::findOneBy(['seat_block=?', 'seat_row=?', 'seat_seat=?'], [$block, $row, $seatNum]);
+    // Nur bekannte Felder uebernehmen. Vorher landete request->all() in einer
+    // Schleife im Model, womit ein praepariertes POST auch paid, pay_date oder
+    // order_number setzen konnte. Fehlende Felder bleiben wie bisher ganz weg,
+    // damit Spalten mit NOT NULL nicht auf null laufen.
+    $data = [];
 
-        if ($seat) {
-          // Seat exists - check status
-          if ($seat->seat_status === 'booked') {
-            return new Response('seat_already_booked', 400);
-          } elseif ($seat->seat_status === 'non-existent') {
-            return new Response('seat_non_existent', 400);
-          } else {
-            // Seat is available or reserved - mark as booked
-            $seat->seat_status = 'booked';
-            $seat->tstamp = time();
-            $seat->save();
-          }
-        } else {
-          // Seat doesn't exist in database - create it as booked
-          $newSeat = new Seats();
-          $newSeat->seat_block = $block;
-          $newSeat->seat_row = $row;
-          $newSeat->seat_seat = $seatNum;
-          $newSeat->seat_status = 'booked';
-          $newSeat->tstamp = time();
-          $newSeat->save();
-        }
+    foreach ([...self::ORDER_FIELDS, ...self::TRANSIENT_FIELDS] as $field) {
+      if (!$request->request->has($field)) {
+        continue;
+      }
+
+      $value = $request->request->get($field);
+      $data[$field] = is_string($value) ? trim($value) : $value;
+    }
+
+    $area = $data['ticket_area'] ?? null;
+
+    if (!in_array($area, PriceTable::AREAS, true)) {
+      return new Response('invalid_area', 400);
+    }
+
+    if (!in_array($data['ticket_type'] ?? null, PriceTable::TYPES, true)) {
+      return new Response('invalid_type', 400);
+    }
+
+    if (!array_key_exists($data['ticket_category'] ?? '', self::getCategoryMap())) {
+      return new Response('invalid_category', 400);
+    }
+
+    // Minimalpruefung der Felder, auf die der Code danach zwingend angewiesen
+    // ist. Ohne sie lief ein unvollstaendiges POST in einen 500 (etwa
+    // $email->to(null)). Die inhaltliche Pflichtfeldpruefung macht weiter das
+    // Formular -- hier geht es nur darum, sauber abzulehnen.
+    foreach (['customer_email', 'customer_name', 'terms', 'data_privacy'] as $required) {
+      if (($data[$required] ?? '') === '') {
+        return new Response('missing_field:' . $required, 400);
       }
     }
 
-    $data['price'] = self::getTicketPrice(
-      $data['ticket_area'],
-      $data['ticket_category'],
-      $data['seat_block'],
-      $data['ticket_type']
+    if (!filter_var($data['customer_email'], FILTER_VALIDATE_EMAIL)) {
+      return new Response('invalid_email', 400);
+    }
+
+    if ($area === 'stehplatz') {
+      // Das Formular blendet die Platzfelder beim Wechsel auf Stehplatz nur
+      // aus, schickt veraltete Werte aber weiter mit. In den Datensatz
+      // gehoeren sie dann nicht.
+      unset($data['seat_block'], $data['seat_row'], $data['seat_seat']);
+    }
+
+    // Wer den Platz waehrend der Bestellung gehalten hat, steht im Cookie.
+    // Nur dieser Besucher darf ihn jetzt buchen.
+    $holdToken = (string) $request->cookies->get(SeatHoldController::COOKIE, '');
+
+    if (in_array($area, ['sitzplatz', 'rollstuhl'], true)) {
+      $seatBookingData = $this->resolveSeatBookingData($data, $holdToken);
+
+      // resolveSeatBookingData() kann null liefern: unbekannter Rollstuhlblock,
+      // kein freier Rollstuhlplatz oder fehlende seat_*-Felder. Vorher lief der
+      // Code dann auf null['baseSeat'], $seatsToBlock wurde null, die Schleife
+      // machte nichts -- und die Bestellung ging durch, ohne dass ein Platz
+      // blockiert wurde.
+      if ($seatBookingData === null) {
+        return new Response('seat_unavailable', 400);
+      }
+
+      $block = (string) $seatBookingData['block'];
+      $row = (string) $seatBookingData['row'];
+      $baseSeat = (int) $seatBookingData['baseSeat'];
+      $seatsToBlock = (int) $seatBookingData['seatsToBlock'];
+
+      // Gegen den echten Hallenbestand pruefen. Vorher waren Block, Reihe und
+      // Platz ungepruefte POST-Werte: einen Platz, den es nicht gibt, hat der
+      // Server einfach als gebucht angelegt.
+      $knownSeat = $area === 'rollstuhl'
+        ? $baseSeat >= 1 && $baseSeat <= ($this->inventory->wheelchairCapacity($block) ?? 0)
+        : $this->inventory->seatRangeExists($block, $row, $baseSeat, $seatsToBlock);
+
+      if (!$knownSeat) {
+        return new Response('seat_non_existent', 400);
+      }
+
+      try {
+        $this->holds->book($block, $row, $baseSeat, $seatsToBlock, $holdToken);
+      } catch (SeatUnavailableException $exception) {
+        return new Response($exception->getMessage(), 400);
+      }
+
+      // Den aufgeloesten Platz festhalten. Bei Rollstuhlbestellungen stand im
+      // Datensatz bisher kein Platz, weil seat_rollstuhl_block keine Spalte
+      // hat und Contao unbekannte Felder beim Speichern verwirft.
+      $data['seat_block'] = $block;
+      $data['seat_row'] = $row;
+      $data['seat_seat'] = (string) $baseSeat;
+    }
+
+    $data['price'] = $this->getTicketPrice(
+      $area,
+      $data['ticket_category'] ?? null,
+      $data['seat_block'] ?? null,
+      $data['ticket_type'] ?? null
     );
 
     // Save to database using SeasonTicket model
     $seasonTicket = new SeasonTicket();
-    if ($data['customer_birthday'] === '' || $data['customer_birthday'] === null) {
+    if (($data['customer_birthday'] ?? '') === '') {
       unset($data['customer_birthday']);
     }
-    foreach ($data as $key => $value) {
-      $seasonTicket->$key = $value;
+
+    foreach (self::ORDER_FIELDS as $field) {
+      if (array_key_exists($field, $data)) {
+        $seasonTicket->$field = $data[$field];
+      }
     }
+
+    $seasonTicket->price = $data['price'];
 
     // Generate unique random order number (e.g., 100000-999999)
     do {
@@ -99,21 +237,22 @@ class SeasonTicketController
     $email->htmlTemplate('@Contao_App/email_season_ticket_confirmation.html.twig');
     $email->context($data);
 
-    $this->sendWithRetry($mailer, $email);
-
-
     $email2 = new TemplatedEmail();
-    $email2->subject('Dauerkarte Bestellung - ' . $data['customer_firstname'] . ' ' . $data['customer_name']);
+    // customer_firstname ist im Formular optional, wird hier aber benutzt.
+    $email2->subject('Dauerkarte Bestellung - ' . trim(($data['customer_firstname'] ?? '') . ' ' . $data['customer_name']));
     $email2->from('webseite@steelers.de');
     $email2->replyTo($data['customer_email']);
 
     $email2->to('ticketing@steelers.de');
     $email2->htmlTemplate('@Contao_App/email_season_ticket_order.html.twig');
+    // Hier stand bisher $data['ticket_block'] -- ein Feld, das das Formular
+    // nie geschickt hat. Dadurch blieb die Preisklasse (PK 1/2/3) bei allen
+    // Sitzplatzbestellungen leer. Das Formularfeld heisst seat_block.
     $eventimCategory = $this->getEventimCategory(
       $data['ticket_area'],
-      $data['ticket_category'],
-      $data['ticket_block'],
-      $data['ff_new_dk']
+      $data['ticket_category'] ?? null,
+      $data['seat_block'] ?? null,
+      null
     );
 
     $email2->context(array_merge($data, [
@@ -121,25 +260,42 @@ class SeasonTicketController
       'eventim_category' => $eventimCategory
     ]));
 
-    $this->sendWithRetry($mailer, $email2);
-
-    //first try to sent emails. Sometimes the fucking microsoft mail server is not reachable!!!
+    // Die Bestellung ist der verbindliche Datensatz: erst speichern, dann
+    // mailen. Vorher gingen die Mails zuerst raus ("sometimes the microsoft
+    // mail server is not reachable") -- scheiterte save() danach, hatte der
+    // Kunde eine Bestaetigung und es gab keine Bestellung.
     $seasonTicket->save();
+
+    // Scheitert der Mailversand, bleibt die Bestellung bestehen und wird nur
+    // protokolliert. Ein 500 wuerde den Besucher erneut absenden lassen -- und
+    // weil der Platz jetzt gebucht ist, bekaeme er beim zweiten Versuch
+    // "seat_already_booked" auf seine eigene Bestellung.
+    // Absichtlich Throwable und nicht nur TransportExceptionInterface: auch
+    // eine fehlende Mailer-Konfiguration oder ein Fehler im Mail-Template darf
+    // eine bereits gespeicherte Bestellung nicht in einen 500 verwandeln.
+    foreach (['Kundenbestaetigung' => $email, 'Ticketing' => $email2] as $label => $message) {
+      try {
+        $this->sendWithRetry($this->mailer, $message);
+      } catch (\Throwable $exception) {
+        $this->logger->error(
+          'Dauerkarte {order} ist gespeichert, aber die Mail "{label}" ging nicht raus',
+          ['order' => $randomNumber, 'label' => $label, 'exception' => $exception]
+        );
+      }
+    }
 
     return new Response('order successful');
   }
-
-  private function resolveSeatBookingData(array $data): ?array
+  private function resolveSeatBookingData(array $data, string $holdToken): ?array
   {
     if (($data['ticket_area'] ?? null) === 'rollstuhl') {
       $rollstuhlBlock = $this->normalizeBlock($data['seat_rollstuhl_block'] ?? null);
 
-      if (!in_array($rollstuhlBlock, ['R1', 'R3', 'R4'], true)) {
+      if ($rollstuhlBlock === null || !$this->inventory->isWheelchairBlock($rollstuhlBlock)) {
         return null;
       }
 
-      $maxSeats = ($rollstuhlBlock === 'R1') ? 2 : 3;
-      $nextSeat = $this->findNextAvailableSeat($rollstuhlBlock, 1, $maxSeats);
+      $nextSeat = $this->holds->nextFreeWheelchairSeat($rollstuhlBlock, $holdToken);
 
       if ($nextSeat === null) {
         return null; // No seats available
@@ -157,37 +313,13 @@ class SeasonTicketController
       return null;
     }
 
-    $seatsToBlock = 1;
-
-    if (in_array($data['ticket_category'], ['familie1', 'familie2'], true)) {
-      $seatsToBlock = 3;
-    } elseif (($data['ticket_category'] ?? null) === 'familie3') {
-      $seatsToBlock = 4;
-    }
-
     return [
       'baseSeat' => (int) $data['seat_seat'],
       'block' => (string) $data['seat_block'],
       'row' => $data['seat_row'],
-      'seatsToBlock' => $seatsToBlock,
+      // Familienkarten belegen mehrere Plaetze; die Zahl steht in PriceTable.
+      'seatsToBlock' => PriceTable::seatsFor($data['ticket_category'] ?? null),
     ];
-  }
-
-  private function findNextAvailableSeat(string $block, int $row, int $maxSeats): ?int
-  {
-    for ($seat = 1; $seat <= $maxSeats; $seat++) {
-      $existingSeat = Seats::findOneBy(
-        ['seat_block=?', 'seat_row=?', 'seat_seat=?'],
-        [$block, $row, $seat]
-      );
-
-      // If seat doesn't exist OR exists but not booked, it's available
-      if (!$existingSeat || $existingSeat->seat_status !== 'booked') {
-        return $seat;
-      }
-    }
-
-    return null; // All seats booked
   }
 
   private function normalizeBlock(?string $block): ?string
@@ -219,131 +351,23 @@ class SeasonTicketController
     }
   }
 
-  private function getPrices($type, $block, $category): int
+  /**
+   * Die Preistabelle liegt in App\SeasonTicket\PriceTable -- frueher stand
+   * sie hier noch einmal komplett und musste bei jeder Preisrunde doppelt
+   * gepflegt werden (die zweite Kopie war assets/js/TicketPriceCalculator.js).
+   *
+   * Rueckgabe jetzt float statt int: die BASIC-Stehplatzpreise fuer
+   * jugendlich/kind sind 129,74 und wurden vom alten ": int" auf 129
+   * abgeschnitten, waehrend das Formular 130 anzeigte.
+   */
+  private function getTicketPrice($area, $category, $block, $type): float
   {
-    $prices = [
-      "plus" => [
-        "A,G" => [
-          "vollzahler" => 855,
-          "ermaessigt" => 735,
-          "jugendlich" => 510,
-          "kind" => 426,
-          "behinderung" => 426,
-        ],
-        "B,F,H,L" => [
-          "vollzahler" => 737,
-          "ermaessigt" => 618,
-          "jugendlich" => 453,
-          "kind" => 369,
-          "behinderung" => 369,
-        ],
-        "C,I,K" => [
-          "vollzahler" => 621,
-          "ermaessigt" => 537,
-          "jugendlich" => 360,
-          "kind" => 310,
-          "behinderung" => 310,
-          "familie1" => 948,
-          "familie2" => 1249,
-          "familie3" => 1435,
-        ],
-        "J" => [
-          "vollzahler" => 430,
-          "ermaessigt" => 381,
-          "jugendlich" => 275,
-          "kind" => 215,
-          "behinderung" => 215,
-        ],
-        "R1,R3,R4" => [
-          "rollstuhl" => 383,
-        ],
-      ],
-      "basic" => [
-        "A,G" => [
-          "vollzahler" => 749,
-          "ermaessigt" => 645,
-          "jugendlich" => 447,
-          "kind" => 375,
-          "behinderung" => 375,
-        ],
-        "B,F,H,L" => [
-          "vollzahler" => 645,
-          "ermaessigt" => 540,
-          "jugendlich" => 395,
-          "kind" => 322,
-          "behinderung" => 322,
-        ],
-        "C,I,K" => [
-          "vollzahler" => 540,
-          "ermaessigt" => 468,
-          "jugendlich" => 312,
-          "kind" => 270,
-          "behinderung" => 270,
-          "familie1" => 832,
-          "familie2" => 1102,
-          "familie3" => 1268,
-        ],
-        "J" => [
-          "vollzahler" => 374,
-          "ermaessigt" => 333,
-          "jugendlich" => 129.74,
-          "kind" => 129.74,
-          "behinderung" => 187,
-        ],
-        "R1,R3,R4" => [
-          "rollstuhl" => 333,
-        ],
-      ],
-    ];
-
-    return $prices[$type][$block][$category];
-  }
-  private function getTicketPrice($area, $category, $block, $type): int
-  {
-    $reducedCategories = ['rentner', 'student', 'azubi', 'schueler', 'mitglied'];
-    $category = in_array($category, $reducedCategories) ? 'ermaessigt' : $category;
-
-    if ($area === 'stehplatz') {
-      return $this->getPrices($type, 'J', $category);
-    }
-    if ($area === 'rollstuhl') {
-      return $this->getPrices($type, 'R1,R3,R4', 'rollstuhl');
-    }
-
-    $blockMap = [
-      'A' => 'A,G',
-      'G' => 'A,G',
-      'B' => 'B,F,H,L',
-      'F' => 'B,F,H,L',
-      'H' => 'B,F,H,L',
-      'L' => 'B,F,H,L',
-      'C' => 'C,I,K',
-      'I' => 'C,I,K',
-      'K' => 'C,I,K',
-    ];
-
-    $mappedBlock = $blockMap[$block] ?? null;
-
-    return $mappedBlock ? $this->getPrices($type, $mappedBlock, $category) : 0;
+    return PriceTable::priceFor($type, $category, $area, $block);
   }
 
   public static function getCategoryMap(): array
   {
-    return [
-      'vollzahler' => 'Vollzahler',
-      'familie1' => 'Familienkarte 1',
-      'familie2' => 'Familienkarte 2',
-      'familie3' => 'Familienkarte 3',
-      'rentner' => 'Rentner',
-      'student' => 'Student',
-      'azubi' => 'Auszubildender',
-      'schueler' => 'Schüler über 18 Jahre',
-      'mitglied' => 'SC Mitglied',
-      'jugendlich' => 'Jugendlicher (13-17 Jahre)',
-      'kind' => 'Kind (8-12 Jahre)',
-      'behinderung' => 'Fan mit Behinderung ab 50%',
-      'rollstuhl' => 'Rollstuhlfahrer inkl. Begleitperson',
-    ];
+    return PriceTable::categoryLabels();
   }
 
   private function getEventimCategory($area, $category, $block, $ff_new_dk): string

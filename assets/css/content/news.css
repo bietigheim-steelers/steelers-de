@@ -19,7 +19,7 @@
   top: 0px;
 }
 
-/* var(--vf-primary) */
+/* var(--steelers-primary) */
 
 .swiper-topnews .swiper-slide img {
   animation-name: move;
@@ -64,7 +64,7 @@
 }
 
 .swiper-topnews .swiper-pagination .swiper-pagination-bullet {
-  --swiper-pagination-color: var(--vf-primary);
+  --swiper-pagination-color: var(--steelers-primary);
   --swiper-pagination-bullet-inactive-color: #fff;
   --swiper-pagination-bullet-size: 8px;
 }

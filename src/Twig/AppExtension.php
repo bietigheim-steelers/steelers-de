@@ -8,13 +8,16 @@ use Twig\TwigFunction;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Contao\ArticleModel;
 use Contao\PageModel;
+use App\SeasonTicket\FormConfig;
 
 class AppExtension extends AbstractExtension
 {
   private $requestStack;
 
-  public function __construct(RequestStack $requestStack)
-  {
+  public function __construct(
+    RequestStack $requestStack,
+    private readonly FormConfig $seasonTicketConfig,
+  ) {
     $this->requestStack = $requestStack;
   }
 
@@ -41,7 +44,17 @@ class AppExtension extends AbstractExtension
       new TwigFunction('next_home_game', [$this, 'getNextHomeGame']),
       new TwigFunction('ticket_banner_images', [$this, 'getTicketBannerImages']),
       new TwigFunction('ticket_banner_cutouts', [$this, 'getTicketBannerCutouts']),
+      new TwigFunction('season_ticket_config', [$this, 'getSeasonTicketConfig']),
     ];
+  }
+
+  /**
+   * Konfiguration des Dauerkarten-Formulars als JSON fuer das
+   * <script type="application/json" id="dk-config"> im Wrapper-Template.
+   */
+  public function getSeasonTicketConfig(): string
+  {
+    return $this->seasonTicketConfig->toJson();
   }
 
   // The first argument ($value) is the string, the filter is applied on

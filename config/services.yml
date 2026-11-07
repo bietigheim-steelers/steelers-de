@@ -16,6 +16,24 @@ services:
     public: true
     tags: [controller.service_arguments]
 
+  # Rate-Limiter fuer die Dauerkartenbestellung. Bewusst hier und nicht in
+  # config/config.yml: diese Datei ist beim Deployment shared und wuerde eine
+  # Aenderung nicht mitnehmen.
+  app.rate_limiter_storage:
+    class: Symfony\Component\RateLimiter\Storage\CacheStorage
+    arguments:
+      - "@cache.app"
+
+  app.season_ticket_order_limiter:
+    class: Symfony\Component\RateLimiter\RateLimiterFactory
+    arguments:
+      - { id: season_ticket_order, policy: sliding_window, limit: 20, interval: "15 minutes" }
+      - "@app.rate_limiter_storage"
+
+  # Alias, damit der Type-Hint in SeasonTicketController::order() per Autowiring
+  # aufgeloest wird. Der sprechende Service-Name bleibt daneben bestehen.
+  Symfony\Component\RateLimiter\RateLimiterFactory: "@app.season_ticket_order_limiter"
+
   App\EventListener\GeneratePageListener:
     tags:
       - { name: contao.hook, hook: generatePage }

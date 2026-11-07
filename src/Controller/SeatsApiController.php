@@ -2,37 +2,33 @@
 
 namespace App\Controller;
 
+use App\Seats\SeatHoldService;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Contao\CoreBundle\Framework\ContaoFramework;
-use App\Model\Seats;
+use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Die aktuelle Belegung für den Saalplan.
+ *
+ * Liefert jetzt zusätzlich "held": Plätze, die gerade ein anderer
+ * Bestellvorgang hält. Die eigenen Holds bleiben wählbar -- welche das sind,
+ * sagt das dk_hold-Cookie.
+ */
 class SeatsApiController
 {
-  public function getSeats(ContaoFramework $framework): JsonResponse
+  public function __construct(private readonly SeatHoldService $holds)
   {
-    $framework->initialize();
+  }
 
-    // Fetch all seats from database
-    $allSeats = Seats::findAll();
+  public function getSeats(Request $request): JsonResponse
+  {
+    $token = (string) $request->cookies->get(SeatHoldController::COOKIE, '');
 
-    $booked = [];
-    $reserved = [];
+    $response = new JsonResponse($this->holds->availability($token));
 
-    if ($allSeats !== null) {
-      foreach ($allSeats as $seat) {
-        $seatId = $seat->seat_block . '_' . $seat->seat_row . '_' . $seat->seat_seat;
+    // Die Antwort haengt am Cookie und veraltet in Sekunden -- nichts davon
+    // darf in einen Cache.
+    $response->headers->set('Cache-Control', 'no-store, private');
 
-        if ($seat->seat_status === 'booked') {
-          $booked[] = $seatId;
-        } elseif ($seat->seat_status === 'reserved') {
-          $reserved[] = $seatId;
-        }
-      }
-    }
-
-    return new JsonResponse([
-      'booked' => $booked,
-      'reserved' => $reserved
-    ]);
+    return $response;
   }
 }

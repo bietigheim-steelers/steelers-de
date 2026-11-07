@@ -2,11 +2,36 @@ app.tilastot.controller:
   controller: App\Controller\SeasonTicketController::order
   path: /seasonticket/order
   methods: POST
-  schemes: [https]
+  # Kein "schemes: [https]" mehr: eine Scheme-Beschraenkung laesst einen POST
+  # ueber http stillschweigend ins Leere laufen (404, Body weg) und machte die
+  # Bestellung lokal untestbar. SeasonTicketController::order() lehnt eine
+  # unverschluesselte Anfrage jetzt ausdruecklich ab -- ausser auf localhost.
+  defaults:
+    # Ohne _token_check hat Contao den REQUEST_TOKEN hier nie geprueft: die
+    # Route liegt nicht im Contao-Scope, und der RequestTokenListener greift
+    # nur bei _token_check true oder einem Contao-Request.
+    _token_check: true
 app.tilastot.seats_api:
   controller: App\Controller\SeatsApiController::getSeats
   path: /seasontickets/api/seats
   methods: GET
+
+# Befristete Platzreservierung waehrend der Bestellung. Bewusst ohne
+# schemes-Beschraenkung, damit sich das lokal ueber http testen laesst -- im
+# Produktivbetrieb ruft die Seite diese Routen ohnehin ueber https auf.
+app.tilastot.seats_hold:
+  controller: App\Controller\SeatHoldController::hold
+  path: /seasontickets/api/hold
+  methods: POST
+  defaults:
+    _token_check: true
+
+app.tilastot.seats_release:
+  controller: App\Controller\SeatHoldController::release
+  path: /seasontickets/api/release
+  methods: POST
+  defaults:
+    _token_check: true
 
 backend_season_ticket_download:
   controller: App\Controller\SeasonTicketDownloadController::triggerDownload

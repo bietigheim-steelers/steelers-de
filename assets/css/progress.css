@@ -45,12 +45,12 @@ li.section:before {
     height: 2px;
     width: 0;
     border-radius: 1px;
-    background: var(--vf-primary);
+    background: var(--steelers-primary);
 }
 
 @keyframes changeBackground {
     from {background: gray}
-    to {background: var(--vf-primary)}
+    to {background: var(--steelers-primary)}
 }
 
 li.section.visited:before {
@@ -60,7 +60,7 @@ li.section.visited:before {
 }
 
 li.section.visited.current:before {
-    box-shadow: 0 0 0 2px var(--vf-primary);
+    box-shadow: 0 0 0 2px var(--steelers-primary);
 }
 
 

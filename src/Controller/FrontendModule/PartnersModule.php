@@ -34,7 +34,11 @@ class PartnersModule extends AbstractFrontendModuleController
 		}
 		foreach ($partners->fetchAll() as $p) {
 
-			$p['logo'] = FilesModel::findByUuid(StringUtil::deserialize($p['logo']));
+			$p['logo'] = $p['logo'] ? FilesModel::findByUuid(StringUtil::deserialize($p['logo'])) : null;
+
+			if (null === $p['logo']) {
+				continue;
+			}
 
 			$partnerslist[] = $p;
 		}

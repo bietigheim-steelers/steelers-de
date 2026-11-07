@@ -7,6 +7,9 @@
 :before,
 :after,
 * {
-  --vf-primary: #046a38;
+  /* Hiess frueher --vf-primary, weil Vueform die Variable gelesen hat.
+     Vueform ist raus; den Wert brauchen weiterhin progress.css, die
+     Swiper-Pagination in content/news.css und das Fortschritts-Template. */
+  --steelers-primary: #046a38;
   -webkit-font-smoothing: antialiased;
 }

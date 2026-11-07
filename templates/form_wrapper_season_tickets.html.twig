@@ -9,7 +9,16 @@
         <{{ hl }}>{{ headline|insert_tag_raw }}</{{ hl }}>
     {% endif %}
 
-    <div id="formApp"></div>
-    <script type="module" src="files/js/form.js?2024070200"></script>
+    {# Der Request-Token wandert ueber das data-Attribut in die Vue-App, die ihn
+       als verstecktes Feld mitschickt. Die Route prueft ihn per _token_check. #}
+    {# Preise, Kategorien, Hallenplan, Verkaufsphasen und Feature-Schalter --
+       eine Quelle in PHP (App\SeasonTicket\FormConfig), kein Extra-Request. #}
+    <script type="application/json" id="dk-config">{{ season_ticket_config()|raw }}</script>
+    <div id="formApp" data-request-token="{{ contao.request_token }}"></div>
+    {# Pfad absolut statt relativ. Relativ funktionierte bisher nur, weil
+       templates/fe_page.html.twig ein <base href> ausgibt. Ohne das wuerde der
+       Browser "files/js/form.js" gegen den Seitenpfad aufloesen, also zu
+       /dauerkarte-2026-2027/files/js/form.js -- und 404 bekommen. #}
+    <script type="module" src="/files/js/form.js?2026110600"></script>
 </div>
 <!-- indexer::continue -->
