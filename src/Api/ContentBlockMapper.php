@@ -84,6 +84,15 @@ class ContentBlockMapper
             $blocks[] = $heading;
         }
 
+        // Bild am Textelement ("Bild hinzufügen"): als eigener Bild-Baustein vor dem Text
+        if ($element->type === 'text' && $element->addImage && ($image = $this->image($element)) !== null) {
+            $blocks[] = $image;
+        }
+
+        if ($element->type === 'gallery') {
+            array_push($blocks, ...$this->gallery($element));
+        }
+
         $block = match ($element->type) {
             'headline' => $this->headline($element),
             'text' => $this->text($element),
@@ -335,6 +344,59 @@ class ContentBlockMapper
             'image' => $image,
             'linkUrl' => $this->format->url($element->imageUrl),
         ];
+    }
+
+    /**
+     * Galerie: ein Bild-Baustein je Datei (Ordner werden aufgelöst), in der im Backend gesetzten Reihenfolge.
+     *
+     * @return list<array>
+     */
+    private function gallery(ContentModel $element): array
+    {
+        $uuids = StringUtil::deserialize($element->multiSRC, true);
+        if ($uuids === []) {
+            return [];
+        }
+
+        $files = FilesModel::findMultipleByUuids($uuids);
+        $paths = [];
+        foreach ($files ?? [] as $file) {
+            if ($file->type === 'folder') {
+                foreach (FilesModel::findByPid($file->uuid) ?? [] as $child) {
+                    if ($child->type === 'file') {
+                        $paths[$child->uuid] = $child;
+                    }
+                }
+            } else {
+                $paths[$file->uuid] = $file;
+            }
+        }
+
+        $order = array_flip(array_map('strval', StringUtil::deserialize($element->orderSRC, true)));
+        $models = array_values($paths);
+        usort($models, static function ($a, $b) use ($order) {
+            $ia = $order[$a->uuid] ?? PHP_INT_MAX;
+            $ib = $order[$b->uuid] ?? PHP_INT_MAX;
+
+            return $ia === $ib ? strcmp($a->path, $b->path) : $ia <=> $ib;
+        });
+
+        $blocks = [];
+        foreach ($models as $file) {
+            $meta = StringUtil::deserialize($file->meta, true)['de'] ?? [];
+            $image = $this->images->fromUuid(
+                $file->uuid,
+                1000,
+                null,
+                $this->format->text($meta['alt'] ?? null),
+                $this->format->text($meta['caption'] ?? null),
+            );
+            if ($image !== null) {
+                $blocks[] = ['type' => 'image', 'image' => $image, 'linkUrl' => null];
+            }
+        }
+
+        return $blocks;
     }
 
     private function list(ContentModel $element): ?array
