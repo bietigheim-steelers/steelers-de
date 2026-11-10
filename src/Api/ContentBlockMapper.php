@@ -15,9 +15,10 @@ use Contao\StringUtil;
 
 /**
  * Übersetzt Inhaltselemente der Webseite (tl_content) in App-Bausteine (docs/openapi.yaml: Block).
- * Unterstützt: headline (auch als Überschrift anderer Elemente), text, image, list, hyperlink,
- * download, youtube, vimeo, Formulare (nativ als form, sonst Button zur Webseite) und verschachtelte Gruppen.
- * Alles andere (Module, Slider-Inhalte …) hat keine App-Darstellung und entfällt.
+ * Jedes Element wird zu EINEM Block `element` mit seinem `template` und allen Teilen, die es hat
+ * (headline, image/images, html, list, link, download, video); das Template der App entscheidet über
+ * Aufbau und Reihenfolge. Formulare kommen nativ als `form`. Verschachtelte Gruppen folgen flach nach
+ * dem Container. Alles andere (Module …) hat keine App-Darstellung und entfällt.
  */
 class ContentBlockMapper
 {
@@ -71,52 +72,18 @@ class ContentBlockMapper
     }
 
     /**
-     * Ein Element samt eigener Überschrift (Feld "headline" gibt es an fast jedem Element) und,
-     * bei Gruppen/Akkordeons/Slidern, seiner verschachtelten Kindelemente.
+     * Ein Element als ein Block `element` (bzw. `form`) und, bei Gruppen/Akkordeons/Slidern,
+     * danach seine verschachtelten Kindelemente.
      *
      * @return list<array>
      */
     public function forElement(ContentModel $element): array
     {
-        $blocks = [];
-
-        if ($element->type !== 'headline' && ($heading = $this->headline($element)) !== null) {
-            $blocks[] = $heading;
-        }
-
-        // Bild am Textelement ("Bild hinzufügen"): als eigener Bild-Baustein vor dem Text
-        if ($element->type === 'text' && $element->addImage && ($image = $this->image($element)) !== null) {
-            $blocks[] = $image;
-        }
-
-        if ($element->type === 'gallery') {
-            array_push($blocks, ...$this->gallery($element));
-        }
-
-        $block = match ($element->type) {
-            'headline' => $this->headline($element),
-            'text' => $this->text($element),
-            'image' => $this->image($element),
-            'list' => $this->list($element),
-            'hyperlink' => $this->button($element),
-            'download' => $this->download($element->singleSRC, $element->linkTitle),
-            'youtube' => $this->video('youtube', (string) $element->youtube, null),
-            'vimeo' => $this->video('vimeo', (string) $element->vimeo, null),
-            'form' => $this->form($element),
-            default => null,
-        };
-
-        if ($block !== null) {
-            $blocks[] = $block;
-        }
-
         // Template des Elements: im Backend gewähltes Template (Variante), sonst der Elementtyp.
-        // Kindelemente tragen ihr eigenes Template und werden danach angehängt.
         $template = (string) $element->customTpl !== '' ? (string) $element->customTpl : (string) $element->type;
-        foreach ($blocks as &$own) {
-            $own['template'] = $template;
-        }
-        unset($own);
+
+        $block = $element->type === 'form' ? $this->form($element, $template) : $this->element($element, $template);
+        $blocks = $block === null ? [] : [$block];
 
         if (\in_array($element->type, self::CONTAINERS, true)) {
             foreach (ContentModel::findPublishedByPidAndTable((int) $element->id, 'tl_content') ?? [] as $child) {
@@ -128,12 +95,68 @@ class ContentBlockMapper
     }
 
     /**
+     * Alle Teile eines Elements. Nichts darstellbar → `null`.
+     */
+    private function element(ContentModel $element, string $template): ?array
+    {
+        $parts = ['headline' => $this->headline($element)];
+
+        switch ($element->type) {
+            case 'headline':
+                break;
+            case 'text':
+                $parts['image'] = $element->addImage ? $this->image($element) : null;
+                $parts['linkUrl'] = $this->format->url($element->imageUrl);
+                $parts['html'] = $this->format->html($element->text);
+                $parts['link'] = $this->button($element);
+                break;
+            case 'image':
+                $parts['image'] = $this->image($element);
+                $parts['linkUrl'] = $this->format->url($element->imageUrl);
+                break;
+            case 'gallery':
+                $parts['images'] = $this->gallery($element);
+                break;
+            case 'list':
+                $parts['list'] = $this->list($element);
+                break;
+            case 'hyperlink':
+                $parts['link'] = $this->button($element);
+                break;
+            case 'download':
+                $parts['download'] = $this->withoutType($this->download($element->singleSRC, $element->linkTitle));
+                break;
+            case 'youtube':
+                $parts['video'] = $this->withoutType($this->video('youtube', (string) $element->youtube, null));
+                break;
+            case 'vimeo':
+                $parts['video'] = $this->withoutType($this->video('vimeo', (string) $element->vimeo, null));
+                break;
+        }
+
+        $parts = array_filter($parts, static fn ($v) => $v !== null && $v !== []);
+
+        // Elemente, aus denen sich nichts darstellen lässt (z. B. Module), entfallen.
+        return $parts === [] ? null : ['type' => 'element', 'template' => $template] + $parts;
+    }
+
+    private function withoutType(?array $block): ?array
+    {
+        if ($block === null) {
+            return null;
+        }
+        unset($block['type']);
+
+        return $block;
+    }
+
+    /**
      * Formulare werden nativ als `form`-Block geliefert: Feldbeschreibung plus die Seite des Artikels,
      * an die die App per POST sendet (wie der Browser; Contao verarbeitet es wie gewohnt).
      * Enthält das Formular etwas, das die App nicht darstellen kann (Upload, Captcha, HTML, GET-Formular,
      * dynamische Felder ohne Optionen), bleibt es beim Button zur Webseite.
      */
-    private function form(ContentModel $element): ?array
+    private function form(ContentModel $element, string $template): ?array
     {
         $article = $this->articleOf($element);
         if ($article === null) {
@@ -150,11 +173,16 @@ class ContentBlockMapper
 
         $fields = $form !== null && $form->method !== 'GET' ? $this->formFields($form) : null;
         if ($fields === null) {
-            return ['type' => 'button', 'label' => $title ?? 'Zum Formular', 'url' => $url, 'external' => true];
+            return [
+                'type' => 'element',
+                'template' => $template,
+                'link' => ['label' => $title ?? 'Zum Formular', 'url' => $url, 'external' => true],
+            ];
         }
 
         return [
             'type' => 'form',
+            'template' => $template,
             'title' => $title,
             'action' => $url,
             'formSubmit' => $form->formID ? 'auto_' . $form->formID : 'auto_form_' . $form->id,
@@ -327,35 +355,22 @@ class ContentBlockMapper
 
         $level = (int) substr((string) ($headline['unit'] ?? 'h2'), 1);
 
-        return ['type' => 'headline', 'text' => $text, 'level' => $level >= 1 && $level <= 6 ? $level : 2];
-    }
-
-    private function text(ContentModel $element): ?array
-    {
-        $html = $this->format->html($element->text);
-
-        return $html === null ? null : ['type' => 'text', 'html' => $html];
+        return ['text' => $text, 'level' => $level >= 1 && $level <= 6 ? $level : 2];
     }
 
     private function image(ContentModel $element): ?array
     {
-        $image = $this->images->fromUuid(
+        return $this->images->fromUuid(
             $element->singleSRC,
             1000,
             null,
             $this->format->text($element->alt),
             $this->format->text($element->caption),
         );
-
-        return $image === null ? null : [
-            'type' => 'image',
-            'image' => $image,
-            'linkUrl' => $this->format->url($element->imageUrl),
-        ];
     }
 
     /**
-     * Galerie: ein Bild-Baustein je Datei (Ordner werden aufgelöst), in der im Backend gesetzten Reihenfolge.
+     * Galerie: ein Bild je Datei (Ordner werden aufgelöst), in der im Backend gesetzten Reihenfolge.
      *
      * @return list<array>
      */
@@ -400,7 +415,7 @@ class ContentBlockMapper
                 $this->format->text($meta['caption'] ?? null),
             );
             if ($image !== null) {
-                $blocks[] = ['type' => 'image', 'image' => $image, 'linkUrl' => null];
+                $blocks[] = $image;
             }
         }
 
@@ -416,7 +431,7 @@ class ContentBlockMapper
             }
         }
 
-        return $items === [] ? null : ['type' => 'list', 'ordered' => $element->listtype === 'ordered', 'items' => $items];
+        return $items === [] ? null : ['ordered' => $element->listtype === 'ordered', 'items' => $items];
     }
 
     private function button(ContentModel $element): ?array
@@ -427,7 +442,6 @@ class ContentBlockMapper
         }
 
         return [
-            'type' => 'button',
             'label' => $this->format->text($element->linkTitle) ?? $url,
             'url' => $url,
             'external' => !str_starts_with($url, 'app://'),

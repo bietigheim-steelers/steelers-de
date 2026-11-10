@@ -228,7 +228,32 @@ bleibt sichtbar).
 | `download` | `label`, `url`, `mimeType?`, `size?` (Bytes) | Zeile mit Dateisymbol; Antippen öffnet/lädt die Datei (PDF im Systemviewer) |
 | `video` | `provider` (`youtube`\|`vimeo`), `id`, `title?` | Vorschaubild mit Abspielen; YouTube-ID → `youtube_player_iframe` o. ä. oder Link zur Video-App |
 | `promo` | `title`, `text?`, `image?`, `label?`, `url?` | auffälliger Banner (Bild, Titel, Text, optional Button/Antippen) |
+| `element` | `template`, `headline?`, `image?`, `linkUrl?`, `images[]?`, `html?`, `list?`, `link?`, `download?`, `video?` | **Inhaltselement der Webseite**, siehe „Elemente der Webseite“ unten |
 | `form` | `title?`, `action`, `formSubmit`, `submitLabel`, `fields[]` | native Felder; Absenden per `POST` (urlencoded, **ohne Cookies**) an `action` mit allen Werten + `FORM_SUBMIT={formSubmit}`, genau wie der Browser, damit Speichern/Mails/Hooks der Webseite laufen. `3xx` = Erfolg, `200` = Validierungsfehler. Währenddessen Warteansicht, danach Bestätigung |
+
+### Elemente der Webseite (`element`)
+
+Jedes Inhaltselement der Webseite (Text, Bild, Galerie, Liste, Link, Download, Video, Überschrift) kommt als
+**ein** Block `element`. `template` ist die im Backend gewählte Twig-Variante (z. B.
+`content_element/text/highlight`), sonst der Elementtyp (`text`). Alle anderen Felder sind optional und
+enthalten, was das Element hat: `headline {text, level}`, `image` (+ `linkUrl`), `images[]` (Galerie), `html`,
+`list {ordered, items}`, `link {label, url, external}`, `download`, `video`. Kindelemente von Gruppen und
+Akkordeons folgen als eigene Blöcke nach dem Container.
+
+Die App wählt je `template` eine Darstellung und bestimmt selbst Reihenfolge und Layout der Teile
+(`lib/widgets/content_templates.dart`, Tabelle `_templates`, Schlüssel = letzter Pfadteil des Templates).
+**Unbekanntes Template → Standarddarstellung.**
+
+| Familie | Varianten in der App |
+|---|---|
+| `text/*` | `default`, `default_left`, `one_column`, `small`, `highlight`, `page_title`, `kidsclub_page_title`, `business_hero`, `business_section_header`, `businessschmiede(_header/_pricing)` (= Standard) |
+| `headline/*` | `page_title`, `business_page_title` |
+| `hyperlink/*` | `button`, `card`, `content` |
+| `image/*` | `centered`, `business_grid_group_element` |
+| `list/*` | `cards`, `business` |
+| `gallery/*` | `masonry` (2 Spalten), `scroller` (horizontal) |
+
+Neue Twig-Variante auf der Webseite → in der App eintragen, sonst erscheint sie im Standard-Look.
 
 **HTML-Teilmenge in `text.html`** (und in `Player.about`, `Partner.description`): nur
 `<p> <strong> <em> <ul> <ol> <li> <br> <a href>`. Alles andere hat der Server schon entfernt. Mit
@@ -346,8 +371,7 @@ Damit die App-Seite die Möglichkeiten kennt: im Contao-Backend gibt es die Grup
 Die Block-Typen dort entsprechen exakt Abschnitt 4. Zusätzlich gibt es zwei Bausteine, die in der API
 nicht als eigener Typ auftauchen, weil der Server sie auflöst:
 
-- **Artikel der Webseite einbinden** – die Inhaltselemente eines Artikels werden zu `text`, `headline`,
-  `image`, `list`, `button`, `download` und `video` Blöcken. Formulare kommen als `form` (nicht darstellbare
+- **Artikel der Webseite einbinden** – die Inhaltselemente eines Artikels werden zu `element`-Blöcken (ein Block je Element). Formulare kommen als `form` (nicht darstellbare
   – Upload, Captcha, GET – als `button` zur Webseite). Alles andere (Galerien, Slider …) entfällt.
 - **Inhaltselement der Webseite einbinden** – dasselbe für ein einzelnes Element.
 
