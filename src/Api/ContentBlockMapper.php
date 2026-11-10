@@ -217,7 +217,7 @@ class ContentBlockMapper
             if (\in_array($type, ['fieldsetStart', 'fieldsetStop'], true)) {
                 continue;
             }
-            if ($class === null || !class_exists($class) || !\in_array($type, ['text', 'textarea', 'select', 'radio', 'checkbox', 'hidden', 'explanation', 'submit'], true)) {
+            if ($class === null || !class_exists($class) || !\in_array($type, ['text', 'textarea', 'select', 'radio', 'checkbox', 'hidden', 'explanation', 'captcha', 'submit'], true)) {
                 return null;
             }
 
@@ -244,6 +244,24 @@ class ContentBlockMapper
                 if ($html !== null) {
                     $fields[] = ['type' => 'explanation', 'html' => $html];
                 }
+                continue;
+            }
+
+            if ($type === 'captcha') {
+                // Rechenaufgabe (zustandslos per HMAC). Die App sendet die Antwort unter `name`, den
+                // Hash unter `{name}_hash{antwort²+1}` und `{name}_name` leer (Honeypot) – wie das JS der Webseite.
+                System::loadLanguageFile('default');
+                $question = html_entity_decode((string) $widget->question, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $fields[] = [
+                    'name' => (string) $widget->name,
+                    'label' => $label ?? 'Sicherheitsfrage',
+                    'type' => 'captcha',
+                    'required' => true,
+                    'value' => null,
+                    'placeholder' => $this->format->text($model->placeholder),
+                    'question' => $question,
+                    'hash' => (string) $widget->hash,
+                ];
                 continue;
             }
 

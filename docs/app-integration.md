@@ -372,7 +372,7 @@ Die Block-Typen dort entsprechen exakt Abschnitt 4. Zusätzlich gibt es zwei Bau
 nicht als eigener Typ auftauchen, weil der Server sie auflöst:
 
 - **Artikel der Webseite einbinden** – die Inhaltselemente eines Artikels werden zu `element`-Blöcken (ein Block je Element). Formulare kommen als `form` (nicht darstellbare
-  – Upload, Captcha, GET – als `button` zur Webseite). Alles andere (Galerien, Slider …) entfällt.
+  – Upload, GET – als `button` zur Webseite). Alles andere (Galerien, Slider …) entfällt.
 - **Inhaltselement der Webseite einbinden** – dasselbe für ein einzelnes Element.
 
 **Regel für neue Bausteine:** Sobald die App einen neuen Block-Typ kann, trägt der Redakteur beim ersten

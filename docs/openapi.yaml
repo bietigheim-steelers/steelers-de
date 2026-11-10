@@ -955,7 +955,11 @@ components:
         (`application/x-www-form-urlencoded`, **ohne Cookies**) an `action` mit allen Feldwerten und
         `FORM_SUBMIT={formSubmit}` – genau wie der Browser, damit Speichern, Mails und Hooks der Webseite
         unverändert laufen. `302/303` = erfolgreich, `200` = Validierungsfehler. Nicht darstellbare
-        Formulare (Upload, Captcha, GET) kommen stattdessen als `element` mit `link`.
+        Formulare (Upload, GET) kommen stattdessen als `element` mit `link`.
+
+        Captcha (`type: captcha`): Rechenaufgabe in `question`. Die App sendet die Antwort `a` unter `name`,
+        `hash` unter `{name}_hash{a²+1}` und `{name}_name` leer (Honeypot). Der Hash ist rund 30–60 Minuten
+        gültig; danach den Screen neu laden.
       type: object
       required: [type, action, formSubmit, fields]
       properties:
@@ -971,8 +975,10 @@ components:
             type: object
             required: [type]
             properties:
-              type: { type: string, enum: [text, email, phone, number, date, textarea, select, radio, checkbox, hidden, explanation] }
+              type: { type: string, enum: [text, email, phone, number, date, textarea, select, radio, checkbox, hidden, explanation, captcha] }
               name: { type: string }
+              question: { type: string, description: Nur bei `captcha`. Rechenaufgabe als Klartext. }
+              hash: { type: string, description: Nur bei `captcha`. Hash zur richtigen Antwort. }
               label: { type: string }
               required: { type: boolean }
               value: { type: string, nullable: true }
