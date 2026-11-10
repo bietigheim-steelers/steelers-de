@@ -110,6 +110,14 @@ class ContentBlockMapper
             $blocks[] = $block;
         }
 
+        // Template des Elements: im Backend gewähltes Template (Variante), sonst der Elementtyp.
+        // Kindelemente tragen ihr eigenes Template und werden danach angehängt.
+        $template = (string) $element->customTpl !== '' ? (string) $element->customTpl : (string) $element->type;
+        foreach ($blocks as &$own) {
+            $own['template'] = $template;
+        }
+        unset($own);
+
         if (\in_array($element->type, self::CONTAINERS, true)) {
             foreach (ContentModel::findPublishedByPidAndTable((int) $element->id, 'tl_content') ?? [] as $child) {
                 array_push($blocks, ...$this->forElement($child));

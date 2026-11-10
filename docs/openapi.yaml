@@ -785,6 +785,10 @@ components:
         *Inhaltsblöcke* (`headline` bis `promo`) bringen ihren Inhalt mit. *Datenblöcke* (`news_list` bis `partners`)
         enthalten nur Konfiguration; die App lädt die Daten selbst über die Daten-Endpunkte.
         Links (`url`) sind `https://…`-Adressen oder `app://screen/{key}` für einen Screen der App.
+
+        Blöcke aus Inhaltselementen tragen zusätzlich `template`: das im Backend gewählte Template
+        (`customTpl`, z. B. eine Variante), sonst den Elementtyp (`text`, `image`, …). Mehrere Blöcke
+        eines Elements (Überschrift, Bild, Text) haben dasselbe `template`.
       oneOf:
         - $ref: '#/components/schemas/HeadlineBlock'
         - $ref: '#/components/schemas/TextBlock'
