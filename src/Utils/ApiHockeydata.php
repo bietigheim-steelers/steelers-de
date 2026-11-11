@@ -161,7 +161,7 @@ class ApiHockeydata
             if ($p->eliteprospectsid && $runEPUpdate) {
                 $rss = new \SimpleXMLElement('http://eliteprospects.com/rss_player_stats2.php?player=' . $p->eliteprospectsid, 0, true);
                 foreach ($rss->xpath('channel/item') as $item) {
-                    $p->epstats = mb_convert_encoding($item->description, 'ISO-8859-1', 'UTF-8');
+                    $p->epstats = (string) $item->description;
                     break;
                 }
 
