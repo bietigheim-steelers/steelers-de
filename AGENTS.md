@@ -632,3 +632,36 @@ verlangt PHP 8.4; mit einem älteren PHP lässt sich ein PHPUnit 12 mit dem Proj
   `contao:filesync files/business`. Zum Wiederherstellen von `tl_files` reicht der Dump unter
   `dev-docker/db/dumps/` – nur den `tl_files`-Abschnitt einspielen.
 
+
+## Schrittassistent für Formulare
+
+Progressive Enhancement für Contao-Formulare: ohne JavaScript bleibt es das normale Formular,
+der Absende-Weg (POST, Hooks, E-Mail, Leads) ändert sich nicht. **Alles Formularspezifische steht im
+Backend**, im Code gibt es keine Feldnamen, Texte oder Profile. Anleitung für die Redaktion:
+`docs/formulare-schrittassistent.md`.
+
+- **Aktivieren:** am Formular (*Formulare → Template*, `tl_form.customTpl`, **nicht** am
+  Inhaltselement) `form_wrapper_steps` wählen. Der Wrapper bindet
+  `templates/custom/form_steps.html.twig` ein (Skript + CSS inline, kein Build nötig).
+- **Schritte** = Fieldsets (`fieldsetStart`). Bezeichnung = Überschrift, Feld `sfStepLead` =
+  Untertitel (`data-step-lead`, `templates/form_fieldsetStart.html.twig`). Felder vor dem ersten
+  Fieldset hängen am ersten Schritt, Felder nach einem Fieldset am vorigen; Captcha und
+  Absenden-Knopf wandern in den letzten Schritt. Ohne Fieldset gibt es einen einzigen Schritt.
+- **Felder an `tl_form_field`** (Spalten: `App\Migration\FormStepsMigration`):
+  `sfMsgRequired`, `sfMsgInvalid`, `sfSumGroup`/`sfSumMin`/`sfSumUnit`/`sfSumMessage`, `sfStepLead`.
+  Dazu die Contao-Bordmittel: Pflichtfeld, `minval`/`maxval`, Eingabeprüfung (inkl. *custom* mit
+  `customRgxp`), Standardwert, Autocomplete.
+- **Server:** `App\EventListener\FormStepsRulesListener` reicht die Backend-Werte als
+  `data-sf-*`-Attribute ans Eingabefeld (`loadFormField`), setzt dieselben Meldungen
+  serverseitig ein und erzwingt die Summenregel (`validateFormField`) – auch ohne JavaScript.
+  Contao leert den POST-Wert eines Feldes, sobald es geprüft ist; der Listener merkt sich die
+  Werte deshalb selbst (`$seen`).
+- **Preise** stehen in den Feldbeschriftungen (`= 15,00 € pro Person`) und Optionstexten
+  (`zzgl. 3,95€`); die Zusammenfassung rechnet daraus.
+- **Fehler:** Prüfung beim Verlassen eines Feldes, Fehlerliste mit Links, Fokus auf das erste Feld.
+  Antwortet der Server mit Fehlern, springt der Assistent in den Schritt mit dem ersten Fehler.
+- Entwurf liegt in `sessionStorage` (nur diese Browser-Sitzung) und wird beim erfolgreichen Absenden gelöscht.
+- Lokal testen: das Formular `gruppenangebote` nutzt den Mailtransport `m365_noreply`. Ein gültiges
+  Absenden verschickt also eine echte Mail an den Empfänger – zum Testen nur ungültige Daten senden.
+- Ausrollen: `contao:migrate --migrations-only` (legt die Spalten an), dann das Formular im Backend
+  umkonfigurieren.

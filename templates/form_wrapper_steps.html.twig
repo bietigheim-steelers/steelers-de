@@ -1,0 +1,51 @@
+{#
+    Formular-Wrapper mit Schrittassistent (Progressive Enhancement).
+
+    Im Backend am Formular-Inhaltselement unter "Template" auswaehlen. Ohne JavaScript
+    bleibt es ein ganz normales, vollstaendiges Formular; der Absende-Weg (POST an Contao,
+    Hooks, E-Mail, Leads) ist unveraendert. Was der Assistent daraus macht, steht in
+    templates/custom/form_steps.html.twig.
+#}
+{% set wrapperAttributes = attrs(cssID|default)
+    .addClass(['defaultcontainer', class, 'block'])
+    .addStyle(style|default)
+    .mergeWith(wrapperAttributes|default)
+%}
+
+<!-- indexer::stop -->
+<div{{ wrapperAttributes }}>
+
+    {% if headline|default %}
+        <{{ hl }}>{{ headline|insert_tag_raw }}</{{ hl }}>
+    {% endif %}
+
+    <form{{ attrs()
+        .setIfExists('action', action|default)
+        .set('method', method)
+        .set('enctype', enctype)
+        .mergeWith(attributes|default)
+        .mergeWith(novalidate|default)
+    }}>
+        <div class="max-w-5xl mx-auto formbody">
+            {% if errors|default %}
+                <div class="sf-form-errors" role="alert">
+                    {% for error in errors %}
+                        <p class="error">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if 'get' != method %}
+                <input type="hidden" name="FORM_SUBMIT" value="{{ formSubmit }}">
+                <input type="hidden" name="REQUEST_TOKEN" value="{{ contao.request_token }}">
+                {% if maxFileSize|default %}
+                    <input type="hidden" name="MAX_FILE_SIZE" value="{{ maxFileSize }}">
+                {% endif %}
+            {% endif %}
+            {{ hidden|raw }}
+            {{ fields|raw }}
+        </div>
+    </form>
+
+    {% include 'custom/form_steps.html.twig' %}
+</div>
+<!-- indexer::continue -->
