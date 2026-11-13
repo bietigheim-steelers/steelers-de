@@ -57,3 +57,7 @@ $GLOBALS['TL_LANG']['MOD']['app_flags'] = array('Schalter', 'Funktionen der mobi
 $GLOBALS['TL_LANG']['MOD']['sponsors_events'] = array('Sponsoren Events', 'Hier können Sponsoren Events verwaltet werden.');
 $GLOBALS['TL_LANG']['MOD']['auction_bids'] = array('Auktionsgebote', 'Gebote aus den Auktionsformularen (Zieltabelle steelers_auktion).');
 $GLOBALS['TL_LANG']['FMD']['auction'] = array('Auktion: Höchstgebote', 'Listet alle Artikel aus dem Auswahlfeld "player" des gewählten Auktionsformulars mit dem jeweils höchsten Gebot.');
+
+$GLOBALS['TL_LANG']['FMD']['ice_plan_module'] = array('Eisplan', 'Zeigt Trainingszeiten, Spiele und Hallenbelegung direkt aus den hochgeladenen Eisplan-PDFs (Eisplan_KW47-2026a.pdf) an.');
+$GLOBALS['TL_LANG']['tl_module']['iceplan_legend'] = 'Eisplan';
+$GLOBALS['TL_LANG']['tl_module']['iceplan_folder'] = array('Ordner mit den Eisplan-PDFs', 'In diesem Ordner werden die wöchentlichen PDFs (Eisplan_KW47-2026a.pdf) hochgeladen. Gibt es mehrere Versionen einer Woche (a, b, c …), zählt die höchste. Es ist kein weiterer Schritt nötig.');

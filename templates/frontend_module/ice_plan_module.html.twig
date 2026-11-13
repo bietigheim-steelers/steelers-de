@@ -1,0 +1,124 @@
+{% block content %}
+<div class="defaultcontainer {{ cssClass }}" data-iceplan{% if cssId %} id="{{ cssId }}"{% endif %}>
+  {% if headline %}<{{ headlineUnit|default('h2') }}>{{ headline }}</{{ headlineUnit|default('h2') }}>{% endif %}
+
+  {% if not hasFolder %}
+    <p>Im Modul ist noch kein Ordner mit den Eisplan-PDFs gewählt.</p>
+  {% elseif not week %}
+    <p>Aktuell liegt kein Eisplan vor.</p>
+  {% else %}
+    <div class="flex items-center justify-between gap-4 mb-6">
+      {% if prev %}
+        <a href="{{ baseUrl }}?kw={{ prev.key }}" class="font-bold text-steelgreen hover:underline" rel="prev">&larr; KW {{ prev.week }}</a>
+      {% else %}<span></span>{% endif %}
+      <div class="text-center">
+        <div class="font-bold text-xl">KW {{ week.week }}</div>
+        <div class="text-sm text-gray-600">{{ week.monday|format_datetime(locale='de', pattern='dd.MM.')}} – {{ week.monday.modify('+6 days')|format_datetime(locale='de', pattern='dd.MM.yyyy') }}</div>
+      </div>
+      {% if next %}
+        <a href="{{ baseUrl }}?kw={{ next.key }}" class="font-bold text-steelgreen hover:underline" rel="next">KW {{ next.week }} &rarr;</a>
+      {% else %}<span></span>{% endif %}
+    </div>
+
+    {% if teams %}
+      <div class="mb-6 flex flex-wrap gap-2" data-iceplan-filter hidden role="group" aria-label="Team filtern">
+        <button type="button" data-team="" aria-pressed="true" class="px-3 py-1 border-2 border-steelgreen font-bold text-sm bg-steelgreen text-white">Alle</button>
+        {% for team in teams %}
+          <button type="button" data-team="{{ team }}" aria-pressed="false" class="px-3 py-1 border-2 border-steelgreen font-bold text-sm text-steelgreen">{{ team }}</button>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if parseFailed %}
+      <p>Der Eisplan konnte nicht ausgelesen werden.{% if pdfUrl %} <a class="underline" href="{{ pdfUrl }}">Eisplan als PDF öffnen</a>{% endif %}</p>
+    {% else %}
+      <div class="grid gap-4 lg:grid-cols-2">
+        {% for day in days %}
+          <section data-iceplan-day class="border-t-4 border-steelgreen bg-white shadow-sm">
+            <h3 style="margin:0" class="flex items-baseline justify-between px-4 py-2 font-bold text-lg bg-steelwhite">
+              <span>{{ day.weekday }}</span>
+              <span class="text-sm font-normal text-gray-600">{{ day.date|date('d.m.Y') }}</span>
+            </h3>
+            {% if day.entries is empty %}
+              <p class="px-4 py-3 text-sm text-gray-500">Keine Eiszeiten</p>
+            {% else %}
+              <div class="grid sm:grid-cols-2 sm:divide-x divide-gray-200">
+                {% for place, label in {arena: 'Arena', halle: 'Trainingshalle'} %}
+                  <div>
+                    <h4 style="margin:0" class="px-4 py-1 text-xs uppercase tracking-wide text-gray-500 border-b border-gray-200">{{ label }}</h4>
+                    <ul class="divide-y divide-gray-200" data-iceplan-list>
+                      {% for e in day.entries|filter(x => x.place == place) %}
+                        <li data-team="{{ e.team }}" class="px-4 py-2 {{ e.type == 'game' ? 'bg-steelgreen text-white' : '' }}">
+                          <div class="font-bold tabular-nums">
+                            {% if e.type == 'game' %}
+                              {{ e.start }} Uhr{% if e.warmup %} <span class="text-xs font-normal opacity-80">(Warm-up {{ e.warmup }})</span>{% endif %}
+                            {% elseif e.end %}
+                              {{ e.start }}–{{ e.end }}
+                            {% else %}
+                              ab {{ e.start }}
+                            {% endif %}
+                          </div>
+                          <div class="font-bold">
+                            {% if e.type == 'game' %}
+                              Spiel: {{ e.title }}{% if e.opponent %} <span class="font-normal">vs.</span> {{ e.opponent }}{% endif %}
+                            {% else %}
+                              {{ e.title }}
+                            {% endif %}
+                          </div>
+                          {% if e.rooms or e.note %}
+                            <div class="text-sm {{ e.type == 'game' ? 'opacity-80' : 'text-gray-600' }}">
+                              {% if e.rooms %}Kabine {{ e.rooms|join(', ') }}{% endif %}{% if e.rooms and e.note %} · {% endif %}{{ e.note }}
+                            </div>
+                          {% endif %}
+                        </li>
+                      {% endfor %}
+                      <li class="px-4 py-2 text-sm text-gray-400" data-empty{% if day.entries|filter(x => x.place == place) %} style="display:none"{% endif %}>Kein Training</li>
+                    </ul>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </section>
+        {% endfor %}
+      </div>
+      {% if pdfUrl %}<p class="mt-4 text-sm"><a class="underline" href="{{ pdfUrl }}">Eisplan als PDF</a></p>{% endif %}
+    {% endif %}
+  {% endif %}
+</div>
+<script>
+(function () {
+  var root = document.querySelector('[data-iceplan]');
+  var bar = root && root.querySelector('[data-iceplan-filter]');
+  if (!bar) return;
+  var buttons = bar.querySelectorAll('button');
+  function apply(team) {
+    buttons.forEach(function (b) {
+      var on = b.dataset.team === team;
+      b.setAttribute('aria-pressed', on);
+      b.classList.toggle('bg-steelgreen', on);
+      b.classList.toggle('text-white', on);
+      b.classList.toggle('text-steelgreen', !on);
+    });
+    root.querySelectorAll('[data-iceplan-day]').forEach(function (day) {
+      var total = 0;
+      day.querySelectorAll('[data-iceplan-list]').forEach(function (ul) {
+        var shown = 0;
+        ul.querySelectorAll('li[data-team]').forEach(function (li) {
+          var show = !team || li.dataset.team === team;
+          li.style.display = show ? '' : 'none';
+          if (show) shown++;
+        });
+        var empty = ul.querySelector('[data-empty]');
+        if (empty) empty.style.display = shown === 0 ? '' : 'none';
+        total += shown;
+      });
+    });
+    try { history.replaceState(null, '', location.pathname + location.search + (team ? '#team=' + encodeURIComponent(team) : '')); } catch (e) {}
+  }
+  bar.hidden = false; bar.style.display = '';
+  buttons.forEach(function (b) { b.addEventListener('click', function () { apply(b.dataset.team); }); });
+  var m = location.hash.match(/team=([^&]+)/);
+  if (m) apply(decodeURIComponent(m[1]));
+})();
+</script>
+{% endblock %}

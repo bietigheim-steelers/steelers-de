@@ -146,3 +146,13 @@ $GLOBALS['TL_DCA']['tl_module']['palettes']['auction'] .= '{template_legend:hide
 // Bestätigungstext des Formulars aus der URL (siehe App\Controller\FrontendModule\FormConfirmationModule)
 $GLOBALS['TL_DCA']['tl_module']['palettes']['form_confirmation_module'] = '{title_legend},name,headline,type;';
 $GLOBALS['TL_DCA']['tl_module']['palettes']['form_confirmation_module'] .= '{template_legend:hide},customTpl;{expert_legend:hide},cssID';
+
+// Eisplan (Hallenbelegung aus woechentlich hochgeladenen PDFs)
+$GLOBALS['TL_DCA']['tl_module']['fields']['iceplan_folder'] = array(
+	'label'                   => &$GLOBALS['TL_LANG']['tl_module']['iceplan_folder'],
+	'exclude'                 => true,
+	'inputType'               => 'fileTree',
+	'eval'                    => array('fieldType' => 'radio', 'files' => false, 'mandatory' => true, 'tl_class' => 'clr'),
+	'sql'                     => "binary(16) NULL"
+);
+$GLOBALS['TL_DCA']['tl_module']['palettes']['ice_plan_module'] = '{title_legend},name,headline,type;{iceplan_legend},iceplan_folder;{template_legend:hide},customTpl;{protected_legend:hide},protected;{expert_legend:hide},guests,cssID';
