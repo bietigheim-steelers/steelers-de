@@ -10,6 +10,7 @@ use Contao\CoreBundle\DependencyInjection\Attribute\AsFrontendModule;
 use Contao\CoreBundle\Twig\FragmentTemplate;
 use Contao\FilesModel;
 use Contao\ModuleModel;
+use Contao\StringUtil;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -102,8 +103,10 @@ class IcePlanModule extends AbstractFrontendModuleController
         $keys = array_keys($weeks);
         $index = $selected ? array_search($selected['key'], $keys, true) : false;
 
-        $template->headline = $model->headline;
-        $template->headlineUnit = $model->hl;
+        // Contao speichert die Ueberschrift serialisiert: a:2:{unit, value}.
+        $headline = StringUtil::deserialize($model->headline, true);
+        $template->headline = $headline['value'] ?? '';
+        $template->headlineUnit = ($headline['unit'] ?? '') ?: 'h2';
         $template->cssId = $model->cssID[0] ?? '';
         $template->cssClass = $model->cssID[1] ?? '';
         $template->hasFolder = (bool) $folder;
