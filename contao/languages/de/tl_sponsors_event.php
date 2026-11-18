@@ -3,7 +3,7 @@
 $GLOBALS['TL_LANG']['tl_sponsors_event']['title'][0]       = 'Titel';
 $GLOBALS['TL_LANG']['tl_sponsors_event']['title'][1]       = 'Bitte geben Sie einen Titel für das Sponsor-Event ein.';
 $GLOBALS['TL_LANG']['tl_sponsors_event']['startDate'][0]   = 'Datum';
-$GLOBALS['TL_LANG']['tl_sponsors_event']['startDate'][1]   = 'Bitte geben Sie das Datum des Events an.';
+$GLOBALS['TL_LANG']['tl_sponsors_event']['startDate'][1]   = 'Datum des Events. Kann leer bleiben, wenn der Termin noch nicht feststeht – dann erscheint im Formular statt des Datums ein Hinweis und der Kalendereintrag taucht in keiner Terminliste auf, bis das Datum nachgetragen wird.';
 $GLOBALS['TL_LANG']['tl_sponsors_event']['startTime'][0]   = 'Startzeit';
 $GLOBALS['TL_LANG']['tl_sponsors_event']['startTime'][1]   = 'Startzeit des Events (z. B. 14:30).';
 $GLOBALS['TL_LANG']['tl_sponsors_event']['teaser'][0] = 'Teaser';

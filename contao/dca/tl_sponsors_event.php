@@ -108,7 +108,7 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
             'sorting'   => true,
             'flag'      => DataContainer::SORT_DAY_DESC,
             'inputType' => 'text',
-            'eval'      => ['rgxp' => 'date', 'mandatory' => true, 'datepicker' => true, 'tl_class' => 'w50 wizard'],
+            'eval'      => ['rgxp' => 'date', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "int(10) unsigned NULL",
         ],
         'startTime' => [

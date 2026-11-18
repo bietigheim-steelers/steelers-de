@@ -66,11 +66,15 @@ class SponsorsEventDca
             $calEvent = CalendarEventsModel::findById((int) $row['calendar_event_id']);
         }
 
-        $startDate = (int) ($row['startDate'] ?? time());
+        // Das Datum ist optional (Events, deren Termin erst kurzfristig feststeht).
+        // Ohne Datum bleiben alle vier Datumsspalten des Kalendereintrags NULL: Contao
+        // sucht Termine über "startTime BETWEEN ...", ein Eintrag ohne Datum taucht
+        // deshalb in keiner Terminliste auf, bis das Datum nachgetragen wird.
+        $startDate = !empty($row['startDate']) ? (int) $row['startDate'] : null;
 
         // Startzeit (HH:ii) mit Datum kombinieren
         $startTime = $startDate;
-        if (!empty($row['startTime']) && preg_match('/^(\d{1,2}):(\d{2})$/', $row['startTime'], $m)) {
+        if (null !== $startDate && !empty($row['startTime']) && preg_match('/^(\d{1,2}):(\d{2})$/', $row['startTime'], $m)) {
             $startTime = mktime((int) $m[1], (int) $m[2], 0,
                 (int) date('m', $startDate),
                 (int) date('d', $startDate),
@@ -85,13 +89,20 @@ class SponsorsEventDca
             $calEvent->alias     = 'sponsor-event-' . $dc->id . '-' . substr(bin2hex(random_bytes(4)), 0, 6);
             $calEvent->author    = BackendUser::getInstance()->id;
             $calEvent->startTime = $startTime;
-            $calEvent->endTime   = $startDate + 86399;
+            $calEvent->endTime   = null !== $startDate ? $startDate + 86399 : null;
         }
 
         $calEvent->title     = $row['title'];
         $calEvent->startDate = $startDate;
         $calEvent->endDate   = $startDate;
         $calEvent->startTime = $startTime;
+
+        // Wird das Datum nachträglich entfernt, darf kein alter Endzeitpunkt stehen
+        // bleiben – sonst bliebe der Eintrag über endTime in den Listen auffindbar.
+        if (null === $startDate) {
+            $calEvent->endTime = null;
+        }
+
         $calEvent->teaser    = $row['teaser'] ?? '';
         $calEvent->addImage  = (bool) ($row['addImage'] ?? false);
         $calEvent->singleSRC = $row['singleSRC'] ?? null;
@@ -173,9 +184,9 @@ class SponsorsEventDca
      */
     public function formatListLabel(array $row, string $label, DataContainer $dc, array $args): array
     {
-        if (!empty($row['startDate'])) {
-            $args[1] = Date::parse('d.m.Y', (int) $row['startDate']);
-        }
+        $args[1] = !empty($row['startDate'])
+            ? Date::parse('d.m.Y', (int) $row['startDate'])
+            : 'Termin offen';
 
         // Bei begrenzten Events den Stand direkt in der Liste zeigen
         if (!empty($row['limitParticipants']) && (int) $row['maxParticipants'] > 0) {

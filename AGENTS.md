@@ -478,6 +478,24 @@ zeigt bei begrenzten Events den Stand hinter dem Titel (`SponsorsEventDca::forma
 Das Template nutzt nur Klassen, die in `sponsors_event_form.html.twig` schon vorkommen –
 so ist kein Tailwind-Rebuild nötig.
 
+**Datum ist optional** – für Events, deren Termin erst kurzfristig feststeht, darf
+`startDate` leer bleiben. Was daran hängt:
+
+- Das Formular-Template gibt dann „Termin wird noch bekanntgegeben“ aus. Der Guard um
+  `format_date` ist Pflicht: Twig setzt einen leeren Wert auf „jetzt“, ohne `{% if %}`
+  stünde dort das heutige Datum.
+- Der gespiegelte Kalendereintrag bekommt `startDate`, `endDate`, `startTime` und
+  `endTime` als `NULL`. Contao sucht Termine über `startTime BETWEEN …`, der Eintrag
+  taucht deshalb in keiner Terminliste auf, bis das Datum nachgetragen wird.
+- `SponsorsEventResolver::formatDate()` liefert einen Leerstring, `{{sponsor_event_date}}`
+  und `##sponsor_event_date##` bleiben also leer. Texte, die „Am ‹Datum› um ‹Zeit› Uhr“
+  schreiben, müssen das selbst abfangen – das betrifft `tl_form.confirmation` und die
+  Event-Texte, nicht den Code.
+- In der Backend-Liste steht „Termin offen“. Sortiert wird nach `startDate DESC`, und
+  Contao behandelt den leeren Wert als `0` – undatierte Events stehen deshalb ganz unten.
+  Der Datumsfilter findet sie nicht (Contao filtert mit `startDate=''`, das trifft kein
+  `NULL`).
+
 Fallstricke:
 
 - `startTime` speichert Contao als Zeitstempel, nicht als `19:00`; formatiert wird über
