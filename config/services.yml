@@ -99,6 +99,22 @@ services:
       $requestFactory: '@cleverreach.psr17_factory'
       $streamFactory: '@cleverreach.psr17_factory'
 
+  # --- Frontend-Login ueber Auth0 -------------------------------------------
+  # Domain, Client-ID und -Secret stehen als auth0_* in config/parameters.yml (nicht im Git).
+  # Die Parameter MUESSEN vor dem Deploy auf dem Zielsystem stehen (leere Werte sind erlaubt,
+  # dann antwortet /auth0/login mit 503), sonst startet der Container nicht.
+  App\Auth0\Auth0Client:
+    arguments:
+      $httpClient: '@http_client'
+      $domain: '%auth0_domain%'
+      $clientId: '%auth0_client_id%'
+      $clientSecret: '%auth0_client_secret%'
+
+  # Der Namespace muss zur Action in Auth0 passen (Post Login, setCustomClaim).
+  App\Auth0\Auth0MemberProvisioner:
+    arguments:
+      $rolesClaim: 'https://steelers.de/roles'
+
 twig:
   globals:
     project_dir: '%kernel.project_dir%'

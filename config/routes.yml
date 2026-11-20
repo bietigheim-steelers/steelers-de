@@ -96,3 +96,22 @@ app_api_app_screen:
   path: /api/v1/app/screens/{key}
   methods: GET
   requirements: { key: '[A-Za-z0-9_.-]+' }
+
+# --- Frontend-Login ueber Auth0 (siehe AGENTS.md, Abschnitt "Frontend-Login") ----------------
+# _scope frontend: nur so greift die Contao-Frontend-Firewall und das Mitglied wird ueber die
+# normale Contao-Session eingeloggt.
+auth0_login:
+  controller: App\Controller\Auth0Controller::login
+  path: /auth0/login
+  methods: GET
+  defaults: { _scope: frontend, _token_check: false }
+auth0_callback:
+  controller: App\Controller\Auth0Controller::callback
+  path: /auth0/callback
+  methods: GET
+  defaults: { _scope: frontend, _token_check: false }
+auth0_logout:
+  controller: App\Controller\Auth0Controller::logout
+  path: /auth0/logout
+  methods: GET
+  defaults: { _scope: frontend, _token_check: false }

@@ -17,6 +17,11 @@ parameters:
   # CleverReach-REST-API (Newsletter-Anmeldung): Account > Extras > REST API
   cleverreach_api_token: 
 
+  # Frontend-Login ueber Auth0: Application > Settings (Regular Web Application)
+  auth0_domain: bietigheim-steelers.eu.auth0.com
+  auth0_client_id: 
+  auth0_client_secret: 
+
   # Microsoft 365 / Entra ID App-Registrierung für den Graph-Mailer
   # (Azure Portal > Microsoft Entra ID > App-Registrierungen)
   microsoft_graph_tenant_id: nicht-konfiguriert

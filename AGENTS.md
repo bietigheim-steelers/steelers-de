@@ -651,6 +651,43 @@ verlangt PHP 8.4; mit einem älteren PHP lässt sich ein PHPUnit 12 mit dem Proj
   `dev-docker/db/dumps/` – nur den `tl_files`-Abschnitt einspielen.
 
 
+## Frontend-Login über Auth0
+
+Mitglieder melden sich im Frontend über Auth0 an (Tenant `bietigheim-steelers.eu.auth0.com`),
+nicht über das Contao-Loginformular. Registrierung und Passwörter liegen komplett bei Auth0;
+auf steelers.de gibt es kein Registrierungsformular.
+
+- **Routen** (`config/routes.yml`, `_scope: frontend`): `/auth0/login`, `/auth0/callback`,
+  `/auth0/logout`. Verlinkt wird z. B. `/auth0/login?target=/mitglieder`; mit `&signup=1`
+  öffnet Auth0 gleich die Registrierung. `target` muss ein Pfad auf dieser Seite sein.
+- **Ablauf** (`App\Controller\Auth0Controller`): Authorization-Code-Flow mit PKCE, State und
+  Nonce in der Session. `App\Auth0\Auth0Client` tauscht den Code serverseitig gegen den
+  ID-Token und prüft Issuer, Audience, Ablauf und Nonce (die Signatur nicht: der Token kommt
+  direkt vom Token-Endpunkt über TLS, OIDC Core 3.1.3.7). Eingeloggt wird über
+  `Security::login()` mit dem Contao-Authenticator – wie beim Contao-Formular, also inklusive
+  `lastLogin` und Weiterleitungsseite der Gruppe.
+- **Mitglied** (`App\Auth0\Auth0MemberProvisioner`): Schlüssel ist die Auth0-`sub`
+  (`tl_member.auth0Sub`), nicht die E-Mail. Ohne bestätigte E-Mail (`email_verified`) wird
+  nichts angelegt. Ein bestehendes Mitglied ohne `auth0Sub` mit gleicher Adresse wird beim
+  ersten Login übernommen. Neue Mitglieder bekommen den Benutzernamen `auth0_<hash>` und ein
+  zufälliges Passwort (kein Passwort-Login).
+- **Gruppen**: am Gruppendatensatz steht die Auth0-Rolle (`tl_member_group.auth0Role`, z. B.
+  `sponsor`, `admin`, `helfer`). Bei jedem Login werden die Gruppen mit Rolle neu gesetzt
+  (Rolle entzogen → Gruppe weg); Gruppen ohne Rolle bleiben unangetastet.
+- **Rollen im Token**: eine Auth0-Action (Post Login) schreibt
+  `api.idToken.setCustomClaim('https://steelers.de/roles', event.authorization.roles)`.
+  Der Namespace steht in `config/services.yml` (`$rolesClaim`) und muss übereinstimmen. Die
+  Action muss deployt **und** in den Login-Flow gezogen sein.
+- **Parameter** (`config/parameters.yml`, nicht im Git): `auth0_domain`, `auth0_client_id`,
+  `auth0_client_secret`. Müssen vor dem Deploy auf dem Zielsystem stehen (leer ist erlaubt,
+  dann antwortet `/auth0/login` mit 503). Bei einer Custom Domain nur `auth0_domain` ändern.
+- **Auth0-Application** (Regular Web Application): Callback `<host>/auth0/callback`, Logout-URL
+  und Web Origin `<host>/`; lokal `http://localhost:5388/...` (nicht `127.0.0.1`).
+- **Ausrollen**: `contao:migrate --migrations-only` (`Auth0MemberMigration` legt `auth0Sub` und
+  `auth0Role` an), dann im Backend an den Gruppen die Rolle eintragen.
+- Fehler stehen im Contao-Log (`Auth0 login failed: …`); für den Besucher gibt es eine
+  schlichte Fehlerseite.
+
 ## Schrittassistent für Formulare
 
 Progressive Enhancement für Contao-Formulare: ohne JavaScript bleibt es das normale Formular,
