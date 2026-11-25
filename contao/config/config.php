@@ -42,6 +42,7 @@ $GLOBALS['BE_MOD']['content']['tilastot_seats'] = array('tables' => array('tl_ti
 $GLOBALS['BE_MOD']['content']['tilastot_season_ticket'] = array('tables' => array('tl_tilastot_season_ticket'));
 $GLOBALS['BE_MOD']['content']['sponsors_events'] = array('tables' => array('tl_sponsors_event'));
 $GLOBALS['BE_MOD']['content']['auction_bids'] = array('tables' => array('steelers_auktion'));
+$GLOBALS['BE_MOD']['content']['invoices'] = array('tables' => array('tl_invoice'));
 
 /* App: Aufbau und Inhalte der mobilen App (API: /api/v1/app/*, Vertrag docs/openapi.yaml) */
 $GLOBALS['BE_MOD']['app'] = array(

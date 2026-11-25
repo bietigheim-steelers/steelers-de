@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Rechnung {{ invoice.invoice_number|default('(Entwurf)') }}</title>
+  <style>
+    :root { --green: #046a38; --red: #b71c1c; --amber: #8a5300; --line: #d4d7dc; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; background: #f3f4f6; color: #1c1f23; }
+    header { background: var(--green); color: #fff; padding: 10px 20px; display: flex; gap: 16px; align-items: center; }
+    header a { color: #fff; }
+    header h1 { font-size: 17px; margin: 0; flex: 1; }
+    main { display: grid; grid-template-columns: minmax(420px, 1fr) minmax(360px, 1fr); gap: 16px; padding: 16px 20px; align-items: start; }
+    @media (max-width: 1000px) { main { grid-template-columns: 1fr; } }
+    .card { background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; }
+    .banner { padding: 12px 16px; border-radius: 6px; margin: 16px 20px 0; font-weight: 600; }
+    .banner.sent { background: #fff3cd; border: 2px solid #e0a800; color: var(--amber); }
+    .banner.ok { background: #e6f4ea; border: 1px solid #81c995; color: #1e5e32; }
+    .banner.error { background: #fdecea; border: 1px solid #f28b82; color: var(--red); }
+    .banner.warn { background: #fff3cd; border: 1px solid #e0a800; color: var(--amber); font-weight: 400; }
+    label { display: block; font-weight: 600; margin: 12px 0 4px; }
+    input, textarea { width: 100%; font: inherit; padding: 6px 8px; border: 1px solid #b8bdc4; border-radius: 4px; background: #fff; }
+    textarea { resize: vertical; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+    th { text-align: left; font-size: 12px; color: #555; padding: 2px 4px; }
+    td { padding: 3px 4px; vertical-align: top; }
+    td.q { width: 70px; } td.p { width: 100px; } td.t { width: 90px; text-align: right; padding-top: 9px; white-space: nowrap; } td.x { width: 30px; }
+    .sum { margin: 10px 0 0 auto; width: 260px; }
+    .sum td { padding: 2px 4px; } .sum td:last-child { text-align: right; white-space: nowrap; }
+    .sum tr.gross td { border-top: 2px solid #333; font-weight: 700; }
+    button { font: inherit; cursor: pointer; border-radius: 4px; padding: 8px 14px; border: 1px solid #8d939b; background: #fff; }
+    button.primary { background: var(--green); color: #fff; border-color: var(--green); font-weight: 600; }
+    button.danger { background: var(--red); border-color: var(--red); color: #fff; font-weight: 600; }
+    .actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    iframe { width: 100%; height: 78vh; min-height: 480px; border: 1px solid var(--line); border-radius: 4px; background: #eee; }
+    .hint { color: #666; font-size: 12px; margin-top: 4px; }
+    .badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 700; background: #fff; color: var(--green); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>
+      Rechnung {% if invoice.invoice_number %}{{ invoice.invoice_number }}{% else %}(Entwurf – Nummer wird beim Versand vergeben){% endif %}
+      {% if sent %}<span class="badge">VERSENDET</span>{% endif %}
+    </h1>
+    <a href="{{ list_url }}">← Zur Liste der Gruppenrechnungen</a>
+  </header>
+
+  {% if sent %}
+    <div class="banner sent">
+      Achtung: Diese Rechnung wurde bereits verschickt – am {{ invoice.sent_at|date('d.m.Y \\u\\m H:i') }} Uhr
+      an {{ invoice.sent_to }}{% if invoice.sent_by %} (von {{ invoice.sent_by }}){% endif %}{% if invoice.sent_count > 1 %}, insgesamt {{ invoice.sent_count }}×{% endif %}.
+      Änderungen betreffen nur diese Ansicht, bis die Rechnung erneut versendet wird.
+      {% if invoice.modified_after_sent %}<br>Seit dem Versand geändert am {{ invoice.modified_after_sent|date('d.m.Y \\u\\m H:i') }} Uhr – die verschickte Fassung weicht davon ab.{% endif %}
+    </div>
+  {% endif %}
+
+  {% for flash in flashes %}
+    <div class="banner {{ flash[0] }}">{{ flash[1] }}</div>
+  {% endfor %}
+
+  {% if not has_letterhead %}
+    <div class="banner warn">Das Briefpapier fehlt: <code>files/steelers/briefpapier/rechnung.pdf</code>. Das PDF wird ohne Briefpapier erzeugt.</div>
+  {% endif %}
+
+  <main>
+    <form method="post" class="card" id="invoice-form" autocomplete="off">
+      <input type="hidden" name="REQUEST_TOKEN" value="{{ request_token }}">
+
+      <div class="row">
+        <div>
+          <label for="invoice_date">Rechnungsdatum</label>
+          <input type="date" id="invoice_date" name="invoice_date" value="{{ invoice.invoice_date|date('Y-m-d') }}" required>
+        </div>
+        <div>
+          <label for="vat_rate">MwSt.-Satz (%)</label>
+          <input type="text" inputmode="decimal" id="vat_rate" name="vat_rate" value="{{ invoice.vat_rate|number_format(2, ',', '') }}">
+        </div>
+      </div>
+
+      <label for="recipient">Anschrift</label>
+      <textarea id="recipient" name="recipient" rows="5">{{ invoice.recipient }}</textarea>
+
+      <label for="subject">Betreff</label>
+      <input type="text" id="subject" name="subject" value="{{ invoice.subject }}">
+
+      <label for="intro_text">Einleitungstext</label>
+      <textarea id="intro_text" name="intro_text" rows="4">{{ invoice.intro_text }}</textarea>
+
+      <label>Positionen <span class="hint">(Einzelpreise brutto)</span></label>
+      <table id="items">
+        <thead><tr><th>Beschreibung</th><th>Menge</th><th>Einzelpreis €</th><th></th><th></th></tr></thead>
+        <tbody>
+          {% for item in items %}
+            <tr>
+              <td><input type="text" name="items[{{ loop.index0 }}][description]" value="{{ item.description }}"></td>
+              <td class="q"><input type="number" min="0" step="1" name="items[{{ loop.index0 }}][quantity]" value="{{ item.quantity }}"></td>
+              <td class="p"><input type="text" inputmode="decimal" name="items[{{ loop.index0 }}][price]" value="{{ item.price }}"></td>
+              <td class="t line-total"></td>
+              <td class="x"><button type="button" class="remove" title="Position entfernen">×</button></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="actions" style="margin-top:8px"><button type="button" id="add-item">+ Position hinzufügen</button></div>
+
+      <table class="sum">
+        <tr><td>Netto</td><td id="sum-net"></td></tr>
+        <tr><td>MwSt.</td><td id="sum-vat"></td></tr>
+        <tr class="gross"><td>Gesamt</td><td id="sum-gross"></td></tr>
+      </table>
+
+      <label for="outro_text">Schlusstext</label>
+      <textarea id="outro_text" name="outro_text" rows="4">{{ invoice.outro_text }}</textarea>
+
+      <label for="send_to">PDF senden an</label>
+      <input type="email" id="send_to" name="send_to" value="{{ invoice.send_to }}">
+      <div class="hint">Interne Adresse zur Weiterverarbeitung. Der Besteller bekommt das PDF nicht direkt.</div>
+
+      <div class="actions">
+        <button type="submit" name="action" value="save" class="primary">Speichern</button>
+        <button type="submit" name="action" value="send" class="{{ sent ? 'danger' : 'primary' }}" id="send-btn">
+          {{ sent ? 'Erneut per E-Mail senden' : 'Speichern und per E-Mail senden' }}
+        </button>
+      </div>
+    </form>
+
+    <div class="card">
+      <strong>Vorschau</strong> <span class="hint">(zeigt den gespeicherten Stand – nach Änderungen erst speichern)</span>
+      <iframe src="{{ pdf_url }}" title="PDF-Vorschau"></iframe>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var tbody = document.querySelector('#items tbody');
+      var form = document.getElementById('invoice-form');
+      var sent = {{ sent ? 'true' : 'false' }};
+
+      function parseMoney(s) {
+        s = String(s).replace(/[€\s]/g, '');
+        if (!s) return 0;
+        var pos = Math.max(s.lastIndexOf(','), s.lastIndexOf('.'));
+        var intPart = s, dec = '00';
+        if (pos > 0 && s.length - pos - 1 <= 2) { intPart = s.slice(0, pos); dec = (s.slice(pos + 1) + '00').slice(0, 2); }
+        intPart = intPart.replace(/\D/g, '');
+        return parseInt(intPart || '0', 10) * 100 + parseInt(dec, 10);
+      }
+      function fmt(c) { return (c / 100).toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'; }
+
+      function recalc() {
+        var gross = 0;
+        tbody.querySelectorAll('tr').forEach(function (tr) {
+          var q = parseInt(tr.querySelector('.q input').value || '0', 10) || 0;
+          var p = parseMoney(tr.querySelector('.p input').value);
+          gross += q * p;
+          tr.querySelector('.line-total').textContent = fmt(q * p);
+        });
+        var rate = parseFloat(String(document.getElementById('vat_rate').value).replace(',', '.')) || 0;
+        var net = Math.round(gross / (1 + rate / 100));
+        document.getElementById('sum-net').textContent = fmt(net);
+        document.getElementById('sum-vat').textContent = fmt(gross - net);
+        document.getElementById('sum-gross').textContent = fmt(gross);
+      }
+
+      function reindex() {
+        tbody.querySelectorAll('tr').forEach(function (tr, i) {
+          tr.querySelectorAll('input').forEach(function (inp) {
+            inp.name = inp.name.replace(/items\[\d+\]/, 'items[' + i + ']');
+          });
+        });
+      }
+
+      document.getElementById('add-item').addEventListener('click', function () {
+        var i = tbody.querySelectorAll('tr').length;
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td><input type="text" name="items[' + i + '][description]"></td>' +
+          '<td class="q"><input type="number" min="0" step="1" name="items[' + i + '][quantity]" value="1"></td>' +
+          '<td class="p"><input type="text" inputmode="decimal" name="items[' + i + '][price]" value="0,00"></td>' +
+          '<td class="t line-total"></td><td class="x"><button type="button" class="remove" title="Position entfernen">×</button></td>';
+        tbody.appendChild(tr);
+        tr.querySelector('input').focus();
+        recalc();
+      });
+
+      tbody.addEventListener('click', function (e) {
+        if (e.target.classList.contains('remove')) { e.target.closest('tr').remove(); reindex(); recalc(); }
+      });
+      form.addEventListener('input', recalc);
+
+      form.addEventListener('submit', function (e) {
+        var action = e.submitter && e.submitter.value;
+        if (action === 'send') {
+          var msg = sent
+            ? 'Diese Rechnung wurde bereits verschickt. Wirklich erneut senden?'
+            : 'Rechnung jetzt per E-Mail versenden? Dabei wird die Rechnungsnummer vergeben.';
+          if (!confirm(msg)) e.preventDefault();
+        }
+      });
+
+      recalc();
+    })();
+  </script>
+</body>
+</html>

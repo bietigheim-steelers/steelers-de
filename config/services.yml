@@ -68,6 +68,22 @@ services:
   App\Dca\AppDca:
     public: true
 
+  # --- Rechnungen fuer Gruppenbestellungen ----------------------------------
+  # Anderes Nummernformat: eigene Klasse mit InvoiceNumberGeneratorInterface schreiben und
+  # hier als Alias eintragen (der Standard wird sonst automatisch verdrahtet).
+  App\Dca\InvoiceDca:
+    public: true
+
+  App\Invoice\InvoicePdfRenderer:
+    arguments:
+      $letterheadPath: '%app.invoice.letterhead%'
+      $tempDir: '%kernel.project_dir%/var/mpdf'
+      $margins: '%app.invoice.margins%'
+
+  App\Invoice\InvoiceMailer:
+    arguments:
+      $internalRecipient: '%app.invoice.recipient%'
+
   # --- CleverReach-REST-API -------------------------------------------------
   # Genutzt von App\EventListener\CleverReachFormListener. Den API-Token traegt man als
   # cleverreach_api_token in config/parameters.yml ein (nicht im Git). Der Parameter MUSS
@@ -137,6 +153,13 @@ twig:
 # Postfach aus dem Envelope-Sender ableitet (POST /users/{from}/sendMail)
 # und dieser in Contao pro Transport ueber "from" festgelegt wird.
 parameters:
+  # Rechnungen: Empfaenger der Mitarbeiter-Info und Vorbelegung fuer den PDF-Versand,
+  # Briefpapier (liegt unter files/steelers, bleibt also ueber Deployments erhalten) und
+  # Schreibbereich in mm (Rand oben/rechts/unten/links) passend zum Briefpapier.
+  app.invoice.recipient: 'frederic.keck@steelers.de'
+  app.invoice.letterhead: '%kernel.project_dir%/files/steelers/briefpapier/rechnung.pdf'
+  app.invoice.margins: { top: 55, right: 20, bottom: 30, left: 25 }
+
   microsoft_graph_dsn: 'microsoftgraph+api://%microsoft_graph_client_id%:%microsoft_graph_client_secret%@default?tenantId=%microsoft_graph_tenant_id%'
 
 framework:

@@ -1,0 +1,61 @@
+<style>
+  body { font-family: dejavusans, sans-serif; font-size: 10pt; color: #000; }
+  .meta { width: 100%; margin-bottom: 8mm; }
+  .meta td { vertical-align: top; }
+  .meta .right { text-align: right; }
+  h1 { font-size: 14pt; margin: 0 0 4mm 0; }
+  table.items { width: 100%; border-collapse: collapse; margin: 6mm 0 4mm 0; }
+  table.items th { text-align: left; border-bottom: 0.4mm solid #000; padding: 1.5mm 2mm; font-size: 9pt; }
+  table.items td { padding: 1.5mm 2mm; border-bottom: 0.2mm solid #bbb; vertical-align: top; }
+  .num { text-align: right; white-space: nowrap; }
+  table.totals { width: 55%; margin-left: 45%; border-collapse: collapse; }
+  table.totals td { padding: 1mm 2mm; }
+  table.totals tr.gross td { border-top: 0.4mm solid #000; font-weight: bold; }
+  .text { margin: 4mm 0; line-height: 1.4; }
+</style>
+
+<table class="meta">
+  <tr>
+    <td style="width: 55%;">{{ invoice.recipient|e|nl2br }}</td>
+    <td class="right">
+      Rechnungsnummer:
+      {% if invoice.invoice_number %}<strong>{{ invoice.invoice_number|e }}</strong>{% else %}<strong>ENTWURF</strong> (Nummer wird beim Versand vergeben){% endif %}<br>
+      Datum: {{ invoice.invoice_date|date('d.m.Y') }}
+    </td>
+  </tr>
+</table>
+
+<h1>{{ invoice.subject|e }}</h1>
+
+{% if invoice.intro_text %}<div class="text">{{ invoice.intro_text|e|nl2br }}</div>{% endif %}
+
+<table class="items">
+  <thead>
+    <tr>
+      <th style="width: 8%;">Pos.</th>
+      <th>Beschreibung</th>
+      <th class="num" style="width: 12%;">Menge</th>
+      <th class="num" style="width: 18%;">Einzelpreis</th>
+      <th class="num" style="width: 18%;">Gesamt</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ item.description|e|nl2br }}</td>
+        <td class="num">{{ item.quantity }}</td>
+        <td class="num">{{ item.unit_price_cents|money }} €</td>
+        <td class="num">{{ item.line_cents|money }} €</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<table class="totals">
+  <tr><td>Nettobetrag</td><td class="num">{{ totals.net_cents|money }} €</td></tr>
+  <tr><td>zzgl. {{ invoice.vat_rate|number_format(2, ',', '.') }} % MwSt.</td><td class="num">{{ totals.vat_cents|money }} €</td></tr>
+  <tr class="gross"><td>Gesamtbetrag</td><td class="num">{{ totals.gross_cents|money }} €</td></tr>
+</table>
+
+{% if invoice.outro_text %}<div class="text">{{ invoice.outro_text|e|nl2br }}</div>{% endif %}

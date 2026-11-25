@@ -40,6 +40,22 @@ backend_season_ticket_download:
   defaults:
     _scope: backend
 
+# --- Rechnungen fuer Gruppenbestellungen (nur mit Backend-Login) -------------
+backend_invoice_edit:
+  controller: App\Controller\Backend\InvoiceController::edit
+  path: /contao/rechnungen/{id}
+  methods: [GET, POST]
+  requirements: { id: '\d+' }
+  defaults:
+    _scope: backend
+backend_invoice_pdf:
+  controller: App\Controller\Backend\InvoiceController::pdf
+  path: /contao/rechnungen/{id}/pdf
+  methods: GET
+  requirements: { id: '\d+' }
+  defaults:
+    _scope: backend
+
 # --- App-API (read-only, Vertrag: docs/openapi.yaml) -----------------------
 app_api_news:
   controller: App\Controller\Api\NewsController::list

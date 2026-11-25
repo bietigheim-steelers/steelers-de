@@ -21,7 +21,9 @@
     "symfony/microsoft-graph-mailer": "^7.4",
     "cleverreach/php-sdk": "^1.1",
     "nyholm/psr7": "^1.8",
-    "smalot/pdfparser": "^2.13"
+    "smalot/pdfparser": "^2.13",
+    "mpdf/mpdf": "^8.3",
+    "setasign/fpdi": "^2.6"
   },
   "require-dev": {
     "contao/manager-plugin": "^2.0",

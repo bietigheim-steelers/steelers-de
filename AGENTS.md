@@ -720,3 +720,48 @@ Backend**, im Code gibt es keine Feldnamen, Texte oder Profile. Anleitung für d
   Absenden verschickt also eine echte Mail an den Empfänger – zum Testen nur ungültige Daten senden.
 - Ausrollen: `contao:migrate --migrations-only` (legt die Spalten an), dann das Formular im Backend
   umkonfigurieren.
+
+## Rechnungen für Gruppenbestellungen
+
+Jede Bestellung über das Formular mit dem Alias `gruppenangebote` wird als **Rechnungsentwurf**
+in `tl_invoice` gespeichert. Die Mitarbeiter prüfen und bearbeiten die Rechnung im Backend und
+versenden das PDF per E-Mail an eine interne Adresse.
+
+Ablauf:
+
+1. `App\EventListener\GroupOrderInvoiceListener` (`processFormData`, nur Alias `gruppenangebote`)
+   legt den Entwurf an (Anschrift, Positionen, Betreff vorbefüllt) und verschickt zwei Mails über
+   `App\Invoice\InvoiceMailer`: Eingangsbestätigung an den Besteller und eine Info mit Link an
+   `app.invoice.recipient`. Mailfehler werden nur protokolliert, die Bestellung bleibt bestehen.
+2. Der Link `/contao/rechnungen/<id>` (`InvoiceController`, `_scope: backend`) ist nur mit
+   Backend-Login erreichbar. Die Seite bietet Bearbeitung aller Texte, Anschrift, MwSt.-Satz,
+   Positionen (hinzufügen/entfernen, Summen live) und eine PDF-Vorschau (`/contao/rechnungen/<id>/pdf`).
+3. „Speichern und per E-Mail senden“ vergibt beim **ersten** Versand die Rechnungsnummer, erzeugt das
+   PDF und schickt es an die Adresse im Feld „PDF senden an“. Danach stehen `status=sent`, `sent_at`,
+   `sent_to`, `sent_by`, `sent_count`. Eine versendete Rechnung zeigt einen deutlichen Hinweis mit
+   Zeitpunkt, bleibt änderbar (`modified_after_sent` vermerkt spätere Änderungen) und kann erneut
+   gesendet werden – mit der gleichen Nummer.
+4. Die Liste steht im Backend unter *Inhalte → Gruppenrechnungen* (`tl_invoice`). Rechnungen mit Nummer
+   lassen sich nicht löschen, damit der Nummernkreis keine Lücken bekommt.
+
+Wichtig:
+
+- **Preise** stehen als Konstanten in `App\Invoice\GroupOrderPricing` (im Formular nur als Text in den
+  Feldbeschriftungen). Preisänderungen an beiden Stellen nachziehen. Einzelpreise sind **Brutto**;
+  Netto und MwSt. werden aus der Summe herausgerechnet (`InvoiceCalculator`, Cent-Arithmetik).
+  Standard-MwSt.-Satz: `GroupOrderPricing::DEFAULT_VAT_RATE` (je Rechnung änderbar).
+- **Nummernkreis**: `InvoiceNumberGeneratorInterface`, Standard `YearSequenceInvoiceNumberGenerator`
+  (`JJJJ-NNNN`, Zähler je Jahr in `tl_invoice_counter`, atomar per `LAST_INSERT_ID`). Anderes Format:
+  eigene Klasse schreiben und in `config/services.yml` als Alias für das Interface eintragen.
+- **Briefpapier**: `files/steelers/briefpapier/rechnung.pdf` (Parameter `app.invoice.letterhead`). Fehlt
+  die Datei, entsteht das PDF ohne Briefpapier. Der Schreibbereich (Ränder in mm) steht als
+  `app.invoice.margins` in `config/services.yml` und muss zum Briefpapier passen.
+- **Empfänger**: `app.invoice.recipient` (`config/services.yml`) für die Mitarbeiter-Info und als
+  Vorbelegung für den PDF-Versand.
+- **Mailtransport**: Standard-Transport wie bei den Dauerkarten (Absender `webseite@steelers.de`). Der
+  PDF-Anhang ist bisher nur lokal gegen die Rechnungslogik geprüft, nicht gegen den Graph-Transport.
+- **Contaos eigene Roh-Mail** des Formulars (`sendViaEmail`, Empfänger) wird nicht mehr gebraucht und
+  sollte im Backend am Formular abgeschaltet werden, sonst gehen zwei Mails raus.
+- Ausrollen: `contao:migrate --migrations-only` (`InvoiceMigration` legt `tl_invoice` und
+  `tl_invoice_counter` an), `composer install` (mPDF, FPDI), Briefpapier hochladen.
+- Tests: `tests/Invoice/InvoiceCalculatorTest.php`.
