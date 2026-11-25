@@ -43,7 +43,7 @@ task('apache:reload', function () {
   run('sudo -n /usr/sbin/service apache2 force-reload');
 })->select('stage=prod');
 
-add('shared_files', ['config/config.yml']);
+add('shared_files', ['config/config.yml', '.env']);
 
 set('bin/php', function () {
   return '/usr/bin/php8.4';
