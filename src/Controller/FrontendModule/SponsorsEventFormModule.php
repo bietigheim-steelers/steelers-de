@@ -98,7 +98,8 @@ class SponsorsEventFormModule extends AbstractFrontendModuleController
             'title'     => $sponsorEvent->title,
             'startDate' => $sponsorEvent->startDate,
             'startTime' => $sponsorEvent->startTime,
-            'teaser'    => $sponsorEvent->teaser,
+            'noDateText' => trim((string) $sponsorEvent->noDateText),
+            'teaser'   => $sponsorEvent->teaser,
             'addImage'  => (bool) $sponsorEvent->addImage,
             'singleSRC' => $sponsorEvent->singleSRC ? StringUtil::binToUuid($sponsorEvent->singleSRC) : null,
         ];

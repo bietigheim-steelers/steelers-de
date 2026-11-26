@@ -28,10 +28,10 @@
             um {{ event.startTime|format_time(locale='de', pattern='HH:mm') }} Uhr
           {% endif %}
         {% elseif event.startTime %}
-          Termin wird noch bekanntgegeben, Beginn um
+          {{ event.noDateText ?: 'Termin wird noch bekanntgegeben' }}, Beginn um
           {{ event.startTime|format_time(locale='de', pattern='HH:mm') }} Uhr
         {% else %}
-          Termin wird noch bekanntgegeben
+          {{ event.noDateText ?: 'Termin wird noch bekanntgegeben' }}
         {% endif %}
       </p>
     </div>

@@ -79,7 +79,7 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
     // Palettes
     'palettes' => [
         '__selector__' => ['addImage', 'limitParticipants'],
-        'default' => '{title_legend},title;{date_legend},startDate,startTime;{teaser_legend},teaser;{image_legend},addImage;{form_legend},form_id;{participants_legend},limitParticipants;{confirmation_legend},confirmationText;{notification_legend},notificationSubject,notificationText;{notes_legend:hide},notes;{access_legend},access_link;{publish_legend},published',
+        'default' => '{title_legend},title;{date_legend},startDate,startTime,noDateText;{teaser_legend},teaser;{image_legend},addImage;{form_legend},form_id;{participants_legend},limitParticipants;{confirmation_legend},confirmationText;{notification_legend},notificationSubject,notificationText;{notes_legend:hide},notes;{access_legend},access_link;{publish_legend},published',
     ],
 
     // Sub-palettes
@@ -110,6 +110,11 @@ $GLOBALS['TL_DCA']['tl_sponsors_event'] = [
             'inputType' => 'text',
             'eval'      => ['rgxp' => 'date', 'datepicker' => true, 'tl_class' => 'w50 wizard'],
             'sql'       => "int(10) unsigned NULL",
+        ],
+        'noDateText' => [
+            'inputType' => 'text',
+            'eval'      => ['maxlength' => 255, 'tl_class' => 'long clr'],
+            'sql'       => "varchar(255) NOT NULL default ''",
         ],
         'startTime' => [
             'inputType' => 'text',

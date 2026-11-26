@@ -75,7 +75,7 @@ class SponsorsEventResolver
     public static function formatDate(array $sponsorEvent): string
     {
         if (empty($sponsorEvent['startDate'])) {
-            return '';
+            return trim((string) ($sponsorEvent['noDateText'] ?? ''));
         }
 
         return date('d.m.Y', (int) $sponsorEvent['startDate']);
